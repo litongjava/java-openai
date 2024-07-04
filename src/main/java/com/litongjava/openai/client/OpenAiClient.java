@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.litongjava.openai.constants.OpenAiConstatns;
+import com.litongjava.openai.constants.OpenAiModels;
+import com.litongjava.openai.embedding.EmbeddingRequestVo;
+import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
+import com.litongjava.tio.utils.json.JsonUtils;
 
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -55,6 +59,31 @@ public class OpenAiClient {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static EmbeddingResponseVo embeddings(EmbeddingRequestVo reoVo) {
+    EmbeddingResponseVo respVo = null;
+    try (Response response = OpenAiClient.embeddings(JsonUtils.toJson(reoVo))) {
+      String bodyString = response.body().string();
+      if (response.isSuccessful()) {
+        respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
+      } else {
+        throw new RuntimeException(bodyString);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return respVo;
+  }
+
+  public static Float[] embeddingArray(String input, String model) {
+    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
+
+    return embeddings(embeddingRequestVo).getData().get(0).getEmbedding();
+  }
+
+  public static Float[] embeddingArray(String input) {
+    return embeddingArray(input, OpenAiModels.text_embedding_3_small);
   }
 
   public static Response chatCompletions(Map<String, String> requestHeaders, String bodyString) {
