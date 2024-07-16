@@ -12,7 +12,7 @@ import com.litongjava.openai.chat.ChatRequestFunctionParameter;
 import com.litongjava.openai.chat.ChatRequestFunctionProperty;
 import com.litongjava.openai.chat.ChatRequestTool;
 import com.litongjava.openai.chat.ChatRequestToolCallFunction;
-import com.litongjava.openai.chat.ChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class ChatRequestVoTest {
@@ -27,7 +27,7 @@ public class ChatRequestVoTest {
 
     messages.add(message);
 
-    ChatRequestVo chatRequestVo = new ChatRequestVo();
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setStream(false);
     chatRequestVo.setModel("gpt-4o-2024-05-13");
 
@@ -71,7 +71,7 @@ public class ChatRequestVoTest {
 
     tools.add(tool);
 
-    ChatRequestVo chatRequestVo = new ChatRequestVo();
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setStream(false);
     chatRequestVo.setModel("gpt-4o-2024-05-13");
     chatRequestVo.setMessages(messages);

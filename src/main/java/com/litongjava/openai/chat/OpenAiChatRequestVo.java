@@ -5,11 +5,13 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRequestVo {
+@Accessors(chain = true)
+public class OpenAiChatRequestVo {
   private String model;
   private boolean stream;
   private List<ChatMessage> messages;
