@@ -58,7 +58,6 @@ public class OpenAiClient {
     }
   }
 
-
   public static Response chatCompletions(String authorization, String bodyString) {
     Map<String, String> header = new HashMap<>();
     header.put("authorization", "Bearer " + authorization);
@@ -101,11 +100,11 @@ public class OpenAiClient {
 
   public static ChatResponseVo chatCompletionsWithRole(String role, String prompt) {
     ChatMessage chatMessage = new ChatMessage(role, prompt);
-    return chatCompletions(OpenAiModels.gpt_4o_2024_05_13, chatMessage);
+    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
   }
 
-  public static ChatResponseVo chatCompletionsByModel(String model, String bodyString, String prompt) {
-    ChatMessage chatMessage = new ChatMessage("system", prompt);
+  public static ChatResponseVo chatCompletionsByModel(String model, String role, String prompt) {
+    ChatMessage chatMessage = new ChatMessage(role, prompt);
     return chatCompletions(model, chatMessage);
   }
 
@@ -214,8 +213,6 @@ public class OpenAiClient {
     httpClient.newCall(request).enqueue(callback);
   }
 
-  
-
   public static Float[] embeddingArray(String input, String model) {
     EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
 
@@ -225,11 +222,11 @@ public class OpenAiClient {
   public static Float[] embeddingArray(String input) {
     return embeddingArray(input, OpenAiModels.text_embedding_3_small);
   }
-  
+
   public static Float[] embeddingArrayByLargeModel(String input) {
     return embeddingArray(input, OpenAiModels.text_embedding_3_large);
   }
-  
+
   public static EmbeddingResponseVo embeddings(EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
     try (Response response = embeddings(JsonUtils.toJson(reoVo))) {
