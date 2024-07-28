@@ -12,5 +12,5 @@ import lombok.experimental.Accessors;
 public class EmbeddingData {
   private String object;
   private Integer index;
-  private Float[] embedding;
+  private float[] embedding;
 }

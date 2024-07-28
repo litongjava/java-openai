@@ -8,7 +8,7 @@ public class EmbeddingVectorUtils {
     return Arrays.toString(array);
   }
 
-  public static float[] parseToFloats(String string) {
+  public static float[] toFloats(String string) {
     // 移除字符串的方括号
     string = string.substring(1, string.length() - 1);
 
