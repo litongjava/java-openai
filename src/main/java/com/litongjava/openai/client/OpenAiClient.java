@@ -264,7 +264,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new RuntimeException("status:" + response.code() + ",sbody:" + bodyString);
+        throw new RuntimeException("status:" + response.code() + ",body:" + bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
