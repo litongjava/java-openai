@@ -27,9 +27,9 @@ import okhttp3.Response;
 
 public class OpenAiClient {
 
-  public static Response chatCompletions(String authorization, String bodyString) {
+  public static Response chatCompletions(String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>();
-    header.put("authorization", "Bearer " + authorization);
+    header.put("Authorization", "Bearer " + apiKey);
 
     return chatCompletions(header, bodyString);
   }
@@ -45,14 +45,14 @@ public class OpenAiClient {
   }
 
   public static Response chatCompletions(String bodyString) {
-    String authorization = EnvUtils.get("OPENAI_API_KEY");
-    return chatCompletions(authorization, bodyString);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return chatCompletions(apiKey, bodyString);
   }
 
   public static void chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
-    String authorization = EnvUtils.get("OPENAI_API_KEY");
-    header.put("authorization", "Bearer " + authorization);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    header.put("Authorization", "Bearer " + apiKey);
     chatCompletions(header, bodyString, callback);
   }
 
@@ -125,15 +125,15 @@ public class OpenAiClient {
     return respVo;
   }
 
-  public static Response chatCompletions(String apiPerfixUrl, String authorization, String bodyString) {
+  public static Response chatCompletions(String apiPerfixUrl, String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>(1);
-    header.put("authorization", "Bearer " + authorization);
+    header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
-  public static void chatCompletions(String apiPerfixUrl, String authorization, String bodyString, Callback callback) {
+  public static void chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
-    header.put("authorization", "Bearer " + authorization);
+    header.put("Authorization", "Bearer " + apiKey);
     chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
@@ -184,8 +184,8 @@ public class OpenAiClient {
 
   public static Response embeddings(String bodyString) {
     Map<String, String> header = new HashMap<>(1);
-    String authorization = EnvUtils.get("OPENAI_API_KEY");
-    header.put("authorization", "Bearer " + authorization);
+    String Authorization = EnvUtils.get("OPENAI_API_KEY");
+    header.put("Authorization", "Bearer " + Authorization);
     return embeddings(header, bodyString);
   }
 
@@ -274,8 +274,8 @@ public class OpenAiClient {
 
   public static Response embeddings(String serverUrl, String json) {
     Map<String, String> header = new HashMap<>(1);
-    String authorization = EnvUtils.get("OPENAI_API_KEY");
-    header.put("authorization", "Bearer " + authorization);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    header.put("Authorization", "Bearer " + apiKey);
     return embeddings(serverUrl, header, json);
   }
 

@@ -1,5 +1,5 @@
 package com.litongjava.openai.constants;
 
-public interface PerplexityConstatns {
+public interface PerplexityConstants {
   String server_url = "https://api.perplexity.ai";
 }

@@ -8,7 +8,7 @@ An OpenAi client for Java language band base on okhttp and fastjson
 <dependency>
   <groupId>com.litongjava</groupId>
   <artifactId>java-openai</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.4</version>
 </dependency>
 <dependency>
   <groupId>com.alibaba</groupId>
@@ -277,4 +277,81 @@ public class EmbeddingExample {
     }
   }
 }
+```
+
+## llama
+```
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.ChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.openai.constants.LlamaConstants;
+import com.litongjava.openai.constants.LlamaModels;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class Llama3_1_Test {
+
+  @Test
+  public void test01() {
+    EnvUtils.load();
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage("user", "How are you"));
+
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo()
+        // .setModel(PerplexityModles.llama_3_sonar_large_32k_online)
+        .setModel(LlamaModels.llama3_1_8b).setMessages(messages);
+
+    String apiKey = EnvUtils.get("LLAMA_API_KEY");
+    chatRequestVo.setMax_tokens(3000);
+
+    ChatResponseVo chatCompletions = OpenAiClient.chatCompletions(LlamaConstants.server_url, apiKey, chatRequestVo);
+    String content = chatCompletions.getChoices().get(0).getMessage().getContent();
+    System.out.println(content);
+  }
+
+}
+```
+
+## Perplexity
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.ChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.openai.constants.PerplexityConstants;
+import com.litongjava.openai.constants.PerplexityModels;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class Perplexity_Test {
+
+  @Test
+  public void test01() {
+    EnvUtils.load();
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage("user", "How are you"));
+
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo()
+        // .setModel(PerplexityModles.llama_3_sonar_large_32k_online)
+        .setModel(PerplexityModels.llama_3_1_sonar_small_128k_online).setMessages(messages);
+
+    String apiKey = EnvUtils.get("PERPLEXITY_API_KEY");
+    chatRequestVo.setMax_tokens(3000);
+
+    ChatResponseVo chatCompletions = OpenAiClient.chatCompletions(PerplexityConstants.server_url, apiKey, chatRequestVo);
+    String content = chatCompletions.getChoices().get(0).getMessage().getContent();
+    System.out.println(content);
+  }
+
+}
+
 ```
