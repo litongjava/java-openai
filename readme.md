@@ -5,19 +5,19 @@ An OpenAi client for Java language band base on okhttp and fastjson
 ## Chat Example
 1. add dependecy to pom.xml
 ```xml
-<dependency>
-  <groupId>com.litongjava</groupId>
-  <artifactId>java-openai</artifactId>
-  <version>1.0.4</version>
-</dependency>
-<dependency>
-  <groupId>com.alibaba</groupId>
-  <artifactId>fastjson</artifactId>
-  <version>2.0.39</version>
-</dependency
+    <dependency>
+      <groupId>com.litongjava</groupId>
+      <artifactId>java-openai</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+      <version>2.0.52</version>
+    </dependency>
 ```
 2. add OPENAI_API_KEY to src/main/resources/app.properties
-```
+```properties
 OPENAI_API_KEY=apikey from openai
 ```
 
@@ -30,9 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatRequestVo;
 import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.chat.OpenAiClient;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -49,9 +50,9 @@ public class SimpleAskExample {
     messages.add(message);
 
     // reqvo
-    ChatRequestVo chatRequestVo = new ChatRequestVo();
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setStream(false);
-    chatRequestVo.setModel("gpt-4o-2024-05-13");
+    chatRequestVo.setModel(OpenAiModels.gpt_4o_mini);
     chatRequestVo.setMessages(messages);
 
     String json = JsonUtils.toJson(chatRequestVo);
