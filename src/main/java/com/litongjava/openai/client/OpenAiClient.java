@@ -219,8 +219,8 @@ public class OpenAiClient {
 
   public static float[] embeddingArray(String input, String model) {
     EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
-    String serverUrl = EnvUtils.get("OPENAI_API_URL");
-    return embeddings(serverUrl, embeddingRequestVo).getData().get(0).getEmbedding();
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
   public static float[] embeddingArray(String serverUrl, String input, String model) {
@@ -256,9 +256,9 @@ public class OpenAiClient {
     return respVo;
   }
 
-  public static EmbeddingResponseVo embeddings(String serverUrl, EmbeddingRequestVo reoVo) {
+  public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(serverUrl, JsonUtils.toJson(reoVo))) {
+    try (Response response = embeddings(apiKey, JsonUtils.toJson(reoVo))) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
