@@ -237,8 +237,8 @@ public class OpenAiClient {
   }
 
   public static EmbeddingResponseVo embeddings(EmbeddingRequestVo embeddingRequestVo) {
-    String serverUrl = EnvUtils.get("OPENAI_API_URL");
-    return embeddings(serverUrl, embeddingRequestVo);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return embeddings(apiKey, embeddingRequestVo);
   }
 
   public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
