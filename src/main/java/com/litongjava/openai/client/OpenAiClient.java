@@ -159,13 +159,11 @@ public class OpenAiClient {
     }
   }
 
-  public static void chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo,
-      Callback callback) {
+  public static void chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
     chatCompletions(serverUrl, apiKey, JsonUtils.toJson(chatRequestVo), callback);
   }
 
-  public static void chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString,
-      Callback callback) {
+  public static void chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
 
     MediaType mediaType = MediaType.parse("application/json");
@@ -183,18 +181,16 @@ public class OpenAiClient {
   }
 
   public static Response embeddings(String bodyString) {
-    Map<String, String> header = new HashMap<>(1);
-    String Authorization = EnvUtils.get("OPENAI_API_KEY");
-    header.put("Authorization", "Bearer " + Authorization);
-    return embeddings(header, bodyString);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return embeddings(apiKey, bodyString);
   }
 
-  public static Response embeddings(Map<String, String> requestHeaders, String bodyString) {
+  public static Response embeddings(String apiKey, String bodyString) {
     String serverUrl = EnvUtils.get("OPENAI_API_URL");
-    return embeddings(serverUrl, requestHeaders, bodyString);
+    return embeddings(serverUrl, apiKey, bodyString);
   }
 
-  public static Response embeddings(String serverUrl, Map<String, String> requestHeaders, String bodyString) {
+  public static Response embeddings(String serverUrl, String apiKey, String bodyString) {
     if (serverUrl == null) {
       serverUrl = OpenAiConstatns.server_url;
     }
@@ -204,6 +200,9 @@ public class OpenAiClient {
     MediaType mediaType = MediaType.parse("application/json");
 
     RequestBody body = RequestBody.create(mediaType, bodyString);
+
+    Map<String, String> requestHeaders = new HashMap<>(1);
+    requestHeaders.put("Authorization", "Bearer " + apiKey);
 
     Headers headers = Headers.of(requestHeaders);
 
@@ -242,9 +241,9 @@ public class OpenAiClient {
     return embeddings(serverUrl, embeddingRequestVo);
   }
 
-  public static EmbeddingResponseVo embeddings(String serverUrl, Map<String, String> header, EmbeddingRequestVo reoVo) {
+  public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(serverUrl, header, JsonUtils.toJson(reoVo))) {
+    try (Response response = embeddings(serverUrl, apiKey, JsonUtils.toJson(reoVo))) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
@@ -272,20 +271,13 @@ public class OpenAiClient {
     return respVo;
   }
 
-  public static Response embeddings(String serverUrl, String json) {
-    Map<String, String> header = new HashMap<>(1);
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
-    header.put("Authorization", "Bearer " + apiKey);
-    return embeddings(serverUrl, header, json);
-  }
-
-  public static float[] embeddingArray(String serverUrl, Map<String, String> header, String input, String model) {
+  public static float[] embeddingArray(String serverUrl, String apiKey, String input, String model) {
     EmbeddingRequestVo reqVo = new EmbeddingRequestVo(input, model);
-    return embeddingArray(serverUrl, header, reqVo);
+    return embeddingArray(serverUrl, apiKey, reqVo);
   }
 
-  public static float[] embeddingArray(String serverUrl, Map<String, String> header, EmbeddingRequestVo reqVo) {
-    EmbeddingResponseVo embeddings = embeddings(serverUrl, header, reqVo);
+  public static float[] embeddingArray(String serverUrl, String apiKey, EmbeddingRequestVo reqVo) {
+    EmbeddingResponseVo embeddings = embeddings(serverUrl, apiKey, reqVo);
     return embeddings.getData().get(0).getEmbedding();
   }
 
