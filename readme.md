@@ -298,6 +298,28 @@ public class EmbeddingExample {
 }
 ```
 
+```java
+package com.litongjava.example;
+
+import org.junit.Test;
+
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.openai.constants.OpenAiModels;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class SimpleEmbeddingExample {
+
+  @Test
+  public void embedding() {
+    EnvUtils.load();
+    String text = "Hi";
+    float[] embeddingArray = OpenAiClient.embeddingArray(text, OpenAiModels.text_embedding_3_large);
+    System.out.println(embeddingArray.length);
+    //3072
+  }
+}
+
+```
 ## llama
 ```
 import java.util.ArrayList;
