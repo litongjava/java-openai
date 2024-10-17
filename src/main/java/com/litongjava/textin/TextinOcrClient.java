@@ -18,7 +18,7 @@ import okhttp3.Response;
 
 public class TextinOcrClient {
   private static final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
-  private static final OkHttpClient client = OkHttpClientPool.getHttpClient();
+  private static final OkHttpClient client = OkHttpClientPool.get3600HttpClient();
 
   /**
    * @param pdfFile
