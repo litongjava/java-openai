@@ -1,0 +1,1712 @@
+{
+  "message": "Success",
+  "result":
+  {
+    "markdown": "<!-- SJSU SAN JOSÉ STATE UNIVERSITY  -->\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/ee4fb4f4e0818538)\n\nCollege of Science·Computer Science\n\n## Data Structures and Algorithms Section 05CS 146\n\nFall 2024 3 Unit(s) 08/21/2024 to 12/09/2024 Modified 08/27/2024\n\n## Contact Information\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/43d8c06eaf6d12b8)\n\nInstructor:Ricky Koonming Chan\n\nEmail:koon-ming.chan@sjsu.edu\n\n## し Course Information\n\nClass Time: Tuesday and Thursday 9:000am-10:15am\n\nClass Location:MacQuarrie Hall 233\n\nOffice Hours:\n\nTime: Tuesday and Thursday 10:15am-11:15am\n\nLocation: Student-Faculty Conference Room\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/f54839d06bfeee0d)\n\n## Course Description and Requisites\n\nImplementations of advanced tree structures, priority queues, heaps, directed and undirected graphs.Advanced searching and sorting techniques (radix sort, heapsort, mergesort, and quicksort). Design and analysis of data structures and algorithms. Divide-and-conquer, greedy, and dynamic programming algorithm design techniques.\n\nPrerequisite(s): MATH 30, MATH 42, CS 46B, and [(CS 48 or CS 49J) if CS 46B was not in Java], each with a grade of \"C-\" or better; Computer Science, Applied and Computational Math, Forensic Science: Digital Evidence, Software Engineering, Data Science majors only;or instructor consent.\n\nLetter Graded\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/104350d6db833f8b)\n\n* Classroom Protocols\n\nThe lectures will be as an in-person mode. Regular class attendance is highly recommended and strongly encouraged. This section has online office hours. Please have your camera on during office hours. Do not publicly share or upload material for this course such as exam questions, lecture notes, or solutions without my consent. Students are not allowed to share any of the materials of the course without the instructor's consent.\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/ed7978fe4750c821)\n\n## Program Information\n\nDiversity Statement-At SJSU, it is important to create a safe learning environment where we can explore,learn, and grow together. We strive to build a diverse, equitable, inclusive culture that values,encourages,and supports students from all backgrounds and experiences.\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/4740d706c9496ead)\n\n# Course Goals\n\n1. To ensure that students are familiar with ways to implement elementary data structures and their associated\n\n2. To introduce students to the implementation of more complex data structures and their associated\n\n3. To acquaint students with advanced sorting\n\n4. To teach students how to determine the time complexity of\n\n5. To introduce students to algorithm design\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/2799ba8b11c3d7c3)\n\nCourse Learning Outcomes (CLOS)\n\nUpon successful completion of this course, students will be able to:\n\n· Understand the implementation of lists, stacks, queues, search trees, heaps, and graphs and use these data structures in programs they design.\n\nProve basic properties of trees and graphs.\n\n· Perform breadth-first search and depth-first search on directed as well as undirected graphs.\n\n·Use advanced sorting techniques (radix sort, heapsort, mergesort, quicksort).\n\n·Determine the running time of an algorithm in terms of asymptotic notation.\n\n·Solve recurrence relations representing the running time of an algorithm designed using a divide-and-conquer strategy.\n\n·Understand the basic concept of NP-completeness and realize that they may notbe able to efficiently solve all problems they encounter in their careers.\n\n· Understand algorithms designed using greedy, divide-and-conquer, and dynamic programming techniques.\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/511406b6e77be99a)\n\n## Introduction to Algorithms\n\nAuthor: Cormen, Leiserson, Rivest, and Stein\n\nPublisher:MIT Press, 2009\n\nEdition: 3rd Edition\n\nISBN:ISBN-10:0262033844ISBN-13:978-0262033848\n\n## Course Requirements and Assignments\n\nSJSU classes are designed such thatin order to be successful, it is expected that students will spend a minimum of forty-five hours for each unit of credit (normally three hours per unit per week), including preparing for class, participating in course activities, completing assignments, and so on. More details about student workload can be found in University Policy S12-3at http://www.sjsu.edu/senate/docs/S12-3.pdf.\n\nHomework assignments will be individual, regularly assigned, will include written problem assignments and programming exercises. The homework is a tool for you to learn the material and prepare you for the exams.\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/39dbd17c4a53ae3b)\n\n## Grading Information\n\nYour grade for the course will be based on the following components:\n\nAssignments-30%\n\nQuizzes-20%\n\nExam 1-15%\n\nExam 2-15%\n\nFinal Exam-20%\n\nA+ :97% or higher\n\nA :93% to 97%\n\nA- :90% to 93%\n\nB+:87% to 90%\n\nB :83% to 87%\n\nB-:80% to 83%\n\nC+:77% to 80%\n\nC :73% to 77%\n\nC-:70% to 73%\n\nD+:67% to 70%\n\nD :63% to 67%\n\nD- :60% to 63%\n\nF :0% to 60%\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/606bf511482e1fef)\n\n## University Policies\n\nPer University Policy S16-9(PDF)(http://www.sjsu.edu/senate/docs/S16-9 pdf), relevant university policy concerning all courses, such as student responsibilities, academic integrity, accommodations, dropping and adding,consent for recording of class, etc. and available student services (e.g. learning assistance,counseling, and other resources) are listed on the Syllabus Information\n\n(https://www.sjsu.edu/curriculum/courses/syllabus-info.php).web page. Make sure to visit this page to review and be aware of these university policies and resources.\n\n\n![](https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/52d8cae6d19a5c7d)\n\n# Course Schedule\n\nThis schedule is subject to change with advance notice.\n\n\n| Week  | Date | Topic |  |\n| -- | -- | -- | -- |\n| 1 | Thur 8/22 | Syllabus and Prerequisite Check |  |\n\n\n\n| 2 | Tue 8/27 | Introduction |\n| -- | -- | -- |\n| 2 | Thur 8/29 | Lists,Stacks and Queues |\n| 3 | Tue 9/3 | Loop Invariants |\n| 3 | Thur 9/5 | Growth of Functions |\n| 4 | Tue 9/10 | Heap Sort |\n| 4 | Thur 9/12 | Recurrence Relations |\n| 5 | Tue 9/17 | Recurrence Relations |\n| 5 | Thur 9/19 | Merge Sort, Quick Sort |\n| 6 | Tue 9/24 | Decision Trees |\n| 6 | Thur 9/26 | Counting Sort,Radix Sort andBucket Sort |\n| 7 | Tue 10/1 | Review |\n| 7 | Thur 10/3 | Exam 1 |\n| 8 | Tue 10/8 | Binary Search Trees |\n| 8 | Thur 10/10 | Introduction to Topological Sort |\n| 9 | Tue 10/15 | DFS, BFS |\n| 9 | Thur 10/17 | Disjoint Sets |\n| 10 | Tue 10/22 | Shortest Path Algorithms |\n| 10 | Thur 10/24 | Shortest Path Algorithms |\n| 11 | Tue 10/29 | Minimum Spanning Trees |\n| 11 | Thur 10/31 | Dynamic Programming |\n| 12 | Tue 11/5 | Dynamic Programming |\n| 12 | Thur 11/7 | Dynamic Programming |\n| 13 | Tue 11/12 | Review |\n| 13 | Thur 11/14 | Exam 2 |\n| 14 | Tue11/119 | Subset Sum Algorithm |\n| 14 | Thur 11/21 | Introduction to P and NP |\n| 15 | Tue 11/26 | NP-complete problems |\n| 15 | Thur 11/28 | Thanksgiving Holiday-No Class |\n| 16 | Tue 12/3 | Review |\n| 16 | Thur 12/5 | Review |\n| 17 | Mon 12/16 | Final Exam 7:15 AM-9:30 AM |\n\n\n",
+    "detail":
+    [
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "72",
+          "64",
+          "491",
+          "64",
+          "491",
+          "148",
+          "72",
+          "148"
+        ],
+        "text": "SJSU SAN JOSÉ STATE UNIVERSITY ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/ee4fb4f4e0818538",
+        "paragraph_id": "0"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "159",
+          "466",
+          "159",
+          "466",
+          "185",
+          "76",
+          "185"
+        ],
+        "text": "College of Science·Computer Science",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "1"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "78",
+          "212",
+          "1095",
+          "212",
+          "1095",
+          "330",
+          "78",
+          "330"
+        ],
+        "text": "Data Structures and Algorithms Section 05CS 146",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "2"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "353",
+          "758",
+          "353",
+          "758",
+          "382",
+          "76",
+          "382"
+        ],
+        "text": "Fall 2024 3 Unit(s) 08/21/2024 to 12/09/2024 Modified 08/27/2024",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "3"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "421",
+          "512",
+          "421",
+          "512",
+          "464",
+          "121",
+          "464"
+        ],
+        "text": "Contact Information",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "4"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "421",
+          "119",
+          "421",
+          "119",
+          "466",
+          "76",
+          "466"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/43d8c06eaf6d12b8",
+        "paragraph_id": "5"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "506",
+          "433",
+          "506",
+          "433",
+          "533",
+          "121",
+          "533"
+        ],
+        "text": "Instructor:Ricky Koonming Chan",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "6"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "561",
+          "487",
+          "561",
+          "487",
+          "588",
+          "163",
+          "588"
+        ],
+        "text": "Email:koon-ming.chan@sjsu.edu",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "7"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "88",
+          "673",
+          "500",
+          "673",
+          "500",
+          "714",
+          "88",
+          "714"
+        ],
+        "text": "し Course Information",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "8"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "756",
+          "648",
+          "756",
+          "648",
+          "783",
+          "121",
+          "783"
+        ],
+        "text": "Class Time: Tuesday and Thursday 9:000am-10:15am",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "9"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "811",
+          "471",
+          "811",
+          "471",
+          "838",
+          "121",
+          "838"
+        ],
+        "text": "Class Location:MacQuarrie Hall 233",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "10"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "921",
+          "250",
+          "921",
+          "250",
+          "946",
+          "121",
+          "946"
+        ],
+        "text": "Office Hours:",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "11"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "132",
+          "975",
+          "601",
+          "975",
+          "601",
+          "1002",
+          "132",
+          "1002"
+        ],
+        "text": "Time: Tuesday and Thursday 10:15am-11:15am",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "12"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "130",
+          "1031",
+          "557",
+          "1031",
+          "557",
+          "1055",
+          "130",
+          "1055"
+        ],
+        "text": "Location: Student-Faculty Conference Room",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "13"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "78",
+          "1194",
+          "126",
+          "1194",
+          "126",
+          "1235",
+          "78",
+          "1235"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/f54839d06bfeee0d",
+        "paragraph_id": "14"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "138",
+          "1192",
+          "795",
+          "1192",
+          "795",
+          "1241",
+          "138",
+          "1241"
+        ],
+        "text": "Course Description and Requisites",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "15"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "1281",
+          "1113",
+          "1281",
+          "1113",
+          "1404",
+          "121",
+          "1404"
+        ],
+        "text": "Implementations of advanced tree structures, priority queues, heaps, directed and undirected graphs.Advanced searching and sorting techniques (radix sort, heapsort, mergesort, and quicksort). Design and analysis of data structures and algorithms. Divide-and-conquer, greedy, and dynamic programming algorithm design techniques.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "16"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "119",
+          "72",
+          "1136",
+          "72",
+          "1136",
+          "167",
+          "119",
+          "167"
+        ],
+        "text": "Prerequisite(s): MATH 30, MATH 42, CS 46B, and [(CS 48 or CS 49J) if CS 46B was not in Java], each with a grade of \"C-\" or better; Computer Science, Applied and Computational Math, Forensic Science: Digital Evidence, Software Engineering, Data Science majors only;or instructor consent.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "0"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "195",
+          "259",
+          "195",
+          "259",
+          "218",
+          "121",
+          "218"
+        ],
+        "text": "Letter Graded",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "1"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "239",
+          "121",
+          "239",
+          "121",
+          "284",
+          "76",
+          "284"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/104350d6db833f8b",
+        "paragraph_id": "2"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "80",
+          "239",
+          "534",
+          "239",
+          "534",
+          "280",
+          "80",
+          "280"
+        ],
+        "text": "* Classroom Protocols",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "3"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "325",
+          "1138",
+          "325",
+          "1138",
+          "480",
+          "121",
+          "480"
+        ],
+        "text": "The lectures will be as an in-person mode. Regular class attendance is highly recommended and strongly encouraged. This section has online office hours. Please have your camera on during office hours. Do not publicly share or upload material for this course such as exam questions, lecture notes, or solutions without my consent. Students are not allowed to share any of the materials of the course without the instructor's consent.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "4"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "567",
+          "121",
+          "567",
+          "121",
+          "608",
+          "76",
+          "608"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/ed7978fe4750c821",
+        "paragraph_id": "5"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "127",
+          "565",
+          "530",
+          "565",
+          "530",
+          "612",
+          "127",
+          "612"
+        ],
+        "text": "Program Information",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "6"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "651",
+          "1132",
+          "651",
+          "1132",
+          "744",
+          "121",
+          "744"
+        ],
+        "text": "Diversity Statement-At SJSU, it is important to create a safe learning environment where we can explore,learn, and grow together. We strive to build a diverse, equitable, inclusive culture that values,encourages,and supports students from all backgrounds and experiences.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "7"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "78",
+          "773",
+          "121",
+          "773",
+          "121",
+          "816",
+          "78",
+          "816"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/4740d706c9496ead",
+        "paragraph_id": "8"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "125",
+          "773",
+          "385",
+          "773",
+          "385",
+          "812",
+          "125",
+          "812"
+        ],
+        "text": "Course Goals",
+        "pageId": "0",
+        "outline_level": 0,
+        "image_url": null,
+        "paragraph_id": "9"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "858",
+          "1103",
+          "858",
+          "1103",
+          "913",
+          "142",
+          "913"
+        ],
+        "text": "1. To ensure that students are familiar with ways to implement elementary data structures and their associated",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "10"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "922",
+          "1116",
+          "922",
+          "1116",
+          "951",
+          "142",
+          "951"
+        ],
+        "text": "2. To introduce students to the implementation of more complex data structures and their associated",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "11"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "955",
+          "587",
+          "955",
+          "587",
+          "982",
+          "142",
+          "982"
+        ],
+        "text": "3. To acquaint students with advanced sorting",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "12"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "988",
+          "734",
+          "988",
+          "734",
+          "1015",
+          "142",
+          "1015"
+        ],
+        "text": "4. To teach students how to determine the time complexity of",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "13"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "1021",
+          "569",
+          "1021",
+          "569",
+          "1048",
+          "142",
+          "1048"
+        ],
+        "text": "5. To introduce students to algorithm design",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "14"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "1079",
+          "129",
+          "1079",
+          "129",
+          "1124",
+          "76",
+          "1124"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/2799ba8b11c3d7c3",
+        "paragraph_id": "15"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "138",
+          "1079",
+          "798",
+          "1079",
+          "798",
+          "1124",
+          "138",
+          "1124"
+        ],
+        "text": "Course Learning Outcomes (CLOS)",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "16"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "1159",
+          "771",
+          "1159",
+          "771",
+          "1182",
+          "121",
+          "1182"
+        ],
+        "text": "Upon successful completion of this course, students will be able to:",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "17"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "144",
+          "1184",
+          "1151",
+          "1184",
+          "1151",
+          "1233",
+          "144",
+          "1233"
+        ],
+        "text": "· Understand the implementation of lists, stacks, queues, search trees, heaps, and graphs and use these data structures in programs they design.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "18"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "152",
+          "1235",
+          "579",
+          "1235",
+          "579",
+          "1260",
+          "152",
+          "1260"
+        ],
+        "text": "Prove basic properties of trees and graphs.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "19"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "144",
+          "1262",
+          "1058",
+          "1262",
+          "1058",
+          "1287",
+          "144",
+          "1287"
+        ],
+        "text": "· Perform breadth-first search and depth-first search on directed as well as undirected graphs.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "20"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "144",
+          "1289",
+          "903",
+          "1289",
+          "903",
+          "1316",
+          "144",
+          "1316"
+        ],
+        "text": "·Use advanced sorting techniques (radix sort, heapsort, mergesort, quicksort).",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "21"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "1318",
+          "889",
+          "1318",
+          "889",
+          "1341",
+          "142",
+          "1341"
+        ],
+        "text": "·Determine the running time of an algorithm in terms of asymptotic notation.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "22"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "1343",
+          "1140",
+          "1343",
+          "1140",
+          "1392",
+          "142",
+          "1392"
+        ],
+        "text": "·Solve recurrence relations representing the running time of an algorithm designed using a divide-and-conquer strategy.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "23"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "142",
+          "1392",
+          "1140",
+          "1392",
+          "1140",
+          "1440",
+          "142",
+          "1440"
+        ],
+        "text": "·Understand the basic concept of NP-completeness and realize that they may notbe able to efficiently solve all problems they encounter in their careers.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "24"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "144",
+          "1442",
+          "1072",
+          "1442",
+          "1072",
+          "1489",
+          "144",
+          "1489"
+        ],
+        "text": "· Understand algorithms designed using greedy, divide-and-conquer, and dynamic programming techniques.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "25"
+      },
+      {
+        "type": "paragraph",
+        "content": 1,
+        "position":
+        [
+          "121",
+          "76",
+          "450",
+          "76",
+          "450",
+          "117",
+          "121",
+          "117"
+        ],
+        "text": "Course Materials",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "0"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "78",
+          "78",
+          "115",
+          "78",
+          "115",
+          "119",
+          "78",
+          "119"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/511406b6e77be99a",
+        "paragraph_id": "2"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "124",
+          "163",
+          "626",
+          "163",
+          "626",
+          "208",
+          "124",
+          "208"
+        ],
+        "text": "Introduction to Algorithms",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "3"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "175",
+          "223",
+          "601",
+          "223",
+          "601",
+          "252",
+          "175",
+          "252"
+        ],
+        "text": "Author: Cormen, Leiserson, Rivest, and Stein",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "4"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "175",
+          "279",
+          "436",
+          "279",
+          "436",
+          "305",
+          "175",
+          "305"
+        ],
+        "text": "Publisher:MIT Press, 2009",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "5"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "175",
+          "334",
+          "357",
+          "334",
+          "357",
+          "357",
+          "175",
+          "357"
+        ],
+        "text": "Edition: 3rd Edition",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "6"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "175",
+          "386",
+          "696",
+          "386",
+          "696",
+          "413",
+          "175",
+          "413"
+        ],
+        "text": "ISBN:ISBN-10:0262033844ISBN-13:978-0262033848",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "7"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "126",
+          "553",
+          "886",
+          "553",
+          "886",
+          "597",
+          "126",
+          "597"
+        ],
+        "text": "Course Requirements and Assignments",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "8"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "638",
+          "1155",
+          "638",
+          "1155",
+          "764",
+          "121",
+          "764"
+        ],
+        "text": "SJSU classes are designed such thatin order to be successful, it is expected that students will spend a minimum of forty-five hours for each unit of credit (normally three hours per unit per week), including preparing for class, participating in course activities, completing assignments, and so on. More details about student workload can be found in University Policy S12-3at http://www.sjsu.edu/senate/docs/S12-3.pdf.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "9"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "789",
+          "1151",
+          "789",
+          "1151",
+          "880",
+          "121",
+          "880"
+        ],
+        "text": "Homework assignments will be individual, regularly assigned, will include written problem assignments and programming exercises. The homework is a tool for you to learn the material and prepare you for the exams.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "10"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "76",
+          "915",
+          "121",
+          "915",
+          "121",
+          "950",
+          "76",
+          "950"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/39dbd17c4a53ae3b",
+        "paragraph_id": "11"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "128",
+          "913",
+          "512",
+          "913",
+          "512",
+          "959",
+          "128",
+          "959"
+        ],
+        "text": "Grading Information",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "12"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "998",
+          "789",
+          "998",
+          "789",
+          "1025",
+          "121",
+          "1025"
+        ],
+        "text": "Your grade for the course will be based on the following components:",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "13"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "1052",
+          "357",
+          "1052",
+          "357",
+          "1081",
+          "163",
+          "1081"
+        ],
+        "text": "Assignments-30%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "14"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "1107",
+          "303",
+          "1107",
+          "303",
+          "1132",
+          "163",
+          "1132"
+        ],
+        "text": "Quizzes-20%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "15"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "1159",
+          "307",
+          "1159",
+          "307",
+          "1186",
+          "163",
+          "1186"
+        ],
+        "text": "Exam 1-15%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "16"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "1215",
+          "307",
+          "1215",
+          "307",
+          "1240",
+          "163",
+          "1240"
+        ],
+        "text": "Exam 2-15%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "17"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "163",
+          "1269",
+          "341",
+          "1269",
+          "341",
+          "1295",
+          "163",
+          "1295"
+        ],
+        "text": "Final Exam-20%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "18"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "161",
+          "1376",
+          "345",
+          "1376",
+          "345",
+          "1407",
+          "161",
+          "1407"
+        ],
+        "text": "A+ :97% or higher",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "19"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "161",
+          "1434",
+          "322",
+          "1434",
+          "322",
+          "1457",
+          "161",
+          "1457"
+        ],
+        "text": "A :93% to 97%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "20"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "162",
+          "73",
+          "320",
+          "73",
+          "320",
+          "100",
+          "162",
+          "100"
+        ],
+        "text": "A- :90% to 93%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "0"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "127",
+          "326",
+          "127",
+          "326",
+          "151",
+          "164",
+          "151"
+        ],
+        "text": "B+:87% to 90%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "1"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "184",
+          "322",
+          "184",
+          "322",
+          "207",
+          "164",
+          "207"
+        ],
+        "text": "B :83% to 87%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "2"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "238",
+          "320",
+          "238",
+          "320",
+          "262",
+          "164",
+          "262"
+        ],
+        "text": "B-:80% to 83%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "3"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "291",
+          "324",
+          "291",
+          "324",
+          "316",
+          "164",
+          "316"
+        ],
+        "text": "C+:77% to 80%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "4"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "347",
+          "316",
+          "347",
+          "316",
+          "371",
+          "164",
+          "371"
+        ],
+        "text": "C :73% to 77%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "5"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "402",
+          "314",
+          "402",
+          "314",
+          "425",
+          "164",
+          "425"
+        ],
+        "text": "C-:70% to 73%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "6"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "455",
+          "320",
+          "455",
+          "320",
+          "480",
+          "164",
+          "480"
+        ],
+        "text": "D+:67% to 70%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "7"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "509",
+          "318",
+          "509",
+          "318",
+          "535",
+          "164",
+          "535"
+        ],
+        "text": "D :63% to 67%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "8"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "564",
+          "314",
+          "564",
+          "314",
+          "589",
+          "164",
+          "589"
+        ],
+        "text": "D- :60% to 63%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "9"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "164",
+          "618",
+          "303",
+          "618",
+          "303",
+          "642",
+          "164",
+          "642"
+        ],
+        "text": "F :0% to 60%",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "10"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "75",
+          "827",
+          "123",
+          "827",
+          "123",
+          "870",
+          "75",
+          "870"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/606bf511482e1fef",
+        "paragraph_id": "11"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "127",
+          "829",
+          "476",
+          "829",
+          "476",
+          "874",
+          "127",
+          "874"
+        ],
+        "text": "University Policies",
+        "pageId": "0",
+        "outline_level": 1,
+        "image_url": null,
+        "paragraph_id": "12"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "913",
+          "1147",
+          "913",
+          "1147",
+          "1037",
+          "121",
+          "1037"
+        ],
+        "text": "Per University Policy S16-9(PDF)(http://www.sjsu.edu/senate/docs/S16-9 pdf), relevant university policy concerning all courses, such as student responsibilities, academic integrity, accommodations, dropping and adding,consent for recording of class, etc. and available student services (e.g. learning assistance,counseling, and other resources) are listed on the Syllabus Information",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "13"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "1043",
+          "1113",
+          "1043",
+          "1113",
+          "1104",
+          "121",
+          "1104"
+        ],
+        "text": "(https://www.sjsu.edu/curriculum/courses/syllabus-info.php).web page. Make sure to visit this page to review and be aware of these university policies and resources.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "14"
+      },
+      {
+        "type": "image",
+        "content": 0,
+        "position":
+        [
+          "75",
+          "1131",
+          "117",
+          "1131",
+          "117",
+          "1176",
+          "75",
+          "1176"
+        ],
+        "text": " ",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": "https://textin-image-store-1303028177.cos.ap-shanghai.myqcloud.com/external/52d8cae6d19a5c7d",
+        "paragraph_id": "15"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "123",
+          "1131",
+          "449",
+          "1131",
+          "449",
+          "1174",
+          "123",
+          "1174"
+        ],
+        "text": "Course Schedule",
+        "pageId": "0",
+        "outline_level": 0,
+        "image_url": null,
+        "paragraph_id": "16"
+      },
+      {
+        "type": "paragraph",
+        "content": 0,
+        "position":
+        [
+          "121",
+          "1217",
+          "661",
+          "1217",
+          "661",
+          "1244",
+          "121",
+          "1244"
+        ],
+        "text": "This schedule is subject to change with advance notice.",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "17"
+      },
+      {
+        "type": "table",
+        "content": 0,
+        "position":
+        [
+          "125",
+          "1324",
+          "640",
+          "1324",
+          "640",
+          "1478",
+          "125",
+          "1478"
+        ],
+        "text": "\n| Week  | Date | Topic |  |\n| -- | -- | -- | -- |\n| 1 | Thur 8/22 | Syllabus and Prerequisite Check |  |\n",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "18"
+      },
+      {
+        "type": "table",
+        "content": 0,
+        "position":
+        [
+          "124",
+          "73",
+          "622",
+          "73",
+          "622",
+          "1432",
+          "124",
+          "1432"
+        ],
+        "text": "\n| 2 | Tue 8/27 | Introduction |\n| -- | -- | -- |\n| 2 | Thur 8/29 | Lists,Stacks and Queues |\n| 3 | Tue 9/3 | Loop Invariants |\n| 3 | Thur 9/5 | Growth of Functions |\n| 4 | Tue 9/10 | Heap Sort |\n| 4 | Thur 9/12 | Recurrence Relations |\n| 5 | Tue 9/17 | Recurrence Relations |\n| 5 | Thur 9/19 | Merge Sort, Quick Sort |\n| 6 | Tue 9/24 | Decision Trees |\n| 6 | Thur 9/26 | Counting Sort,Radix Sort andBucket Sort |\n| 7 | Tue 10/1 | Review |\n| 7 | Thur 10/3 | Exam 1 |\n| 8 | Tue 10/8 | Binary Search Trees |\n| 8 | Thur 10/10 | Introduction to Topological Sort |\n| 9 | Tue 10/15 | DFS, BFS |\n| 9 | Thur 10/17 | Disjoint Sets |\n| 10 | Tue 10/22 | Shortest Path Algorithms |\n| 10 | Thur 10/24 | Shortest Path Algorithms |\n| 11 | Tue 10/29 | Minimum Spanning Trees |\n| 11 | Thur 10/31 | Dynamic Programming |\n| 12 | Tue 11/5 | Dynamic Programming |\n| 12 | Thur 11/7 | Dynamic Programming |\n| 13 | Tue 11/12 | Review |\n| 13 | Thur 11/14 | Exam 2 |\n| 14 | Tue11/119 | Subset Sum Algorithm |\n| 14 | Thur 11/21 | Introduction to P and NP |\n| 15 | Tue 11/26 | NP-complete problems |\n| 15 | Thur 11/28 | Thanksgiving Holiday-No Class |\n| 16 | Tue 12/3 | Review |\n| 16 | Thur 12/5 | Review |\n| 17 | Mon 12/16 | Final Exam 7:15 AM-9:30 AM |\n",
+        "pageId": "0",
+        "outline_level": -1,
+        "image_url": null,
+        "paragraph_id": "0"
+      }
+    ]
+  },
+  "code": 200,
+  "version": "3.8.4",
+  "duration": "936",
+  "metrics":
+  [
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "56c0766f5074322b",
+      "durations": 0.0
+    },
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "ab313a94ad490e4e",
+      "durations": 0.0
+    },
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "95736c8034690d66",
+      "durations": 0.0
+    },
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "176075c0fc98df98",
+      "durations": 0.0
+    },
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "eb9e980612e80de1",
+      "durations": 0.0
+    },
+    {
+      "pageId": 0.0,
+      "status": "Success",
+      "image_id": "2650b5287b5cae6d",
+      "durations": 0.0
+    }
+  ]
+}
