@@ -17,6 +17,7 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -49,22 +50,20 @@ public class OpenAiClient {
     return chatCompletions(apiKey, bodyString);
   }
 
-  public static void chatCompletions(String bodyString, Callback callback) {
+  public static Call chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     header.put("Authorization", "Bearer " + apiKey);
-    chatCompletions(header, bodyString, callback);
+    return chatCompletions(header, bodyString, callback);
   }
 
-  public static void chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
+  public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
     String serverUrl = EnvUtils.get("OPENAI_API_URL");
     if (serverUrl == null) {
       serverUrl = OpenAiConstatns.server_url;
     }
-
     serverUrl += "/v1";
-
-    chatCompletions(serverUrl, header, bodyString, callback);
+    return chatCompletions(serverUrl, header, bodyString, callback);
   }
 
   public static ChatResponseVo chatCompletionsWithRole(String role, String prompt) {
@@ -104,9 +103,9 @@ public class OpenAiClient {
     return respVo;
   }
 
-  public static void chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
+  public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
     String json = JsonUtils.toJson(chatRequestVo);
-    chatCompletions(json, callback);
+    return chatCompletions(json, callback);
   }
 
   public static ChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
@@ -131,10 +130,10 @@ public class OpenAiClient {
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
-  public static void chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
+  public static Call chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     header.put("Authorization", "Bearer " + apiKey);
-    chatCompletions(apiPerfixUrl, header, bodyString, callback);
+    return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
@@ -159,11 +158,11 @@ public class OpenAiClient {
     }
   }
 
-  public static void chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
-    chatCompletions(serverUrl, apiKey, JsonUtils.toJson(chatRequestVo), callback);
+  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
+    return chatCompletions(serverUrl, apiKey, JsonUtils.toJson(chatRequestVo), callback);
   }
 
-  public static void chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
+  public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
 
     MediaType mediaType = MediaType.parse("application/json");
@@ -177,7 +176,9 @@ public class OpenAiClient {
         .url(url) //
         .method("POST", body).headers(headers) //
         .build();
-    httpClient.newCall(request).enqueue(callback);
+    Call newCall = httpClient.newCall(request);
+    newCall.enqueue(callback);
+    return newCall;
   }
 
   public static Response embeddings(String bodyString) {
