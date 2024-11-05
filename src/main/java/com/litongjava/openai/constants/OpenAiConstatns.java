@@ -1,5 +1,5 @@
 package com.litongjava.openai.constants;
 
 public interface OpenAiConstatns {
-  String server_url = "https://api.openai.com";
+  String api_perfix_url = "https://api.openai.com/v1";
 }

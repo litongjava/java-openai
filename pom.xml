@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.litongjava</groupId>
   <artifactId>java-openai</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <packaging>jar</packaging>
   <name>java-openai</name>
   <description>db table to json</description>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-utils</artifactId>
-      <version>3.7.3.v20241011-RELEASE</version>
+      <version>3.7.3.v20241015-RELEASE</version>
     </dependency>
 
     <dependency>

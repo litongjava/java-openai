@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.ChatRequestImage;
+import com.litongjava.openai.chat.ChatRequestMultiContent;
 import com.litongjava.openai.chat.ChatResponseVo;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.constants.OpenAiConstatns;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
+import com.litongjava.tio.utils.encoder.Base64Utils;
 import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -36,13 +40,12 @@ public class OpenAiClient {
   }
 
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-    String serverUrl = EnvUtils.get("OPENAI_API_URL");
-    if (serverUrl == null) {
-      serverUrl = OpenAiConstatns.server_url;
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL");
+    if (apiPerfixUrl == null) {
+      apiPerfixUrl = OpenAiConstatns.api_perfix_url;
     }
 
-    serverUrl += "/v1";
-    return chatCompletions(serverUrl, header, bodyString);
+    return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
   public static Response chatCompletions(String bodyString) {
@@ -58,12 +61,11 @@ public class OpenAiClient {
   }
 
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
-    String serverUrl = EnvUtils.get("OPENAI_API_URL");
-    if (serverUrl == null) {
-      serverUrl = OpenAiConstatns.server_url;
+    String api_perfix_url = EnvUtils.get("OPENAI_API_URL");
+    if (api_perfix_url == null) {
+      api_perfix_url = OpenAiConstatns.api_perfix_url;
     }
-    serverUrl += "/v1";
-    return chatCompletions(serverUrl, header, bodyString, callback);
+    return chatCompletions(api_perfix_url, header, bodyString, callback);
   }
 
   public static ChatResponseVo chatCompletionsWithRole(String role, String prompt) {
@@ -87,10 +89,10 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
-  public static ChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
+  public static ChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = JsonUtils.toJson(chatRequestVo);
     ChatResponseVo respVo = null;
-    try (Response response = chatCompletions(json)) {
+    try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ChatResponseVo.class);
@@ -101,6 +103,11 @@ public class OpenAiClient {
       throw new RuntimeException(e);
     }
     return respVo;
+  }
+
+  public static ChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return chatCompletions(apiKey, chatRequestVo);
   }
 
   public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
@@ -191,9 +198,9 @@ public class OpenAiClient {
     return embeddings(serverUrl, apiKey, bodyString);
   }
 
-  public static Response embeddings(String serverUrl, String apiKey, String bodyString) {
-    if (serverUrl == null) {
-      serverUrl = OpenAiConstatns.server_url;
+  public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
+    if (api_perfix_url == null) {
+      api_perfix_url = OpenAiConstatns.api_perfix_url;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
@@ -208,7 +215,7 @@ public class OpenAiClient {
     Headers headers = Headers.of(requestHeaders);
 
     Request request = new Request.Builder() //
-        .url(serverUrl + "/v1/embeddings") //
+        .url(api_perfix_url + "/embeddings") //
         .method("POST", body).headers(headers) //
         .build();
     try {
@@ -282,4 +289,35 @@ public class OpenAiClient {
     return embeddings.getData().get(0).getEmbedding();
   }
 
+  public static ChatResponseVo chatWithImage(String prompt, byte[] bytes, String suffix) {
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    return chatWithImage(apiKey, prompt, bytes, suffix);
+  }
+
+  public static ChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
+    String mimeType = ContentTypeUtils.getContentType(suffix);
+
+    String byteArrayToAltBase64 = Base64Utils.encodeImage(bytes, mimeType);
+
+    ChatRequestImage chatRequestImage = new ChatRequestImage();
+    chatRequestImage.setDetail("auto");
+    chatRequestImage.setUrl(byteArrayToAltBase64);
+
+    ChatRequestMultiContent image = new ChatRequestMultiContent("image_url", chatRequestImage);
+    List<ChatRequestMultiContent> multiContents = new ArrayList<>();
+    multiContents.add(image);
+
+    ChatMessage system = new ChatMessage("system", prompt);
+    ChatMessage user = new ChatMessage();
+    user.role("user").multiContents(multiContents);
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(system);
+    messages.add(user);
+
+    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    openAiChatRequestVo.setModel(OpenAiModels.gpt_4o_mini);
+    openAiChatRequestVo.setMessages(messages);
+    return OpenAiClient.chatCompletions(apiKey, openAiChatRequestVo);
+  }
 }
