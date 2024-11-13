@@ -271,7 +271,67 @@ public class DatasetDocumentSplitServiceTest {
   }
 }
 ```
-
+input json
+```json
+{
+  "stream": false,
+  "max_tokens": null,
+  "model": "gpt-4o-mini",
+  "messages":
+  [
+    {
+      "content": "Convert the image into text. Do not miss any information, keep the format, and just output the text.\r\ntext",
+      "role": "system"
+    },
+    {
+      "content":
+      [
+        {
+          "type": "image_url",
+          "image_url":
+          {
+            "detail": "auto",
+            "url": "data:image/png;base64,iVBO=="
+          }
+        }
+      ],
+      "role": "user"
+    }
+  ],
+  "tools": null
+}
+```
+output json
+```json
+{
+  "object": "chat.completion",
+  "id": "chatcmpl-AQ8omr9mEX9UXWLm7LPP5V0RuypFz",
+  "choices":
+  [
+    {
+      "message":
+      {
+        "content": "...",
+        "role": "assistant",
+        "tool_calls": null
+      },
+      "index": 0,
+      "delta": null,
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "model": "gpt-4o-mini-2024-07-18",
+  "system_fingerprint": "fp_9b78b61c52",
+  "usage":
+  {
+    "completion_tokens": 571,
+    "prompt_tokens": 25524,
+    "total_tokens": 26095
+  },
+  "created": "1730793788"
+}
+```
 ### Chat with Image
 
 Another example of sending an image along with a prompt.

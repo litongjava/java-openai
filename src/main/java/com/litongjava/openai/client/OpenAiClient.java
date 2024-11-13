@@ -145,7 +145,7 @@ public class OpenAiClient {
 
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
 
-    OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     MediaType mediaType = MediaType.parse("application/json");
 
@@ -170,7 +170,7 @@ public class OpenAiClient {
   }
 
   public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
-    OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     MediaType mediaType = MediaType.parse("application/json");
 
@@ -203,7 +203,7 @@ public class OpenAiClient {
       api_perfix_url = OpenAiConstatns.api_perfix_url;
     }
 
-    OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     MediaType mediaType = MediaType.parse("application/json");
 
