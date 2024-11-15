@@ -11,7 +11,7 @@ import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatRequestMultiContent;
 import com.litongjava.openai.chat.ChatResponseVo;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.constants.OpenAiConstatns;
+import com.litongjava.openai.constants.OpenAiConstants;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
@@ -42,7 +42,7 @@ public class OpenAiClient {
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
     String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL");
     if (apiPerfixUrl == null) {
-      apiPerfixUrl = OpenAiConstatns.api_perfix_url;
+      apiPerfixUrl = OpenAiConstants.api_perfix_url;
     }
 
     return chatCompletions(apiPerfixUrl, header, bodyString);
@@ -63,7 +63,7 @@ public class OpenAiClient {
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
     String api_perfix_url = EnvUtils.get("OPENAI_API_URL");
     if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstatns.api_perfix_url;
+      api_perfix_url = OpenAiConstants.api_perfix_url;
     }
     return chatCompletions(api_perfix_url, header, bodyString, callback);
   }
@@ -200,7 +200,7 @@ public class OpenAiClient {
 
   public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
     if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstatns.api_perfix_url;
+      api_perfix_url = OpenAiConstants.api_perfix_url;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
