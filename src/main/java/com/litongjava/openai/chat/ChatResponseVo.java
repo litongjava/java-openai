@@ -17,4 +17,5 @@ public class ChatResponseVo {
   private String system_fingerprint;
   private List<Choice> choices;
   private ChatResponseUsage usage;
+  private List<String> citations;
 }
