@@ -32,6 +32,12 @@ import okhttp3.Response;
 
 public class OpenAiClient {
 
+  /**
+   * 
+   * @param apiKey
+   * @param bodyString
+   * @return
+   */
   public static Response chatCompletions(String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>();
     header.put("Authorization", "Bearer " + apiKey);
@@ -39,6 +45,12 @@ public class OpenAiClient {
     return chatCompletions(header, bodyString);
   }
 
+  /**
+   * 
+   * @param header
+   * @param bodyString
+   * @return
+   */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
     String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL");
     if (apiPerfixUrl == null) {
@@ -48,11 +60,22 @@ public class OpenAiClient {
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
+  /**
+   * 
+   * @param bodyString
+   * @return
+   */
   public static Response chatCompletions(String bodyString) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return chatCompletions(apiKey, bodyString);
   }
 
+  /**
+   * 
+   * @param bodyString
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
@@ -60,6 +83,13 @@ public class OpenAiClient {
     return chatCompletions(header, bodyString, callback);
   }
 
+  /**
+   * 
+   * @param header
+   * @param bodyString
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
     String api_perfix_url = EnvUtils.get("OPENAI_API_URL");
     if (api_perfix_url == null) {
@@ -68,16 +98,12 @@ public class OpenAiClient {
     return chatCompletions(api_perfix_url, header, bodyString, callback);
   }
 
-  public static ChatResponseVo chatCompletionsWithRole(String role, String prompt) {
-    ChatMessage chatMessage = new ChatMessage(role, prompt);
-    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
-  }
-
-  public static ChatResponseVo chatCompletionsByModel(String model, String role, String prompt) {
-    ChatMessage chatMessage = new ChatMessage(role, prompt);
-    return chatCompletions(model, chatMessage);
-  }
-
+  /**
+   * 
+   * @param model
+   * @param chatMessage
+   * @return
+   */
   public static ChatResponseVo chatCompletions(String model, ChatMessage chatMessage) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
@@ -89,6 +115,12 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
+  /**
+   * 
+   * @param apiKey
+   * @param chatRequestVo
+   * @return
+   */
   public static ChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = JsonUtils.toJson(chatRequestVo);
     ChatResponseVo respVo = null;
@@ -105,16 +137,34 @@ public class OpenAiClient {
     return respVo;
   }
 
+  /**
+   * 
+   * @param chatRequestVo
+   * @return
+   */
   public static ChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return chatCompletions(apiKey, chatRequestVo);
   }
 
+  /**
+   * 
+   * @param chatRequestVo
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
     String json = JsonUtils.toJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
 
+  /**
+   * 
+   * @param apiPerfixUrl
+   * @param apiKey
+   * @param chatRequestVo
+   * @return
+   */
   public static ChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = JsonUtils.toJson(chatRequestVo);
     ChatResponseVo respVo = null;
@@ -131,18 +181,40 @@ public class OpenAiClient {
     return respVo;
   }
 
+  /**
+   * 
+   * @param apiPerfixUrl
+   * @param apiKey
+   * @param bodyString
+   * @return
+   */
   public static Response chatCompletions(String apiPerfixUrl, String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>(1);
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
+  /**
+   * 
+   * @param apiPerfixUrl
+   * @param apiKey
+   * @param bodyString
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
+  /**
+   * 
+   * @param uri
+   * @param requestHeaders
+   * @param bodyString
+   * @return
+   */
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
@@ -165,10 +237,26 @@ public class OpenAiClient {
     }
   }
 
+  /**
+   * 
+   * @param serverUrl
+   * @param apiKey
+   * @param chatRequestVo
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
     return chatCompletions(serverUrl, apiKey, JsonUtils.toJson(chatRequestVo), callback);
   }
 
+  /**
+   * 
+   * @param apiPrefixUrl
+   * @param requestHeaders
+   * @param bodyString
+   * @param callback
+   * @return
+   */
   public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
@@ -186,6 +274,40 @@ public class OpenAiClient {
     Call newCall = httpClient.newCall(request);
     newCall.enqueue(callback);
     return newCall;
+  }
+
+  /**
+   * 
+   * @param role
+   * @param prompt
+   * @return
+   */
+  public static ChatResponseVo chat(String prompt) {
+    ChatMessage chatMessage = new ChatMessage("system", prompt);
+    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
+  }
+
+  /**
+   * 
+   * @param role
+   * @param prompt
+   * @return
+   */
+  public static ChatResponseVo chatWithRole(String role, String prompt) {
+    ChatMessage chatMessage = new ChatMessage(role, prompt);
+    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
+  }
+
+  /**
+   * 
+   * @param model
+   * @param role
+   * @param prompt
+   * @return
+   */
+  public static ChatResponseVo chatWithModel(String model, String role, String prompt) {
+    ChatMessage chatMessage = new ChatMessage(role, prompt);
+    return chatCompletions(model, chatMessage);
   }
 
   public static Response embeddings(String bodyString) {
