@@ -2,9 +2,10 @@ package com.litongjava.openai.constants;
 
 public interface PerplexityModels {
   // 32k  online
-  String llama_3_sonar_small_32k_online = "llama--sonar-small-32k-online";
+  String llama_3_sonar_small_32k_online = "llama-3-sonar-small-32k-online";
   String llama_3_sonar_large_32k_online = "llama-3-sonar-large-32k-online";
 
+  
   // 32k search
   String llama_3_sonar_small_32k_chat = "llama-3-sonar-small-32k-chat";
   String llama_3_sonar_large_32k_chat = "llama-3-sonar-large-32k-chat";

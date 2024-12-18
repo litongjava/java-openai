@@ -18,12 +18,12 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>3.11.0</version>
+      <version>4.12.0</version>
     </dependency>
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-utils</artifactId>
-      <version>3.7.3.v20241015-RELEASE</version>
+      <version>3.7.3.v20241212-RELEASE</version>
     </dependency>
 
     <dependency>

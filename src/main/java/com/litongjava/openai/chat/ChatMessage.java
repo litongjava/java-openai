@@ -50,4 +50,9 @@ public class ChatMessage {
   public Object content() {
     return content;
   }
+
+  public ChatMessage(String content) {
+    this.role = "user";
+    this.content = content;
+  }
 }
