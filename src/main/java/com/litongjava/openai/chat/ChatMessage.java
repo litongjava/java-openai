@@ -55,4 +55,29 @@ public class ChatMessage {
     this.role = "user";
     this.content = content;
   }
+
+  public static ChatMessage buildSystem(String content) {
+    return new ChatMessage(MessageRole.system, content);
+  }
+
+  public static ChatMessage buildAssistant(String content) {
+    return new ChatMessage(MessageRole.assistant, content);
+  }
+
+  public static ChatMessage buildUser(String content) {
+    return new ChatMessage(MessageRole.user, content);
+  }
+
+  public static ChatMessage buildFunction(String content) {
+    return new ChatMessage(MessageRole.function, content);
+  }
+
+  public static ChatMessage buildTool(String content) {
+    return new ChatMessage(MessageRole.tool, content);
+  }
+
+  public static ChatMessage buildDeveloper(String content) {
+    return new ChatMessage(MessageRole.developer, content);
+  }
+
 }

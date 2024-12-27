@@ -105,12 +105,25 @@ public class OpenAiClient {
    * @return
    */
   public static ChatResponseVo chatCompletions(String model, ChatMessage chatMessage) {
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
-    chatRequestVo.setModel(model);
-    chatRequestVo.setStream(false);
     List<ChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
 
+    return chatComplections(model, messages);
+  }
+
+  public static ChatResponseVo chatComplections(String model, List<ChatMessage> messages) {
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    chatRequestVo.setModel(model);
+    chatRequestVo.setStream(false);
+    chatRequestVo.setMessages(messages);
+    return chatCompletions(chatRequestVo);
+  }
+
+  public static ChatResponseVo chatComplections(String model, String systemPrompt, List<ChatMessage> messages) {
+    messages.add(0, ChatMessage.buildSystem(systemPrompt));
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    chatRequestVo.setModel(model);
+    chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
     return chatCompletions(chatRequestVo);
   }
