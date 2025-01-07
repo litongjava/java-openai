@@ -712,7 +712,44 @@ public class JinaRerankClientTest {
   ]
 }
 ```
+### GOOGLE GEMINI
+```java
+package com.litongjava.gemini;
 
+import java.util.Collections;
+
+/**
+ * Demo for Gemini
+ */
+public class GeminiDemo {
+
+  public static void main(String[] args) {
+    String googleApiKey = "";
+
+    // 1. 构造请求体
+    GeminiPartVo part = new GeminiPartVo("Hello, how are you?", null);
+    GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
+    GeminiRequestVo reqVo = new GeminiRequestVo(Collections.singletonList(content),
+        //
+        null, // safetySettings
+        null // generationConfig
+    );
+
+    // 2. 同步请求：generateContent
+    GeminiResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
+    if (respVo != null && respVo.getCandidates() != null) {
+      respVo.getCandidates().forEach(candidate -> {
+        if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
+          candidate.getContent().getParts().forEach(partVo -> {
+            System.out.println("Gemini answer text: " + partVo.getText());
+          });
+        }
+      });
+    }
+  }
+}
+
+```
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
