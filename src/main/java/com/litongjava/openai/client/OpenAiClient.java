@@ -41,7 +41,6 @@ public class OpenAiClient {
   public static Response chatCompletions(String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>();
     header.put("Authorization", "Bearer " + apiKey);
-
     return chatCompletions(header, bodyString);
   }
 
