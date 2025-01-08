@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Choice {
   private Integer index;
-  private Delta delta;
+  private ChatResponseDelta delta;
   private Object logprobs;
   private Object finish_reason;
   private ChatResponseMessage message;

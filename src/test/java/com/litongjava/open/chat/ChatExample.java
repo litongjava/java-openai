@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.litongjava.openai.chat.ChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.ChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
@@ -37,11 +37,11 @@ public class ChatExample {
     String json = JsonUtils.toJson(chatRequestVo);
     System.out.println(json);
 
-    ChatResponseVo chatCompletions = null;
+    OpenAiChatResponseVo chatCompletions = null;
     try (Response response = OpenAiClient.chatCompletions(json)) {
       if (response.isSuccessful()) {
         String string = response.body().string();
-        chatCompletions = JsonUtils.parse(string, ChatResponseVo.class);
+        chatCompletions = JsonUtils.parse(string, OpenAiChatResponseVo.class);
         System.out.println(JsonUtils.toJson(chatCompletions));
       } else {
         System.out.println(response);

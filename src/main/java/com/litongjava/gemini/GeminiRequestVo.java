@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeminiRequestVo {
+
   /**
    * 必填参数：对话内容
    */
@@ -27,4 +28,8 @@ public class GeminiRequestVo {
    * 可选：文本生成配置
    */
   private GeminiGenerationConfigVo generationConfig;
+
+  public GeminiRequestVo(List<GeminiContentVo> contents) {
+    this.contents = contents;
+  }
 }
