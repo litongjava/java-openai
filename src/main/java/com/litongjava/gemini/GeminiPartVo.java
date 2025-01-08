@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GeminiPartVo {
   private String text;
-
   private GeminiInlineDataVo inline_data;
+  private GeminiFunctionCallVo functionCall;
 }

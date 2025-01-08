@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 顶层请求体
+ * 顶层请求体 - 修改后
  */
 @Data
 @NoArgsConstructor
@@ -15,8 +15,22 @@ import lombok.NoArgsConstructor;
 public class GeminiRequestVo {
 
   /**
-   * 必填参数：对话内容
+   * -- 新增字段 --
+   * system_instruction, tools, tool_config
+   * 来对应你示例中的 JSON 结构：
+   * {
+   *   "system_instruction": {...},
+   *   "tools": [...],
+   *   "tool_config": {...},
+   *   "contents": {...或list...}
+   * }
    */
+  private GeminiSystemInstructionVo system_instruction;
+
+  private List<GeminiToolVo> tools;
+
+  private GeminiToolConfigVo tool_config;
+
   private List<GeminiContentVo> contents;
 
   /**
