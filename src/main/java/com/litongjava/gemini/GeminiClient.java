@@ -63,6 +63,9 @@ public class GeminiClient {
 
   public static GeminiResponseVo generate(String modelName, GeminiRequestVo requestVo) {
     String key = EnvUtils.getStr("GEMINI_API_KEY");
+    if (key == null || key.isEmpty()) {
+      new RuntimeException("GEMINI_API_KEY is empty");
+    }
     return generate(key, modelName, requestVo);
   }
 

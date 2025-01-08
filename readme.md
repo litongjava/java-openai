@@ -23,6 +23,8 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [Llama Integration](#llama-integration)
     - [Perplexity Integration](#perplexity-integration)
     - [Jina Rerank](#jina-rerank)
+    - [GOOGLE GEMINI](#google-gemini)
+    - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
   - [License](#license)
 
 ## Features
@@ -749,6 +751,222 @@ public class GeminiDemo {
   }
 }
 
+```
+
+### GOOGLE GEMINI Function Call
+request body json string
+```json
+{
+  "system_instruction": {
+    "parts": {
+      "text": "You are a helpful lighting system bot. You can turn lights on and off, and you can set the color. Do not perform any other tasks."
+    }
+  },
+  "tools": [
+    {
+      "function_declarations": [
+        {
+          "name": "enable_lights",
+          "description": "Turn on the lighting system.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "dummy": {
+                "type": "boolean",
+                "description": "A placeholder parameter."
+              }
+            },
+            "required": [
+              "dummy"
+            ]
+          }
+        },
+        {
+          "name": "set_light_color",
+          "description": "Set the light color. Lights must be enabled for this to work.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "rgb_hex": {
+                "type": "string",
+                "description": "The light color as a 6-digit hex string, e.g. ff0000 for red."
+              }
+            },
+            "required": [
+              "rgb_hex"
+            ]
+          }
+        },
+        {
+          "name": "stop_lights",
+          "description": "Turn off the lighting system.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "dummy": {
+                "type": "boolean",
+                "description": "A placeholder parameter."
+              }
+            },
+            "required": [
+              "dummy"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "tool_config": {
+    "function_calling_config": {
+      "mode": "ANY",
+      "allowed_function_names": [
+        "enable_lights",
+        "set_light_color",
+        "stop_lights"
+      ]
+    }
+  },
+  "contents": {
+    "role": "user",
+    "parts": {
+      "text": "Turn off the lighting system"
+    }
+  }
+}
+```
+java code
+```java
+package com.litongjava.gemini;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class GeminiFunctionCallExample {
+
+  public static void main(String[] args) {
+    EnvUtils.load();
+
+    // 1. 构造 system_instruction
+    GeminiSystemInstructionVo systemInstruction = new GeminiSystemInstructionVo(
+        new GeminiPartVo("You are a helpful lighting system bot. You can turn lights on and off, " + "and you can set the color. Do not perform any other tasks."));
+
+    // 2. 构造工具 (tools) - 这里只演示一个 tool 里有多个 function_declarations
+    GeminiFunctionDeclarationVo enableLightsFunc = new GeminiFunctionDeclarationVo();
+    enableLightsFunc.setName("enable_lights");
+    enableLightsFunc.setDescription("Turn on the lighting system.");
+    Map<String, Object> enableLightsProperties = new HashMap<>();
+    enableLightsProperties.put("dummy", new HashMap<String, Object>() {
+      {
+        put("type", "boolean");
+        put("description", "A placeholder parameter.");
+      }
+    });
+    Map<String, Object> enableLightsParams = new HashMap<>();
+    enableLightsParams.put("type", "object");
+    enableLightsParams.put("properties", enableLightsProperties);
+    enableLightsParams.put("required", Arrays.asList("dummy"));
+    enableLightsFunc.setParameters(enableLightsParams);
+
+    GeminiFunctionDeclarationVo setLightColorFunc = new GeminiFunctionDeclarationVo();
+    setLightColorFunc.setName("set_light_color");
+    setLightColorFunc.setDescription("Set the light color. Lights must be enabled for this to work.");
+    Map<String, Object> setLightColorProperties = new HashMap<>();
+    setLightColorProperties.put("rgb_hex", new HashMap<String, String>() {
+      {
+        put("type", "string");
+        put("description", "The light color as a 6-digit hex string, e.g. ff0000 for red.");
+      }
+    });
+    Map<String, Object> setLightColorParams = new HashMap<>();
+    setLightColorParams.put("type", "object");
+    setLightColorParams.put("properties", setLightColorProperties);
+    setLightColorParams.put("required", Arrays.asList("rgb_hex"));
+    setLightColorFunc.setParameters(setLightColorParams);
+
+    GeminiFunctionDeclarationVo stopLightsFunc = new GeminiFunctionDeclarationVo();
+    stopLightsFunc.setName("stop_lights");
+    stopLightsFunc.setDescription("Turn off the lighting system.");
+    Map<String, Object> stopLightsProperties = new HashMap<>();
+    stopLightsProperties.put("dummy", new HashMap<String, Object>() {
+      {
+        put("type", "boolean");
+        put("description", "A placeholder parameter.");
+      }
+    });
+    Map<String, Object> stopLightsParams = new HashMap<>();
+    stopLightsParams.put("type", "object");
+    stopLightsParams.put("properties", stopLightsProperties);
+    stopLightsParams.put("required", Arrays.asList("dummy"));
+    stopLightsFunc.setParameters(stopLightsParams);
+
+    // 将三个 function 都放到同一个工具的 function_declarations 中
+    GeminiToolVo tool = new GeminiToolVo(Arrays.asList(enableLightsFunc, setLightColorFunc, stopLightsFunc));
+
+    // 3. 构造 tool_config
+    GeminiFunctionCallingConfigVo funcCallingConfig = new GeminiFunctionCallingConfigVo();
+    funcCallingConfig.setMode("ANY");
+    funcCallingConfig.setAllowed_function_names(Arrays.asList("enable_lights", "set_light_color", "stop_lights"));
+
+    GeminiToolConfigVo toolConfig = new GeminiToolConfigVo(funcCallingConfig);
+
+    // 4. 构造用户消息 contents
+    //    注意：如果你的接口约定 "contents" 是数组，就用 List<GeminiContentVo>；否则可以直接用单个对象
+    GeminiPartVo userPart = new GeminiPartVo("Turn off the lighting system");
+    GeminiContentVo userContent = new GeminiContentVo("user", Arrays.asList(userPart));
+
+    // 5. 组装到 GeminiRequestVo
+    GeminiRequestVo requestVo = new GeminiRequestVo();
+    // （1）system_instruction
+    requestVo.setSystem_instruction(systemInstruction);
+    // （2）tools
+    requestVo.setTools(Arrays.asList(tool));
+    // （3）tool_config
+    requestVo.setTool_config(toolConfig);
+    // （4）contents
+    requestVo.setContents(Arrays.asList(userContent));
+
+    // 可以根据需要，设置 generationConfig / safetySettings 等
+    // requestVo.setGenerationConfig(...);
+    // requestVo.setSafetySettings(...);
+
+    // 在这里可以看到请求的 JSON 长什么样
+    String requestJson = JsonUtils.toJson(requestVo);
+    System.out.println("==== 请求 JSON ====");
+    System.out.println(requestJson);
+
+    // 6. 调用原先的 generate 接口
+    //    注意将 "YOUR_GOOGLE_API_KEY" 换成你真实的 KEY
+    //    同时将 "gemini-1.5-flash" 换成你要用的模型名称
+    GeminiResponseVo response = GeminiClient.generate("gemini-1.5-flash", requestVo);
+
+    // 7. 查看响应
+    if (response != null && response.getCandidates() != null) {
+      for (GeminiCandidateVo candidate : response.getCandidates()) {
+        GeminiContentResponseVo content = candidate.getContent();
+        if (content == null || content.getParts() == null)
+          continue;
+        for (GeminiPartVo part : content.getParts()) {
+          // 如果返回的是 functionCall
+          if (part.getFunctionCall() != null) {
+            System.out.println("[Function Call Response]");
+            System.out.println("Function Name: " + part.getFunctionCall().getName());
+            System.out.println("Function Args: " + part.getFunctionCall().getArgs());
+          } else {
+            // 普通文本
+            System.out.println("[Text Response]");
+            System.out.println("Model Text: " + part.getText());
+          }
+        }
+      }
+    } else {
+      System.out.println("No response or no candidates from Gemini.");
+    }
+  }
+}
 ```
 ## License
 
