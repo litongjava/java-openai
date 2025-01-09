@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatRequestMultiContent;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.constants.OpenAiConstants;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
@@ -422,7 +422,7 @@ public class OpenAiClient {
     return chatWithImage(apiKey, prompt, bytes, suffix);
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
+  public static OpenAiChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
     String mimeType = ContentTypeUtils.getContentType(suffix);
 
     String byteArrayToAltBase64 = Base64Utils.encodeImage(bytes, mimeType);
@@ -444,8 +444,12 @@ public class OpenAiClient {
     messages.add(user);
 
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
-    openAiChatRequestVo.setModel(OpenAiModels.gpt_4o_mini);
+    openAiChatRequestVo.setModel(model);
     openAiChatRequestVo.setMessages(messages);
     return OpenAiClient.chatCompletions(apiKey, openAiChatRequestVo);
+  }
+
+  public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
+    return chatWithImage(apiKey, prompt, OpenAiModels.gpt_4o_mini, bytes, suffix);
   }
 }
