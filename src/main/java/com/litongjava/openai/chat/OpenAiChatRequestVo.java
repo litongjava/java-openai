@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 public class OpenAiChatRequestVo {
   private String model;
   private boolean stream;
-  private List<ChatMessage> messages;
+  private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
 }

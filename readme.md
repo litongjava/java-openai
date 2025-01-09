@@ -731,14 +731,14 @@ public class GeminiDemo {
     // 1. 构造请求体
     GeminiPartVo part = new GeminiPartVo("Hello, how are you?", null);
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
-    GeminiRequestVo reqVo = new GeminiRequestVo(Collections.singletonList(content),
+    GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content),
         //
         null, // safetySettings
         null // generationConfig
     );
 
     // 2. 同步请求：generateContent
-    GeminiResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
+    GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
     if (respVo != null && respVo.getCandidates() != null) {
       respVo.getCandidates().forEach(candidate -> {
         if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
@@ -918,8 +918,8 @@ public class GeminiFunctionCallExample {
     GeminiPartVo userPart = new GeminiPartVo("Turn off the lighting system");
     GeminiContentVo userContent = new GeminiContentVo("user", Arrays.asList(userPart));
 
-    // 5. 组装到 GeminiRequestVo
-    GeminiRequestVo requestVo = new GeminiRequestVo();
+    // 5. 组装到 GeminiChatRequestVo
+    GeminiChatRequestVo requestVo = new GeminiChatRequestVo();
     // （1）system_instruction
     requestVo.setSystem_instruction(systemInstruction);
     // （2）tools
@@ -941,7 +941,7 @@ public class GeminiFunctionCallExample {
     // 6. 调用原先的 generate 接口
     //    注意将 "YOUR_GOOGLE_API_KEY" 换成你真实的 KEY
     //    同时将 "gemini-1.5-flash" 换成你要用的模型名称
-    GeminiResponseVo response = GeminiClient.generate("gemini-1.5-flash", requestVo);
+    GeminiChatResponseVo response = GeminiClient.generate("gemini-1.5-flash", requestVo);
 
     // 7. 查看响应
     if (response != null && response.getCandidates() != null) {

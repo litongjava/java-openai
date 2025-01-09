@@ -1,6 +1,8 @@
 package com.litongjava.openai.constants;
 
 public interface OpenAiModels {
+  String openai = "openai";
+
   String gpt_4o = "gpt-4o";
   String gpt_4o_mini = "gpt-4o-mini";
 

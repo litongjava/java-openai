@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatRequestMultiContent;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
@@ -103,14 +103,14 @@ public class OpenAiClient {
    * @param chatMessage
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String model, ChatMessage chatMessage) {
-    List<ChatMessage> messages = new ArrayList<>();
+  public static OpenAiChatResponseVo chatCompletions(String model, OpenAiChatMessage chatMessage) {
+    List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
 
     return chatComplections(model, messages);
   }
 
-  public static OpenAiChatResponseVo chatComplections(String model, List<ChatMessage> messages) {
+  public static OpenAiChatResponseVo chatComplections(String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -118,8 +118,8 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatComplections(String model, String systemPrompt, List<ChatMessage> messages) {
-    messages.add(0, ChatMessage.buildSystem(systemPrompt));
+  public static OpenAiChatResponseVo chatComplections(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
+    messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -231,9 +231,7 @@ public class OpenAiClient {
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
-    MediaType mediaType = MediaType.parse("application/json");
-
-    RequestBody body = RequestBody.create(mediaType, bodyString);
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Headers headers = Headers.of(requestHeaders);
 
@@ -245,7 +243,7 @@ public class OpenAiClient {
     try {
       return httpClient.newCall(request).execute();
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
 
@@ -272,9 +270,7 @@ public class OpenAiClient {
   public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
-    MediaType mediaType = MediaType.parse("application/json");
-
-    RequestBody body = RequestBody.create(mediaType, bodyString);
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Headers headers = Headers.of(requestHeaders);
 
@@ -295,7 +291,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chat(String prompt) {
-    ChatMessage chatMessage = new ChatMessage("system", prompt);
+    OpenAiChatMessage chatMessage = new OpenAiChatMessage("system", prompt);
     return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
   }
 
@@ -306,7 +302,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chatWithRole(String role, String prompt) {
-    ChatMessage chatMessage = new ChatMessage(role, prompt);
+    OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
   }
 
@@ -318,7 +314,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chatWithModel(String model, String role, String prompt) {
-    ChatMessage chatMessage = new ChatMessage(role, prompt);
+    OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(model, chatMessage);
   }
 
@@ -339,9 +335,7 @@ public class OpenAiClient {
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
-    MediaType mediaType = MediaType.parse("application/json");
-
-    RequestBody body = RequestBody.create(mediaType, bodyString);
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Map<String, String> requestHeaders = new HashMap<>(1);
     requestHeaders.put("Authorization", "Bearer " + apiKey);
@@ -441,11 +435,11 @@ public class OpenAiClient {
     List<ChatRequestMultiContent> multiContents = new ArrayList<>();
     multiContents.add(image);
 
-    ChatMessage system = new ChatMessage("system", prompt);
-    ChatMessage user = new ChatMessage();
+    OpenAiChatMessage system = new OpenAiChatMessage("system", prompt);
+    OpenAiChatMessage user = new OpenAiChatMessage();
     user.role("user").multiContents(multiContents);
 
-    List<ChatMessage> messages = new ArrayList<>();
+    List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(system);
     messages.add(user);
 

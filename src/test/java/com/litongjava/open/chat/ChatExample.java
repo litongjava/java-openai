@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
@@ -21,11 +21,11 @@ public class ChatExample {
   public void simpleChatTest() {
     // load OPENAI_API_KEY from the config()
     EnvUtils.load();
-    ChatMessage chatRequestMessage = new ChatMessage();
+    OpenAiChatMessage chatRequestMessage = new OpenAiChatMessage();
     chatRequestMessage.role("user");
-    List<ChatMessage> messages = new ArrayList<>();
+    List<OpenAiChatMessage> messages = new ArrayList<>();
 
-    ChatMessage message = new ChatMessage().role("user").content("How are you");
+    OpenAiChatMessage message = new OpenAiChatMessage().role("user").content("How are you");
 
     messages.add(message);
 

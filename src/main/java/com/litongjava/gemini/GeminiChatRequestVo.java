@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiRequestVo {
+public class GeminiChatRequestVo {
 
   /**
    * -- 新增字段 --
@@ -43,7 +43,7 @@ public class GeminiRequestVo {
    */
   private GeminiGenerationConfigVo generationConfig;
 
-  public GeminiRequestVo(List<GeminiContentVo> contents) {
+  public GeminiChatRequestVo(List<GeminiContentVo> contents) {
     this.contents = contents;
   }
 }

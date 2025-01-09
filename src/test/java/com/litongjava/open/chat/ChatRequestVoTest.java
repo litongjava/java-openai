@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.ChatRequestFunctionParameter;
 import com.litongjava.openai.chat.ChatRequestFunctionProperty;
 import com.litongjava.openai.chat.ChatRequestTool;
@@ -19,11 +19,11 @@ public class ChatRequestVoTest {
 
   @Test
   public void test() {
-    ChatMessage chatRequestMessage = new ChatMessage();
+    OpenAiChatMessage chatRequestMessage = new OpenAiChatMessage();
     chatRequestMessage.role("user");
-    List<ChatMessage> messages = new ArrayList<>();
+    List<OpenAiChatMessage> messages = new ArrayList<>();
 
-    ChatMessage message = new ChatMessage().role("user").content("How are you");
+    OpenAiChatMessage message = new OpenAiChatMessage().role("user").content("How are you");
 
     messages.add(message);
 
@@ -39,11 +39,11 @@ public class ChatRequestVoTest {
   @Test
   public void testFunctionTools() {
 
-    ChatMessage systemMessage = new ChatMessage().role("system")
+    OpenAiChatMessage systemMessage = new OpenAiChatMessage().role("system")
         .content("You are an excellent student advisor. You can query the database");
-    ChatMessage userMessage = new ChatMessage().role("system").content("I have a user table,how to count this table");
+    OpenAiChatMessage userMessage = new OpenAiChatMessage().role("system").content("I have a user table,how to count this table");
 
-    List<ChatMessage> messages = new ArrayList<>();
+    List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(systemMessage);
     messages.add(userMessage);
 

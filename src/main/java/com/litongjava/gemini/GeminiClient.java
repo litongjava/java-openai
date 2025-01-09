@@ -23,6 +23,7 @@ public class GeminiClient {
 
   // 接口前缀不变
   private static final String BASE_URL = EnvUtils.get("GEMINI_API_URL", "https://generativelanguage.googleapis.com/v1beta/models/");
+  public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
   /**
    * 单次生成内容 (同步请求)
@@ -33,7 +34,7 @@ public class GeminiClient {
    * @param requestVo    - 请求体实体
    * @return GeminiResponseVo - 响应实体
    */
-  public static GeminiResponseVo generate(String googleApiKey, String modelName, GeminiRequestVo requestVo) {
+  public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     // 拼接 URL
@@ -55,18 +56,43 @@ public class GeminiClient {
         throw new RuntimeException("Gemini generateContent failed, statusCode=" + response.code() + ", body=" + responseBody);
       }
       // 解析 JSON
-      return JsonUtils.parse(responseBody, GeminiResponseVo.class);
+      return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static GeminiResponseVo generate(String modelName, GeminiRequestVo requestVo) {
+  public static GeminiChatResponseVo generate(String modelName, GeminiChatRequestVo requestVo) {
     String key = EnvUtils.getStr("GEMINI_API_KEY");
     if (key == null || key.isEmpty()) {
       new RuntimeException("GEMINI_API_KEY is empty");
     }
     return generate(key, modelName, requestVo);
+  }
+
+  public static Response generate(String modelName, String bodyString) {
+    String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
+    if (apiKey == null || apiKey.isEmpty()) {
+      new RuntimeException("GEMINI_API_KEY is empty");
+    }
+    return generate(apiKey, modelName, bodyString);
+  }
+
+  public static Response generate(String googleApiKey, String modelName, String bodyString) {
+    // 拼接 URL
+    String url = BASE_URL + modelName + ":generateContent?key=" + googleApiKey;
+
+    // 构造 HTTP 请求
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    Request request = new Request.Builder().url(url).post(body).build();
+
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    // 发起调用
+    try {
+      return httpClient.newCall(request).execute();
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage(), e);
+    }
   }
 
   /**
@@ -80,23 +106,39 @@ public class GeminiClient {
    * @param callback     - 用于处理 SSE 流式回调
    * @return OkHttp Call 对象，可根据需求执行取消等操作
    */
-  public static Call stream(String googleApiKey, String modelName, GeminiRequestVo requestVo, Callback callback) {
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
-
-    String url = BASE_URL + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+  public static Call stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo, Callback callback) {
     String requestJson = JsonUtils.toJson(requestVo);
+    return stream(googleApiKey, modelName, requestJson, callback);
 
-    RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).header("Accept", "text/event-stream").build();
+  }
+
+  public static Call stream(String modelName, GeminiChatRequestVo requestVo, Callback callback) {
+    String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
+    if (apiKey == null || apiKey.isEmpty()) {
+      new RuntimeException("GEMINI_API_KEY is empty");
+    }
+    return stream(apiKey, modelName, requestVo, callback);
+  }
+
+  public static Call stream(String modelName, String bodyString, Callback callback) {
+    String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
+    if (apiKey == null || apiKey.isEmpty()) {
+      new RuntimeException("GEMINI_API_KEY is empty");
+    }
+    return stream(apiKey, modelName, bodyString, callback);
+  }
+
+  public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
+    // 拼接 URL
+    String url = BASE_URL + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+
+    // 构造 HTTP 请求
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    Request request = new Request.Builder().url(url).post(body).build();
 
     // 异步请求
     Call call = httpClient.newCall(request);
     call.enqueue(callback);
     return call;
-  }
-
-  public static Call stream(String modelName, GeminiRequestVo requestVo, Callback callback) {
-    String key = EnvUtils.getStr("GEMINI_API_KEY");
-    return stream(key, modelName, requestVo, callback);
   }
 }

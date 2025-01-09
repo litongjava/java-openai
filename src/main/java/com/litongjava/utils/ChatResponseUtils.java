@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.litongjava.gemini.GeminiCandidateVo;
 import com.litongjava.gemini.GeminiPartVo;
-import com.litongjava.gemini.GeminiResponseVo;
+import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.openai.chat.ChatResponseDelta;
 import com.litongjava.openai.chat.ChatResponseMessage;
@@ -16,7 +16,7 @@ import com.litongjava.openai.chat.OpenAiChatResponseVo;
 
 public class ChatResponseUtils {
 
-  public static OpenAiChatResponseVo toOpenAiChatResponseVo(GeminiResponseVo geminiResponseVo, boolean isStream) {
+  public static OpenAiChatResponseVo toOpenAiChatResponseVo(GeminiChatResponseVo geminiResponseVo, boolean isStream) {
     OpenAiChatResponseVo chatResponseVo = new OpenAiChatResponseVo();
     if (geminiResponseVo != null && geminiResponseVo.getCandidates() != null) {
       GeminiUsageMetadataVo usageMetadata = geminiResponseVo.getUsageMetadata();
