@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.openai.chat.ChatRequestImage;
-import com.litongjava.openai.chat.ChatRequestMultiContent;
+import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
@@ -15,12 +14,11 @@ import com.litongjava.openai.constants.OpenAiConstants;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
-import com.litongjava.tio.utils.encoder.Base64Utils;
 import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -30,6 +28,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@Slf4j
 public class OpenAiClient {
 
   /**
@@ -141,10 +140,11 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new RuntimeException(bodyString);
+        throw new RuntimeException("request:" + json + " response:" + bodyString);
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      log.error(e.getMessage() + " request json:" + json);
+      throw new RuntimeException(e.getMessage(), e);
     }
     return respVo;
   }
@@ -423,30 +423,24 @@ public class OpenAiClient {
   }
 
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
-    String mimeType = ContentTypeUtils.getContentType(suffix);
 
-    String byteArrayToAltBase64 = Base64Utils.encodeImage(bytes, mimeType);
+    ChatMesageContent text = new ChatMesageContent(prompt);
+    ChatMesageContent image = new ChatMesageContent(bytes, suffix);
 
-    ChatRequestImage chatRequestImage = new ChatRequestImage();
-    chatRequestImage.setDetail("auto");
-    chatRequestImage.setUrl(byteArrayToAltBase64);
-
-    ChatRequestMultiContent image = new ChatRequestMultiContent("image_url", chatRequestImage);
-    List<ChatRequestMultiContent> multiContents = new ArrayList<>();
+    List<ChatMesageContent> multiContents = new ArrayList<>();
+    multiContents.add(text);
     multiContents.add(image);
 
-    OpenAiChatMessage system = new OpenAiChatMessage("system", prompt);
     OpenAiChatMessage user = new OpenAiChatMessage();
     user.role("user").multiContents(multiContents);
 
     List<OpenAiChatMessage> messages = new ArrayList<>();
-    messages.add(system);
     messages.add(user);
 
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(model);
     openAiChatRequestVo.setMessages(messages);
-    return OpenAiClient.chatCompletions(apiKey, openAiChatRequestVo);
+    return chatCompletions(apiKey, openAiChatRequestVo);
   }
 
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {

@@ -25,7 +25,7 @@ public class OpenAiChatMessage {
     return this;
   }
 
-  public OpenAiChatMessage multiContents(List<ChatRequestMultiContent> multiContents) {
+  public OpenAiChatMessage multiContents(List<ChatMesageContent> multiContents) {
     this.content = multiContents;
     return this;
   }
