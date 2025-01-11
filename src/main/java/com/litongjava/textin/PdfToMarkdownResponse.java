@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 public class PdfToMarkdownResponse {
   private int code;
   private String message;
-  private Result result;
+  private TextInResult result;
   private String version;
   private long duration;
   private List<Metric> metrics;

@@ -1,5 +1,6 @@
 package com.litongjava.gemini;
 
+import java.util.Collections;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -44,6 +45,13 @@ public class GeminiChatRequestVo {
   private GeminiGenerationConfigVo generationConfig;
 
   public GeminiChatRequestVo(List<GeminiContentVo> contents) {
+    this.contents = contents;
+  }
+
+  public GeminiChatRequestVo(String prompt) {
+    GeminiPartVo part = new GeminiPartVo(prompt);
+    GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
+    List<GeminiContentVo> contents = Collections.singletonList(content);
     this.contents = contents;
   }
 }

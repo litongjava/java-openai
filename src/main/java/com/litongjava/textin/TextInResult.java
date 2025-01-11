@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Result {
+public class TextInResult {
   private String markdown;
   private List<Detail> detail;
 }

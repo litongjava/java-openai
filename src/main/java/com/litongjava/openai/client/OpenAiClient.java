@@ -185,7 +185,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new RuntimeException(bodyString);
+        throw new RuntimeException("request url:" + apiPerfixUrl + " request body:" + json + " response code:" + response.code() + " response body:" + bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -318,6 +318,25 @@ public class OpenAiClient {
     return chatCompletions(model, chatMessage);
   }
 
+  public static OpenAiChatResponseVo chatWithModel(String apiUrl, String key, String model, String role, String prompt) {
+    OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
+    return chatCompletions(apiUrl, key, model, chatMessage);
+  }
+
+  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model, OpenAiChatMessage chatMessage) {
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(chatMessage);
+    return chatComplections(apiUrl, key, model, messages);
+  }
+
+  public static OpenAiChatResponseVo chatComplections(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    chatRequestVo.setModel(model);
+    chatRequestVo.setStream(false);
+    chatRequestVo.setMessages(messages);
+    return chatCompletions(apiUrl, key, chatRequestVo);
+  }
+
   public static Response embeddings(String bodyString) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return embeddings(apiKey, bodyString);
@@ -446,4 +465,5 @@ public class OpenAiClient {
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
     return chatWithImage(apiKey, prompt, OpenAiModels.gpt_4o_mini, bytes, suffix);
   }
+
 }
