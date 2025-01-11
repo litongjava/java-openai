@@ -1,5 +1,6 @@
 package com.litongjava.openai.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,14 +15,23 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OpenAiChatMessage {
   private String role;
-  private Object content;
+  private List<ChatMesageContent> content;
 
-  public void setContent(String content) {
-    this.content = content;
+  public OpenAiChatMessage(String role, String prompt) {
+    this.role = role;
+
+    this.content = new ArrayList<>();
+    content.add(new ChatMesageContent(prompt));
   }
 
-  public OpenAiChatMessage content(String content) {
-    this.content = content;
+  public void setContent(String prompt) {
+    this.content = new ArrayList<>();
+    content.add(new ChatMesageContent(prompt));
+
+  }
+
+  public OpenAiChatMessage content(String prompt) {
+    this.setContent(prompt);
     return this;
   }
 
@@ -51,14 +61,16 @@ public class OpenAiChatMessage {
     return content;
   }
 
-  public OpenAiChatMessage(String content) {
+  public OpenAiChatMessage(String prompt) {
     this.role = "user";
-    this.content = content;
+    this.content = new ArrayList<>();
+    content.add(new ChatMesageContent(prompt));
   }
 
   public OpenAiChatMessage(ChatMessage chatMessage) {
     this.role = chatMessage.getRole();
-    this.content = chatMessage.getContent();
+    this.content = new ArrayList<>();
+    content.add(new ChatMesageContent(chatMessage.getContent()));
   }
 
   public static OpenAiChatMessage buildSystem(String content) {
@@ -84,5 +96,4 @@ public class OpenAiChatMessage {
   public static OpenAiChatMessage buildDeveloper(String content) {
     return new OpenAiChatMessage(MessageRole.developer, content);
   }
-
 }

@@ -34,7 +34,7 @@ public class JinaRerankClient {
     OkHttpClient client = OkHttpClientPool.getHttpClient();
     MediaType mediaType = MediaType.parse("application/json");
 
-    RequestBody body = RequestBody.create(mediaType, bodyString);
+    RequestBody body = RequestBody.create(bodyString, mediaType);
 
     String apiKey = EnvUtils.get("JINA_API_KEY");
     if (apiKey == null) {
@@ -44,7 +44,7 @@ public class JinaRerankClient {
     try (Response response = client.newCall(request).execute()) {
       if (response.isSuccessful()) {
         return response.body().string();
-      }else {
+      } else {
         throw new RuntimeException(response.body().string());
       }
     } catch (IOException e) {

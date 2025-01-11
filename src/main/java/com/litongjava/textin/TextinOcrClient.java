@@ -54,7 +54,7 @@ public class TextinOcrClient {
   }
 
   public static String convertPdfToMarkdown(String url, String appId, String appSecret, byte[] pdfFile) {
-    RequestBody body = RequestBody.create(MEDIA_TYPE_OCTET_STREAM, pdfFile);
+    RequestBody body = RequestBody.create(pdfFile,MEDIA_TYPE_OCTET_STREAM);
 
     Request request = new Request.Builder().url(url).post(body)
         //

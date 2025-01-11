@@ -25,6 +25,7 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [Jina Rerank](#jina-rerank)
     - [GOOGLE GEMINI](#google-gemini)
     - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
+    - [gemini openai](#gemini-openai)
   - [License](#license)
 
 ## Features
@@ -965,6 +966,28 @@ public class GeminiFunctionCallExample {
     } else {
       System.out.println("No response or no candidates from Gemini.");
     }
+  }
+}
+```
+### gemini openai 
+```properties
+OPENAI_API_KEY=<Gemini key here>
+OPENAI_API_URL=https://generativelanguage.googleapis.com/v1beta/openai
+```
+```java
+package com.litongjava.perplexica.services;
+
+import com.litongjava.gemini.GoogleGeminiModels;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class GeminiClientTest {
+  public static void main(String[] args) {
+    EnvUtils.load();
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatWithModel(GoogleGeminiModels.GEMINI_2_0_FLASH_EXP, "user", "how are you");
+    System.out.println(JsonUtils.toJson(chatResponse));
   }
 }
 ```
