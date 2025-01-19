@@ -21,4 +21,14 @@ public class ChatMessage {
   public static ChatMessage buildAssistant(String content) {
     return new ChatMessage(MessageRole.assistant, content);
   }
+
+  public ChatMessage role(String role) {
+    this.role=role;
+    return this;
+  }
+
+  public ChatMessage content(String content) {
+    this.content=content;
+    return this;
+  }
 }

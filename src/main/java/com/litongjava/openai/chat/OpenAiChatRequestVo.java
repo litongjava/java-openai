@@ -1,5 +1,6 @@
 package com.litongjava.openai.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -17,4 +18,12 @@ public class OpenAiChatRequestVo {
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
+
+  public void fromMessages(List<ChatMessage> messages) {
+    List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
+    for (int i = 0; i < messages.size(); i++) {
+      openAimessages.add(new OpenAiChatMessage(messages.get(i)));
+    }
+    this.messages = openAimessages;
+  }
 }
