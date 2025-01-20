@@ -23,7 +23,6 @@ import okhttp3.Response;
 public class GeminiClient {
 
   // 接口前缀不变
-  private static final String BASE_URL = EnvUtils.get("GEMINI_API_URL", "https://generativelanguage.googleapis.com/v1beta/models/");
   public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
   /**
@@ -35,11 +34,17 @@ public class GeminiClient {
    * @param requestVo    - 请求体实体
    * @return GeminiResponseVo - 响应实体
    */
-  public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
+    return extracted(baseUrl, googleApiKey, modelName, requestVo);
+  }
 
+  public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
+    return extracted(GeminiConsts.GEMINI_API_BASE, googleApiKey, modelName, requestVo);
+  }
+
+  public static GeminiChatResponseVo extracted(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
     // 拼接 URL
-    String url = BASE_URL + modelName + ":generateContent?key=" + googleApiKey;
+    String url = baseUrl + modelName + ":generateContent?key=" + googleApiKey;
     // 将 requestVo 转换为 JSON
     String requestJson = JsonUtils.toJson(requestVo);
     log.debug("Gemini generateContent request json: {}", requestJson);
@@ -54,7 +59,7 @@ public class GeminiClient {
       log.debug("Gemini generateContent response json: {}", responseBody);
 
       if (!response.isSuccessful()) {
-        throw new RuntimeException("Gemini generateContent failed, statusCode=" + response.code() + ", body=" + responseBody);
+        throw new RuntimeException("Gemini generateContent failed, request url=" + url + " request body=" + requestJson + "statusCode=" + response.code() + ", body=" + responseBody);
       }
       // 解析 JSON
       return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
@@ -81,7 +86,7 @@ public class GeminiClient {
 
   public static Response generate(String googleApiKey, String modelName, String bodyString) {
     // 拼接 URL
-    String url = BASE_URL + modelName + ":generateContent?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + modelName + ":generateContent?key=" + googleApiKey;
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
@@ -150,7 +155,7 @@ public class GeminiClient {
 
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
-    String url = BASE_URL + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
