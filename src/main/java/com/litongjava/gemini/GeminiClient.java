@@ -1,6 +1,7 @@
 package com.litongjava.gemini;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
@@ -93,6 +94,25 @@ public class GeminiClient {
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage(), e);
     }
+  }
+
+  /**
+   * 
+   * @param apiKey
+   * @param model
+   * @param role
+   * @param prompt
+   * @return
+   */
+  public static String chatWithModel(String apiKey, String model, String role, String prompt) {
+    // 1. 构造请求体
+    GeminiPartVo part = new GeminiPartVo(prompt);
+    GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
+    GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
+    // 2.发送请求
+    GeminiChatResponseVo chatResponse = GeminiClient.generate(apiKey, model, reqVo);
+    // 3.返回结果
+    return chatResponse.getCandidates().get(0).getContent().getParts().get(0).getText();
   }
 
   /**
