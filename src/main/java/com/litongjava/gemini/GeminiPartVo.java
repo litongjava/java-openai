@@ -15,8 +15,12 @@ public class GeminiPartVo {
   private String text;
   private GeminiInlineDataVo inline_data;
   private GeminiFunctionCallVo functionCall;
-  
+
   public GeminiPartVo(String text) {
-    this.text=text;
+    this.text = text;
+  }
+
+  public GeminiPartVo(GeminiInlineDataVo inline_data) {
+    this.inline_data = inline_data;
   }
 }
