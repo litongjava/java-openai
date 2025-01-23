@@ -24,7 +24,10 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [Perplexity Integration](#perplexity-integration)
     - [Jina Rerank](#jina-rerank)
     - [GOOGLE GEMINI](#google-gemini)
+    - [Google GEMINI images](#google-gemini-images)
     - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
+    - [gemini upload file](#gemini-upload-file)
+    - [gemini ask with pdf](#gemini-ask-with-pdf)
     - [gemini openai](#gemini-openai)
   - [License](#license)
 
@@ -750,7 +753,7 @@ public class GeminiDemo {
 ```
 ### Google GEMINI images
 ```java
-package com.litongjava.china.school.book.service;
+package com.litongjava.gemini;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -759,17 +762,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.gemini.GeminiChatRequestVo;
-import com.litongjava.gemini.GeminiChatResponseVo;
-import com.litongjava.gemini.GeminiClient;
-import com.litongjava.gemini.GeminiContentVo;
-import com.litongjava.gemini.GeminiInlineDataVo;
-import com.litongjava.gemini.GeminiPartVo;
-import com.litongjava.gemini.GoogleGeminiModels;
 import com.litongjava.tio.utils.encoder.Base64Utils;
 import com.litongjava.tio.utils.environment.EnvUtils;
 
-public class BookService {
+public class GeminiClientImageTest {
 
   public void toMarkdown(Path path) {
     //读取图片为base64
@@ -1024,6 +1020,89 @@ public class GeminiFunctionCallExample {
   }
 }
 ```
+### gemini upload file
+```java
+package com.litongjava.gemini;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class GeminiClientUploadFileTest {
+  public static void main(String[] args) throws IOException {
+    EnvUtils.load();
+    Path path = Paths.get("C:\\Users\\Administrator\\Downloads\\Lab Equipments Activity Sheet.pdf");
+    byte[] bytes = Files.readAllBytes(path);
+    FileUploadResponseVo responseVo = GeminiClient.uploadFile(bytes);
+    System.out.println(JsonUtils.toJson(responseVo));
+  }
+}
+```
+FileUploadResponseVo数据内容
+```json
+{
+  "file": {
+    "name": "files/mo7v85d4zum5",
+    "mimeType": "application/pdf",
+    "sizeBytes": "295078",
+    "createTime": "2025-01-23T06:54:56.365928Z",
+    "updateTime": "2025-01-23T06:54:56.365928Z",
+    "expirationTime": "2025-01-25T06:54:56.347859648Z",
+    "sha256Hash": "NDk0ZWNiZDE4MWZmY2QyZWM2M2Q0YWNjMThlNzhiN2Y3MTgwNGI1MzgwNDY0NTc4ZjZkY2QzNjljM2E0NTAxMg==",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/mo7v85d4zum5",
+    "state": "ACTIVE",
+    "source": "UPLOADED"
+  }
+}
+```
+### gemini ask with pdf
+
+```java
+package com.litongjava.gemini;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class GeminiClientAskWithPdfTest {
+
+  public static void main(String[] args) {
+    EnvUtils.load();
+    String googleApiKey = EnvUtils.getStr("GEMINI_API_KEY");
+
+    // 0. 生成文件
+    String mimeType = "application/pdf";
+    String fileUri = "https://generativelanguage.googleapis.com/v1beta/files/4eqnhyuzvzkb";
+
+    // 1. 构造请求体
+    List<GeminiPartVo> parts = new ArrayList<>();
+    parts.add(new GeminiPartVo("翻译成中文"));
+    parts.add(new GeminiPartVo(new GeminiFileDataVo(mimeType, fileUri)));
+    GeminiContentVo content = new GeminiContentVo("user", parts);
+    GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
+
+    // 2. 同步请求：generateContent
+    GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
+    // 3. 输出响应
+    if (respVo != null && respVo.getCandidates() != null) {
+      respVo.getCandidates().forEach(candidate -> {
+        if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
+          candidate.getContent().getParts().forEach(partVo -> {
+            System.out.println("Gemini answer text: " + partVo.getText());
+          });
+        }
+      });
+    }
+    return;
+  }
+}
+```
 ### gemini openai 
 ```properties
 OPENAI_API_KEY=<Gemini key here>
@@ -1046,6 +1125,7 @@ public class GeminiClientTest {
   }
 }
 ```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

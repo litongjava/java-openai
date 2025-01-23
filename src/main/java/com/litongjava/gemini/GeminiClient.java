@@ -22,7 +22,6 @@ import okhttp3.Response;
 @Slf4j
 public class GeminiClient {
 
-  // 接口前缀不变
   public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
   /**
@@ -34,15 +33,11 @@ public class GeminiClient {
    * @param requestVo    - 请求体实体
    * @return GeminiResponseVo - 响应实体
    */
-  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
-    return extracted(baseUrl, googleApiKey, modelName, requestVo);
-  }
-
   public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
-    return extracted(GeminiConsts.GEMINI_API_BASE, googleApiKey, modelName, requestVo);
+    return generate(GeminiConsts.GEMINI_API_BASE, googleApiKey, modelName, requestVo);
   }
 
-  public static GeminiChatResponseVo extracted(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
+  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
     // 拼接 URL
     String url = baseUrl + modelName + ":generateContent?key=" + googleApiKey;
     // 将 requestVo 转换为 JSON
@@ -165,5 +160,54 @@ public class GeminiClient {
     Call call = httpClient.newCall(request);
     call.enqueue(callback);
     return call;
+  }
+
+  /**
+   * 上传文件到 Google Gemini API
+   * @param googleApiKey - 你的 Google API Key
+   */
+  public static String uploadFile(String googleApiKey, byte[] bytes) {
+
+    String url = GeminiConsts.GEMINI_API_SERVER + "/upload/v1beta/files?key=" + googleApiKey;
+
+    RequestBody requestBody = RequestBody.create(bytes);
+
+    // 定义自定义 RequestBody，先写入 JSON，然后写入文件的二进制数据
+    // 构建请求
+    Request request = new Request.Builder().url(url).post(requestBody).addHeader("x-goog-api-key", "googleApiKey")
+        //
+        .build();
+
+    // 发送请求并处理响应
+    try (Response response = httpClient.newCall(request).execute()) {
+      String responseBody = response.body().string();
+      log.debug("File upload response: {}", responseBody);
+
+      if (!response.isSuccessful()) {
+        throw new RuntimeException("File upload failed, statusCode=" + response.code() + ", body=" + responseBody);
+      }
+
+      return responseBody;
+    } catch (IOException e) {
+      throw new RuntimeException("File upload failed: " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * 重载方法，从环境变量中获取 API Key
+   *
+   * @param displayName - 文件的显示名称
+   * @param file        - 要上传的文件
+   * @param mimeType    - 文件的 MIME 类型
+   * @return String - 上传后文件的 URI
+   */
+  public static FileUploadResponseVo uploadFile(byte[] bytes) {
+    String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
+    if (apiKey == null || apiKey.isEmpty()) {
+      throw new RuntimeException("GEMINI_API_KEY is empty");
+    }
+    String responseBody = uploadFile(apiKey, bytes);
+    // 解析响应 JSON
+    return JsonUtils.parse(responseBody, FileUploadResponseVo.class);
   }
 }
