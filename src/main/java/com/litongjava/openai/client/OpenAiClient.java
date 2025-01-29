@@ -16,6 +16,7 @@ import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
+import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +134,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = Json.getSkipNullJson().toJson(chatRequestVo);
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
@@ -166,7 +167,7 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = Json.getSkipNullJson().toJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
 
@@ -178,7 +179,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = Json.getSkipNullJson().toJson(chatRequestVo);
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       String bodyString = response.body().string();
@@ -256,7 +257,7 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
-    return chatCompletions(serverUrl, apiKey, JsonUtils.toJson(chatRequestVo), callback);
+    return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
   /**
@@ -398,7 +399,7 @@ public class OpenAiClient {
 
   public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(serverUrl, apiKey, JsonUtils.toJson(reoVo))) {
+    try (Response response = embeddings(serverUrl, apiKey, Json.getSkipNullJson().toJson(reoVo))) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
@@ -413,7 +414,7 @@ public class OpenAiClient {
 
   public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(apiKey, JsonUtils.toJson(reoVo))) {
+    try (Response response = embeddings(apiKey, Json.getSkipNullJson().toJson(reoVo))) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
@@ -463,7 +464,7 @@ public class OpenAiClient {
   }
 
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
-    return chatWithImage(apiKey, prompt, OpenAiModels.gpt_4o_mini, bytes, suffix);
+    return chatWithImage(apiKey, OpenAiModels.gpt_4o_mini, prompt, bytes, suffix);
   }
 
 }

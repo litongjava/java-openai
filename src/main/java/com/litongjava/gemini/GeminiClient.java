@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
+import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class GeminiClient {
     // 拼接 URL
     String url = baseUrl + modelName + ":generateContent?key=" + googleApiKey;
     // 将 requestVo 转换为 JSON
-    String requestJson = JsonUtils.toJson(requestVo);
+    String requestJson = Json.getSkipNullJson().toJson(requestVo);
     log.debug("Gemini generateContent request json: {}", requestJson);
 
     // 构造 HTTP 请求
@@ -127,7 +128,7 @@ public class GeminiClient {
    * @return OkHttp Call 对象，可根据需求执行取消等操作
    */
   public static Call stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo, Callback callback) {
-    String requestJson = JsonUtils.toJson(requestVo);
+    String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(googleApiKey, modelName, requestJson, callback);
 
   }
