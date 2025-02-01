@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.model.web.WebPageConteont;
+import com.litongjava.model.web.WebPageContent;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
@@ -163,8 +163,8 @@ public class JinaSearchClient {
     }
   }
 
-  public static List<WebPageConteont> parse(String markdown) {
-    List<WebPageConteont> results = new ArrayList<>();
+  public static List<WebPageContent> parse(String markdown) {
+    List<WebPageContent> results = new ArrayList<>();
 
     Matcher matcher = sourcePattern.matcher(markdown);
     while (matcher.find()) {
@@ -173,7 +173,7 @@ public class JinaSearchClient {
       String description = matcher.group(4) != null ? matcher.group(4).trim() : "";
       String content = matcher.group(5) != null ? matcher.group(5).trim() : "";
 
-      WebPageConteont webPageConteont = new WebPageConteont(title, url, description, content);
+      WebPageContent webPageConteont = new WebPageContent(title, url, description, content);
       results.add(webPageConteont);
     }
     return results;
