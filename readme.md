@@ -718,6 +718,84 @@ public class JinaRerankClientTest {
   ]
 }
 ```
+### Jian Search
+```java
+import org.junit.Test;
+
+import com.litongjava.jian.search.JinaSearchClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class JinaSearchServiceTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    //String key = EnvUtils.getStr("JINA_API_KEY");
+    String result = JinaSearchClient.search("How can I run deepseek r1 with lama.cpp");
+    System.out.println(result);
+  }
+}
+```
+
+```outout
+[1] Title: Run Deepseek-R1 / R1 Zero
+[1] URL Source: https://unsloth.ai/blog/deepseek-r1
+[1] Description: Thankfully, the DeepSeek team has created R1 Llama and Qwen distilled models that are much smaller and can easily be run locally on your own device. To run DeepSeek-R1 / R1-Zero, you&#x27;ll need to <strong>install the open-source package llama.cpp</strong>, the original framework for using GGUF files.
+[1] Markdown Content:
+Run & Finetune DeepSeek-R1
+
+Jan 20, 2025 • By Daniel & Michael
+----------------------------------
+
+Jan 20, 2025
+------------
+
+•
+-
+
+By Daniel & Michael
+-------------------
+
+DeepSeek’s new R1 models sets new benchmarks in reasoning performance, matching OpenAI’s o1 model. It follows the recently launched [DeepSeek-V3](https://huggingface.co/collections/unsloth/deepseek-v3-all-versions-677cf5cfd7df8b7815fc723c), the most powerful open-source AI model to date. DeepSeek also distilled from R1 and fine-tuned it on Llama 3 and Qwen 2.5 models, meaning you can now also fine-tune the models out of the box with [Unsloth](https://github.com/unslothai/unsloth).See our collection for all versions of the R1 model series including GGUF's, 4-bit and more! [huggingface.co/collections/unsloth/deepseek-r1](https://huggingface.co/collections/unsloth/deepseek-r1-all-versions-678e1c48f5d2fce87892ace5)
+
+**_Jan 27, 2025 update_**: We've released 1.58-bit Dynamic GGUFs for DeepSeek-R1 allowing you to run R1 even better with a 80% size reduction: [1.58-bit Dynamic R1](https://unsloth.ai/blog/deepseekr1-dynamic)
+
+```
+### PARSE markdown response
+```java
+package com.litongjava.searxng;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
+public class WebPageConteont {
+  private String title;
+  private String url;
+  private String description;
+  private String content;
+
+  public WebPageConteont(String title, String url) {
+    this.title = title;
+    this.url = url;
+  }
+
+  public WebPageConteont(String title, String url, String content) {
+    this.title = title;
+    this.url = url;
+    this.content = content;
+  }
+}
+```
+com.litongjava.jian.search.JinaSearchClient.parse
+```java
+public static List<WebPageConteont> parse(String markdown)
+```
 ### GOOGLE GEMINI
 ```java
 package com.litongjava.gemini;
