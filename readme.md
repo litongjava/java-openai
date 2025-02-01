@@ -23,12 +23,15 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [Llama Integration](#llama-integration)
     - [Perplexity Integration](#perplexity-integration)
     - [Jina Rerank](#jina-rerank)
+    - [Jian Search](#jian-search)
+    - [PARSE markdown response](#parse-markdown-response)
     - [GOOGLE GEMINI](#google-gemini)
     - [Google GEMINI images](#google-gemini-images)
     - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
     - [gemini upload file](#gemini-upload-file)
     - [gemini ask with pdf](#gemini-ask-with-pdf)
     - [gemini openai](#gemini-openai)
+  - [deepseek-openai](#deepseek-openai)
   - [License](#license)
 
 ## Features
@@ -1203,7 +1206,40 @@ public class GeminiClientTest {
   }
 }
 ```
+## deepseek-openai
+```java
+import java.util.ArrayList;
+import java.util.List;
 
+import com.litongjava.deepseek.DeepSeekConst;
+import com.litongjava.deepseek.DeepSeekModels;
+import com.litongjava.openai.chat.OpenAiChatMessage;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class DeepSeekClientTest {
+
+  public static void main(String[] args) {
+    EnvUtils.load();
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(new OpenAiChatMessage("user", "Hi"));
+
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo()
+        //
+        .setModel(DeepSeekModels.DEEPSEEK_REASONER)
+        //
+        .setMessages(messages).setMax_tokens(8000);
+
+    String apiKey = EnvUtils.getStr("DEEPSEEK_API_KEY");
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(DeepSeekConst.BASE_URL, apiKey, chatRequestVo);
+    System.out.println(JsonUtils.toSkipNullJson(chatResponse));
+  }
+}
+
+```
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

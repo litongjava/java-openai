@@ -31,4 +31,9 @@ public class GeminiContentVo {
     this.role = chatMessage.getRole();
     this.parts = Collections.singletonList(new GeminiPartVo(chatMessage.getContent()));
   }
+
+  public GeminiContentVo(String role, String content) {
+    this.role=role;
+    this.parts = Collections.singletonList(new GeminiPartVo(content));
+  }
 }

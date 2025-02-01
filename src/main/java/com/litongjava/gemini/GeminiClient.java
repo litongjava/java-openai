@@ -23,6 +23,7 @@ import okhttp3.Response;
 @Slf4j
 public class GeminiClient {
 
+  public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
   /**
@@ -152,7 +153,9 @@ public class GeminiClient {
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
     String url = GeminiConsts.GEMINI_API_BASE + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
-
+    if (debug) {
+      log.info("{} {}", url, bodyString);
+    }
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
     Request request = new Request.Builder().url(url).post(body).build();

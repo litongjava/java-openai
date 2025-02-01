@@ -31,6 +31,7 @@ import okhttp3.Response;
 
 @Slf4j
 public class OpenAiClient {
+  public static boolean debug = false;
 
   /**
    * 
@@ -271,6 +272,9 @@ public class OpenAiClient {
   public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
+    if (debug) {
+      log.info(bodyString);
+    }
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Headers headers = Headers.of(requestHeaders);
