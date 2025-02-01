@@ -13,6 +13,7 @@ public class ChatResponseMessage {
 
   private String role;
   private String content;
+  private String reasoning_content;
   private List<ToolCall> tool_calls;
 
   public ChatResponseMessage(String role, String content) {

@@ -14,11 +14,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class OpenAiChatRequestVo {
   private String model;
-  private boolean stream;
-  private boolean return_images;
+  private Boolean stream;
+  private Boolean return_images;
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
+  private String stop;
 
   public void fromMessages(List<ChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
