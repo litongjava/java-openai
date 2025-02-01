@@ -18,4 +18,5 @@ public class OpenAiChatResponseVo {
   private List<Choice> choices;
   private ChatResponseUsage usage;
   private List<String> citations;
+  private List<ChatImage> images;
 }
