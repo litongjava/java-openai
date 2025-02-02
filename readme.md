@@ -212,7 +212,7 @@ public class SimpleAskExample {
 Convert an image to text and output the result.
 
 ```java
-package com.litongjava.maxkb.service;
+package com.litongjava.perplexica.services;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -220,26 +220,29 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
-import com.litongjava.openai.chat.ChatRequestMultiContent;
 import com.litongjava.openai.chat.ChatResponseMessage;
-import com.litongjava.openai.chat.ChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.hutool.FileUtil;
 import com.litongjava.tio.utils.hutool.FilenameUtils;
 import com.litongjava.tio.utils.hutool.ResourceUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
 
-public class DatasetDocumentSplitServiceTest {
+public class AskWithImageOpenai {
 
   @Test
   public void imageToMarkDown() {
-    String apiKey = "your_openai_api_key_here";
+    EnvUtils.load();
+    String apiKey = EnvUtils.getStr("OPENAI_API_KEY");
+
     String prompt = "Convert the image to text and just output the text.";
 
     String filePath = "images/200-dpi.png";
@@ -254,25 +257,23 @@ public class DatasetDocumentSplitServiceTest {
     chatRequestImage.setDetail("auto");
     chatRequestImage.setUrl(imageBase64);
 
-    ChatRequestMultiContent imageContent = new ChatRequestMultiContent("image_url", chatRequestImage);
-    List<ChatRequestMultiContent> multiContents = new ArrayList<>();
-    multiContents.add(imageContent);
+    List<ChatMesageContent> multiContents = new ArrayList<>();
+    multiContents.add(new ChatMesageContent(prompt));
+    multiContents.add(new ChatMesageContent(chatRequestImage));
 
-    ChatMessage systemMessage = new ChatMessage("system", prompt);
-    ChatMessage userMessage = new ChatMessage();
+    OpenAiChatMessage userMessage = new OpenAiChatMessage();
     userMessage.role("user").multiContents(multiContents);
 
-    List<ChatMessage> messages = new ArrayList<>();
-    messages.add(systemMessage);
+    List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(userMessage);
 
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(OpenAiModels.GPT_4O_MINI);
     chatRequestVo.setMessages(messages);
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
     System.out.println("Request JSON:\n" + json);
 
-    ChatResponseVo chatResponse = OpenAiClient.chatCompletions(apiKey, chatRequestVo);
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(apiKey, chatRequestVo);
     ChatResponseMessage responseMessage = chatResponse.getChoices().get(0).getMessage();
     String content = responseMessage.getContent();
     System.out.println("Response Content:\n" + content);
@@ -288,12 +289,12 @@ input json
   "messages":
   [
     {
-      "content": "Convert the image into text. Do not miss any information, keep the format, and just output the text.\r\ntext",
-      "role": "system"
-    },
-    {
       "content":
       [
+        {
+          "type":"text",
+          "text": "Convert the image into text. Do not miss any information, keep the format, and just output the text.\r\ntext",
+        },
         {
           "type": "image_url",
           "image_url":
@@ -305,8 +306,7 @@ input json
       ],
       "role": "user"
     }
-  ],
-  "tools": null
+  ]
 }
 ```
 output json
