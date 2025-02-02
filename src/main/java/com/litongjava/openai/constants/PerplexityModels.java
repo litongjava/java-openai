@@ -1,11 +1,15 @@
 package com.litongjava.openai.constants;
 
 public interface PerplexityModels {
+  String SONAR_REASONING = "sonar-reasoning";
+  String SONAR_PRO = "sonar-pro";
+  String SONAR = "sonar";
+
+  // the follows models will be deprecated and will no longer be available to use after 2/22/2025
   // 32k  online
   String LLAMA_3_SONAR_SMALL_32K_ONLINE = "llama-3-sonar-small-32k-online";
   String LLAMA_3_SONAR_LARGE_32K_ONLINE = "llama-3-sonar-large-32k-online";
 
-  
   // 32k search
   String LLAMA_3_SONAR_SMALL_32K_CHAT = "llama-3-sonar-small-32k-chat";
   String LLAMA_3_SONAR_LARGE_32K_CHAT = "llama-3-sonar-large-32k-chat";
