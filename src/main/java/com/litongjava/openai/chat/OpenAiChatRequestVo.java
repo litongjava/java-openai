@@ -19,6 +19,10 @@ public class OpenAiChatRequestVo {
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
+  private Float temperature;
+  private Float top_p;
+  private Integer top_k;
+  private Integer frequency_penalty;
   private String stop;
 
   public void fromMessages(List<ChatMessage> messages) {

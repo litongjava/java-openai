@@ -33,6 +33,7 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [gemini openai](#gemini-openai)
   - [deepseek-openai](#deepseek-openai)
   - [SiliconFlow DeepSeek](#siliconflow-deepseek)
+  - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
   - [License](#license)
 
 ## Features
@@ -1321,6 +1322,82 @@ output
   },
   "object": "chat.completion",
   "id": "0194c43b4cf5338c81e022cbc39581d9"
+}
+```
+## SiliconFlow DeepSeek Image
+```java
+package com.litongjava.perplexica.services;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.openai.chat.ChatMesageContent;
+import com.litongjava.openai.chat.ChatRequestImage;
+import com.litongjava.openai.chat.ChatResponseMessage;
+import com.litongjava.openai.chat.OpenAiChatMessage;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.siliconflow.SiliconFlowConsts;
+import com.litongjava.siliconflow.SiliconFlowModels;
+import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.ContentTypeUtils;
+import com.litongjava.tio.utils.hutool.FileUtil;
+import com.litongjava.tio.utils.hutool.FilenameUtils;
+import com.litongjava.tio.utils.hutool.ResourceUtil;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class AskWithImageDeepSeek {
+
+  @Test
+  public void imageToMarkDown() {
+    EnvUtils.load();
+    String apiKey = EnvUtils.getStr("SILICONFLOW_API_KEY");
+
+    String prompt = "Convert the image to text and just output the text.";
+
+    String filePath = "images/200-dpi.png";
+    URL url = ResourceUtil.getResource(filePath);
+    byte[] imageBytes = FileUtil.readUrlAsBytes(url);
+    String suffix = FilenameUtils.getSuffix(filePath);
+    String mimeType = ContentTypeUtils.getContentType(suffix);
+
+    String imageBase64 = Base64Utils.encodeImage(imageBytes, mimeType);
+
+    ChatRequestImage chatRequestImage = new ChatRequestImage();
+    chatRequestImage.setUrl(imageBase64);
+
+    List<ChatMesageContent> multiContents = new ArrayList<>();
+    multiContents.add(new ChatMesageContent(chatRequestImage));
+    multiContents.add(new ChatMesageContent(prompt));
+
+    OpenAiChatMessage userMessage = new OpenAiChatMessage();
+    userMessage.role("user").multiContents(multiContents);
+
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(userMessage);
+
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    //DEEPSEEK_R1 is not a VLM (Vision Language Model). Please use text-only prompts.
+    //DeepSeek-V3 not working
+    //DEEPSEEK_VL2 working but not well
+    chatRequestVo.setModel(SiliconFlowModels.DEEPSEEK_VL2);
+    //better for ocr
+    chatRequestVo.setMax_tokens(1024).setTemperature(0.7f).setTop_p(0.7f).setTop_k(50).setFrequency_penalty(0);
+
+    chatRequestVo.setMessages(messages);
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
+    //System.out.println("Request JSON:\n" + json);
+
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(SiliconFlowConsts.SELICONFLOW_API_BASE, apiKey, chatRequestVo);
+    ChatResponseMessage responseMessage = chatResponse.getChoices().get(0).getMessage();
+    String content = responseMessage.getContent();
+    System.out.println("Response Content:\n" + content);
+  }
 }
 ```
 ## License
