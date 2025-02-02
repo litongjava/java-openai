@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatImage {
+public class SearchReturnImage {
   private String image_url;
   private String origin_url;
   private Integer height;
