@@ -32,6 +32,7 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
     - [gemini ask with pdf](#gemini-ask-with-pdf)
     - [gemini openai](#gemini-openai)
   - [deepseek-openai](#deepseek-openai)
+  - [SiliconFlow DeepSeek](#siliconflow-deepseek)
   - [License](#license)
 
 ## Features
@@ -54,7 +55,7 @@ To use Java OpenAI in your project, add the following dependencies to your `pom.
   <dependency>
     <groupId>com.litongjava</groupId>
     <artifactId>java-openai</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.4</version>
   </dependency>
   <dependency>
     <groupId>com.alibaba.fastjson2</groupId>
@@ -77,15 +78,13 @@ OPENAI_API_KEY=your_openai_api_key_here
 Create a simple Java class to test the integration:
 
 ```java
-package com.litongjava.openai.example;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.constants.OpenAiModels;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -99,9 +98,8 @@ public class SimpleAskExample {
     EnvUtils.load();
 
     // Create messages
-    List<ChatMessage> messages = new ArrayList<>();
-    ChatMessage message = new ChatMessage().role("user").content("How are you?");
-    messages.add(message);
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(new OpenAiChatMessage("user", "How are you?"));
 
     // Create chat request
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
@@ -109,14 +107,14 @@ public class SimpleAskExample {
     chatRequestVo.setModel(OpenAiModels.GPT_4O_MINI);
     chatRequestVo.setMessages(messages);
 
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
     System.out.println("Request JSON:\n" + json);
 
     // Send HTTP request
     try (Response response = OpenAiClient.chatCompletions(json)) {
       if (response.isSuccessful()) {
         String responseBody = response.body().string();
-        ChatResponseVo chatCompletions = JsonUtils.parse(responseBody, ChatResponseVo.class);
+        OpenAiChatResponseVo chatCompletions = JsonUtils.parse(responseBody, OpenAiChatResponseVo.class);
         System.out.println("Response:\n" + JsonUtils.toJson(chatCompletions));
       } else {
         System.err.println("Request failed: " + response);
@@ -126,6 +124,7 @@ public class SimpleAskExample {
     }
   }
 }
+
 ```
 
 Another simplified example using roles:
@@ -1239,6 +1238,90 @@ public class DeepSeekClientTest {
   }
 }
 
+```
+
+## SiliconFlow DeepSeek
+[api docs](https://docs.siliconflow.cn/guides)
+
+```java
+package com.litongjava.perplexica.services;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.litongjava.openai.chat.OpenAiChatMessage;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.siliconflow.SiliconFlowConsts;
+import com.litongjava.siliconflow.SiliconFlowModels;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+import okhttp3.Response;
+
+public class SiliconFlowDeepSeekTest {
+  public static void main(String[] args) {
+    // Load OPENAI_API_KEY from configuration
+    EnvUtils.load();
+    String apiKey = EnvUtils.getStr("SILICONFLOW_API_KEY");
+
+    // Create messages
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(new OpenAiChatMessage("user", "How are you?"));
+
+    // Create chat request
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    chatRequestVo.setStream(false);
+    chatRequestVo.setModel(SiliconFlowModels.DEEPSEEK_R1);
+    chatRequestVo.setMessages(messages);
+
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
+    System.out.println("Request JSON:\n" + json);
+
+    // Send HTTP request
+    try (Response response = OpenAiClient.chatCompletions(SiliconFlowConsts.SELICONFLOW_API_BASE, apiKey, json)) {
+      if (response.isSuccessful()) {
+        String responseBody = response.body().string();
+        OpenAiChatResponseVo chatCompletions = JsonUtils.parse(responseBody, OpenAiChatResponseVo.class);
+        System.out.println("Response:\n" + JsonUtils.toSkipNullJson(chatCompletions));
+      } else {
+        System.err.println("Request failed: " + response);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+output
+```json
+{
+  "system_fingerprint": "",
+  "model": "deepseek-ai/DeepSeek-R1",
+  "created": "1738459008",
+  "choices":
+  [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message":
+      {
+        "role": "assistant",
+        "content": "<think>Okay, the user is asking, \"How are you?\" so I need to respond in a friendly and helpful manner.\n\nFirst, I should acknowledge that I'm an AI and don't have feelings, but still keep it positive. \n\nMaybe start with a thank you for asking. Then mention that I'm here to help with any questions or tasks. Keep it short and welcoming.\n\nAlso, avoid using any markdown formatting. Just plain text with proper punctuation.\n\nLet me put that together: \"I'm just a computer program, so I don't have feelings, but thanks for asking! How can I assist you today?\" \n\nThat sounds good. It answers their question, clarifies my nature, and opens the door for them to ask for help.\n</think>\n\nI'm just a computer program, so I don't have feelings, but thanks for asking! How can I assist you today?"
+      }
+    }
+  ],
+  "usage":
+  {
+    "completion_tokens": 179,
+    "prompt_tokens": 9,
+    "total_tokens": 188
+  },
+  "object": "chat.completion",
+  "id": "0194c43b4cf5338c81e022cbc39581d9"
+}
 ```
 ## License
 

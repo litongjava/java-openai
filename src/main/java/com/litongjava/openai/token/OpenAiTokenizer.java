@@ -44,7 +44,7 @@ public class OpenAiTokenizer implements Tokenizer {
    * It should be suitable for all current OpenAI models, as they all use the same cl100k_base encoding.
    */
   public OpenAiTokenizer() {
-    this(OpenAiModels.gpt_35_turbo.toString());
+    this(OpenAiModels.GPT_35_TURBO);
   }
 
   /**

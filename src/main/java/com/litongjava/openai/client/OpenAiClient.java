@@ -297,7 +297,7 @@ public class OpenAiClient {
    */
   public static OpenAiChatResponseVo chat(String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage("system", prompt);
-    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
+    return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
   }
 
   /**
@@ -308,7 +308,7 @@ public class OpenAiClient {
    */
   public static OpenAiChatResponseVo chatWithRole(String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
-    return chatCompletions(OpenAiModels.gpt_4o_mini, chatMessage);
+    return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
   }
 
   /**
@@ -389,11 +389,11 @@ public class OpenAiClient {
   }
 
   public static float[] embeddingArray(String input) {
-    return embeddingArray(input, OpenAiModels.text_embedding_3_small);
+    return embeddingArray(input, OpenAiModels.TEXT_EMBEDDING_3_SMALL);
   }
 
   public static float[] embeddingArrayByLargeModel(String input) {
-    return embeddingArray(input, OpenAiModels.text_embedding_3_large);
+    return embeddingArray(input, OpenAiModels.TEXT_EMBEDDING_3_LARGE);
   }
 
   public static EmbeddingResponseVo embeddings(EmbeddingRequestVo embeddingRequestVo) {
@@ -468,7 +468,7 @@ public class OpenAiClient {
   }
 
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
-    return chatWithImage(apiKey, OpenAiModels.gpt_4o_mini, prompt, bytes, suffix);
+    return chatWithImage(apiKey, OpenAiModels.GPT_4O_MINI, prompt, bytes, suffix);
   }
 
 }
