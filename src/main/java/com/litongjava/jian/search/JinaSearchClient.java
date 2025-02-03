@@ -14,6 +14,7 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -22,6 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+@Slf4j
 public class JinaSearchClient {
 
   // Reuse a single OkHttpClient instance if possible
@@ -140,7 +142,7 @@ public class JinaSearchClient {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
       responseVo.setOk(false);
       responseVo.setBodyString(e.getMessage());
     }
@@ -153,7 +155,7 @@ public class JinaSearchClient {
     jinaSearchRequest.setQ(keywords);
     //Remove All Images
     jinaSearchRequest.setXRetainImages("none");
-    ResponseVo vo = JinaSearchClient.search(jinaSearchRequest);
+    ResponseVo vo = search(jinaSearchRequest);
     String bodyString = vo.getBodyString();
     if (vo.isOk()) {
       return bodyString;

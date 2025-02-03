@@ -3,11 +3,19 @@ package com.litongjava.searxng;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.tio.utils.http.Http;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import okhttp3.Response;
+
 public class SearxngSearchClient {
+
+  public static SearxngSearchResponse search(SearxngSearchParam param) {
+    String baseUrl = EnvUtils.getStr("SEARXNG_API_URL");
+    String endpoint = baseUrl + "/search";
+    return search(endpoint, param);
+  }
 
   public static SearxngSearchResponse search(String endpoint, SearxngSearchParam param) {
     // 使用 Map 收集所有非空参数
@@ -50,13 +58,16 @@ public class SearxngSearchClient {
       params.put("theme", param.getTheme());
     }
 
-    // 发起 POST 请求
-    ResponseVo responseVo = Http.post(endpoint, params);
-    if (responseVo.isOk()) {
-      String bodyString = responseVo.getBodyString();
-      return JsonUtils.parse(bodyString, SearxngSearchResponse.class);
-    } else {
-      throw new RuntimeException("Request URL: " + endpoint + " Response: " + responseVo.getBodyString());
+    try (Response resposne = HttpUtils.post(endpoint, null, params)) {
+      String bodyString = resposne.body().string();
+      if (resposne.isSuccessful()) {
+        return JsonUtils.parse(bodyString, SearxngSearchResponse.class);
+      } else {
+        throw new RuntimeException("Request URL: " + endpoint + " Response: " + bodyString);
+      }
+
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 }
