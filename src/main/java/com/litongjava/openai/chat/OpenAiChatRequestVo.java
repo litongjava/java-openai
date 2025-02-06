@@ -45,4 +45,13 @@ public class OpenAiChatRequestVo {
     this.stream_options = new ChatStreamOptions(b);
 
   }
+
+  public OpenAiChatRequestVo setMessages(List<ChatMessage> messages) {
+    List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
+    for (ChatMessage message : messages) {
+      openAiMessages.add(new OpenAiChatMessage(message));
+    }
+    this.messages = openAiMessages;
+    return this;
+  }
 }
