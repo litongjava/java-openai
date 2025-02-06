@@ -46,7 +46,7 @@ public class OpenAiChatRequestVo {
 
   }
 
-  public OpenAiChatRequestVo setMessages(List<ChatMessage> messages) {
+  public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages) {
     List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
     for (ChatMessage message : messages) {
       openAiMessages.add(new OpenAiChatMessage(message));
