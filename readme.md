@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Java OpenAI is a robust client library for integrating OpenAI services into Java applications. Built on top of [OkHttp](https://square.github.io/okhttp/) and [FastJSON](https://github.com/alibaba/fastjson), it provides a seamless and efficient way to interact with OpenAI's APIs, enabling features such as chat completions, image processing, embeddings, and more.
+**Java OpenAI** is a robust client library for integrating OpenAI services into Java applications. Built on top of [OkHttp](https://square.github.io/okhttp/) and [FastJSON](https://github.com/alibaba/fastjson), it provides a seamless, efficient way to interact with OpenAI's APIs—enabling features such as chat completions, image processing, embeddings, and more.
 
 ## Table of Contents
 
@@ -13,43 +13,47 @@ Java OpenAI is a robust client library for integrating OpenAI services into Java
   - [Getting Started](#getting-started)
     - [1. Add Dependencies](#1-add-dependencies)
     - [2. Configure API Key](#2-configure-api-key)
-    - [3. Run a Simple Test](#3-run-a-simple-test)
+    - [3. Run With PromptEngine](#3-run-with-promptengine)
+    - [4. Run a Simple Test](#4-run-a-simple-test)
+    - [5. Another Simplified Example Using Roles](#5-another-simplified-example-using-roles)
   - [Examples](#examples)
     - [Chat Example](#chat-example)
     - [Ask with Image](#ask-with-image)
     - [Chat with Image](#chat-with-image)
     - [Ask with Tools](#ask-with-tools)
     - [Embedding](#embedding)
+      - [Example 1: Generate Embedding](#example-1-generate-embedding)
+      - [Example 2: Simple Embedding](#example-2-simple-embedding)
     - [Llama Integration](#llama-integration)
     - [Perplexity Integration](#perplexity-integration)
     - [Jina Rerank](#jina-rerank)
-    - [Jian Search](#jian-search)
+    - [Jina Search](#jina-search)
     - [PARSE markdown response](#parse-markdown-response)
     - [GOOGLE GEMINI](#google-gemini)
-    - [Google GEMINI images](#google-gemini-images)
-    - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
-    - [gemini upload file](#gemini-upload-file)
-    - [gemini ask with pdf](#gemini-ask-with-pdf)
-    - [gemini openai](#gemini-openai)
-  - [deepseek-openai](#deepseek-openai)
-  - [SiliconFlow DeepSeek](#siliconflow-deepseek)
-  - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
+      - [Google GEMINI images](#google-gemini-images)
+      - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
+      - [gemini upload file](#gemini-upload-file)
+      - [gemini ask with pdf](#gemini-ask-with-pdf)
+      - [gemini openai](#gemini-openai)
+    - [deepseek-openai](#deepseek-openai)
+    - [SiliconFlow DeepSeek](#siliconflow-deepseek)
+    - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
   - [License](#license)
 
 ## Features
 
-- **Chat Completions:** Interact with OpenAI's chat models effortlessly.
-- **Image Processing:** Convert images to text or other formats.
-- **Embeddings:** Generate text embeddings for various applications.
-- **Tool Integration:** Enhance functionality by integrating with external tools.
-- **Support for Llama and Perplexity Models:** Extend capabilities beyond OpenAI with support for other models.
-- **Easy Configuration:** Simple setup with configuration files.
+- **Chat Completions**: Interact with OpenAI's chat models effortlessly.
+- **Image Processing**: Convert images to text or other formats.
+- **Embeddings**: Generate text embeddings for various applications.
+- **Tool Integration**: Enhance functionality by integrating with external tools.
+- **Support for Llama and Perplexity Models**: Extend capabilities beyond OpenAI with support for other models.
+- **Easy Configuration**: Simple setup with configuration files.
 
 ## Getting Started
 
 ### 1. Add Dependencies
 
-To use Java OpenAI in your project, add the following dependencies to your `pom.xml`:
+Add the following dependencies to your `pom.xml`:
 
 ```xml
 <dependencies>
@@ -68,15 +72,170 @@ To use Java OpenAI in your project, add the following dependencies to your `pom.
 
 ### 2. Configure API Key
 
-Add your OpenAI API key to the `src/main/resources/app.properties` file:
+Create or update `src/main/resources/app.properties`:
 
 ```properties
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### 3. Run a Simple Test
+### 3. Run With PromptEngine
 
-Create a simple Java class to test the integration:
+```java
+package com.litongjava.prompt;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.litongjava.openai.chat.ChatResponseFormatType;
+import com.litongjava.openai.chat.OpenAiChatMessage;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.openai.constants.OpenAiModels;
+import com.litongjava.template.PromptEngine;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class ProfessorEmojisTest {
+  public static void main(String[] args) {
+    // Load OPENAI_API_KEY from configuration
+    EnvUtils.load();
+
+    // Create messages
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    String prompt = PromptEngine.renderToString("professor_emojis_introduction_weaknesses_strengths_prompt.txt");
+    String exmaple = PromptEngine.renderToString("professor_emojis_introduction_weaknesses_strengths_prompt_example.txt");
+    messages.add(new OpenAiChatMessage("system", prompt));
+    messages.add(new OpenAiChatMessage("user", exmaple));
+
+    // Create chat request
+    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    chatRequestVo.setStream(false);
+    chatRequestVo.setModel(OpenAiModels.GPT_4O_MINI);
+    chatRequestVo.setMessages(messages);
+
+    chatRequestVo
+        .setTemperature(0f)
+        .setTop_p(1.0f)
+        .setFrequency_penalty(0.0f)
+        .setPresence_penalty(0.0f)
+        .setResponse_format(ChatResponseFormatType.json_object);
+
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
+    System.out.println("Request JSON:\n" + json);
+
+    // Send HTTP request
+    OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(chatRequestVo);
+    System.out.println(JsonUtils.toSkipNullJson(chatCompletions));
+  }
+}
+
+```
+professor_emojis_introduction_weaknesses_strengths_prompt.txt
+```
+<instruction>
+  You are tasked with generating a comprehensive analysis report of a professor based on data from RateMyProfessor. Follow these steps to complete the task:
+
+  1. Use the provided variables to fill in the required fields in the JSON format.
+  2. Analyze the professor's teaching style, classroom interaction, and personal charisma based on student reviews.
+  3. Ensure the tone is humorous, witty, yet objective throughout the report.
+  4. Populate the 'emojis' field with emojis that reflect the professor's personality and characteristics.
+  5. Write a concise and impactful introduction summarizing the professor's teaching style, academic background, or notable qualities.
+  6. Identify and list the professor's weaknesses using the specified format, ensuring each entry is on a new line with a key and description separated by a colon.
+  7. Identify and list the professor's strengths using the specified format, ensuring each entry is on a new line with a key and description separated by a colon.
+  8. Ensure the output is strictly in JSON format and does not contain any XML tags.
+
+  The output should look like this:
+  {
+    "emojis": ["emoji1", "emoji_2", ...],
+    "introduction": "professor_introduction",
+    "weaknesses": "**Weakness_name_1**:weakness_description_1\n**Weakness_name_2**:weakness_description_2\n...",
+    "strengths": "**Strength__name_1**:strength_description_1\n**Strength_name_2**:strength_description_2\n..."
+  }
+</instruction>
+```
+prompts\professor_emojis_introduction_weaknesses_strengths_prompt_example.txt
+```json
+[
+{
+"Quality": 5.0,
+"Difficulty": 1.0,
+"Course": "EGMT1510",
+"Date": "Jan 31st, 2025",
+"For Credit": "Yes",
+"Attendance": "Not Mandatory",
+"Would Take Again": "Yes",
+"Grade": "A+",
+"Textbook": "Yes",
+"Review": "I had Professor Levenson for the London First Program, and he was genuinely the kindest and most caring professor I have ever had. He is incredibly engaged with his students, and will make the effort to have a personal relationship with anyone willing to talk to him. He is an incredibly reasonable grader, and his course is genuinely enjoyable.",
+"Tags": ["Amazing lectures", "Caring", "Accessible outside class", "Helpful"],
+"Thumbs Up": 0,
+"Thumbs Down": 0
+},
+{
+"Quality": 5.0,
+"Difficulty": 1.0,
+"Course": "LONDON",
+"Date": "Jan 12th, 2025",
+"For Credit": "Yes",
+"Attendance": "Not Mandatory",
+"Would Take Again": "Yes",
+"Grade": "A",
+"Textbook": "N/A",
+"Review": "I had him for my first semester during London First and he was amazing.",
+"Tags": ["Get ready to read", "Amazing lectures", "Hilarious", "Helpful"],
+"Thumbs Up": 0,
+"Thumbs Down": 0
+},
+{
+"Quality": 5.0,
+"Difficulty": 2.0,
+"Course": "EGMT1510",
+"Date": "May 28th, 2024",
+"For Credit": "Yes",
+"Attendance": "Mandatory",
+"Would Take Again": "Yes",
+"Grade": "A",
+"Textbook": "N/A",
+"Review": "Professor Levenson is one of the sweetest instructors I have ever had. He was in charge of the London First Program and was the instructor for my engagements, which were (contrary to most Engagements) very fun, as we traveled around the city and watched plays and films as a class. I loved the discussions he led and he was always available to chat.",
+"Tags": ["Inspirational", "Respected", "Accessible outside class", "Helpful"],
+"Thumbs Up": 0,
+"Thumbs Down": 0
+},
+{
+"Quality": 5.0,
+"Difficulty": 2.0,
+"Course": "ENGL3610",
+"Date": "May 2nd, 2023",
+"For Credit": "Yes",
+"Attendance": "Not Mandatory",
+"Would Take Again": "Yes",
+"Grade": "A",
+"Textbook": "N/A",
+"Review": "Professor Levenson is a great lecturer, and I really enjoyed the course material! I feel like I've learned a lot.",
+"Tags": ["Get ready to read", "Amazing lectures", "Helpful"],
+"Thumbs Up": 0,
+"Thumbs Down": 0
+},
+{
+"Quality": 5.0,
+"Difficulty": 3.0,
+"Course": "EGMT1510",
+"Date": "Sep 14th, 2020",
+"For Credit": "Yes",
+"Attendance": "Mandatory",
+"Would Take Again": "Yes",
+"Grade": "A",
+"Textbook": "No",
+"Review": "I did Global First, so I took Professor Levenson's class in London. It was a great experience, and much of the class involved taking field trips and discussing plays we saw. He was very engaging, and discussions were always interesting.",
+"Tags": ["Participation matters", "Amazing lectures", "Caring", "Helpful"],
+"Thumbs Up": 0,
+"Thumbs Down": 0
+}
+]
+```
+
+### 4. Run a Simple Test
 
 ```java
 import java.io.IOException;
@@ -125,10 +284,9 @@ public class SimpleAskExample {
     }
   }
 }
-
 ```
 
-Another simplified example using roles:
+### 5. Another Simplified Example Using Roles
 
 ```java
 package com.litongjava.openai.example;
@@ -143,7 +301,7 @@ public class ChatCompletionsWithRoleExample {
     // Load OPENAI_API_KEY from configuration
     EnvUtils.load();
     
-    // Make a chat completion request with role
+    // Make a chat completion request with a specific role
     ChatResponseVo chatResponse = OpenAiClient.chatCompletionsWithRole("user", "How are you?");
     System.out.println("Response:\n" + JsonUtils.toJson(chatResponse));
   }
@@ -153,8 +311,6 @@ public class ChatCompletionsWithRoleExample {
 ## Examples
 
 ### Chat Example
-
-A basic example demonstrating how to send a chat message and receive a response.
 
 ```java
 package com.litongjava.openai.example;
@@ -209,8 +365,6 @@ public class SimpleAskExample {
 ```
 
 ### Ask with Image
-
-Convert an image to text and output the result.
 
 ```java
 package com.litongjava.perplexica.services;
@@ -281,69 +435,8 @@ public class AskWithImageOpenai {
   }
 }
 ```
-input json
-```json
-{
-  "stream": false,
-  "max_tokens": null,
-  "model": "gpt-4o-mini",
-  "messages":
-  [
-    {
-      "content":
-      [
-        {
-          "type":"text",
-          "text": "Convert the image into text. Do not miss any information, keep the format, and just output the text.\r\ntext",
-        },
-        {
-          "type": "image_url",
-          "image_url":
-          {
-            "detail": "auto",
-            "url": "data:image/png;base64,iVBO=="
-          }
-        }
-      ],
-      "role": "user"
-    }
-  ]
-}
-```
-output json
-```json
-{
-  "object": "chat.completion",
-  "id": "chatcmpl-AQ8omr9mEX9UXWLm7LPP5V0RuypFz",
-  "choices":
-  [
-    {
-      "message":
-      {
-        "content": "...",
-        "role": "assistant",
-        "tool_calls": null
-      },
-      "index": 0,
-      "delta": null,
-      "finish_reason": "stop",
-      "logprobs": null
-    }
-  ],
-  "model": "gpt-4o-mini-2024-07-18",
-  "system_fingerprint": "fp_9b78b61c52",
-  "usage":
-  {
-    "completion_tokens": 571,
-    "prompt_tokens": 25524,
-    "total_tokens": 26095
-  },
-  "created": "1730793788"
-}
-```
-### Chat with Image
 
-Another example of sending an image along with a prompt.
+### Chat with Image
 
 ```java
 package com.litongjava.maxkb.service;
@@ -378,8 +471,6 @@ public class DatasetDocumentSplitServiceTest {
 ```
 
 ### Ask with Tools
-
-Integrate external tools to enhance the functionality of your chat interactions.
 
 ```java
 import java.io.IOException;
@@ -468,9 +559,7 @@ public class AskWithTools {
 
 ### Embedding
 
-Generate text embeddings for various applications.
-
-**Example 1: Generate Embedding**
+#### Example 1: Generate Embedding
 
 ```java
 package com.litongjava.openai.example;
@@ -518,7 +607,7 @@ public class EmbeddingExample {
 }
 ```
 
-**Example 2: Simple Embedding**
+#### Example 2: Simple Embedding
 
 ```java
 package com.litongjava.example;
@@ -546,8 +635,6 @@ public class SimpleEmbeddingExample {
 ```
 
 ### Llama Integration
-
-Integrate with Llama models for advanced language processing.
 
 ```java
 import java.util.ArrayList;
@@ -592,8 +679,6 @@ public class Llama3_1_Test {
 
 ### Perplexity Integration
 
-Leverage Perplexity models for enhanced language understanding.
-
 ```java
 import java.util.ArrayList;
 import java.util.List;
@@ -637,8 +722,6 @@ public class PerplexityTest {
 
 ### Jina Rerank
 
-Use Jina Rerank to reorder documents based on relevance.
-
 ```java
 package com.litongjava.open.chat.client;
 
@@ -663,14 +746,14 @@ public class JinaRerankClientTest {
     
     // Prepare documents
     List<String> documents = new ArrayList<>();
-    documents.add("Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: Erleben Sie die wohltuende Wirkung unserer Bio-Hautpflege, speziell für empfindliche Haut entwickelt. Mit den beruhigenden Eigenschaften von Aloe Vera und Kamille pflegen und schützen unsere Produkte Ihre Haut auf natürliche Weise. Verabschieden Sie sich von Hautirritationen und genießen Sie einen strahlenden Teint.");
-    documents.add("Neue Make-up-Trends setzen auf kräftige Farben und innovative Techniken: Tauchen Sie ein in die Welt der modernen Schönheit mit den neuesten Make-up-Trends. Kräftige, lebendige Farben und innovative Techniken setzen neue Maßstäbe. Von auffälligen Eyelinern bis hin zu holografischen Highlightern – lassen Sie Ihrer Kreativität freien Lauf und setzen Sie jedes Mal ein Statement.");
-    documents.add("Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: Descubre el poder de la naturaleza con nuestra línea de cuidado de la piel orgánico, diseñada especialmente para pieles sensibles. Enriquecidos con aloe vera y manzanilla, estos productos ofrecen una hidratación y protección suave. Despídete de las irritaciones y saluda a una piel radiante y saludable.");
-    documents.add("Las nuevas tendencias de maquillaje se centran en colores vivos y técnicas innovadoras: Entra en el fascinante mundo del maquillaje con las tendencias más actuales. Colores vivos y técnicas innovadoras están revolucionando el arte del maquillaje. Desde delineadores neón hasta iluminadores holográficos, desata tu creatividad y destaca en cada look.");
-    documents.add("针对敏感肌专门设计的天然有机护肤产品：体验由芦荟和洋甘菊提取物带来的自然呵护。我们的护肤产品特别为敏感肌设计，温和滋润，保护您的肌肤不受刺激。让您的肌肤告别不适，迎来健康光彩。");
-    documents.add("新的化妆趋势注重鲜艳的颜色和创新的技巧：进入化妆艺术的新纪元，本季的化妆趋势以大胆的颜色和创新的技巧为主。无论是霓虹眼线还是全息高光，每一款妆容都能让您脱颖而出，展现独特魅力。");
-    documents.add("敏感肌のために特別に設計された天然有機スキンケア製品: アロエベラとカモミールのやさしい力で、自然の抱擁を感じてください。敏感肌用に特別に設計された私たちのスキンケア製品は、肌に優しく栄養を与え、保護します。肌トラブルにさようなら、輝く健康な肌にこんにちは。");
-    documents.add("新しいメイクのトレンドは鮮やかな色と革新的な技術に焦点を当てています: 今シーズンのメイクアップトレンドは、大胆な色彩と革新的な技術に注目しています。ネオンアイライナーからホログラフィックハイライターまで、クリエイティビティを解き放ち、毎回ユニークなルックを演出しましょう。");
+    documents.add("Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: ...");
+    documents.add("Neue Make-up-Trends setzen auf kräftige Farben und innovative Techniken: ...");
+    documents.add("Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: ...");
+    documents.add("Las nuevas tendencias de maquillaje se centran en colores vivos y técnicas innovadoras: ...");
+    documents.add("针对敏感肌专门设计的天然有机护肤产品：体验由芦荟和洋甘菊提取物带来的自然呵护。...");
+    documents.add("新的化妆趋势注重鲜艳的颜色和创新的技巧：进入化妆艺术的新纪元...");
+    documents.add("敏感肌のために特別に設計された天然有機スキンケア製品: ...");
+    documents.add("新しいメイクのトレンドは鮮やかな色と革新的な技術に焦点を当てています: ...");
 
     // Create rerank request
     RerankReqVo reqVo = new RerankReqVo();
@@ -686,42 +769,8 @@ public class JinaRerankClientTest {
 }
 ```
 
-**Sample Output:**
+### Jina Search
 
-```json
-{
-  "model": "jina-reranker-v2-base-multilingual",
-  "usage": {
-    "prompt_tokens": 652,
-    "total_tokens": 652,
-    "completion_tokens": null
-  },
-  "results": [
-    {
-      "index": 4,
-      "document": {
-        "text": "针对敏感肌专门设计的天然有机护肤产品：体验由芦荟和洋甘菊提取物带来的自然呵护。我们的护肤产品特别为敏感肌设计，温和滋润，保护您的肌肤不受刺激。让您的肌肤告别不适，迎来健康光彩。"
-      },
-      "relevance_score": 0.8783142566680908
-    },
-    {
-      "index": 2,
-      "document": {
-        "text": "Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: Descubre el poder de la naturaleza con nuestra línea de cuidado de la piel orgánico, diseñada especialmente para pieles sensibles. Enriquecidos con aloe vera y manzanilla, estos productos ofrecen una hidratación y protección suave. Despídete de las irritaciones y saluda a una piel radiante y saludable."
-      },
-      "relevance_score": 0.8633915781974792
-    },
-    {
-      "index": 6,
-      "document": {
-        "text": "敏感肌のために特別に設計された天然有機スキンケア製品: アロエベラとカモミールのやさしい力で、自然の抱擁を感じてください。敏感肌用に特別に設計された私たちのスキンケア製品は、肌に優しく栄養を与え、保護します。肌トラブルにさようなら、輝く健康な肌にこんにちは。"
-      },
-      "relevance_score": 0.7786493301391602
-    }
-  ]
-}
-```
-### Jian Search
 ```java
 import org.junit.Test;
 
@@ -733,38 +782,24 @@ public class JinaSearchServiceTest {
   @Test
   public void test() {
     EnvUtils.load();
-    //String key = EnvUtils.getStr("JINA_API_KEY");
     String result = JinaSearchClient.search("How can I run deepseek r1 with lama.cpp");
     System.out.println(result);
   }
 }
 ```
 
-```outout
-[1] Title: Run Deepseek-R1 / R1 Zero
-[1] URL Source: https://unsloth.ai/blog/deepseek-r1
-[1] Description: Thankfully, the DeepSeek team has created R1 Llama and Qwen distilled models that are much smaller and can easily be run locally on your own device. To run DeepSeek-R1 / R1-Zero, you&#x27;ll need to <strong>install the open-source package llama.cpp</strong>, the original framework for using GGUF files.
-[1] Markdown Content:
-Run & Finetune DeepSeek-R1
-
-Jan 20, 2025 • By Daniel & Michael
-----------------------------------
-
-Jan 20, 2025
-------------
-
-•
--
-
-By Daniel & Michael
--------------------
-
-DeepSeek’s new R1 models sets new benchmarks in reasoning performance, matching OpenAI’s o1 model. It follows the recently launched [DeepSeek-V3](https://huggingface.co/collections/unsloth/deepseek-v3-all-versions-677cf5cfd7df8b7815fc723c), the most powerful open-source AI model to date. DeepSeek also distilled from R1 and fine-tuned it on Llama 3 and Qwen 2.5 models, meaning you can now also fine-tune the models out of the box with [Unsloth](https://github.com/unslothai/unsloth).See our collection for all versions of the R1 model series including GGUF's, 4-bit and more! [huggingface.co/collections/unsloth/deepseek-r1](https://huggingface.co/collections/unsloth/deepseek-r1-all-versions-678e1c48f5d2fce87892ace5)
-
-**_Jan 27, 2025 update_**: We've released 1.58-bit Dynamic GGUFs for DeepSeek-R1 allowing you to run R1 even better with a 80% size reduction: [1.58-bit Dynamic R1](https://unsloth.ai/blog/deepseekr1-dynamic)
+**Sample Output**:
 
 ```
+[1] Title: Run Deepseek-R1 / R1 Zero
+[1] URL Source: https://unsloth.ai/blog/deepseek-r1
+...
+```
+
 ### PARSE markdown response
+
+A simple data class example:
+
 ```java
 package com.litongjava.searxng;
 
@@ -782,24 +817,20 @@ public class WebPageConteont {
   private String url;
   private String description;
   private String content;
-
-  public WebPageConteont(String title, String url) {
-    this.title = title;
-    this.url = url;
-  }
-
-  public WebPageConteont(String title, String url, String content) {
-    this.title = title;
-    this.url = url;
-    this.content = content;
-  }
 }
 ```
-com.litongjava.jian.search.JinaSearchClient.parse
+
+And a hypothetical parse method:
 ```java
-public static List<WebPageConteont> parse(String markdown)
+public static List<WebPageConteont> parse(String markdown) {
+  // Implementation that parses a given markdown string
+  // to extract relevant fields (title, url, description, etc.)
+  // and returns a list of WebPageConteont objects.
+}
 ```
+
 ### GOOGLE GEMINI
+
 ```java
 package com.litongjava.gemini;
 
@@ -811,13 +842,13 @@ import java.util.Collections;
 public class GeminiDemo {
 
   public static void main(String[] args) {
-    String googleApiKey = "";
-    // 1. 构造请求体
+    String googleApiKey = "YOUR_GOOGLE_API_KEY";
+    // 1. Construct request body
     GeminiPartVo part = new GeminiPartVo("Hello, how are you?");
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
     GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
 
-    // 2. 同步请求：generateContent
+    // 2. Send sync request: generateContent
     GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
     if (respVo != null && respVo.getCandidates() != null) {
       respVo.getCandidates().forEach(candidate -> {
@@ -830,9 +861,10 @@ public class GeminiDemo {
     }
   }
 }
-
 ```
-### Google GEMINI images
+
+#### Google GEMINI images
+
 ```java
 package com.litongjava.gemini;
 
@@ -849,7 +881,7 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 public class GeminiClientImageTest {
 
   public void toMarkdown(Path path) {
-    //读取图片为base64
+    // Read image to base64
     byte[] readAllBytes = null;
     try {
       readAllBytes = Files.readAllBytes(path);
@@ -863,14 +895,14 @@ public class GeminiClientImageTest {
     String encodeImage = Base64Utils.encodeToString(readAllBytes);
     String googleApiKey = EnvUtils.getStr("GEMINI_API_KEY");
 
-    // 1. 构造请求体
+    // 1. Build request body
     List<GeminiPartVo> parts = new ArrayList<>();
     parts.add(new GeminiPartVo("识别图片内容"));
     parts.add(new GeminiPartVo(new GeminiInlineDataVo(mimeType, encodeImage)));
     GeminiContentVo content = new GeminiContentVo("user", parts);
     GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
 
-    // 2. 同步请求：generateContent
+    // 2. Sync request: generateContent
     GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
     if (respVo != null && respVo.getCandidates() != null) {
       respVo.getCandidates().forEach(candidate -> {
@@ -884,10 +916,12 @@ public class GeminiClientImageTest {
     return;
   }
 }
-
 ```
-### GOOGLE GEMINI Function Call
-request body json string
+
+#### GOOGLE GEMINI Function Call
+
+**Request Body JSON Example**:
+
 ```json
 {
   "system_instruction": {
@@ -967,7 +1001,9 @@ request body json string
   }
 }
 ```
-java code
+
+**Java Code**:
+
 ```java
 package com.litongjava.gemini;
 
@@ -983,21 +1019,20 @@ public class GeminiFunctionCallExample {
   public static void main(String[] args) {
     EnvUtils.load();
 
-    // 1. 构造 system_instruction
+    // 1. system_instruction
     GeminiSystemInstructionVo systemInstruction = new GeminiSystemInstructionVo(
-        new GeminiPartVo("You are a helpful lighting system bot. You can turn lights on and off, " + "and you can set the color. Do not perform any other tasks."));
+        new GeminiPartVo("You are a helpful lighting system bot. You can turn lights on and off, "
+            + "and you can set the color. Do not perform any other tasks."));
 
-    // 2. 构造工具 (tools) - 这里只演示一个 tool 里有多个 function_declarations
+    // 2. tools -> function_declarations
     GeminiFunctionDeclarationVo enableLightsFunc = new GeminiFunctionDeclarationVo();
     enableLightsFunc.setName("enable_lights");
     enableLightsFunc.setDescription("Turn on the lighting system.");
     Map<String, Object> enableLightsProperties = new HashMap<>();
-    enableLightsProperties.put("dummy", new HashMap<String, Object>() {
-      {
-        put("type", "boolean");
-        put("description", "A placeholder parameter.");
-      }
-    });
+    enableLightsProperties.put("dummy", new HashMap<String, Object>() {{
+      put("type", "boolean");
+      put("description", "A placeholder parameter.");
+    }});
     Map<String, Object> enableLightsParams = new HashMap<>();
     enableLightsParams.put("type", "object");
     enableLightsParams.put("properties", enableLightsProperties);
@@ -1008,12 +1043,10 @@ public class GeminiFunctionCallExample {
     setLightColorFunc.setName("set_light_color");
     setLightColorFunc.setDescription("Set the light color. Lights must be enabled for this to work.");
     Map<String, Object> setLightColorProperties = new HashMap<>();
-    setLightColorProperties.put("rgb_hex", new HashMap<String, String>() {
-      {
-        put("type", "string");
-        put("description", "The light color as a 6-digit hex string, e.g. ff0000 for red.");
-      }
-    });
+    setLightColorProperties.put("rgb_hex", new HashMap<String, String>() {{
+      put("type", "string");
+      put("description", "The light color as a 6-digit hex string, e.g. ff0000 for red.");
+    }});
     Map<String, Object> setLightColorParams = new HashMap<>();
     setLightColorParams.put("type", "object");
     setLightColorParams.put("properties", setLightColorProperties);
@@ -1024,72 +1057,56 @@ public class GeminiFunctionCallExample {
     stopLightsFunc.setName("stop_lights");
     stopLightsFunc.setDescription("Turn off the lighting system.");
     Map<String, Object> stopLightsProperties = new HashMap<>();
-    stopLightsProperties.put("dummy", new HashMap<String, Object>() {
-      {
-        put("type", "boolean");
-        put("description", "A placeholder parameter.");
-      }
-    });
+    stopLightsProperties.put("dummy", new HashMap<String, Object>() {{
+      put("type", "boolean");
+      put("description", "A placeholder parameter.");
+    }});
     Map<String, Object> stopLightsParams = new HashMap<>();
     stopLightsParams.put("type", "object");
     stopLightsParams.put("properties", stopLightsProperties);
     stopLightsParams.put("required", Arrays.asList("dummy"));
     stopLightsFunc.setParameters(stopLightsParams);
 
-    // 将三个 function 都放到同一个工具的 function_declarations 中
+    // Single tool with multiple functions
     GeminiToolVo tool = new GeminiToolVo(Arrays.asList(enableLightsFunc, setLightColorFunc, stopLightsFunc));
 
-    // 3. 构造 tool_config
+    // 3. tool_config
     GeminiFunctionCallingConfigVo funcCallingConfig = new GeminiFunctionCallingConfigVo();
     funcCallingConfig.setMode("ANY");
     funcCallingConfig.setAllowed_function_names(Arrays.asList("enable_lights", "set_light_color", "stop_lights"));
 
     GeminiToolConfigVo toolConfig = new GeminiToolConfigVo(funcCallingConfig);
 
-    // 4. 构造用户消息 contents
-    //    注意：如果你的接口约定 "contents" 是数组，就用 List<GeminiContentVo>；否则可以直接用单个对象
+    // 4. user message contents
     GeminiPartVo userPart = new GeminiPartVo("Turn off the lighting system");
     GeminiContentVo userContent = new GeminiContentVo("user", Arrays.asList(userPart));
 
-    // 5. 组装到 GeminiChatRequestVo
+    // 5. Assemble request
     GeminiChatRequestVo requestVo = new GeminiChatRequestVo();
-    // （1）system_instruction
     requestVo.setSystem_instruction(systemInstruction);
-    // （2）tools
     requestVo.setTools(Arrays.asList(tool));
-    // （3）tool_config
     requestVo.setTool_config(toolConfig);
-    // （4）contents
     requestVo.setContents(Arrays.asList(userContent));
 
-    // 可以根据需要，设置 generationConfig / safetySettings 等
-    // requestVo.setGenerationConfig(...);
-    // requestVo.setSafetySettings(...);
-
-    // 在这里可以看到请求的 JSON 长什么样
+    // Convert to JSON
     String requestJson = JsonUtils.toJson(requestVo);
     System.out.println("==== 请求 JSON ====");
     System.out.println(requestJson);
 
-    // 6. 调用原先的 generate 接口
-    //    注意将 "YOUR_GOOGLE_API_KEY" 换成你真实的 KEY
-    //    同时将 "gemini-1.5-flash" 换成你要用的模型名称
+    // 6. Send request
     GeminiChatResponseVo response = GeminiClient.generate("gemini-1.5-flash", requestVo);
 
-    // 7. 查看响应
+    // 7. Print response
     if (response != null && response.getCandidates() != null) {
       for (GeminiCandidateVo candidate : response.getCandidates()) {
         GeminiContentResponseVo content = candidate.getContent();
-        if (content == null || content.getParts() == null)
-          continue;
+        if (content == null || content.getParts() == null) continue;
         for (GeminiPartVo part : content.getParts()) {
-          // 如果返回的是 functionCall
           if (part.getFunctionCall() != null) {
             System.out.println("[Function Call Response]");
             System.out.println("Function Name: " + part.getFunctionCall().getName());
             System.out.println("Function Args: " + part.getFunctionCall().getArgs());
           } else {
-            // 普通文本
             System.out.println("[Text Response]");
             System.out.println("Model Text: " + part.getText());
           }
@@ -1101,7 +1118,9 @@ public class GeminiFunctionCallExample {
   }
 }
 ```
-### gemini upload file
+
+#### gemini upload file
+
 ```java
 package com.litongjava.gemini;
 
@@ -1123,7 +1142,9 @@ public class GeminiClientUploadFileTest {
   }
 }
 ```
-FileUploadResponseVo数据内容
+
+**Sample Response**:
+
 ```json
 {
   "file": {
@@ -1133,14 +1154,15 @@ FileUploadResponseVo数据内容
     "createTime": "2025-01-23T06:54:56.365928Z",
     "updateTime": "2025-01-23T06:54:56.365928Z",
     "expirationTime": "2025-01-25T06:54:56.347859648Z",
-    "sha256Hash": "NDk0ZWNiZDE4MWZmY2QyZWM2M2Q0YWNjMThlNzhiN2Y3MTgwNGI1MzgwNDY0NTc4ZjZkY2QzNjljM2E0NTAxMg==",
+    "sha256Hash": "...",
     "uri": "https://generativelanguage.googleapis.com/v1beta/files/mo7v85d4zum5",
     "state": "ACTIVE",
     "source": "UPLOADED"
   }
 }
 ```
-### gemini ask with pdf
+
+#### gemini ask with pdf
 
 ```java
 package com.litongjava.gemini;
@@ -1157,20 +1179,21 @@ public class GeminiClientAskWithPdfTest {
     EnvUtils.load();
     String googleApiKey = EnvUtils.getStr("GEMINI_API_KEY");
 
-    // 0. 生成文件
+    // Suppose you have an uploaded PDF
     String mimeType = "application/pdf";
     String fileUri = "https://generativelanguage.googleapis.com/v1beta/files/4eqnhyuzvzkb";
 
-    // 1. 构造请求体
+    // 1. Construct request
     List<GeminiPartVo> parts = new ArrayList<>();
     parts.add(new GeminiPartVo("翻译成中文"));
     parts.add(new GeminiPartVo(new GeminiFileDataVo(mimeType, fileUri)));
     GeminiContentVo content = new GeminiContentVo("user", parts);
     GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
 
-    // 2. 同步请求：generateContent
+    // 2. Sync request
     GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
-    // 3. 输出响应
+
+    // 3. Print response
     if (respVo != null && respVo.getCandidates() != null) {
       respVo.getCandidates().forEach(candidate -> {
         if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
@@ -1180,15 +1203,21 @@ public class GeminiClientAskWithPdfTest {
         }
       });
     }
-    return;
   }
 }
 ```
-### gemini openai 
+
+#### gemini openai
+
+In your `app.properties`:
+
 ```properties
 OPENAI_API_KEY=<Gemini key here>
 OPENAI_API_URL=https://generativelanguage.googleapis.com/v1beta/openai
 ```
+
+Then in code:
+
 ```java
 package com.litongjava.perplexica.services;
 
@@ -1201,12 +1230,18 @@ import com.litongjava.tio.utils.json.JsonUtils;
 public class GeminiClientTest {
   public static void main(String[] args) {
     EnvUtils.load();
-    OpenAiChatResponseVo chatResponse = OpenAiClient.chatWithModel(GoogleGeminiModels.GEMINI_2_0_FLASH_EXP, "user", "how are you");
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatWithModel(
+        GoogleGeminiModels.GEMINI_2_0_FLASH_EXP,
+        "user",
+        "How are you?"
+    );
     System.out.println(JsonUtils.toJson(chatResponse));
   }
 }
 ```
-## deepseek-openai
+
+### deepseek-openai
+
 ```java
 import java.util.ArrayList;
 import java.util.List;
@@ -1228,21 +1263,18 @@ public class DeepSeekClientTest {
     messages.add(new OpenAiChatMessage("user", "Hi"));
 
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo()
-        //
         .setModel(DeepSeekModels.DEEPSEEK_REASONER)
-        //
-        .setMessages(messages).setMax_tokens(8000);
+        .setMessages(messages)
+        .setMax_tokens(8000);
 
     String apiKey = EnvUtils.getStr("DEEPSEEK_API_KEY");
     OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(DeepSeekConst.BASE_URL, apiKey, chatRequestVo);
     System.out.println(JsonUtils.toSkipNullJson(chatResponse));
   }
 }
-
 ```
 
-## SiliconFlow DeepSeek
-[api docs](https://docs.siliconflow.cn/guides)
+### SiliconFlow DeepSeek
 
 ```java
 package com.litongjava.perplexica.services;
@@ -1296,35 +1328,9 @@ public class SiliconFlowDeepSeekTest {
   }
 }
 ```
-output
-```json
-{
-  "system_fingerprint": "",
-  "model": "deepseek-ai/DeepSeek-R1",
-  "created": "1738459008",
-  "choices":
-  [
-    {
-      "index": 0,
-      "finish_reason": "stop",
-      "message":
-      {
-        "role": "assistant",
-        "content": "<think>Okay, the user is asking, \"How are you?\" so I need to respond in a friendly and helpful manner.\n\nFirst, I should acknowledge that I'm an AI and don't have feelings, but still keep it positive. \n\nMaybe start with a thank you for asking. Then mention that I'm here to help with any questions or tasks. Keep it short and welcoming.\n\nAlso, avoid using any markdown formatting. Just plain text with proper punctuation.\n\nLet me put that together: \"I'm just a computer program, so I don't have feelings, but thanks for asking! How can I assist you today?\" \n\nThat sounds good. It answers their question, clarifies my nature, and opens the door for them to ask for help.\n</think>\n\nI'm just a computer program, so I don't have feelings, but thanks for asking! How can I assist you today?"
-      }
-    }
-  ],
-  "usage":
-  {
-    "completion_tokens": 179,
-    "prompt_tokens": 9,
-    "total_tokens": 188
-  },
-  "object": "chat.completion",
-  "id": "0194c43b4cf5338c81e022cbc39581d9"
-}
-```
-## SiliconFlow DeepSeek Image
+
+### SiliconFlow DeepSeek Image
+
 ```java
 package com.litongjava.perplexica.services;
 
@@ -1382,24 +1388,20 @@ public class AskWithImageDeepSeek {
     messages.add(userMessage);
 
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
-    //DEEPSEEK_R1 is not a VLM (Vision Language Model). Please use text-only prompts.
-    //DeepSeek-V3 not working
-    //DEEPSEEK_VL2 working but not well
+    // DEEPSEEK_R1 is text-only, so let's use DEEPSEEK_VL2 for image
     chatRequestVo.setModel(SiliconFlowModels.DEEPSEEK_VL2);
-    //better for ocr
     chatRequestVo.setMax_tokens(1024).setTemperature(0.7f).setTop_p(0.7f).setTop_k(50).setFrequency_penalty(0);
-
     chatRequestVo.setMessages(messages);
-    String json = JsonUtils.toSkipNullJson(chatRequestVo);
-    //System.out.println("Request JSON:\n" + json);
 
-    OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(SiliconFlowConsts.SELICONFLOW_API_BASE, apiKey, chatRequestVo);
+    OpenAiChatResponseVo chatResponse =
+        OpenAiClient.chatCompletions(SiliconFlowConsts.SELICONFLOW_API_BASE, apiKey, chatRequestVo);
     ChatResponseMessage responseMessage = chatResponse.getChoices().get(0).getMessage();
     String content = responseMessage.getContent();
     System.out.println("Response Content:\n" + content);
   }
 }
 ```
+
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.

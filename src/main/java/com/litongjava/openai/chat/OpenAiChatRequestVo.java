@@ -14,16 +14,20 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class OpenAiChatRequestVo {
   private String model;
-  private Boolean stream;
+
   private Boolean return_images;
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
   private Float temperature;
   private Float top_p;
-  private Integer top_k;
-  private Integer frequency_penalty;
+  private Float frequency_penalty;
+  private Float presence_penalty;
+
+  private ChatResponseFormat response_format;
   private String stop;
+  private Boolean stream;
+  private ChatStreamOptions stream_options;
 
   public void fromMessages(List<ChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
@@ -31,5 +35,14 @@ public class OpenAiChatRequestVo {
       openAimessages.add(new OpenAiChatMessage(messages.get(i)));
     }
     this.messages = openAimessages;
+  }
+
+  public void setResponse_format(String type) {
+    this.response_format = new ChatResponseFormat(type);
+  }
+
+  public void setStreamIncludeUsage(boolean b) {
+    this.stream_options = new ChatStreamOptions(b);
+
   }
 }
