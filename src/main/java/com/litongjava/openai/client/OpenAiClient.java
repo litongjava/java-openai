@@ -52,11 +52,7 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL");
-    if (apiPerfixUrl == null) {
-      apiPerfixUrl = OpenAiConstants.api_perfix_url;
-    }
-
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
@@ -91,11 +87,8 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
-    String api_perfix_url = EnvUtils.get("OPENAI_API_URL");
-    if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstants.api_perfix_url;
-    }
-    return chatCompletions(api_perfix_url, header, bodyString, callback);
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
   /**
@@ -354,7 +347,7 @@ public class OpenAiClient {
 
   public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
     if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstants.api_perfix_url;
+      api_perfix_url = OpenAiConstants.API_PERFIX_URL;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
