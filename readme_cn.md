@@ -2,7 +2,7 @@
 
 ## 简介
 
-**Java OpenAI** 是一个强大的Ai客户端库，用于将 OpenAI 服务集成到 Java 应用程序中。该库构建于 [OkHttp](https://square.github.io/okhttp/) 和 [FastJSON](https://github.com/alibaba/fastjson) 之上，为与 OpenAI 的 API 交互提供了一种无缝高效的方式——支持聊天补全、图像处理、嵌入等功能。并通知调用 gemini,jina,textin,deepseek等服务端.
+**Java OpenAI** 是一个强大的Ai客户端库，用于将 OpenAI 服务集成到 Java 应用程序中。该库构建于 [OkHttp](https://square.github.io/okhttp/) 和 [FastJSON](https://github.com/alibaba/fastjson) 之上，为与 OpenAI 的 API 交互提供了一种无缝高效的方式——支持聊天补全、图像处理、嵌入等功能。并同时支持调用 gemini,jina,textin,deepseek等服务端.
 
 ## 目录
 
