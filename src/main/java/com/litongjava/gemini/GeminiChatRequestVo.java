@@ -43,6 +43,8 @@ public class GeminiChatRequestVo {
    * 可选：文本生成配置
    */
   private GeminiGenerationConfigVo generationConfig;
+  
+  private String responseMimeType;
 
   public GeminiChatRequestVo(List<GeminiContentVo> contents) {
     this.contents = contents;

@@ -101,10 +101,10 @@ public class OpenAiClient {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
 
-    return chatComplections(model, messages);
+    return chatCompletions(model, messages);
   }
 
-  public static OpenAiChatResponseVo chatComplections(String model, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -112,7 +112,7 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatComplections(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponseVo chatCompletions(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
@@ -324,10 +324,10 @@ public class OpenAiClient {
   public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model, OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
-    return chatComplections(apiUrl, key, model, messages);
+    return chatCompletions(apiUrl, key, model, messages);
   }
 
-  public static OpenAiChatResponseVo chatComplections(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
