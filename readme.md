@@ -1402,6 +1402,43 @@ public class AskWithImageDeepSeek {
 }
 ```
 
+## Groq
+### GroqSpeechClientTest
+```java
+package com.litongjava.groq;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import org.junit.Test;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class GroqSpeechClientTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    String filePath = "recording_1739969996898.wav";
+    String model = "whisper-large-v3";
+    String fileName = new File(filePath).getName();
+
+    TranscriptionsRequest reqVo = new TranscriptionsRequest();
+    reqVo.setModel(model).setLanguage("zh-cn");
+    byte[] audioData=null;
+    try {
+      audioData = Files.readAllBytes(new File(filePath).toPath());
+      TranscriptionsResponse transcriptions = GroqSpeechClient.transcriptions(audioData, fileName, reqVo);
+      System.out.println(JsonUtils.toJson(transcriptions));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.
