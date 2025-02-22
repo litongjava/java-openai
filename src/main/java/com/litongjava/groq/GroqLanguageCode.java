@@ -3,7 +3,7 @@ package com.litongjava.groq;
 /**
  * Defines ISO language codes used in the application.
  */
-public interface GorqLanguageCode {
+public interface GroqLanguageCode {
   /** Occitan language code */
   String OC = "oc";
   /** Lingala language code */
