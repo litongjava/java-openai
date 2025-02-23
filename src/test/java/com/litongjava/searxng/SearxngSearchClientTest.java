@@ -11,5 +11,4 @@ public class SearxngSearchClientTest {
     SearxngSearchResponse response = SearxngSearchClient.search("What is the AI");
     System.out.println(JsonUtils.toJson(response));
   }
-
 }
