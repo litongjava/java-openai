@@ -97,6 +97,20 @@ public class GeminiClient {
   }
 
   /**
+   * @param model
+   * @param role
+   * @param prompt
+   * @return
+   */
+  public static String chatWithModel(String model, String role, String prompt) {
+    String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
+    if (apiKey == null || apiKey.isEmpty()) {
+      new RuntimeException("GEMINI_API_KEY is empty");
+    }
+    return chatWithModel(apiKey, model, role, prompt);
+  }
+
+  /**
    * 
    * @param apiKey
    * @param model
