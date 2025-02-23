@@ -44,7 +44,6 @@ public class GeminiClient {
     String url = baseUrl + modelName + ":generateContent?key=" + googleApiKey;
     // 将 requestVo 转换为 JSON
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
-    log.debug("Gemini generateContent request json: {}", requestJson);
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
@@ -53,7 +52,6 @@ public class GeminiClient {
     // 发起调用
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
-      log.debug("Gemini generateContent response json: {}", responseBody);
 
       if (!response.isSuccessful()) {
         throw new RuntimeException("Gemini generateContent failed, request url=" + url + " request body=" + requestJson + "statusCode=" + response.code() + ", body=" + responseBody);
@@ -185,8 +183,6 @@ public class GeminiClient {
     // 发送请求并处理响应
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
-      log.debug("File upload response: {}", responseBody);
-
       if (!response.isSuccessful()) {
         throw new RuntimeException("File upload failed, statusCode=" + response.code() + ", body=" + responseBody);
       }
