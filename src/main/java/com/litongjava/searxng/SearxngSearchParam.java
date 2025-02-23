@@ -3,10 +3,12 @@ package com.litongjava.searxng;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain=true)
 public class SearxngSearchParam {
   private String q; // 搜索关键词
   private String format; // 返回格式，例如 json、rss 等

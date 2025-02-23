@@ -11,8 +11,16 @@ import okhttp3.Response;
 
 public class SearxngSearchClient {
 
+  public static SearxngSearchResponse search(String q) {
+    String baseUrl = EnvUtils.getStr("SEARXNG_API_BASE", SearxngConsts.SEARXNG_API_BASE);
+    SearxngSearchParam param = new SearxngSearchParam();
+    param.setFormat("json").setQ(q);
+    String endpoint = baseUrl + "/search";
+    return search(endpoint, param);
+  }
+
   public static SearxngSearchResponse search(SearxngSearchParam param) {
-    String baseUrl = EnvUtils.getStr("SEARXNG_API_URL");
+    String baseUrl = EnvUtils.getStr("SEARXNG_API_BASE", SearxngConsts.SEARXNG_API_BASE);
     String endpoint = baseUrl + "/search";
     return search(endpoint, param);
   }
