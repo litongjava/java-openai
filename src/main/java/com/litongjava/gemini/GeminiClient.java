@@ -41,7 +41,7 @@ public class GeminiClient {
 
   public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
     // 拼接 URL
-    String urlPerfix = baseUrl + modelName + ":generateContentkey=";
+    String urlPerfix = baseUrl + modelName + ":generateContent?key=";
     String url = urlPerfix + googleApiKey;
     // 将 requestVo 转换为 JSON
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
@@ -55,6 +55,10 @@ public class GeminiClient {
       String responseBody = response.body().string();
 
       if (!response.isSuccessful()) {
+        if (requestJson.length() > 1024) {
+          requestJson = requestJson.substring(0, 1024);
+        }
+        log.error("url:{}", url);
         throw new RuntimeException("Gemini generateContent failed, request url=" + urlPerfix + " request body=" + requestJson + "statusCode=" + response.code() + ", body=" + responseBody);
       }
       // 解析 JSON
