@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OpenAiChatMessage {
   private String role;
-  private List<ChatMesageContent> content;
+  private Object content;
   private Boolean prefix;
 
   public static OpenAiChatMessage buildSystem(String content) {
@@ -44,27 +44,24 @@ public class OpenAiChatMessage {
 
   public OpenAiChatMessage(String prompt) {
     this.role = "user";
-    this.content = new ArrayList<>();
-    content.add(new ChatMesageContent(prompt));
+    this.content = prompt;
   }
 
   public OpenAiChatMessage(ChatMessage chatMessage) {
     this.role = chatMessage.getRole();
     this.content = new ArrayList<>();
-    content.add(new ChatMesageContent(chatMessage.getContent()));
+    List<ChatMesageContent> contents = new ArrayList<>();
+    contents.add(new ChatMesageContent(chatMessage.getContent()));
+    this.content = contents;
   }
 
   public OpenAiChatMessage(String role, String prompt) {
     this.role = role;
-
-    this.content = new ArrayList<>();
-    content.add(new ChatMesageContent(prompt));
+    this.content = prompt;
   }
 
   public void setContent(String prompt) {
-    this.content = new ArrayList<>();
-    content.add(new ChatMesageContent(prompt));
-
+    this.content = prompt;
   }
 
   public OpenAiChatMessage content(String prompt) {

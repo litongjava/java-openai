@@ -1,5 +1,5 @@
 package com.litongjava.volcengine;
 
-public class VolcEngineConst {
-  String BASE_URL = "https://ark.cn-beijing.volces.com";
+public interface VolcEngineConst {
+  String BASE_URL = "https://ark.cn-beijing.volces.com/api/v3";
 }

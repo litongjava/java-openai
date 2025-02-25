@@ -1426,7 +1426,41 @@ public class AskWithImageDeepSeek {
   }
 }
 ```
+## VOLCENGINE
+### DEEPSEEK
+```java
+package llm;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.litongjava.openai.chat.OpenAiChatMessage;
+import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+import com.litongjava.volcengine.VolcEngineConst;
+import com.litongjava.volcengine.VolcEngineModels;
+
+public class VolcEngineDeepSeekClient {
+  public static void main(String[] args) {
+    EnvUtils.load();
+    String apiKey = EnvUtils.get("VOLCENGINE_API_KEY");
+
+    List<OpenAiChatMessage> messages = new ArrayList<>();
+    messages.add(new OpenAiChatMessage("system", "你是人工智能助手."));
+    messages.add(new OpenAiChatMessage("user", "常见的十字花科植物有哪些？"));
+
+    OpenAiChatRequestVo chatRequest = new OpenAiChatRequestVo();
+    chatRequest.setModel(VolcEngineModels.DEEPSEEK_V3_241226);
+    chatRequest.setMessages(messages);
+
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatCompletions(VolcEngineConst.BASE_URL, apiKey, chatRequest);
+    System.out.println(JsonUtils.toSkipNullJson(chatResponse));
+  }
+}
+```
 ## Groq
 ### GroqSpeechClientTest
 ```java
@@ -1463,7 +1497,6 @@ public class GroqSpeechClientTest {
   }
 }
 ```
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.
