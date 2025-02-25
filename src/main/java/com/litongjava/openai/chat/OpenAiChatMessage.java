@@ -48,7 +48,7 @@ public class OpenAiChatMessage {
 
   public OpenAiChatMessage(ChatMessage chatMessage) {
     this.role = chatMessage.getRole();
-    this.content = chatMessage.getRole();
+    this.content = chatMessage.getContent();
   }
 
   public OpenAiChatMessage(String role, String prompt) {
