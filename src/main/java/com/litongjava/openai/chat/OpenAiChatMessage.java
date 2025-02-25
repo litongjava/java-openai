@@ -1,6 +1,5 @@
 package com.litongjava.openai.chat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -49,10 +48,7 @@ public class OpenAiChatMessage {
 
   public OpenAiChatMessage(ChatMessage chatMessage) {
     this.role = chatMessage.getRole();
-    this.content = new ArrayList<>();
-    List<ChatMesageContent> contents = new ArrayList<>();
-    contents.add(new ChatMesageContent(chatMessage.getContent()));
-    this.content = contents;
+    this.content = chatMessage.getRole();
   }
 
   public OpenAiChatMessage(String role, String prompt) {
