@@ -1,7 +1,10 @@
 package com.litongjava.gemini;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.litongjava.openai.chat.ChatMessage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +46,7 @@ public class GeminiChatRequestVo {
    * 可选：文本生成配置
    */
   private GeminiGenerationConfigVo generationConfig;
-  
+
   private String responseMimeType;
 
   public GeminiChatRequestVo(List<GeminiContentVo> contents) {
@@ -54,6 +57,20 @@ public class GeminiChatRequestVo {
     GeminiPartVo part = new GeminiPartVo(prompt);
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
     List<GeminiContentVo> contents = Collections.singletonList(content);
+    this.contents = contents;
+  }
+
+  public void setChatMessages(List<ChatMessage> messages) {
+    List<GeminiContentVo> contents = new ArrayList<>(messages.size());
+    for (ChatMessage chatMessage : messages) {
+      String role = chatMessage.getRole();
+      if (role.equals("assistant")) {
+        role = "model";
+      }
+      GeminiPartVo part = new GeminiPartVo(chatMessage.getContent());
+      GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
+      contents.add(content);
+    }
     this.contents = contents;
   }
 }
