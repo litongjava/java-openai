@@ -17,6 +17,10 @@ import okhttp3.Response;
 public class ApiFyClient {
   public static String LINKEDIN_PROFILE_SCRAPER_URL = "https://api.apify.com/v2/acts/dev_fusion~linkedin-profile-scraper/run-sync-get-dataset-items";
 
+  public static ResponseVo linkedinProfileScraper(String url) {
+    return linkedinProfileScraper(new ApiFyLinkedProfileReqVo(url));
+  }
+
   public static ResponseVo linkedinProfileScraper(ApiFyLinkedProfileReqVo reqVo) {
     String key = EnvUtils.getStr("APIFY_API_KEY");
     if (StrUtil.isBlank(key)) {
@@ -39,4 +43,5 @@ public class ApiFyClient {
       throw new RuntimeException("Failed to request:" + LINKEDIN_PROFILE_SCRAPER_URL, e);
     }
   }
+
 }
