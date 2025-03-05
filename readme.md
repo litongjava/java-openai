@@ -1497,6 +1497,30 @@ public class GroqSpeechClientTest {
   }
 }
 ```
+## ApiFy
+### linkedinProfileScraper
+```java
+package com.litongjava.client;
+
+import org.junit.Test;
+
+import com.litongjava.apify.ApiFyClient;
+import com.litongjava.apify.ApiFyLinkedProfileReqVo;
+import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class ApiFyClientTest {
+
+  @Test
+  public void testLinkedIn() {
+    //load APIFY_API_KEY
+    EnvUtils.load();
+    ApiFyLinkedProfileReqVo reqVo = new ApiFyLinkedProfileReqVo("https: //www.linkedin.com/in/nicolaushilleary");
+    ResponseVo response = ApiFyClient.linkedinProfileScraper(reqVo);
+    System.out.println(response.getBodyString());
+  }
+}
+```
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.
