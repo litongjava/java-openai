@@ -38,8 +38,14 @@
     - [deepseek-openai](#deepseek-openai)
     - [SiliconFlow DeepSeek](#siliconflow-deepseek)
     - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
+  - [VOLCENGINE](#volcengine)
+    - [DEEPSEEK](#deepseek)
   - [Groq](#groq)
     - [GroqSpeechClientTest](#groqspeechclienttest)
+  - [ApiFy](#apify)
+    - [linkedinProfileScraper](#linkedinprofilescraper)
+  - [searchapi](#searchapi)
+    - [google](#google)
   - [License](#license)
 
 ## Features
@@ -1520,6 +1526,36 @@ public class ApiFyClientTest {
     System.out.println(response.getBodyString());
   }
 }
+```
+## searchapi
+### google
+```java
+package com.litongjava.client;
+
+import org.junit.Test;
+
+import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.searchapi.SearchapiClient;
+import com.litongjava.searchapi.SearchapiResult;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.FastJson2Utils;
+
+public class SearchapiClientTest {
+  @Test
+  public void search() {
+    //SEARCHAPI_API_KEY
+    EnvUtils.load();
+    ResponseVo responseVo = SearchapiClient.search("KaiZhao at SJSU");
+    String bodyString = responseVo.getBodyString();
+    if (responseVo.isOk()) {
+      SearchapiResult result = FastJson2Utils.parse(bodyString, SearchapiResult.class);
+      System.out.println(result);
+    } else {
+      System.out.println(bodyString);
+    }
+  }
+}
+
 ```
 ## License
 

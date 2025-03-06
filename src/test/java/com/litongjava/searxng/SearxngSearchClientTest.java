@@ -8,7 +8,7 @@ public class SearxngSearchClientTest {
 
   @Test
   public void test() {
-    SearxngSearchResponse response = SearxngSearchClient.search("What is the AI");
+    SearxngSearchResponse response = SearxngSearchClient.search("KaiZhao at SJSU");
     System.out.println(JsonUtils.toJson(response));
   }
 }
