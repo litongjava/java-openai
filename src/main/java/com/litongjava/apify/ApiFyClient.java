@@ -35,9 +35,7 @@ public class ApiFyClient {
       throw new RuntimeException("APIFY_API_KEY is blank");
     }
 
-    return HttpUtils.postJson(url, payload, key);
+    return HttpUtils.postJson(url, key, payload);
   }
-
-
 
 }
