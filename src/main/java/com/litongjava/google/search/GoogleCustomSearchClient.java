@@ -1,6 +1,7 @@
 package com.litongjava.google.search;
 
 import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.Http;
 import com.litongjava.tio.utils.json.JsonUtils;
 import com.litongjava.tio.utils.url.UrlUtils;
@@ -19,6 +20,11 @@ public class GoogleCustomSearchClient {
     } else {
       throw new RuntimeException("request:" + url + " " + "response:" + responseVo.getBodyString());
     }
+  }
 
+  public static GoogleCustomSearchResponse serach(String q) {
+    String key = EnvUtils.getStr("GOOGLE_API_KEY");
+    String ctx = EnvUtils.getStr("GOOGLE_SEARCH_CTX");
+    return search(key, ctx, q);
   }
 }
