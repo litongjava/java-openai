@@ -6,7 +6,7 @@ import java.util.List;
 @Data
 public class SearxngSearchResponse {
   private String query;
-  private int number_of_results;
+  private long number_of_results;
   private List<SearxngResult> results;
   private List<Object> answers;
   private List<Object> corrections;
