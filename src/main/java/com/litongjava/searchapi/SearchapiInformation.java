@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchapiInformation {
   private String query_displayed;
-  private int total_results;
+  private long total_results;
   private double time_taken_displayed;
   private String detected_location;
 }
