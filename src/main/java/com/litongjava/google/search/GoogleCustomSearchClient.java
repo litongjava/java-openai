@@ -22,7 +22,7 @@ public class GoogleCustomSearchClient {
     }
   }
 
-  public static GoogleCustomSearchResponse serach(String q) {
+  public static GoogleCustomSearchResponse search(String q) {
     String key = EnvUtils.getStr("GOOGLE_API_KEY");
     String ctx = EnvUtils.getStr("GOOGLE_SEARCH_CTX");
     return search(key, ctx, q);

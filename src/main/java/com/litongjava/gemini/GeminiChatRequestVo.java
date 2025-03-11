@@ -64,12 +64,19 @@ public class GeminiChatRequestVo {
     List<GeminiContentVo> contents = new ArrayList<>(messages.size());
     for (ChatMessage chatMessage : messages) {
       String role = chatMessage.getRole();
+      String content = chatMessage.getContent();
+
       if (role.equals("assistant")) {
         role = "model";
+      } else if (role.equals("system")) {
+        GeminiPartVo part = new GeminiPartVo(content);
+        GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(part);
+        this.setSystem_instruction(geminiSystemInstructionVo);
+        continue;
       }
-      GeminiPartVo part = new GeminiPartVo(chatMessage.getContent());
-      GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
-      contents.add(content);
+      GeminiPartVo part = new GeminiPartVo(content);
+      GeminiContentVo vo = new GeminiContentVo(role, Collections.singletonList(part));
+      contents.add(vo);
     }
     this.contents = contents;
   }
