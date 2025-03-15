@@ -94,7 +94,7 @@ public class OpenAiTokenizer implements Tokenizer {
       if (content instanceof TextContent) {
         tokenCount += estimateTokenCountInText(((TextContent) content).text());
       } else if (content instanceof ImageContent) {
-        tokenCount += 85; // TODO implement for HIGH/AUTO detail level
+        tokenCount += 85;
       } else {
         throw illegalArgument("Unknown content type: " + content);
       }
@@ -213,7 +213,6 @@ public class OpenAiTokenizer implements Tokenizer {
           if ("array".equals(entry.getValue()) && isOneOfLatestModels()) {
             tokenCount += 1;
           }
-          // TODO object
         } else if ("description".equals(entry.getKey())) {
           tokenCount += 2;
           tokenCount += estimateTokenCountInText(entry.getValue().toString());
@@ -362,7 +361,6 @@ public class OpenAiTokenizer implements Tokenizer {
   }
 
   private boolean isOneOfLatestGpt3Models() {
-    // TODO add GPT_3_5_TURBO once it points to GPT_3_5_TURBO_1106
     return modelName.equals(OpenAiModels.GPT_3_5_TURBO_1106) || modelName.equals(OpenAiModels.GPT_3_5_TURBO_0125.toString());
   }
 

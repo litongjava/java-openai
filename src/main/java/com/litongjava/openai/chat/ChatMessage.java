@@ -9,6 +9,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatMessage {
   private String role, content;
+  private String type = "text";
+  private ChatSendArgs args;
+
+  public ChatMessage(String role, String content) {
+    this.role = role;
+    this.content = content;
+  }
+
+  public ChatMessage(String role, String content, ChatSendArgs args) {
+    this.role = role;
+    this.content = content;
+    this.args = args;
+  }
 
   public static ChatMessage buildSystem(String content) {
     return new ChatMessage(MessageRole.system, content);
@@ -23,12 +36,13 @@ public class ChatMessage {
   }
 
   public ChatMessage role(String role) {
-    this.role=role;
+    this.role = role;
     return this;
   }
 
   public ChatMessage content(String content) {
-    this.content=content;
+    this.content = content;
     return this;
   }
+
 }
