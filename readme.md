@@ -46,6 +46,8 @@
     - [linkedinProfileScraper](#linkedinprofilescraper)
   - [searchapi](#searchapi)
     - [google](#google)
+  - [Supadata.ai](#supadataai)
+    - [youtube Subtitle](#youtube-subtitle)
   - [License](#license)
 
 ## Features
@@ -1553,6 +1555,49 @@ public class SearchapiClientTest {
     } else {
       System.out.println(bodyString);
     }
+  }
+}
+
+```
+
+## Supadata.ai
+### youtube Subtitle
+```java
+package com.litongjava.client;
+
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.supadata.SubTitleContent;
+import com.litongjava.supadata.SubTitleResponse;
+import com.litongjava.supadata.SupadataClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.video.VideoTimeUtils;
+
+public class SupadataClientTest {
+
+
+  @Test
+  public void getSubtitleTest() {
+    // String url="https://www.youtube.com/watch?v=31FpW6CMmYE";
+    String id = "31FpW6CMmYE";
+    // load SUPADATA_API_KEY
+    EnvUtils.load();
+    SubTitleResponse subTitle = SupadataClient.getSubTitle(id);
+    List<SubTitleContent> content = subTitle.getContent();
+    StringBuffer stringBuffer = new StringBuffer();
+    for (SubTitleContent subTitleContent : content) {
+      long offset = subTitleContent.getOffset();
+      long duration = subTitleContent.getDuration();
+      // 计算结束时间 = 开始时间 + 持续时间
+      long endTime = offset + duration;
+      String startStr = VideoTimeUtils.formatTime(offset);
+      String endStr = VideoTimeUtils.formatTime(endTime);
+      String text = subTitleContent.getText();
+      stringBuffer.append(startStr).append("-").append(endStr).append(" ").append(text).append("\r\n");
+    }
+    System.out.println(stringBuffer.toString());
   }
 }
 
