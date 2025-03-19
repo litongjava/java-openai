@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 public class ChatMessage {
   private String role, content;
   private String type = "text";
-  private ChatSendArgs args;
+  private ChatMessageArgs args;
 
   public ChatMessage(String role, String content) {
     this.role = role;
     this.content = content;
   }
 
-  public ChatMessage(String role, String content, ChatSendArgs args) {
+  public ChatMessage(String role, String content, ChatMessageArgs args) {
     this.role = role;
     this.content = content;
     this.args = args;
