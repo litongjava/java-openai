@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class ChatSendArgs {
   private Long id;
+  private String type;
   private String name;
   private String institution;
   private String url;
+  private String[] urls;
 }
