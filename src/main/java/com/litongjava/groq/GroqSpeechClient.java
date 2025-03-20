@@ -1,5 +1,6 @@
 package com.litongjava.groq;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,14 +74,24 @@ public class GroqSpeechClient {
    * @return
    */
   public static TranscriptionsResponse transcriptions(byte[] audioData, String filename, TranscriptionsRequest reqVo) {
-
-    String apiBase = EnvUtils.getStr("GROQ_API_BASE", GropConst.API_BASE);
-    String endpoint = apiBase + "/openai/v1/audio/transcriptions";
-    String apiKey = EnvUtils.getStr("GROQ_API_KEY");
-
     String suffix = FilenameUtils.getSuffix(filename);
     String contentType = ContentTypeUtils.getContentType(suffix);
     RequestBody fileRequestPart = RequestBody.create(audioData, MediaType.get(contentType));
+
+    return transcriptions(fileRequestPart, filename, reqVo);
+  }
+
+  public static TranscriptionsResponse transcriptions(File file, TranscriptionsRequest reqVo) {
+    String suffix = FilenameUtils.getSuffix(file.getName());
+    String contentType = ContentTypeUtils.getContentType(suffix);
+    RequestBody fileRequestPart = RequestBody.create(file, MediaType.get(contentType));
+    return transcriptions(fileRequestPart, file.getName(), reqVo);
+  }
+
+  public static TranscriptionsResponse transcriptions(RequestBody fileRequestPart, String filename, TranscriptionsRequest reqVo) {
+    String apiBase = EnvUtils.getStr("GROQ_API_BASE", GropConst.API_BASE);
+    String endpoint = apiBase + "/openai/v1/audio/transcriptions";
+    String apiKey = EnvUtils.getStr("GROQ_API_KEY");
 
     MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
     bodyBuilder.setType(MultipartBody.FORM);

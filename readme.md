@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**Java OpenAI** is a robust client library for integrating OpenAI services into Java applications. Built on top of [OkHttp](https://square.github.io/okhttp/) and [FastJSON](https://github.com/alibaba/fastjson), it provides a seamless, efficient way to interact with OpenAI's APIs—enabling features such as chat completions, image processing, embeddings, and more.
+**Java OpenAI** is a robust client library for integrating OpenAI services into Java applications. Built on top of [OkHttp](https://square.github.io/okhttp/) and [FastJSON](https://github.com/alibaba/fastjson), it provides a seamless, efficient way to interact with OpenAI's APIs—enabling features such as chat completions, image processing, embeddings, and more. In addition to OpenAI, the library supports integration with Gemini, Jina, Textin, DeepSeek, and other services.
 
 ## Table of Contents
 
@@ -21,6 +21,7 @@
     - [Ask with Image](#ask-with-image)
     - [Chat with Image](#chat-with-image)
     - [Ask with Tools](#ask-with-tools)
+    - [Whisper Transcription](#whisper-transcription)
     - [Embedding](#embedding)
       - [Example 1: Generate Embedding](#example-1-generate-embedding)
       - [Example 2: Simple Embedding](#example-2-simple-embedding)
@@ -28,36 +29,37 @@
     - [Perplexity Integration](#perplexity-integration)
     - [Jina Rerank](#jina-rerank)
     - [Jina Search](#jina-search)
-    - [PARSE markdown response](#parse-markdown-response)
+    - [Parse Markdown Response](#parse-markdown-response)
     - [GOOGLE GEMINI](#google-gemini)
-      - [Google GEMINI images](#google-gemini-images)
+      - [Google GEMINI Images](#google-gemini-images)
       - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
-      - [gemini upload file](#gemini-upload-file)
-      - [gemini ask with pdf](#gemini-ask-with-pdf)
-      - [gemini openai](#gemini-openai)
+      - [Gemini Upload File](#gemini-upload-file)
+      - [Gemini Ask with PDF](#gemini-ask-with-pdf)
+      - [Gemini OpenAI](#gemini-openai)
     - [deepseek-openai](#deepseek-openai)
     - [SiliconFlow DeepSeek](#siliconflow-deepseek)
     - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
-  - [VOLCENGINE](#volcengine)
-    - [DEEPSEEK](#deepseek)
-  - [Groq](#groq)
-    - [GroqSpeechClientTest](#groqspeechclienttest)
-  - [ApiFy](#apify)
-    - [linkedinProfileScraper](#linkedinprofilescraper)
-  - [searchapi](#searchapi)
-    - [google](#google)
-  - [Supadata.ai](#supadataai)
-    - [youtube Subtitle](#youtube-subtitle)
+  - [Additional Integrations](#additional-integrations)
+    - [VOLCENGINE: DEEPSEEK](#volcengine-deepseek)
+    - [Groq Integration](#groq-integration)
+      - [GroqSpeechClientTest](#groqspeechclienttest)
+    - [ApiFy](#apify)
+      - [LinkedIn Profile Scraper](#linkedin-profile-scraper)
+    - [SearchAPI](#searchapi)
+      - [Google Search](#google-search)
+    - [Supadata.ai](#supadataai)
+      - [YouTube Subtitle](#youtube-subtitle)
   - [License](#license)
 
 ## Features
 
-- **Chat Completions**: Interact with OpenAI's chat models effortlessly.
+- **Chat Completions**: Interact effortlessly with OpenAI's chat models.
 - **Image Processing**: Convert images to text or other formats.
 - **Embeddings**: Generate text embeddings for various applications.
 - **Tool Integration**: Enhance functionality by integrating with external tools.
-- **Support for Llama and Perplexity Models**: Extend capabilities beyond OpenAI with support for other models.
-- **Easy Configuration**: Simple setup with configuration files.
+- **Support for Additional Models**: Includes support for Llama, Perplexity, Gemini, Jina, DeepSeek, SiliconFlow, VOLCENGINE, Groq, ApiFy, SearchAPI, and Supadata.ai.
+- **Whisper Transcriptions**: Transcribe audio using Whisper.
+- **Easy Configuration**: Simplified setup using configuration files.
 
 ## Getting Started
 
@@ -88,6 +90,8 @@ Create or update `src/main/resources/app.properties`:
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
+Other service keys (if applicable) should be added similarly (e.g., `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `LLAMA_API_KEY`, etc.).
+
 ### 3. Run With PromptEngine
 
 ```java
@@ -114,9 +118,9 @@ public class ProfessorEmojisTest {
     // Create messages
     List<OpenAiChatMessage> messages = new ArrayList<>();
     String prompt = PromptEngine.renderToString("professor_emojis_introduction_weaknesses_strengths_prompt.txt");
-    String exmaple = PromptEngine.renderToString("professor_emojis_introduction_weaknesses_strengths_prompt_example.txt");
+    String example = PromptEngine.renderToString("professor_emojis_introduction_weaknesses_strengths_prompt_example.txt");
     messages.add(new OpenAiChatMessage("system", prompt));
-    messages.add(new OpenAiChatMessage("user", exmaple));
+    messages.add(new OpenAiChatMessage("user", example));
 
     // Create chat request
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
@@ -139,10 +143,11 @@ public class ProfessorEmojisTest {
     System.out.println(JsonUtils.toSkipNullJson(chatCompletions));
   }
 }
+```
 
-```
-professor_emojis_introduction_weaknesses_strengths_prompt.txt
-```
+**professor_emojis_introduction_weaknesses_strengths_prompt.txt**
+
+```txt
 <instruction>
   You are tasked with generating a comprehensive analysis report of a professor based on data from RateMyProfessor. Follow these steps to complete the task:
 
@@ -160,88 +165,90 @@ professor_emojis_introduction_weaknesses_strengths_prompt.txt
     "emojis": ["emoji1", "emoji_2", ...],
     "introduction": "professor_introduction",
     "weaknesses": "**Weakness_name_1**:weakness_description_1\n**Weakness_name_2**:weakness_description_2\n...",
-    "strengths": "**Strength__name_1**:strength_description_1\n**Strength_name_2**:strength_description_2\n..."
+    "strengths": "**Strength_name_1**:strength_description_1\n**Strength_name_2**:strength_description_2\n..."
   }
 </instruction>
 ```
-prompts\professor_emojis_introduction_weaknesses_strengths_prompt_example.txt
+
+**prompts/professor_emojis_introduction_weaknesses_strengths_prompt_example.txt**
+
 ```json
 [
-{
-"Quality": 5.0,
-"Difficulty": 1.0,
-"Course": "EGMT1510",
-"Date": "Jan 31st, 2025",
-"For Credit": "Yes",
-"Attendance": "Not Mandatory",
-"Would Take Again": "Yes",
-"Grade": "A+",
-"Textbook": "Yes",
-"Review": "I had Professor Levenson for the London First Program, and he was genuinely the kindest and most caring professor I have ever had. He is incredibly engaged with his students, and will make the effort to have a personal relationship with anyone willing to talk to him. He is an incredibly reasonable grader, and his course is genuinely enjoyable.",
-"Tags": ["Amazing lectures", "Caring", "Accessible outside class", "Helpful"],
-"Thumbs Up": 0,
-"Thumbs Down": 0
-},
-{
-"Quality": 5.0,
-"Difficulty": 1.0,
-"Course": "LONDON",
-"Date": "Jan 12th, 2025",
-"For Credit": "Yes",
-"Attendance": "Not Mandatory",
-"Would Take Again": "Yes",
-"Grade": "A",
-"Textbook": "N/A",
-"Review": "I had him for my first semester during London First and he was amazing.",
-"Tags": ["Get ready to read", "Amazing lectures", "Hilarious", "Helpful"],
-"Thumbs Up": 0,
-"Thumbs Down": 0
-},
-{
-"Quality": 5.0,
-"Difficulty": 2.0,
-"Course": "EGMT1510",
-"Date": "May 28th, 2024",
-"For Credit": "Yes",
-"Attendance": "Mandatory",
-"Would Take Again": "Yes",
-"Grade": "A",
-"Textbook": "N/A",
-"Review": "Professor Levenson is one of the sweetest instructors I have ever had. He was in charge of the London First Program and was the instructor for my engagements, which were (contrary to most Engagements) very fun, as we traveled around the city and watched plays and films as a class. I loved the discussions he led and he was always available to chat.",
-"Tags": ["Inspirational", "Respected", "Accessible outside class", "Helpful"],
-"Thumbs Up": 0,
-"Thumbs Down": 0
-},
-{
-"Quality": 5.0,
-"Difficulty": 2.0,
-"Course": "ENGL3610",
-"Date": "May 2nd, 2023",
-"For Credit": "Yes",
-"Attendance": "Not Mandatory",
-"Would Take Again": "Yes",
-"Grade": "A",
-"Textbook": "N/A",
-"Review": "Professor Levenson is a great lecturer, and I really enjoyed the course material! I feel like I've learned a lot.",
-"Tags": ["Get ready to read", "Amazing lectures", "Helpful"],
-"Thumbs Up": 0,
-"Thumbs Down": 0
-},
-{
-"Quality": 5.0,
-"Difficulty": 3.0,
-"Course": "EGMT1510",
-"Date": "Sep 14th, 2020",
-"For Credit": "Yes",
-"Attendance": "Mandatory",
-"Would Take Again": "Yes",
-"Grade": "A",
-"Textbook": "No",
-"Review": "I did Global First, so I took Professor Levenson's class in London. It was a great experience, and much of the class involved taking field trips and discussing plays we saw. He was very engaging, and discussions were always interesting.",
-"Tags": ["Participation matters", "Amazing lectures", "Caring", "Helpful"],
-"Thumbs Up": 0,
-"Thumbs Down": 0
-}
+  {
+    "Quality": 5.0,
+    "Difficulty": 1.0,
+    "Course": "EGMT1510",
+    "Date": "Jan 31st, 2025",
+    "For Credit": "Yes",
+    "Attendance": "Not Mandatory",
+    "Would Take Again": "Yes",
+    "Grade": "A+",
+    "Textbook": "Yes",
+    "Review": "I had Professor Levenson for the London First Program, and he was genuinely the kindest and most caring professor I have ever had. He is incredibly engaged with his students, and will make the effort to have a personal relationship with anyone willing to talk to him. He is an incredibly reasonable grader, and his course is genuinely enjoyable.",
+    "Tags": ["Amazing lectures", "Caring", "Accessible outside class", "Helpful"],
+    "Thumbs Up": 0,
+    "Thumbs Down": 0
+  },
+  {
+    "Quality": 5.0,
+    "Difficulty": 1.0,
+    "Course": "LONDON",
+    "Date": "Jan 12th, 2025",
+    "For Credit": "Yes",
+    "Attendance": "Not Mandatory",
+    "Would Take Again": "Yes",
+    "Grade": "A",
+    "Textbook": "N/A",
+    "Review": "I had him for my first semester during London First and he was amazing.",
+    "Tags": ["Get ready to read", "Amazing lectures", "Hilarious", "Helpful"],
+    "Thumbs Up": 0,
+    "Thumbs Down": 0
+  },
+  {
+    "Quality": 5.0,
+    "Difficulty": 2.0,
+    "Course": "EGMT1510",
+    "Date": "May 28th, 2024",
+    "For Credit": "Yes",
+    "Attendance": "Mandatory",
+    "Would Take Again": "Yes",
+    "Grade": "A",
+    "Textbook": "N/A",
+    "Review": "Professor Levenson is one of the sweetest instructors I have ever had. He was in charge of the London First Program and was the instructor for my engagements, which were (contrary to most Engagements) very fun, as we traveled around the city and watched plays and films as a class. I loved the discussions he led and he was always available to chat.",
+    "Tags": ["Inspirational", "Respected", "Accessible outside class", "Helpful"],
+    "Thumbs Up": 0,
+    "Thumbs Down": 0
+  },
+  {
+    "Quality": 5.0,
+    "Difficulty": 2.0,
+    "Course": "ENGL3610",
+    "Date": "May 2nd, 2023",
+    "For Credit": "Yes",
+    "Attendance": "Not Mandatory",
+    "Would Take Again": "Yes",
+    "Grade": "A",
+    "Textbook": "N/A",
+    "Review": "Professor Levenson is a great lecturer, and I really enjoyed the course material! I feel like I've learned a lot.",
+    "Tags": ["Get ready to read", "Amazing lectures", "Helpful"],
+    "Thumbs Up": 0,
+    "Thumbs Down": 0
+  },
+  {
+    "Quality": 5.0,
+    "Difficulty": 3.0,
+    "Course": "EGMT1510",
+    "Date": "Sep 14th, 2020",
+    "For Credit": "Yes",
+    "Attendance": "Mandatory",
+    "Would Take Again": "Yes",
+    "Grade": "A",
+    "Textbook": "No",
+    "Review": "I did Global First, so I took Professor Levenson's class in London. It was a great experience, and much of the class involved taking field trips and discussing plays we saw. He was very engaging, and discussions were always interesting.",
+    "Tags": ["Participation matters", "Amazing lectures", "Caring", "Helpful"],
+    "Thumbs Up": 0,
+    "Thumbs Down": 0
+  }
 ]
 ```
 
@@ -317,6 +324,8 @@ public class ChatCompletionsWithRoleExample {
   }
 }
 ```
+
+---
 
 ## Examples
 
@@ -567,6 +576,32 @@ public class AskWithTools {
 }
 ```
 
+### Whisper Transcription
+
+```java
+package com.litongjava.client;
+
+import java.io.File;
+
+import org.junit.Test;
+
+import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.openai.whisper.WhisperClient;
+import com.litongjava.openai.whisper.WhisperResponseFormat;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class WhisperClientTest {
+  @Test
+  public void transcriptions() {
+    EnvUtils.load();
+    String filename = "path/to/your/audio.mp3";
+    File file = new File(filename);
+    ResponseVo responseVo = WhisperClient.transcriptions(file, WhisperResponseFormat.srt);
+    System.out.println(responseVo.getBodyString());
+  }
+}
+```
+
 ### Embedding
 
 #### Example 1: Generate Embedding
@@ -760,9 +795,9 @@ public class JinaRerankClientTest {
     documents.add("Neue Make-up-Trends setzen auf kräftige Farben und innovative Techniken: ...");
     documents.add("Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: ...");
     documents.add("Las nuevas tendencias de maquillaje se centran en colores vivos y técnicas innovadoras: ...");
-    documents.add("针对敏感肌专门设计的天然有机护肤产品：体验由芦荟和洋甘菊提取物带来的自然呵护。...");
-    documents.add("新的化妆趋势注重鲜艳的颜色和创新的技巧：进入化妆艺术的新纪元...");
-    documents.add("敏感肌のために特別に設計された天然有機スキンケア製品: ...");
+    documents.add("Natural organic skincare products for sensitive skin: Experience the gentle care of aloe vera and chamomile extracts...");
+    documents.add("New makeup trends focus on vivid colors and innovative techniques: A new era in the art of makeup...");
+    documents.add("天然有機護膚產品，專為敏感肌設計：感受蘆薈與洋甘菊提取物的溫柔呵護...");
     documents.add("新しいメイクのトレンドは鮮やかな色と革新的な技術に焦点を当てています: ...");
 
     // Create rerank request
@@ -798,15 +833,7 @@ public class JinaSearchServiceTest {
 }
 ```
 
-**Sample Output**:
-
-```
-[1] Title: Run Deepseek-R1 / R1 Zero
-[1] URL Source: https://unsloth.ai/blog/deepseek-r1
-...
-```
-
-### PARSE markdown response
+### Parse Markdown Response
 
 A simple data class example:
 
@@ -822,7 +849,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class WebPageConteont {
+public class WebPageContent {
   private String title;
   private String url;
   private String description;
@@ -831,11 +858,12 @@ public class WebPageConteont {
 ```
 
 And a hypothetical parse method:
+
 ```java
-public static List<WebPageConteont> parse(String markdown) {
+public static List<WebPageContent> parse(String markdown) {
   // Implementation that parses a given markdown string
   // to extract relevant fields (title, url, description, etc.)
-  // and returns a list of WebPageConteont objects.
+  // and returns a list of WebPageContent objects.
 }
 ```
 
@@ -873,7 +901,7 @@ public class GeminiDemo {
 }
 ```
 
-#### Google GEMINI images
+#### Google GEMINI Images
 
 ```java
 package com.litongjava.llm.service;
@@ -926,6 +954,7 @@ public class LlmOcrService {
   }
 }
 ```
+
 ```java
 package com.litongjava.llm.service;
 
@@ -945,15 +974,15 @@ public class LlmOcrServiceTest {
     String path = "C:\\Users\\Administrator\\Pictures\\200-dpi.png";
     File file = new File(path);
     byte[] bytes = FileUtil.readBytes(file);
-    String string = Aop.get(LlmOcrService.class).parse(bytes, file.getName());
-    System.out.println(string);
+    String result = Aop.get(LlmOcrService.class).parse(bytes, file.getName());
+    System.out.println(result);
   }
 }
 ```
 
 #### GOOGLE GEMINI Function Call
 
-**Request Body JSON Example**:
+**Request Body JSON Example:**
 
 ```json
 {
@@ -1035,7 +1064,7 @@ public class LlmOcrServiceTest {
 }
 ```
 
-**Java Code**:
+**Java Code:**
 
 ```java
 package com.litongjava.gemini;
@@ -1054,8 +1083,7 @@ public class GeminiFunctionCallExample {
 
     // 1. system_instruction
     GeminiSystemInstructionVo systemInstruction = new GeminiSystemInstructionVo(
-        new GeminiPartVo("You are a helpful lighting system bot. You can turn lights on and off, "
-            + "and you can set the color. Do not perform any other tasks."));
+        new GeminiPartVo("You are a helpful lighting system bot. You can turn lights on and off, and you can set the color. Do not perform any other tasks."));
 
     // 2. tools -> function_declarations
     GeminiFunctionDeclarationVo enableLightsFunc = new GeminiFunctionDeclarationVo();
@@ -1123,7 +1151,7 @@ public class GeminiFunctionCallExample {
 
     // Convert to JSON
     String requestJson = JsonUtils.toJson(requestVo);
-    System.out.println("==== 请求 JSON ====");
+    System.out.println("==== Request JSON ====");
     System.out.println(requestJson);
 
     // 6. Send request
@@ -1152,7 +1180,7 @@ public class GeminiFunctionCallExample {
 }
 ```
 
-#### gemini upload file
+#### Gemini Upload File
 
 ```java
 package com.litongjava.gemini;
@@ -1176,7 +1204,7 @@ public class GeminiClientUploadFileTest {
 }
 ```
 
-**Sample Response**:
+**Sample Response:**
 
 ```json
 {
@@ -1195,7 +1223,7 @@ public class GeminiClientUploadFileTest {
 }
 ```
 
-#### gemini ask with pdf
+#### Gemini Ask with PDF
 
 ```java
 package com.litongjava.gemini;
@@ -1212,18 +1240,18 @@ public class GeminiClientAskWithPdfTest {
     EnvUtils.load();
     String googleApiKey = EnvUtils.getStr("GEMINI_API_KEY");
 
-    // Suppose you have an uploaded PDF
+    // Suppose you have an uploaded PDF file
     String mimeType = "application/pdf";
     String fileUri = "https://generativelanguage.googleapis.com/v1beta/files/4eqnhyuzvzkb";
 
     // 1. Construct request
     List<GeminiPartVo> parts = new ArrayList<>();
-    parts.add(new GeminiPartVo("翻译成中文"));
+    parts.add(new GeminiPartVo("Translate to Chinese"));
     parts.add(new GeminiPartVo(new GeminiFileDataVo(mimeType, fileUri)));
     GeminiContentVo content = new GeminiContentVo("user", parts);
     GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
 
-    // 2. Sync request
+    // 2. Send sync request
     GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
 
     // 3. Print response
@@ -1240,9 +1268,9 @@ public class GeminiClientAskWithPdfTest {
 }
 ```
 
-#### gemini openai
+#### Gemini OpenAI
 
-In your `app.properties`:
+In your `app.properties` add:
 
 ```properties
 OPENAI_API_KEY=<Gemini key here>
@@ -1421,7 +1449,7 @@ public class AskWithImageDeepSeek {
     messages.add(userMessage);
 
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
-    // DEEPSEEK_R1 is text-only, so let's use DEEPSEEK_VL2 for image
+    // DEEPSEEK_R1 is a text-only model, so use DEEPSEEK_VL2 for image processing
     chatRequestVo.setModel(SiliconFlowModels.DEEPSEEK_VL2);
     chatRequestVo.setMax_tokens(1024).setTemperature(0.7f).setTop_p(0.7f).setTop_k(50).setFrequency_penalty(0);
     chatRequestVo.setMessages(messages);
@@ -1434,8 +1462,13 @@ public class AskWithImageDeepSeek {
   }
 }
 ```
-## VOLCENGINE
-### DEEPSEEK
+
+---
+
+## Additional Integrations
+
+### VOLCENGINE: DEEPSEEK
+
 ```java
 package llm;
 
@@ -1457,8 +1490,8 @@ public class VolcEngineDeepSeekClient {
     String apiKey = EnvUtils.get("VOLCENGINE_API_KEY");
 
     List<OpenAiChatMessage> messages = new ArrayList<>();
-    messages.add(new OpenAiChatMessage("system", "你是人工智能助手."));
-    messages.add(new OpenAiChatMessage("user", "常见的十字花科植物有哪些？"));
+    messages.add(new OpenAiChatMessage("system", "You are an AI assistant."));
+    messages.add(new OpenAiChatMessage("user", "What are the common cruciferous vegetables?"));
 
     OpenAiChatRequestVo chatRequest = new OpenAiChatRequestVo();
     chatRequest.setModel(VolcEngineModels.DEEPSEEK_V3_241226);
@@ -1469,8 +1502,11 @@ public class VolcEngineDeepSeekClient {
   }
 }
 ```
-## Groq
-### GroqSpeechClientTest
+
+### Groq Integration
+
+#### GroqSpeechClientTest
+
 ```java
 package com.litongjava.groq;
 
@@ -1494,7 +1530,7 @@ public class GroqSpeechClientTest {
 
     TranscriptionsRequest reqVo = new TranscriptionsRequest();
     reqVo.setModel(model).setLanguage("zh-cn");
-    byte[] audioData=null;
+    byte[] audioData = null;
     try {
       audioData = Files.readAllBytes(new File(filePath).toPath());
       TranscriptionsResponse transcriptions = GroqSpeechClient.transcriptions(audioData, fileName, reqVo);
@@ -1505,8 +1541,11 @@ public class GroqSpeechClientTest {
   }
 }
 ```
-## ApiFy
-### linkedinProfileScraper
+
+### ApiFy
+
+#### LinkedIn Profile Scraper
+
 ```java
 package com.litongjava.client;
 
@@ -1521,16 +1560,19 @@ public class ApiFyClientTest {
 
   @Test
   public void testLinkedIn() {
-    //load APIFY_API_KEY
+    // Load APIFY_API_KEY
     EnvUtils.load();
-    ApiFyLinkedProfileReqVo reqVo = new ApiFyLinkedProfileReqVo("https: //www.linkedin.com/in/nicolaushilleary");
+    ApiFyLinkedProfileReqVo reqVo = new ApiFyLinkedProfileReqVo("https://www.linkedin.com/in/nicolaushilleary");
     ResponseVo response = ApiFyClient.linkedinProfileScraper(reqVo);
     System.out.println(response.getBodyString());
   }
 }
 ```
-## searchapi
-### google
+
+### SearchAPI
+
+#### Google Search
+
 ```java
 package com.litongjava.client;
 
@@ -1545,7 +1587,7 @@ import com.litongjava.tio.utils.json.FastJson2Utils;
 public class SearchapiClientTest {
   @Test
   public void search() {
-    //SEARCHAPI_API_KEY
+    // SEARCHAPI_API_KEY
     EnvUtils.load();
     ResponseVo responseVo = SearchapiClient.search("KaiZhao at SJSU");
     String bodyString = responseVo.getBodyString();
@@ -1557,11 +1599,12 @@ public class SearchapiClientTest {
     }
   }
 }
-
 ```
 
-## Supadata.ai
-### youtube Subtitle
+### Supadata.ai
+
+#### YouTube Subtitle
+
 ```java
 package com.litongjava.client;
 
@@ -1577,12 +1620,11 @@ import com.litongjava.tio.utils.video.VideoTimeUtils;
 
 public class SupadataClientTest {
 
-
   @Test
   public void getSubtitleTest() {
-    // String url="https://www.youtube.com/watch?v=31FpW6CMmYE";
+    // Example: You can use a YouTube video id
     String id = "31FpW6CMmYE";
-    // load SUPADATA_API_KEY
+    // Load SUPADATA_API_KEY
     EnvUtils.load();
     SubTitleResponse subTitle = SupadataClient.getSubTitle(id);
     List<SubTitleContent> content = subTitle.getContent();
@@ -1590,7 +1632,7 @@ public class SupadataClientTest {
     for (SubTitleContent subTitleContent : content) {
       long offset = subTitleContent.getOffset();
       long duration = subTitleContent.getDuration();
-      // 计算结束时间 = 开始时间 + 持续时间
+      // Calculate end time = start time + duration
       long endTime = offset + duration;
       String startStr = VideoTimeUtils.formatTime(offset);
       String endStr = VideoTimeUtils.formatTime(endTime);
@@ -1600,8 +1642,10 @@ public class SupadataClientTest {
     System.out.println(stringBuffer.toString());
   }
 }
-
 ```
+
+---
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.
