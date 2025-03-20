@@ -21,6 +21,7 @@
     - [带图像的提问](#带图像的提问)
     - [带图像的聊天](#带图像的聊天)
     - [使用工具提问](#使用工具提问)
+    - [Whisper](#whisper)
     - [嵌入](#嵌入)
       - [示例 1：生成嵌入](#示例-1生成嵌入)
       - [示例 2：简单嵌入](#示例-2简单嵌入)
@@ -559,7 +560,32 @@ public class AskWithTools {
   }
 }
 ```
+### Whisper
+```java
+package com.litongjava.client;
 
+import java.io.File;
+
+import org.junit.Test;
+
+import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.openai.whisper.WhisperClient;
+import com.litongjava.openai.whisper.WhisperResponseFormat;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class WhisperClientTest {
+  @Test
+  public void transcriptions() {
+    EnvUtils.load();
+    String filename = "D:\\dev_workspace\\eclipse-jee-2022-6\\java-video-transcript\\video-transcript-service\\downloads\\h5qWn0SfTXA\\What the Best Pitch Decks Have in Common with Mike Vernal (Sequoia Capital).mp3";
+    File file = new File(filename);
+    ResponseVo responseVo = WhisperClient.transcriptions(file, WhisperResponseFormat.srt);
+    System.out.println(responseVo.getBodyString());
+  }
+
+}
+
+```
 ### 嵌入
 
 #### 示例 1：生成嵌入

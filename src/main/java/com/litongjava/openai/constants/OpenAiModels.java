@@ -22,5 +22,6 @@ public interface OpenAiModels {
   String TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small";
 
   String TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large";
+  String WHISPER_1 = "whisper-1";
 
 }
