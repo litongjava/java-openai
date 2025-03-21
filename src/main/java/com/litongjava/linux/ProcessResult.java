@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProcessResult {
   private int exitCode;
+  private String executeCode;
   private String stdOut;
   private String stdErr;
   private List<String> images;
