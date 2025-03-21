@@ -80,4 +80,25 @@ public class GeminiChatRequestVo {
     }
     this.contents = contents;
   }
+
+  public GeminiChatRequestVo setSystemPrompt(String systemPrompt) {
+    GeminiPartVo part = new GeminiPartVo(systemPrompt);
+    GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(part);
+    this.setSystem_instruction(geminiSystemInstructionVo);
+    return this;
+  }
+
+  public GeminiChatRequestVo setUserPrompt(String... prompts) {
+    List<GeminiPartVo> parts = new ArrayList<>(prompts.length);
+    for (String prompt : prompts) {
+      GeminiPartVo part = new GeminiPartVo(prompt);
+      parts.add(part);
+    }
+    List<GeminiContentVo> contents = new ArrayList<>();
+    GeminiContentVo content = new GeminiContentVo("user", parts);
+    contents.add(content);
+    this.contents = contents;
+    return this;
+  }
+
 }

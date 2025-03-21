@@ -31,6 +31,7 @@
     - [Jina Search](#jina-search)
     - [Parse Markdown Response](#parse-markdown-response)
     - [GOOGLE GEMINI](#google-gemini)
+      - [GOOGLE GEMINI Text](#google-gemini-text)
       - [Google GEMINI Images](#google-gemini-images)
       - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
       - [Gemini Upload File](#gemini-upload-file)
@@ -868,11 +869,14 @@ public static List<WebPageContent> parse(String markdown) {
 ```
 
 ### GOOGLE GEMINI
-
+#### GOOGLE GEMINI Text
 ```java
 package com.litongjava.gemini;
 
 import java.util.Collections;
+import java.util.List;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
 
 /**
  * Demo for Gemini
@@ -880,7 +884,9 @@ import java.util.Collections;
 public class GeminiDemo {
 
   public static void main(String[] args) {
-    String googleApiKey = "YOUR_GOOGLE_API_KEY";
+    EnvUtils.load();
+    String googleApiKey = EnvUtils.getStr("GEMINI_API_KEY");
+
     // 1. Construct request body
     GeminiPartVo part = new GeminiPartVo("Hello, how are you?");
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
@@ -888,14 +894,15 @@ public class GeminiDemo {
 
     // 2. Send sync request: generateContent
     GeminiChatResponseVo respVo = GeminiClient.generate(googleApiKey, GoogleGeminiModels.GEMINI_1_5_FLASH, reqVo);
-    if (respVo != null && respVo.getCandidates() != null) {
-      respVo.getCandidates().forEach(candidate -> {
-        if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
-          candidate.getContent().getParts().forEach(partVo -> {
-            System.out.println("Gemini answer text: " + partVo.getText());
-          });
-        }
-      });
+
+    if (respVo != null) {
+      List<GeminiCandidateVo> candidates = respVo.getCandidates();
+      GeminiCandidateVo candidate = candidates.get(0);
+      List<GeminiPartVo> parts = candidate.getContent().getParts();
+      if (candidate != null && candidate.getContent() != null && parts != null) {
+        String text = parts.get(0).getText();
+        System.out.println("Gemini answer text: " + text);
+      }
     }
   }
 }
