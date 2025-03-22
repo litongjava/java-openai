@@ -35,7 +35,7 @@ public class LinuxClient {
         throw new RuntimeException("code:" + resposneCode + " response:" + string);
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Failed to request:" + arg0 + " body:" + code, e);
     }
   }
 

@@ -16,7 +16,7 @@ public class TavilyClient {
    * @return 响应对象 ResponseVo
    */
   public static TavilySearchResponse search(TavilySearchRequest request) {
-    String requestJson = JsonUtils.toJson(request);
+    String requestJson = JsonUtils.toSkipNullJson(request);
     String apiBase = EnvUtils.getStr("TAVILY_API_BASE", TAVILY_API_BASE);
     String url = apiBase + "/search";
     String token = EnvUtils.getStr("TAVILY_API_TOKEN");
@@ -42,7 +42,7 @@ public class TavilyClient {
     // 使用 Builder 构建 SearchRequest 对象
     TavilySearchRequest request = TavilySearchRequest.builder().query(query).topic("general").search_depth("basic")
         //
-        .chunks_perSource(3).max_results(10).include_answer(false).include_raw_content(false)
+        .chunks_perSource(3).max_results(10).include_answer(false).include_raw_content(true)
         //
         .include_images(false).include_image_descriptions(false).build();
     return search(request);
