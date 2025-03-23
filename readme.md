@@ -46,6 +46,9 @@
       - [GroqSpeechClientTest](#groqspeechclienttest)
     - [ApiFy](#apify)
       - [LinkedIn Profile Scraper](#linkedin-profile-scraper)
+  - [Google Custom Search JSON API](#google-custom-search-json-api)
+    - [Example Code](#example-code)
+    - [Explanation](#explanation)
     - [SearchAPI](#searchapi)
       - [Google Search](#google-search)
     - [Supadata.ai](#supadataai)
@@ -1575,6 +1578,49 @@ public class ApiFyClientTest {
   }
 }
 ```
+Below is the translated version of the provided content:
+
+---
+
+## Google Custom Search JSON API
+
+### Example Code
+
+```java
+package com.litongjava.perplexica.services;
+
+import com.litongjava.google.search.GoogleCustomSearchClient;
+import com.litongjava.google.search.GoogleCustomSearchResponse;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class GoogleCustomSearchService {
+
+  /**
+   * Invokes the Google Custom Search JSON API to search for specified content.
+   *
+   * @param ctx   The search engine ID (CSE_ID).
+   * @param text  The search keyword.
+   * @return      The encapsulated search result object.
+   */
+  public GoogleCustomSearchResponse search(String ctx, String text) {
+    // Retrieve the API Key from the environment variables.
+    String key = EnvUtils.getStr("GOOGLE_API_KEY");
+    // Call the wrapped search client to execute the search request and return the response.
+    return GoogleCustomSearchClient.search(key, ctx, text);
+  }
+}
+```
+
+---
+
+### Explanation
+
+In the example code above, we define a class called `GoogleCustomSearchService`. Its `search` method takes two parameters:
+
+- **ctx**: Represents the search engine ID (CSE_ID).
+- **text**: Represents the search keyword.
+
+Inside the method, it first retrieves the API Key stored in the environment variable with the key "GOOGLE_API_KEY" using `EnvUtils.getStr`. Then it calls the `GoogleCustomSearchClient.search` method to initiate the search request and returns a `GoogleCustomSearchResponse` object as the search result.
 
 ### SearchAPI
 
