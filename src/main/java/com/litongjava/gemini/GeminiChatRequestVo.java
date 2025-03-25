@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -91,8 +92,10 @@ public class GeminiChatRequestVo {
   public GeminiChatRequestVo setUserPrompts(String... prompts) {
     List<GeminiPartVo> parts = new ArrayList<>(prompts.length);
     for (String prompt : prompts) {
-      GeminiPartVo part = new GeminiPartVo(prompt);
-      parts.add(part);
+      if (StrUtil.isNotBlank(prompt)) {
+        GeminiPartVo part = new GeminiPartVo(prompt);
+        parts.add(part);
+      }
     }
     List<GeminiContentVo> contents = new ArrayList<>();
     GeminiContentVo content = new GeminiContentVo("user", parts);

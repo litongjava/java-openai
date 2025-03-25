@@ -3,6 +3,7 @@ package com.litongjava.tavily;
 import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
+import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class TavilyClient {
@@ -20,6 +21,9 @@ public class TavilyClient {
     String apiBase = EnvUtils.getStr("TAVILY_API_BASE", TAVILY_API_BASE);
     String url = apiBase + "/search";
     String token = EnvUtils.getStr("TAVILY_API_TOKEN");
+    if (StrUtil.isBlank(token)) {
+      throw new RuntimeException("TAVILY_API_TOKEN can not be empty");
+    }
     ResponseVo responseVo = HttpUtils.postJson(url, token, requestJson);
     int code = responseVo.getCode();
     String bodyString = responseVo.getBodyString();
@@ -42,7 +46,7 @@ public class TavilyClient {
     // 使用 Builder 构建 SearchRequest 对象
     TavilySearchRequest request = TavilySearchRequest.builder().query(query).topic("general").search_depth("basic")
         //
-        .chunks_perSource(3).max_results(10).include_answer(false).include_raw_content(true)
+        .chunks_perSource(3).max_results(4).include_answer(false).include_raw_content(true)
         //
         .include_images(false).include_image_descriptions(false).build();
     return search(request);
