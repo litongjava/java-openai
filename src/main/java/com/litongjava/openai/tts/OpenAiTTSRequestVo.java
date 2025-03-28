@@ -12,5 +12,5 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 public class OpenAiTTSRequestVo {
-  private String model, input, alloy;
+  private String model, input, voice, response_format, instructions;
 }
