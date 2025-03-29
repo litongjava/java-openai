@@ -15,4 +15,5 @@ public class ProcessResult {
   private String stdOut;
   private String stdErr;
   private List<String> images;
+  private List<String> videos;
 }
