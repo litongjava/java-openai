@@ -371,7 +371,7 @@ public class OpenAiClient {
   }
 
   public static float[] embeddingArray(String input, String model) {
-    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
+    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(model, input);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
