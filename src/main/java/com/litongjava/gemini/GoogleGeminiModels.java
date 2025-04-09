@@ -48,6 +48,8 @@ public interface GoogleGeminiModels {
   String GEMINI_2_0_FLASH_THINKING_EXP = "gemini-2.0-flash-thinking-exp";
   String GEMINI_2_0_FLASH_THINKING_EXP_1219 = "gemini-2.0-flash-thinking-exp-1219";
   String GEMINI_2_5_PRO_EXP_03_25 = "gemini-2.5-pro-exp-03-25";
+  String GEMINI_2_5_PRO_PREVIEW_03_25 = "gemini-2.5-pro-preview-03-25";
+  
 
   // Gemini Experimental
   String GEMINI_EXP_1206 = "gemini-exp-1206";

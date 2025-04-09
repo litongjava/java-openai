@@ -19,12 +19,24 @@ public class LinuxClient {
     String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
     String key = EnvUtils.getStr("LINUX_API_KEY");
 
-    String arg0 = apiBase + "/python";
+    String targetUrl = apiBase + "/python";
+    return post(key, targetUrl, code);
+  }
+  
+  public static ProcessResult executeMainmCode(String code) {
+    String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
+    String key = EnvUtils.getStr("LINUX_API_KEY");
+
+    String targetUrl = apiBase + "/manim";
+    return post(key, targetUrl, code);
+  }
+
+  private static ProcessResult post(String key, String targetUrl, String code) {
     MediaType mediaType = MediaType.parse("text/plain");
 
     OkHttpClient client = OkHttpClientPool.get60HttpClient();
     RequestBody body = RequestBody.create(code, mediaType);
-    Request request = new Request.Builder().url(arg0).method("POST", body).addHeader("authorization", "Bearer " + key).build();
+    Request request = new Request.Builder().url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key).build();
     Call call = client.newCall(request);
     try (Response response = call.execute()) {
       String string = response.body().string();
@@ -35,7 +47,7 @@ public class LinuxClient {
         throw new RuntimeException("code:" + resposneCode + " response:" + string);
       }
     } catch (IOException e) {
-      throw new RuntimeException("Failed to request:" + arg0 + " body:" + code, e);
+      throw new RuntimeException("Failed to request:" + targetUrl + " body:" + code, e);
     }
   }
 

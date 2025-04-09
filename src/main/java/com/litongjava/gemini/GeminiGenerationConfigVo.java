@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
  * 例如:
  *   "generationConfig": {
  *       "stopSequences": ["Title"],
- *       "temperature": 1.0,
+ *       "temperature": 0,
  *       "maxOutputTokens": 800,
  *       "topP": 0.8,
  *       "topK": 10
@@ -32,6 +32,6 @@ public class GeminiGenerationConfigVo {
   private GeminiResponseSchema responseSchema;
 
   public GeminiGenerationConfigVo buildJsonValue() {
-    return this.setTemperature(1d).setTopK(40).setTopP(0.95).setMaxOutputTokens(8192).setResponseMimeType("application/json");
+    return this.setResponseMimeType("application/json");
   }
 }
