@@ -15,6 +15,8 @@ import okhttp3.Response;
 
 public class LinuxClient {
 
+  private static OkHttpClient client = OkHttpClientPool.get1000HttpClient();
+
   public static ProcessResult executePythonCode(String code) {
     String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
     String key = EnvUtils.getStr("LINUX_API_KEY");
@@ -45,7 +47,6 @@ public class LinuxClient {
   private static ProcessResult post(String key, String targetUrl, String code) {
     MediaType mediaType = MediaType.parse("text/plain");
 
-    OkHttpClient client = OkHttpClientPool.get300HttpClient();
     RequestBody body = RequestBody.create(code, mediaType);
     Request request = new Request.Builder().url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key).build();
     Call call = client.newCall(request);

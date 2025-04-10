@@ -24,7 +24,7 @@ import okhttp3.Response;
 public class GeminiClient {
 
   public static boolean debug;
-  public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+  public static final OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
 
   /**
    * 单次生成内容 (同步请求)
