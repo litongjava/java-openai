@@ -22,7 +22,18 @@ public class LinuxClient {
     String targetUrl = apiBase + "/python";
     return post(key, targetUrl, code);
   }
-  
+
+  public static ProcessResult executeMainmCode(String apiBase, String key, String code) {
+    String targetUrl = apiBase + "/manim";
+    return post(key, targetUrl, code);
+  }
+
+  public static ProcessResult executeMainmCode(String apiBase, String code) {
+    String key = EnvUtils.getStr("LINUX_API_KEY");
+    String targetUrl = apiBase + "/manim";
+    return post(key, targetUrl, code);
+  }
+
   public static ProcessResult executeMainmCode(String code) {
     String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
     String key = EnvUtils.getStr("LINUX_API_KEY");
@@ -34,7 +45,7 @@ public class LinuxClient {
   private static ProcessResult post(String key, String targetUrl, String code) {
     MediaType mediaType = MediaType.parse("text/plain");
 
-    OkHttpClient client = OkHttpClientPool.get60HttpClient();
+    OkHttpClient client = OkHttpClientPool.get300HttpClient();
     RequestBody body = RequestBody.create(code, mediaType);
     Request request = new Request.Builder().url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key).build();
     Call call = client.newCall(request);
