@@ -2,8 +2,6 @@ package com.litongjava.fishaudio.tts;
 
 import java.util.List;
 
-import org.msgpack.annotation.Message;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Message
 public class FishAudioTTSRequestVo {
   // 合成的文本内容
   private String text;
