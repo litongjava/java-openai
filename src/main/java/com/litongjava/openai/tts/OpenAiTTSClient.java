@@ -19,7 +19,7 @@ import okhttp3.Response;
 public class OpenAiTTSClient {
 
   public static ResponseVo speech(String input) {
-    OpenAiTTSRequestVo req = new OpenAiTTSRequestVo().setInput(input).setVoice(OpenAiTTSVoice.coral)
+    OpenAiTTSRequestVo req = new OpenAiTTSRequestVo().setInput(input).setVoice(OpenAiTTSVoice.shimmer)
         //
         .setModel(OpenAiTTSModels.TTS_1);
     return speech(req);

@@ -321,7 +321,7 @@ public class ChatCompletionsWithRoleExample {
   public static void main(String[] args) {
     // Load OPENAI_API_KEY from configuration
     EnvUtils.load();
-    
+
     // Make a chat completion request with a specific role
     ChatResponseVo chatResponse = OpenAiClient.chatCompletionsWithRole("user", "How are you?");
     System.out.println("Response:\n" + JsonUtils.toJson(chatResponse));
@@ -628,7 +628,7 @@ public class EmbeddingExample {
   public static void main(String[] args) {
     // Load configuration
     EnvUtils.load();
-    
+
     // Create embedding request
     EmbeddingRequestVo embeddingRequest = new EmbeddingRequestVo();
     embeddingRequest.setInput("What's your name?");
@@ -642,7 +642,7 @@ public class EmbeddingExample {
       if (response.isSuccessful()) {
         String responseBody = response.body().string();
         System.out.println("Response:\n" + responseBody);
-        
+
         // Parse response
         EmbeddingResponseVo responseVo = JsonUtils.parse(responseBody, EmbeddingResponseVo.class);
         System.out.println("Parsed Response:\n" + JsonUtils.toJson(responseVo));
@@ -673,10 +673,10 @@ public class SimpleEmbeddingExample {
   public void embedding() {
     // Load configuration
     EnvUtils.load();
-    
+
     String text = "Hi";
     float[] embeddingArray = OpenAiClient.embeddingArray(text, OpenAiModels.TEXT_EMBEDDING_3_LARGE);
-    
+
     System.out.println("Embedding Length: " + embeddingArray.length);
     // Expected output: 3072
   }
@@ -705,7 +705,7 @@ public class Llama3_1_Test {
   public void testLlamaChat() {
     // Load configuration
     EnvUtils.load();
-    
+
     // Create messages
     List<ChatMessage> messages = new ArrayList<>();
     messages.add(new ChatMessage("user", "How are you?"));
@@ -748,7 +748,7 @@ public class PerplexityTest {
   public void testPerplexityChat() {
     // Load configuration
     EnvUtils.load();
-    
+
     // Create messages
     List<ChatMessage> messages = new ArrayList<>();
     messages.add(new ChatMessage("user", "How are you?"));
@@ -792,7 +792,7 @@ public class JinaRerankClientTest {
   public void testRerank() {
     // Load configuration
     EnvUtils.load();
-    
+
     // Prepare documents
     List<String> documents = new ArrayList<>();
     documents.add("Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: ...");
@@ -872,7 +872,9 @@ public static List<WebPageContent> parse(String markdown) {
 ```
 
 ### GOOGLE GEMINI
+
 #### GOOGLE GEMINI Text
+
 ```java
 package com.litongjava.gemini;
 
@@ -1015,9 +1017,7 @@ public class LlmOcrServiceTest {
                 "description": "A placeholder parameter."
               }
             },
-            "required": [
-              "dummy"
-            ]
+            "required": ["dummy"]
           }
         },
         {
@@ -1031,9 +1031,7 @@ public class LlmOcrServiceTest {
                 "description": "The light color as a 6-digit hex string, e.g. ff0000 for red."
               }
             },
-            "required": [
-              "rgb_hex"
-            ]
+            "required": ["rgb_hex"]
           }
         },
         {
@@ -1047,9 +1045,7 @@ public class LlmOcrServiceTest {
                 "description": "A placeholder parameter."
               }
             },
-            "required": [
-              "dummy"
-            ]
+            "required": ["dummy"]
           }
         }
       ]
@@ -1058,11 +1054,7 @@ public class LlmOcrServiceTest {
   "tool_config": {
     "function_calling_config": {
       "mode": "ANY",
-      "allowed_function_names": [
-        "enable_lights",
-        "set_light_color",
-        "stop_lights"
-      ]
+      "allowed_function_names": ["enable_lights", "set_light_color", "stop_lights"]
     }
   },
   "contents": {
@@ -1578,6 +1570,7 @@ public class ApiFyClientTest {
   }
 }
 ```
+
 Below is the translated version of the provided content:
 
 ---
@@ -1622,9 +1615,9 @@ In the example code above, we define a class called `GoogleCustomSearchService`.
 
 Inside the method, it first retrieves the API Key stored in the environment variable with the key "GOOGLE_API_KEY" using `EnvUtils.getStr`. Then it calls the `GoogleCustomSearchClient.search` method to initiate the search request and returns a `GoogleCustomSearchResponse` object as the search result.
 
-### SearchAPI
+## SearchAPI
 
-#### Google Search
+### Google Search
 
 ```java
 package com.litongjava.client;
@@ -1654,9 +1647,9 @@ public class SearchapiClientTest {
 }
 ```
 
-### Supadata.ai
+## Supadata.ai
 
-#### YouTube Subtitle
+### YouTube Subtitle
 
 ```java
 package com.litongjava.client;
@@ -1698,6 +1691,79 @@ public class SupadataClientTest {
 ```
 
 ---
+
+## Fish audio
+
+add key to .env
+
+```
+FISHAUDIO_API_KEY
+```
+
+```java
+package com.litongjava.manim.services;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.junit.Test;
+
+import com.litongjava.fishaudio.tts.FishAudioClient;
+import com.litongjava.fishaudio.tts.FishAudioTTSRequestVo;
+import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class FishAudioClientTest {
+
+  @Test
+  public void fishAudioTest() {
+    EnvUtils.load();
+    ResponseVo responseVo = FishAudioClient.speech("今天天气怎么样");
+    if (responseVo.isOk()) {
+      byte[] audioBytes = responseVo.getBodyBytes();
+      try (FileOutputStream fos = new FileOutputStream("output.mp3")) {
+        fos.write(audioBytes);
+        System.out.println("MP3 文件已保存到 output.mp3");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else {
+      System.err.println("请求失败：" + responseVo);
+    }
+  }
+
+  @Test
+  public void testWithReferenceId() {
+    EnvUtils.load();
+    // 构造请求对象，并指定参考语音ID（发音人）
+    FishAudioTTSRequestVo vo = new FishAudioTTSRequestVo();
+    vo.setText("今天天气怎么样");
+    vo.setReference_id("03397b4c4be74759b72533b663fbd001");
+
+    // 其它参数保持默认或根据需要进行设置，例如：
+    vo.setChunk_length(200);
+    vo.setFormat("mp3");
+    vo.setMp3_bitrate(128);
+    // 如果有需要使用参考音频（in-context learning），也可以通过 vo.setReferences(...) 传入对应参考语音数据
+
+    // 使用 FishAudioClient 发起请求
+    ResponseVo responseVo = FishAudioClient.speech(vo);
+    if (responseVo.isOk()) {
+      // 处理返回的音频数据，例如保存到文件
+      byte[] audioBytes = responseVo.getBodyBytes();
+      try (FileOutputStream fos = new FileOutputStream("output.mp3")) {
+        fos.write(audioBytes);
+        System.out.println("MP3 文件已保存到 output.mp3");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else {
+      System.err.println("请求失败：" + responseVo.getBodyString());
+    }
+
+  }
+}
+```
 
 ## License
 

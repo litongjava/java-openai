@@ -16,6 +16,13 @@
     <langchain4j.version>0.34.0</langchain4j.version>
   </properties>
   <dependencies>
+
+    <dependency>
+      <groupId>org.msgpack</groupId>
+      <artifactId>msgpack</artifactId>
+      <version>0.6.12</version>
+    </dependency>
+
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
