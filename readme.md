@@ -30,14 +30,16 @@
     - [Jina Rerank](#jina-rerank)
     - [Jina Search](#jina-search)
     - [Parse Markdown Response](#parse-markdown-response)
-    - [GOOGLE GEMINI](#google-gemini)
-      - [GOOGLE GEMINI Text](#google-gemini-text)
-      - [Google GEMINI Images](#google-gemini-images)
-      - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
-      - [Gemini Upload File](#gemini-upload-file)
-      - [Gemini Ask with PDF](#gemini-ask-with-pdf)
-      - [Gemini OpenAI](#gemini-openai)
-    - [deepseek-openai](#deepseek-openai)
+  - [GOOGLE GEMINI](#google-gemini)
+    - [GOOGLE GEMINI Text](#google-gemini-text)
+    - [Google GEMINI Images](#google-gemini-images)
+    - [GOOGLE GEMINI Function Call](#google-gemini-function-call)
+    - [Gemini Upload File](#gemini-upload-file)
+    - [Gemini Ask with PDF](#gemini-ask-with-pdf)
+    - [Generate Image](#generate-image)
+    - [Gemini OpenAI](#gemini-openai)
+  - [deepseek-openai](#deepseek-openai)
+  - [SiliconFlow](#siliconflow)
     - [SiliconFlow DeepSeek](#siliconflow-deepseek)
     - [SiliconFlow DeepSeek Image](#siliconflow-deepseek-image)
   - [Additional Integrations](#additional-integrations)
@@ -49,10 +51,11 @@
   - [Google Custom Search JSON API](#google-custom-search-json-api)
     - [Example Code](#example-code)
     - [Explanation](#explanation)
-    - [SearchAPI](#searchapi)
-      - [Google Search](#google-search)
-    - [Supadata.ai](#supadataai)
-      - [YouTube Subtitle](#youtube-subtitle)
+  - [SearchAPI](#searchapi)
+    - [Google Search](#google-search)
+  - [Supadata.ai](#supadataai)
+    - [YouTube Subtitle](#youtube-subtitle)
+  - [Fish audio](#fish-audio)
   - [License](#license)
 
 ## Features
@@ -871,9 +874,9 @@ public static List<WebPageContent> parse(String markdown) {
 }
 ```
 
-### GOOGLE GEMINI
+## GOOGLE GEMINI
 
-#### GOOGLE GEMINI Text
+### GOOGLE GEMINI Text
 
 ```java
 package com.litongjava.gemini;
@@ -913,7 +916,7 @@ public class GeminiDemo {
 }
 ```
 
-#### Google GEMINI Images
+### Google GEMINI Images
 
 ```java
 package com.litongjava.llm.service;
@@ -992,7 +995,7 @@ public class LlmOcrServiceTest {
 }
 ```
 
-#### GOOGLE GEMINI Function Call
+### GOOGLE GEMINI Function Call
 
 **Request Body JSON Example:**
 
@@ -1182,7 +1185,7 @@ public class GeminiFunctionCallExample {
 }
 ```
 
-#### Gemini Upload File
+### Gemini Upload File
 
 ```java
 package com.litongjava.gemini;
@@ -1225,7 +1228,7 @@ public class GeminiClientUploadFileTest {
 }
 ```
 
-#### Gemini Ask with PDF
+### Gemini Ask with PDF
 
 ```java
 package com.litongjava.gemini;
@@ -1269,8 +1272,86 @@ public class GeminiClientAskWithPdfTest {
   }
 }
 ```
+### Generate Image
+```java
+package com.litongjava.manim.services;
 
-#### Gemini OpenAI
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jfinal.kit.Kv;
+import com.litongjava.gemini.GeminiChatRequestVo;
+import com.litongjava.gemini.GeminiChatResponseVo;
+import com.litongjava.gemini.GeminiClient;
+import com.litongjava.gemini.GeminiGenerationConfigVo;
+import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GoogleGeminiModels;
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.template.PromptEngine;
+import com.litongjava.tio.boot.admin.services.AwsS3StorageService;
+import com.litongjava.tio.boot.admin.utils.AwsS3Utils;
+import com.litongjava.tio.boot.admin.vo.UploadResultVo;
+import com.litongjava.tio.http.common.UploadFile;
+import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.snowflake.SnowflakeIdUtils;
+
+public class ImageGenerateService {
+
+  public String generate(String topic) {
+    String userMessage = PromptEngine.renderToString("image_generate_prompt.txt", Kv.by("topic", topic));
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage(userMessage));
+
+    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    geminiChatRequestVo.setChatMessages(messages);
+
+    GeminiGenerationConfigVo config = new GeminiGenerationConfigVo();
+    config.setResponseMimeType("text/plain");
+    List<String> responseModalities = new ArrayList<>();
+    responseModalities.add("image");
+    responseModalities.add("text");
+    config.setResponseModalities(responseModalities);
+
+    geminiChatRequestVo.setGenerationConfig(config);
+
+    GeminiChatResponseVo responseVo = GeminiClient.generate(GoogleGeminiModels.GEMINI_2_0_FLASH_EXP_IMAGE_GENERATION, geminiChatRequestVo);
+    GeminiPartVo geminiPartVo = responseVo.getCandidates().get(0).getContent().getParts().get(0);
+    String data = geminiPartVo.getInlineData().getData();
+    byte[] decodeToBytes = Base64Utils.decodeToBytes(data);
+    UploadFile uploadFile = new UploadFile(SnowflakeIdUtils.id() + ".png", decodeToBytes);
+
+    UploadResultVo uploadResultVo = Aop.get(AwsS3StorageService.class).uploadFile("video/cover", uploadFile);
+    String url = uploadResultVo.getUrl();
+    return url;
+  }
+}
+
+```
+```java
+package com.litongjava.manim.services;
+
+import org.junit.Test;
+
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.manim.config.AdminAppConfig;
+import com.litongjava.tio.boot.testing.TioBootTest;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class ImageGenerateServiceTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    TioBootTest.runWith(AdminAppConfig.class);
+    String url = Aop.get(ImageGenerateService.class).generate("How Does ChatGPT Work?");
+    System.out.println(url);
+  }
+}
+
+```
+### Gemini OpenAI
 
 In your `app.properties` add:
 
@@ -1303,7 +1384,7 @@ public class GeminiClientTest {
 }
 ```
 
-### deepseek-openai
+## deepseek-openai
 
 ```java
 import java.util.ArrayList;
@@ -1337,6 +1418,7 @@ public class DeepSeekClientTest {
 }
 ```
 
+## SiliconFlow
 ### SiliconFlow DeepSeek
 
 ```java

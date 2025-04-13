@@ -58,7 +58,6 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        log.error("url:{}", url);
         throw new RuntimeException("Gemini generateContent failed, request url=" + urlPerfix + " request body=" + requestJson + "statusCode=" + response.code() + ", body=" + responseBody);
       }
       // 解析 JSON

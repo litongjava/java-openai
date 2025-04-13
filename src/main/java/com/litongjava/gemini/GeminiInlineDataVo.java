@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeminiInlineDataVo {
-  private String mime_type;
+  private String mimeType;
   private String data; // base64编码后的二进制
 }

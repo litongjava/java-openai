@@ -45,4 +45,9 @@ public class ChatMessage {
     return this;
   }
 
+  public ChatMessage(String content) {
+    this.role = "user";
+    this.content = content;
+  }
+
 }

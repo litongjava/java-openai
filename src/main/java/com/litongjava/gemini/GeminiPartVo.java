@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GeminiPartVo {
   private String text;
-  private GeminiInlineDataVo inline_data;
+  private GeminiInlineDataVo inlineData;
   private GeminiFileDataVo fileData;
   private GeminiFunctionCallVo functionCall;
 
@@ -21,10 +21,10 @@ public class GeminiPartVo {
     this.text = text;
   }
 
-  public GeminiPartVo(GeminiInlineDataVo inline_data) {
-    this.inline_data = inline_data;
+  public GeminiPartVo(GeminiInlineDataVo inlineData) {
+    this.inlineData = inlineData;
   }
-  
+
   public GeminiPartVo(GeminiFileDataVo fileData) {
     this.fileData = fileData;
   }
