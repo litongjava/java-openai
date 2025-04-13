@@ -40,6 +40,12 @@ public class LinuxClient {
     String targetUrl = apiBase + "/manim";
     return post(key, targetUrl, code);
   }
+  
+
+  public static ProcessResult manimImage(String apiBase, String key, String code) {
+    String targetUrl = apiBase + "/manim/image";
+    return post(key, targetUrl, code);
+  }
 
   public static ProcessResult executeMainmCode(String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
     String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
