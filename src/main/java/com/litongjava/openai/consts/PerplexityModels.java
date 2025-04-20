@@ -1,4 +1,4 @@
-package com.litongjava.openai.constants;
+package com.litongjava.openai.consts;
 
 public interface PerplexityModels {
   String SONAR_REASONING = "sonar-reasoning";

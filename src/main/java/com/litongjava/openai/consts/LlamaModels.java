@@ -1,4 +1,4 @@
-package com.litongjava.openai.constants;
+package com.litongjava.openai.consts;
 
 public interface LlamaModels {
   String llama3_1_8b = "llama3.1-8b";

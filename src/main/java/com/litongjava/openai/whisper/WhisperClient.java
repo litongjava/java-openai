@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.openai.constants.OpenAiConstants;
+import com.litongjava.openai.consts.OpenAiConstants;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;

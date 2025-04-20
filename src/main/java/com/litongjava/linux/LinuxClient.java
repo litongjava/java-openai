@@ -22,7 +22,7 @@ public class LinuxClient {
     String key = EnvUtils.getStr("LINUX_API_KEY");
 
     String targetUrl = apiBase + "/python";
-    return post(key, targetUrl, code);
+    return post(targetUrl, key, code);
   }
 
   public static ProcessResult startMainmSession(String apiBase, String key) {
@@ -38,13 +38,12 @@ public class LinuxClient {
 
   public static ProcessResult executeMainmCode(String apiBase, String key, String code) {
     String targetUrl = apiBase + "/manim";
-    return post(key, targetUrl, code);
+    return post(targetUrl, key, code);
   }
-  
 
   public static ProcessResult manimImage(String apiBase, String key, String code) {
     String targetUrl = apiBase + "/manim/image";
-    return post(key, targetUrl, code);
+    return post(targetUrl, key, code);
   }
 
   public static ProcessResult executeMainmCode(String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
@@ -56,7 +55,7 @@ public class LinuxClient {
   public static ProcessResult executeMainmCode(String apiBase, String code) {
     String key = EnvUtils.getStr("LINUX_API_KEY");
     String targetUrl = apiBase + "/manim";
-    return post(key, targetUrl, code);
+    return post(targetUrl, key, code);
   }
 
   public static ProcessResult executeMainmCode(String code) {
@@ -64,7 +63,7 @@ public class LinuxClient {
     String key = EnvUtils.getStr("LINUX_API_KEY");
 
     String targetUrl = apiBase + "/manim";
-    return post(key, targetUrl, code);
+    return post(targetUrl, key, code);
   }
 
   private static ProcessResult get(String targetUrl, String key) {

@@ -1,7 +1,9 @@
 package com.litongjava.gemini;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
@@ -209,6 +211,23 @@ public class GeminiClient {
     } catch (IOException e) {
       throw new RuntimeException("File upload failed: " + e.getMessage(), e);
     }
+  }
+  
+  public static String parseYoutubeSubtitle(String model, String url, String userPrompt) {
+    GeminiFileDataVo geminiFileDataVo = new GeminiFileDataVo("video/*", url);
+    List<GeminiPartVo> parts = new ArrayList<>();
+    parts.add(new GeminiPartVo(userPrompt));
+    parts.add(new GeminiPartVo(geminiFileDataVo));
+    List<GeminiContentVo> contents = new ArrayList<>();
+    GeminiContentVo content = new GeminiContentVo("user", parts);
+    contents.add(content);
+
+    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    geminiChatRequestVo.setContents(contents);
+
+    GeminiChatResponseVo reponseVo = GeminiClient.generate(model, geminiChatRequestVo);
+    String text = reponseVo.getCandidates().get(0).getContent().getParts().get(0).getText();
+    return text;
   }
 
   /**

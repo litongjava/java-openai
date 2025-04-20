@@ -1,4 +1,4 @@
-package com.litongjava.openai.constants;
+package com.litongjava.openai.consts;
 
 public interface OpenAiConstants {
   String API_PERFIX_URL = "https://api.openai.com/v1";

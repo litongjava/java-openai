@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import com.knuddels.jtokkit.Encodings;
 import com.knuddels.jtokkit.api.Encoding;
 import com.knuddels.jtokkit.api.IntArrayList;
-import com.litongjava.openai.constants.OpenAiModels;
+import com.litongjava.openai.consts.OpenAiModels;
 
 import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.agent.tool.ToolParameters;
