@@ -5,7 +5,7 @@ public interface OpenAiModels {
 
   String GPT_4_1_NANO = "gpt-4.1-nano";
   String GPT_4_1_MINI = "gpt-4.1-mini";
-  String GPT_4_1 = "GPT-4.1";
+  String GPT_4_1 = "gpt-4.1";
 
   String GPT_4O = "gpt-4o";
   String GPT_4O_MINI = "gpt-4o-mini";
