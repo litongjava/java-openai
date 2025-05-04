@@ -14,6 +14,10 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UniChatRequest {
+  private Long groupId;
+  private String groupName;
+  private Long taskId;
+  private String taskName;
   private boolean existsSystemPrompt;
   private String provider;
   private String model;
@@ -21,9 +25,14 @@ public class UniChatRequest {
   private List<ChatMessage> messages;
   private Float temperature;
 
-  public UniChatRequest(String systemPrompt, List<ChatMessage> messages) {
-    this.systemPrompt = systemPrompt;
+
+  public UniChatRequest(List<ChatMessage> messages) {
     this.messages = messages;
+  }
+  
+  public UniChatRequest(Long groupId, String groupName) {
+    this.groupId = groupId;
+    this.groupName = groupName;
   }
 
   public UniChatRequest(String systemPrompt, List<ChatMessage> messages, Float temperature) {

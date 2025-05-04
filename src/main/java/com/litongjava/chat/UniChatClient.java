@@ -7,22 +7,27 @@ import com.litongjava.consts.AiProviderName;
 import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiClient;
+import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfigVo;
+import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.openai.chat.ChatResponseMessage;
+import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 
 public class UniChatClient {
 
-  public static String generate(UniChatRequest uniChatRequest) {
+  public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     if (AiProviderName.GOOGLE.contentEquals(uniChatRequest.getProvider())) {
       return useGemeni(uniChatRequest);
     }
     return useOpenAi(uniChatRequest);
   }
 
-  private static String useOpenAi(UniChatRequest uniChatRequest) {
+  private static UniChatResponse useOpenAi(UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
     Iterator<ChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -44,10 +49,12 @@ public class UniChatClient {
     if (chatCompletions == null) {
       return null;
     }
-    return chatCompletions.getChoices().get(0).getMessage().getContent();
+    ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
+    ChatResponseUsage usage = chatCompletions.getUsage();
+    return new UniChatResponse(message, usage);
   }
 
-  private static String useGemeni(UniChatRequest uniChatRequest) {
+  private static UniChatResponse useGemeni(UniChatRequest uniChatRequest) {
     GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
     geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
 
@@ -60,6 +67,13 @@ public class UniChatClient {
     if (chatResponse == null) {
       return null;
     }
-    return chatResponse.getCandidates().get(0).getContent().getParts().get(0).getText();
+
+    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
+    String role = content.getRole();
+    GeminiPartVo geminiPartVo = content.getParts().get(0);
+    GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
+    ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
+    ChatResponseMessage message = new ChatResponseMessage(role, geminiPartVo);
+    return new UniChatResponse(message, usage);
   }
 }
