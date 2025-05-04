@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class GeminiGenerationConfigVo {
-  private Double temperature;
+  private Float temperature;
   private Integer topK;
   private Double topP;
   private Integer maxOutputTokens;
