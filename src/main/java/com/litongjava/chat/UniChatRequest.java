@@ -35,9 +35,15 @@ public class UniChatRequest {
     this.groupName = groupName;
   }
 
+  public UniChatRequest(List<ChatMessage> messages, Float temperature) {
+    this.messages = messages;
+    this.temperature = temperature;
+  }
+
   public UniChatRequest(String systemPrompt, List<ChatMessage> messages, Float temperature) {
     this.systemPrompt = systemPrompt;
     this.messages = messages;
     this.temperature = temperature;
   }
+
 }
