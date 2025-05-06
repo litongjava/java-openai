@@ -23,5 +23,6 @@ public class ChatResponseUsage {
     this.prompt_tokens = usageMetadata.getPromptTokenCount();
     this.completion_tokens = usageMetadata.getCandidatesTokenCount();
     this.total_tokens = usageMetadata.getTotalTokenCount();
+    this.prompt_cache_hit_tokens = usageMetadata.getCachedContentTokenCount();
   }
 }
