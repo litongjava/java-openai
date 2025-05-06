@@ -20,6 +20,13 @@ import com.litongjava.openai.client.OpenAiClient;
 
 public class UniChatClient {
 
+  public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
+    if (AiProviderName.GOOGLE.contentEquals(uniChatRequest.getProvider())) {
+      return useGemeni(key, uniChatRequest);
+    }
+    return useOpenAi(key, uniChatRequest);
+  }
+
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     if (AiProviderName.GOOGLE.contentEquals(uniChatRequest.getProvider())) {
       return useGemeni(uniChatRequest);
@@ -65,6 +72,57 @@ public class UniChatClient {
     geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
 
     GeminiChatResponseVo chatResponse = GeminiClient.generate(uniChatRequest.getModel(), geminiChatRequestVo);
+    if (chatResponse == null) {
+      return null;
+    }
+
+    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
+    String role = content.getRole();
+    GeminiPartVo geminiPartVo = content.getParts().get(0);
+    GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
+    ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
+    ChatResponseMessage message = new ChatResponseMessage(role, geminiPartVo);
+    return new UniChatResponse(message, usage);
+  }
+
+  private static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
+    List<ChatMessage> messages = uniChatRequest.getMessages();
+    Iterator<ChatMessage> iterator = messages.iterator();
+    while (iterator.hasNext()) {
+      ChatMessage next = iterator.next();
+      if (next.getRole().equals("model")) {
+        //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
+        next.setRole("assistant");
+      }
+    }
+    if (!uniChatRequest.isExistsSystemPrompt()) {
+      messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
+    }
+    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    openAiChatRequestVo.setModel(uniChatRequest.getModel());
+    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
+    openAiChatRequestVo.setChatMessages(messages);
+
+    OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(key, openAiChatRequestVo);
+    if (chatCompletions == null) {
+      return null;
+    }
+    ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
+    ChatResponseUsage usage = chatCompletions.getUsage();
+    return new UniChatResponse(message, usage);
+  }
+
+  private static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
+    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
+    geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
+
+    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
+    geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
+    geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
+    geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
+
+    GeminiChatResponseVo chatResponse = GeminiClient.generate(key, uniChatRequest.getModel(), geminiChatRequestVo);
     if (chatResponse == null) {
       return null;
     }
