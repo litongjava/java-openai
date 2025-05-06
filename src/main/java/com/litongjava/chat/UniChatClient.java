@@ -62,6 +62,7 @@ public class UniChatClient {
     geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
     geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
+    geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
 
     GeminiChatResponseVo chatResponse = GeminiClient.generate(uniChatRequest.getModel(), geminiChatRequestVo);
     if (chatResponse == null) {

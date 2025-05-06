@@ -24,12 +24,12 @@ public class UniChatRequest {
   private String systemPrompt;;
   private List<ChatMessage> messages;
   private Float temperature;
-
+  private String cachedId;
 
   public UniChatRequest(List<ChatMessage> messages) {
     this.messages = messages;
   }
-  
+
   public UniChatRequest(Long groupId, String groupName) {
     this.groupId = groupId;
     this.groupName = groupName;

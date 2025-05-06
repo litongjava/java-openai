@@ -50,6 +50,8 @@ public class GeminiChatRequestVo {
 
   private String responseMimeType;
 
+  private String cachedContent;
+
   public GeminiChatRequestVo(List<GeminiContentVo> contents) {
     this.contents = contents;
   }
@@ -83,9 +85,10 @@ public class GeminiChatRequestVo {
   }
 
   public GeminiChatRequestVo setSystemPrompt(String systemPrompt) {
-    GeminiPartVo part = new GeminiPartVo(systemPrompt);
-    GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(part);
-    this.setSystem_instruction(geminiSystemInstructionVo);
+    if (StrUtil.isNotBlank(systemPrompt)) {
+      GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(systemPrompt);
+      this.system_instruction = geminiSystemInstructionVo;
+    }
     return this;
   }
 

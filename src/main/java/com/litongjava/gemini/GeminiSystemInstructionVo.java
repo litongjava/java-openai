@@ -1,5 +1,8 @@
 package com.litongjava.gemini;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +12,12 @@ import lombok.NoArgsConstructor;
  * 例如:
  * {
  *   "system_instruction": {
- *     "parts": {
- *       "text": "You are a helpful lighting system bot..."
- *     }
+ *     "parts": [
+ *      {
+ *        "text": "You are a helpful lighting system bot..."
+ *      }
+ *       
+ *     ]
  *   }
  * }
  */
@@ -19,10 +25,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeminiSystemInstructionVo {
-  /**
-   * 这里为了和你示例中的 JSON 对应，里层是一个 parts 对象，
-   * 而 parts 本身也可能是 text/image/functionCall 等。
-   * 你可以根据实际需要，直接用 GeminiPartVo 或别的包装方式。
-   */
-  private GeminiPartVo parts;
+  private List<GeminiPartVo> parts;
+
+  public GeminiSystemInstructionVo(GeminiPartVo part) {
+    this.parts = new ArrayList<>();
+    parts.add(part);
+  }
+
+  public GeminiSystemInstructionVo(String systemPrompt) {
+    GeminiPartVo part = new GeminiPartVo(systemPrompt);
+    this.parts = new ArrayList<>();
+    parts.add(part);
+  }
 }
