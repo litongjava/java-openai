@@ -60,9 +60,8 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        throw new RuntimeException("Gemini generateContent failed, request url=" + urlPerfix + " request body=" + requestJson + "statusCode=" + response.code() + ", body=" + responseBody);
+        throw new GeminiGenerateException("Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
       }
-      // 解析 JSON
       return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
