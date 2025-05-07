@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeminiCreateCacheRequestVo {
-  private String model = "models/gemini-2.5-pro-preview-03-25";
+  private String model = "models/gemini-2.5-pro-preview-05-06";
   private List<GeminiContentVo> contents;
   private GeminiSystemInstructionVo systemInstruction;
   private String ttl = "300s";
