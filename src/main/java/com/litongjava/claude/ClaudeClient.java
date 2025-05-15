@@ -1,4 +1,4 @@
-package com.litongjava.openai.client;
+package com.litongjava.claude;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,9 +9,6 @@ import java.util.Map;
 import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.consts.OpenAiConstants;
-import com.litongjava.openai.consts.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -30,7 +27,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @Slf4j
-public class OpenAiClient {
+public class ClaudeClient {
   public static boolean debug = false;
 
   /**
@@ -41,18 +38,18 @@ public class OpenAiClient {
    */
   public static Response chatCompletions(String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>();
-    header.put("Authorization", "Bearer " + apiKey);
+    header.put("x-api-key", apiKey);
+    header.put("anthropic-version", "2023-06-01");
     return chatCompletions(header, bodyString);
   }
 
   /**
-   * 
    * @param header
    * @param bodyString
    * @return
    */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
@@ -62,7 +59,7 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(String bodyString) {
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return chatCompletions(apiKey, bodyString);
   }
 
@@ -74,8 +71,8 @@ public class OpenAiClient {
    */
   public static Call chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
-    header.put("Authorization", "Bearer " + apiKey);
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
+    header.put("x-api-key", apiKey);
     return chatCompletions(header, bodyString, callback);
   }
 
@@ -87,7 +84,7 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
-    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
@@ -97,22 +94,23 @@ public class OpenAiClient {
    * @param chatMessage
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String model, OpenAiChatMessage chatMessage) {
+  public static ClaudeChatResponseVo chatCompletions(String model, OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
 
     return chatCompletions(model, messages);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
+  public static ClaudeChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
+    chatRequestVo.setMax_tokens(64000);
     return chatCompletions(chatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
+  public static ClaudeChatResponseVo chatCompletions(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
@@ -127,13 +125,13 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
+  public static ClaudeChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
-    OpenAiChatResponseVo respVo = null;
+    ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
         throw new RuntimeException("request:" + json + " response:" + bodyString);
       }
@@ -149,8 +147,8 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+  public static ClaudeChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return chatCompletions(apiKey, chatRequestVo);
   }
 
@@ -172,13 +170,13 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
+  public static ClaudeChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
-    OpenAiChatResponseVo respVo = null;
+    ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
         throw new RuntimeException("request url:" + apiPerfixUrl + " request body:" + json + " response code:" + response.code() + " response body:" + bodyString);
       }
@@ -197,7 +195,7 @@ public class OpenAiClient {
    */
   public static Response chatCompletions(String apiPerfixUrl, String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>(1);
-    header.put("Authorization", "Bearer " + apiKey);
+    header.put("x-api-key", apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
@@ -211,7 +209,7 @@ public class OpenAiClient {
    */
   public static Call chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
-    header.put("Authorization", "Bearer " + apiKey);
+    header.put("x-api-key", apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
@@ -230,7 +228,7 @@ public class OpenAiClient {
 
     Headers headers = Headers.of(requestHeaders);
 
-    String url = uri + "/chat/completions";
+    String url = uri + "/messages";
     Request request = new Request.Builder() //
         .url(url) //
         .method("POST", body).headers(headers) //
@@ -272,7 +270,7 @@ public class OpenAiClient {
 
     Headers headers = Headers.of(requestHeaders);
 
-    String url = apiPrefixUrl + "/chat/completions";
+    String url = apiPrefixUrl + "/messages";
     Request request = new Request.Builder() //
         .url(url) //
         .method("POST", body).headers(headers) //
@@ -288,9 +286,9 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chat(String prompt) {
+  public static ClaudeChatResponseVo chat(String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage("user", prompt);
-    return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
+    return chatCompletions(ClaudeModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
   }
 
   /**
@@ -299,9 +297,9 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chatWithRole(String role, String prompt) {
+  public static ClaudeChatResponseVo chatWithRole(String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
-    return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
+    return chatCompletions(ClaudeModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
   }
 
   /**
@@ -311,23 +309,23 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chatWithModel(String model, String role, String prompt) {
+  public static ClaudeChatResponseVo chatWithModel(String model, String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(model, chatMessage);
   }
 
-  public static OpenAiChatResponseVo chatWithModel(String apiUrl, String key, String model, String role, String prompt) {
+  public static ClaudeChatResponseVo chatWithModel(String apiUrl, String key, String model, String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(apiUrl, key, model, chatMessage);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model, OpenAiChatMessage chatMessage) {
+  public static ClaudeChatResponseVo chatCompletions(String apiUrl, String key, String model, OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
     return chatCompletions(apiUrl, key, model, messages);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
+  public static ClaudeChatResponseVo chatCompletions(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -336,18 +334,18 @@ public class OpenAiClient {
   }
 
   public static Response embeddings(String bodyString) {
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return embeddings(apiKey, bodyString);
   }
 
   public static Response embeddings(String apiKey, String bodyString) {
-    String serverUrl = EnvUtils.get("OPENAI_API_URL");
+    String serverUrl = EnvUtils.get("CLAUDE_API_URL");
     return embeddings(serverUrl, apiKey, bodyString);
   }
 
   public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
     if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstants.API_PERFIX_URL;
+      api_perfix_url = ClaudeConsts.API_PERFIX_URL;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
@@ -355,7 +353,7 @@ public class OpenAiClient {
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Map<String, String> requestHeaders = new HashMap<>(1);
-    requestHeaders.put("Authorization", "Bearer " + apiKey);
+    requestHeaders.put("x-api-key", apiKey);
 
     Headers headers = Headers.of(requestHeaders);
 
@@ -372,7 +370,7 @@ public class OpenAiClient {
 
   public static float[] embeddingArray(String input, String model) {
     EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(model, input);
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
@@ -381,16 +379,8 @@ public class OpenAiClient {
     return embeddings(serverUrl, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
-  public static float[] embeddingArray(String input) {
-    return embeddingArray(input, OpenAiModels.TEXT_EMBEDDING_3_SMALL);
-  }
-
-  public static float[] embeddingArrayByLargeModel(String input) {
-    return embeddingArray(input, OpenAiModels.TEXT_EMBEDDING_3_LARGE);
-  }
-
   public static EmbeddingResponseVo embeddings(EmbeddingRequestVo embeddingRequestVo) {
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return embeddings(apiKey, embeddingRequestVo);
   }
 
@@ -434,12 +424,12 @@ public class OpenAiClient {
     return embeddings.getData().get(0).getEmbedding();
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String prompt, byte[] bytes, String suffix) {
-    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+  public static ClaudeChatResponseVo chatWithImage(String prompt, byte[] bytes, String suffix) {
+    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return chatWithImage(apiKey, prompt, bytes, suffix);
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
+  public static ClaudeChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
 
     ChatMesageContent text = new ChatMesageContent(prompt);
     ChatMesageContent image = new ChatMesageContent(bytes, suffix);
@@ -460,8 +450,8 @@ public class OpenAiClient {
     return chatCompletions(apiKey, openAiChatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
-    return chatWithImage(apiKey, OpenAiModels.GPT_4O_MINI, prompt, bytes, suffix);
+  public static ClaudeChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
+    return chatWithImage(apiKey, ClaudeModels.CLAUDE_3_7_SONNET_20250219, prompt, bytes, suffix);
   }
 
 }
