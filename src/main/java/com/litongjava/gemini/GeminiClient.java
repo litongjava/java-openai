@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.Json;
@@ -60,7 +62,7 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        throw new GeminiGenerateException("Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
+        throw new GenerateException(AiProviderName.GEMINI, "Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
     } catch (IOException e) {

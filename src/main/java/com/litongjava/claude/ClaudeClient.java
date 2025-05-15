@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
@@ -129,11 +131,13 @@ public class ClaudeClient {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
+      int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
-        throw new RuntimeException("request:" + json + " response:" + bodyString);
+        String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -175,10 +179,11 @@ public class ClaudeClient {
     ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       String bodyString = response.body().string();
+      int code = response.code();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
-        throw new RuntimeException("request url:" + apiPerfixUrl + " request body:" + json + " response code:" + response.code() + " response body:" + bodyString);
+        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -386,12 +391,14 @@ public class ClaudeClient {
 
   public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(serverUrl, apiKey, Json.getSkipNullJson().toJson(reoVo))) {
+    String json = Json.getSkipNullJson().toJson(reoVo);
+    try (Response response = embeddings(serverUrl, apiKey, json)) {
+      int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new RuntimeException("status:" + response.code() + ",sbody:" + bodyString);
+        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", serverUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -401,12 +408,14 @@ public class ClaudeClient {
 
   public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(apiKey, Json.getSkipNullJson().toJson(reoVo))) {
+    String json = Json.getSkipNullJson().toJson(reoVo);
+    try (Response response = embeddings(apiKey, json)) {
+      int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new RuntimeException("status:" + response.code() + ",body:" + bodyString);
+        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", ClaudeConsts.API_PERFIX_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

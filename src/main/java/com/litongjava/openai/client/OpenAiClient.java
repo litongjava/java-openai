@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
@@ -132,10 +134,11 @@ public class OpenAiClient {
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
+      int code = response.code();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new RuntimeException("request:" + json + " response:" + bodyString);
+        throw new GenerateException(AiProviderName.CHAT_GPT, "ChatGPT generateContent failed", OpenAiConstants.API_PERFIX_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -177,10 +180,11 @@ public class OpenAiClient {
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       String bodyString = response.body().string();
+      int code = response.code();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new RuntimeException("request url:" + apiPerfixUrl + " request body:" + json + " response code:" + response.code() + " response body:" + bodyString);
+        throw new GenerateException(AiProviderName.CHAT_GPT, "ChatGPT generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
