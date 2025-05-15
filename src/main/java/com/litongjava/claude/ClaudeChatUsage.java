@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClaudeChatUsage {
-  private int input_tokens;
-  private int cache_creation_input_tokens;
-  private int cache_read_input_tokens;
-  private int output_tokens;
+  private Integer input_tokens;
+  private Integer output_tokens;
+  private Integer cache_creation_input_tokens;
+  private Integer cache_read_input_tokens;
 }

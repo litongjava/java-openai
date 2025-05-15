@@ -1,7 +1,7 @@
 package com.litongjava.consts;
 
 public interface AiProviderName {
-  String OPENA_AI = "open_ai";
+  String CHAT_GPT = "chat_gpt";
   String CLAUDE = "claude";
-  String GOOGLE = "google";
+  String GEMINI = "gemini";
 }

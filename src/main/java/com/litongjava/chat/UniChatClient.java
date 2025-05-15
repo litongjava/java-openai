@@ -24,7 +24,7 @@ import com.litongjava.openai.client.OpenAiClient;
 public class UniChatClient {
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
-    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
+    if (AiProviderName.GEMINI.equals(uniChatRequest.getProvider())) {
       return useGemeni(key, uniChatRequest);
     } else if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
       return useClaude(key, uniChatRequest);
@@ -34,7 +34,7 @@ public class UniChatClient {
   }
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
-    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
+    if (AiProviderName.GEMINI.equals(uniChatRequest.getProvider())) {
       return useGemeni(uniChatRequest);
     } else if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
       return useClaude(uniChatRequest);
@@ -110,7 +110,7 @@ public class UniChatClient {
       }
     }
     if (uniChatRequest.isHasSystemPrompt()) {
-      messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
+      messages.add(0, new ChatMessage("assistant", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
@@ -141,7 +141,7 @@ public class UniChatClient {
       }
     }
     if (uniChatRequest.isHasSystemPrompt()) {
-      messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
+      messages.add(0, new ChatMessage("assistant", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());

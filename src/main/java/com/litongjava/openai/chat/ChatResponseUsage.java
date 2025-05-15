@@ -17,8 +17,13 @@ public class ChatResponseUsage {
   private Integer total_tokens;
   private Integer prompt_cache_hit_tokens;
   private Integer prompt_cache_miss_tokens;
+
   private ChatPromptTokensDetails prompt_tokens_details;
   private ChatCompletionTokensDetails completion_tokens_details;
+
+  //only use of claude
+  private Integer cache_creation_input_tokens;
+  private Integer cache_read_input_tokens;
 
   public ChatResponseUsage(GeminiUsageMetadataVo usageMetadata) {
     this.prompt_tokens = usageMetadata.getPromptTokenCount();
@@ -31,6 +36,7 @@ public class ChatResponseUsage {
     this.prompt_tokens = usage.getInput_tokens();
     this.completion_tokens = usage.getOutput_tokens();
     this.total_tokens = prompt_tokens + completion_tokens;
-    this.prompt_cache_hit_tokens = usage.getCache_creation_input_tokens();
+    this.cache_creation_input_tokens = usage.getCache_creation_input_tokens();
+    this.cache_read_input_tokens = usage.getCache_read_input_tokens();
   }
 }

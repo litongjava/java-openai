@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CodeUtils {
 
-  public String parsePythonCode(String generatedText) {
+  public static String parsePythonCode(String generatedText) {
     String code;
     int indexOf = generatedText.indexOf("```python");
     if (indexOf == -1) {
