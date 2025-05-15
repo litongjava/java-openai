@@ -3,6 +3,7 @@ package com.litongjava.chat;
 import java.util.Iterator;
 import java.util.List;
 
+import com.litongjava.claude.ClaudeCacheControl;
 import com.litongjava.claude.ClaudeChatMessage;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
@@ -102,17 +103,24 @@ public class UniChatClient {
   private static UniChatResponse useClaude(UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
     Iterator<ChatMessage> iterator = messages.iterator();
+
     while (iterator.hasNext()) {
       ChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
-        //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
+        //'assistant', 'user'
         next.setRole("assistant");
       }
     }
-    if (uniChatRequest.isHasSystemPrompt()) {
-      messages.add(0, new ChatMessage("assistant", uniChatRequest.getSystemPrompt()));
-    }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    if (uniChatRequest.isHasSystemPrompt()) {
+      String systemPrompt = uniChatRequest.getSystemPrompt();
+      ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
+      if (uniChatRequest.isCacheSystemPrompt()) {
+        claudeChatMessage.setCache_control(new ClaudeCacheControl());
+      }
+      openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
+    }
+
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
@@ -140,10 +148,17 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (uniChatRequest.isHasSystemPrompt()) {
-      messages.add(0, new ChatMessage("assistant", uniChatRequest.getSystemPrompt()));
-    }
+
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    if (uniChatRequest.isHasSystemPrompt()) {
+      String systemPrompt = uniChatRequest.getSystemPrompt();
+      ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
+      if (uniChatRequest.isCacheSystemPrompt()) {
+        claudeChatMessage.setCache_control(new ClaudeCacheControl());
+      }
+      openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
+    }
+
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);

@@ -56,4 +56,10 @@ public class OpenAiChatRequestVo {
     this.messages = openAiMessages;
     return this;
   }
+
+  public void setSystemChatMessage(ClaudeChatMessage claudeChatMessage) {
+    List<ClaudeChatMessage> system = new ArrayList<>(1);
+    system.add(claudeChatMessage);
+    this.system = system;
+  }
 }
