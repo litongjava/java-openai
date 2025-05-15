@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ClaudeChatMessage {
   private String type;
   private String text;
+  private ClaudeCacheControl cache_control;
 }

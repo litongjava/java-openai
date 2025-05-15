@@ -3,6 +3,8 @@ package com.litongjava.openai.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.litongjava.claude.ClaudeChatMessage;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class OpenAiChatRequestVo {
   private String model;
 
   private Boolean return_images;
+  private List<ClaudeChatMessage> system;
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;

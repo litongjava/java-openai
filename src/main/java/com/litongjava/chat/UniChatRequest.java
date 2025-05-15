@@ -23,6 +23,7 @@ public class UniChatRequest {
   private String provider;
   private String model;
   private String systemPrompt;;
+  private boolean cacheSystemPrompt;
   private List<ChatMessage> messages;
   private Float temperature;
   private String cachedId;
