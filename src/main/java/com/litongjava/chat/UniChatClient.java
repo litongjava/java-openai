@@ -98,7 +98,7 @@ public class UniChatClient {
     return new UniChatResponse(message, usage);
   }
 
-  public static UniChatResponse useClaude(UniChatRequest uniChatRequest) {
+  private static UniChatResponse useClaude(UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
     Iterator<ChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -128,7 +128,7 @@ public class UniChatClient {
     return new UniChatResponse(message, usage);
   }
 
-  public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
+  private static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
     Iterator<ChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -146,12 +146,15 @@ public class UniChatClient {
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
 
-    OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(key, openAiChatRequestVo);
+    ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);
     if (chatCompletions == null) {
       return null;
     }
-    ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
-    ChatResponseUsage usage = chatCompletions.getUsage();
+
+    String role = chatCompletions.getRole();
+    ClaudeChatMessage claudeChatMessage = chatCompletions.getContent().get(0);
+    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getContent());
+    ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
   }
 
