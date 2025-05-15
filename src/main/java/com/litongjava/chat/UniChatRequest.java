@@ -18,7 +18,7 @@ public class UniChatRequest {
   private String groupName;
   private Long taskId;
   private String taskName;
-  private boolean hasSystemPrompt;
+  private boolean useSystemPrompt;
   private String apiKey;
   private String provider;
   private String model;

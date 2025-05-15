@@ -54,7 +54,7 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (uniChatRequest.isHasSystemPrompt()) {
+    if (uniChatRequest.isUseSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
@@ -82,7 +82,7 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (uniChatRequest.isHasSystemPrompt()) {
+    if (uniChatRequest.isUseSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
@@ -112,7 +112,7 @@ public class UniChatClient {
       }
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
-    if (uniChatRequest.isHasSystemPrompt()) {
+    if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
       if (uniChatRequest.isCacheSystemPrompt()) {
@@ -150,7 +150,7 @@ public class UniChatClient {
     }
 
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
-    if (uniChatRequest.isHasSystemPrompt()) {
+    if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
       if (uniChatRequest.isCacheSystemPrompt()) {
