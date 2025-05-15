@@ -16,7 +16,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class OpenAiChatRequestVo {
   private String model;
-
   private Boolean return_images;
   private List<ClaudeChatMessage> system;
   private List<OpenAiChatMessage> messages;
