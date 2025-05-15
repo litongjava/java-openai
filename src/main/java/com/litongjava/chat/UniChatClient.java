@@ -50,17 +50,17 @@ public class UniChatClient {
     while (iterator.hasNext()) {
       ChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
-        //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
         next.setRole("assistant");
       }
     }
-    if (!uniChatRequest.isExistsSystemPrompt()) {
+    if (uniChatRequest.isHasSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
+    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(openAiChatRequestVo);
     if (chatCompletions == null) {
@@ -81,13 +81,14 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (!uniChatRequest.isExistsSystemPrompt()) {
+    if (uniChatRequest.isHasSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
+    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(key, openAiChatRequestVo);
     if (chatCompletions == null) {
@@ -108,13 +109,14 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (!uniChatRequest.isExistsSystemPrompt()) {
+    if (uniChatRequest.isHasSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
+    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);
     if (chatCompletions == null) {
@@ -123,7 +125,7 @@ public class UniChatClient {
 
     String role = chatCompletions.getRole();
     ClaudeChatMessage claudeChatMessage = chatCompletions.getContent().get(0);
-    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getContent());
+    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
   }
@@ -138,13 +140,14 @@ public class UniChatClient {
         next.setRole("assistant");
       }
     }
-    if (!uniChatRequest.isExistsSystemPrompt()) {
+    if (uniChatRequest.isHasSystemPrompt()) {
       messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
+    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);
     if (chatCompletions == null) {
@@ -153,7 +156,7 @@ public class UniChatClient {
 
     String role = chatCompletions.getRole();
     ClaudeChatMessage claudeChatMessage = chatCompletions.getContent().get(0);
-    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getContent());
+    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
   }

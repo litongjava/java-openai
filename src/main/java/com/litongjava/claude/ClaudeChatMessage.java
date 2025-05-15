@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClaudeChatMessage {
   private String type;
-  private String content;
+  private String text;
 }

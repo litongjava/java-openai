@@ -18,7 +18,7 @@ public class UniChatRequest {
   private String groupName;
   private Long taskId;
   private String taskName;
-  private boolean existsSystemPrompt;
+  private boolean hasSystemPrompt;
   private String apiKey;
   private String provider;
   private String model;
@@ -26,6 +26,7 @@ public class UniChatRequest {
   private List<ChatMessage> messages;
   private Float temperature;
   private String cachedId;
+  private Integer max_tokens;
 
   public UniChatRequest(List<ChatMessage> messages) {
     this.messages = messages;
