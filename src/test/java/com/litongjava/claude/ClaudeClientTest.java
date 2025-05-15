@@ -12,7 +12,5 @@ public class ClaudeClientTest {
     EnvUtils.load();
     ClaudeChatResponseVo chat = ClaudeClient.chat("Hi");
     System.out.println(JsonUtils.toJson(chat));
-    
   }
-
 }
