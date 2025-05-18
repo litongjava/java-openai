@@ -61,13 +61,15 @@ public class OpenAiChatRequestVo {
 
   public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages, String provider) {
     if (AiProviderName.CLAUDE.equals(provider)) {
-
-    } else {
       List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
       for (ChatMessage message : messages) {
-        openAiMessages.add(new OpenAiChatMessage(message));
+        openAiMessages.add(new OpenAiChatMessage(message, provider));
       }
       this.messages = openAiMessages;
+      return this;
+
+    } else {
+      setChatMessages(messages);
     }
     return this;
   }

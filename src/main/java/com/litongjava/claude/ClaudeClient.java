@@ -128,6 +128,9 @@ public class ClaudeClient {
    * @return
    */
   public static ClaudeChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
+    if(chatRequestVo.getMax_tokens()==null) {
+      chatRequestVo.setMax_tokens(64000);
+    }
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {

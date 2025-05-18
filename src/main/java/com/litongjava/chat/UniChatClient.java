@@ -151,11 +151,13 @@ public class UniChatClient {
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
-      if (uniChatRequest.isCacheSystemPrompt()) {
-        claudeChatMessage.setCache_control(new ClaudeCacheControl());
+      if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
+        ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
+        if (uniChatRequest.isCacheSystemPrompt()) {
+          claudeChatMessage.setCache_control(new ClaudeCacheControl());
+        }
+        openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
       }
-      openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
     }
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());

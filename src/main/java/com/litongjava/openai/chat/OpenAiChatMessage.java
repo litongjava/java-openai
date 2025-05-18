@@ -3,6 +3,7 @@ package com.litongjava.openai.chat;
 import java.util.List;
 
 import com.litongjava.chat.ChatMessage;
+import com.litongjava.consts.AiProviderName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -99,5 +100,20 @@ public class OpenAiChatMessage {
 
   public void setPrefix(Boolean prefix) {
     this.prefix = prefix;
+  }
+
+  public OpenAiChatMessage(ChatMessage message, String provider) {
+    this.role = message.getRole();
+    String content = message.getContent();
+    if (AiProviderName.CLAUDE.equals(provider)) {
+      if (message.getFiles() != null && message.getFiles().size() > 0) {
+
+      } else {
+        this.content = content;
+      }
+    } else {
+      this.role = message.getRole();
+      this.content = content;
+    }
   }
 }
