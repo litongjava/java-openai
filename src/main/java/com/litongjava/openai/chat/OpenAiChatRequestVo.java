@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.litongjava.chat.ChatMessage;
-import com.litongjava.claude.ClaudeChatMessage;
+import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.AiProviderName;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 public class OpenAiChatRequestVo {
   private String model;
   private Boolean return_images;
-  private List<ClaudeChatMessage> system;
+  private List<ClaudeMessageContent> system;
   private List<OpenAiChatMessage> messages;
   private List<ChatRequestTool> tools;
   private Integer max_tokens;
@@ -74,8 +74,8 @@ public class OpenAiChatRequestVo {
     return this;
   }
 
-  public void setSystemChatMessage(ClaudeChatMessage claudeChatMessage) {
-    List<ClaudeChatMessage> system = new ArrayList<>(1);
+  public void setSystemChatMessage(ClaudeMessageContent claudeChatMessage) {
+    List<ClaudeMessageContent> system = new ArrayList<>(1);
     system.add(claudeChatMessage);
     this.system = system;
   }

@@ -1,9 +1,13 @@
 package com.litongjava.openai.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.litongjava.chat.ChatFile;
 import com.litongjava.chat.ChatMessage;
+import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.AiProviderName;
+import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -107,7 +111,16 @@ public class OpenAiChatMessage {
     String content = message.getContent();
     if (AiProviderName.CLAUDE.equals(provider)) {
       if (message.getFiles() != null && message.getFiles().size() > 0) {
+        List<ClaudeMessageContent> messageContents = new ArrayList<>();
+        List<ChatFile> files = message.getFiles();
+        for (ChatFile file : files) {
+          messageContents.add(new ClaudeMessageContent(file));
+        }
+        if (StrUtil.isNotBlank(content)) {
+          messageContents.add(new ClaudeMessageContent("text", content));
+        }
 
+        this.content = messageContents;
       } else {
         this.content = content;
       }

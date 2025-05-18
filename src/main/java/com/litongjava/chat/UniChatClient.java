@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.litongjava.claude.ClaudeCacheControl;
-import com.litongjava.claude.ClaudeChatMessage;
+import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.consts.AiProviderName;
@@ -113,7 +113,7 @@ public class UniChatClient {
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
+      ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
       if (uniChatRequest.isCacheSystemPrompt()) {
         claudeChatMessage.setCache_control(new ClaudeCacheControl());
       }
@@ -131,7 +131,7 @@ public class UniChatClient {
     }
 
     String role = chatCompletions.getRole();
-    ClaudeChatMessage claudeChatMessage = chatCompletions.getContent().get(0);
+    ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
@@ -152,7 +152,7 @@ public class UniChatClient {
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
-        ClaudeChatMessage claudeChatMessage = new ClaudeChatMessage("text", systemPrompt);
+        ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
         }
@@ -171,7 +171,7 @@ public class UniChatClient {
     }
 
     String role = chatCompletions.getRole();
-    ClaudeChatMessage claudeChatMessage = chatCompletions.getContent().get(0);
+    ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
