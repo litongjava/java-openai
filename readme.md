@@ -1573,6 +1573,13 @@ public class AnswerService {
     "model": "claude-3-7-sonnet-20250219"
 }
 ```
+
+### Cache
+enable file cache
+```java
+ChatFile chatFile = ChatFile.base64(mimeType, encodeImage);
+chatFile.setCached(true);
+```
 ## deepseek-openai
 
 ```java

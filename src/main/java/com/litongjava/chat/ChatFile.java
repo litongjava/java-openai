@@ -11,6 +11,7 @@ public class ChatFile {
   private String mimeType = "image/png";
   //data:image base64 code, url:image http url
   private String data, url;
+  private boolean cached;
 
   public ChatFile(String url) {
     this.url = url;

@@ -30,5 +30,9 @@ public class ClaudeMessageContent {
       this.source = ClaudeChatSource.base64(file.getMimeType(), file.getData());
     }
 
+    if (file.isCached()) {
+      this.cache_control = new ClaudeCacheControl();
+    }
+
   }
 }

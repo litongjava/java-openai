@@ -16,7 +16,6 @@ public class ChatMessage {
   private String type = "auto";
   //data:image base64 code, url:image http url
   private List<ChatFile> files;
-
   private ChatMessageArgs args;
 
   public ChatMessage(String role, String content) {

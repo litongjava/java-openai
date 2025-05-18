@@ -114,7 +114,8 @@ public class OpenAiChatMessage {
         List<ClaudeMessageContent> messageContents = new ArrayList<>();
         List<ChatFile> files = message.getFiles();
         for (ChatFile file : files) {
-          messageContents.add(new ClaudeMessageContent(file));
+          ClaudeMessageContent e = new ClaudeMessageContent(file);
+          messageContents.add(e);
         }
         if (StrUtil.isNotBlank(content)) {
           messageContents.add(new ClaudeMessageContent("text", content));
