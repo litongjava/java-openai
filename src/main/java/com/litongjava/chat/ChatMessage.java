@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatMessage {
   private String role, content;
-  private String type = "auto";
   //data:image base64 code, url:image http url
   private List<ChatFile> files;
   private ChatMessageArgs args;
