@@ -1427,7 +1427,88 @@ public class GeminiClientTest {
   }
 }
 ```
+## Claude
+### Image
+```java
+package com.litongjava.manim.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jfinal.kit.Kv;
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatClient;
+import com.litongjava.chat.UniChatRequest;
+import com.litongjava.chat.UniChatResponse;
+import com.litongjava.claude.ClaudeModels;
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.template.PromptEngine;
+
+public class AnswerService {
+
+  public String genAnswer(ChatMessage topic, String language) {
+    String apiKey = Aop.get(ApiKeyRotator.class).getNextKey();
+    String systemPrompt = PromptEngine.renderToString("gen_answer.txt", Kv.by("language", language));
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(topic);
+
+    UniChatRequest uniChatRequest = new UniChatRequest(messages);
+    uniChatRequest.setTemperature(0.0f);
+    uniChatRequest.setProvider(AiProviderName.CLAUDE);
+    uniChatRequest.setModel(ClaudeModels.CLAUDE_3_7_SONNET_20250219);
+    uniChatRequest.setSystemPrompt(systemPrompt).setUseSystemPrompt(true);
+    UniChatResponse response = UniChatClient.generate(apiKey, uniChatRequest);
+    return response.getMessage().getContent();
+  }
+}
+```
+```json
+{
+    "temperature": 0.0,
+    "messages":
+    [
+        {
+            "content":
+            [
+                {
+                    "type": "image",
+                    "source":
+                    {
+                        "type": "base64",
+                        "data": "base64Code",
+                        "media_type": "image/png"
+                    }
+                },
+                {
+                    "type": "image",
+                    "source":
+                    {
+                        "type": "base64",
+                        "data": "Base64Code",
+                        "media_type": "image/png"
+                    }
+                },
+                {
+                    "type": "text",
+                    "text": "识别文件内容"
+                }
+            ],
+            "role": "user"
+        }
+    ],
+    "system":
+    [
+        {
+            "type": "text",
+            "text": "Answer the question using the format below:\r\n**Answer**:\r\n{{correct_answer}}\r\n**Steps**:\r\n{{key steps}}\r\n\r\nOutput using the language of the en."
+        }
+    ],
+    "max_tokens": 64000,
+    "model": "claude-3-7-sonnet-20250219"
+}
+```
 ## deepseek-openai
 
 ```java

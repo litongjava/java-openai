@@ -132,6 +132,9 @@ public class ClaudeClient {
       chatRequestVo.setMax_tokens(64000);
     }
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    if(debug) {
+      System.out.println(json);
+    }
     ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       int code = response.code();
