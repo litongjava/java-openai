@@ -3,7 +3,9 @@ package com.litongjava.openai.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.litongjava.chat.ChatMessage;
 import com.litongjava.claude.ClaudeChatMessage;
+import com.litongjava.consts.AiProviderName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,6 +56,19 @@ public class OpenAiChatRequestVo {
       openAiMessages.add(new OpenAiChatMessage(message));
     }
     this.messages = openAiMessages;
+    return this;
+  }
+
+  public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages, String provider) {
+    if (AiProviderName.CLAUDE.equals(provider)) {
+
+    } else {
+      List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
+      for (ChatMessage message : messages) {
+        openAiMessages.add(new OpenAiChatMessage(message));
+      }
+      this.messages = openAiMessages;
+    }
     return this;
   }
 

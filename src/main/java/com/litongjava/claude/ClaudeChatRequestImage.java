@@ -1,17 +1,15 @@
-package com.litongjava.openai.chat;
+package com.litongjava.claude;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class ChatMessageArgs {
-  private Long id;
+public class ClaudeChatRequestImage {
   private String type;
-  private String name;
-  private String institution;
+  private String media_type;
+  private String data;
   private String url;
-  private String[] urls;
 }

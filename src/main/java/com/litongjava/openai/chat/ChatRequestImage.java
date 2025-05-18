@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class ChatRequestImage {
   private String url;
   private String detail;
-
 }

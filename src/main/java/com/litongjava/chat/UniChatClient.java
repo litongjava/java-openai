@@ -15,7 +15,6 @@ import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfigVo;
 import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
-import com.litongjava.openai.chat.ChatMessage;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
@@ -161,7 +160,7 @@ public class UniChatClient {
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages);
+    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);

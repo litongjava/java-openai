@@ -1,9 +1,12 @@
 package com.litongjava.gemini;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +36,24 @@ public class GeminiContentVo {
   }
 
   public GeminiContentVo(String role, String content) {
-    this.role=role;
+    this.role = role;
     this.parts = Collections.singletonList(new GeminiPartVo(content));
   }
+
+  public GeminiContentVo(String role, ChatMessage chatMessage) {
+    this.role = role;
+    String content = chatMessage.getContent();
+    List<GeminiPartVo> parts = new ArrayList<>();
+
+    if (StrUtil.isNotBlank(content)) {
+      GeminiPartVo geminiPartVo = new GeminiPartVo(content);
+      parts.add(geminiPartVo);
+    }
+    List<ChatFile> files = chatMessage.getFiles();
+    for (ChatFile chatFile : files) {
+      parts.add(new GeminiPartVo(chatFile));
+    }
+    this.parts = parts;
+  }
+
 }

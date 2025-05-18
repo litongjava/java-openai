@@ -49,6 +49,9 @@ public class GeminiClient {
     String url = urlPerfix + googleApiKey;
     // 将 requestVo 转换为 JSON
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
+    if (debug) {
+      System.out.println(requestJson);
+    }
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));

@@ -1,5 +1,7 @@
 package com.litongjava.gemini;
 
+import com.litongjava.chat.ChatFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +29,16 @@ public class GeminiPartVo {
 
   public GeminiPartVo(GeminiFileDataVo fileData) {
     this.fileData = fileData;
+  }
+
+  public GeminiPartVo(ChatFile chatFile) {
+    String type = chatFile.getMimeType();
+    String data = chatFile.getData();
+    String url = chatFile.getUrl();
+    if (data != null) {
+      this.inlineData = new GeminiInlineDataVo(type, data);
+    } else if (url != null) {
+      this.fileData = new GeminiFileDataVo(type, url);
+    }
   }
 }

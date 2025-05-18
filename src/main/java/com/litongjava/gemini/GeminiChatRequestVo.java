@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.openai.chat.ChatMessage;
+import com.litongjava.chat.ChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
@@ -77,8 +77,7 @@ public class GeminiChatRequestVo {
         this.setSystem_instruction(geminiSystemInstructionVo);
         continue;
       }
-      GeminiPartVo part = new GeminiPartVo(content);
-      GeminiContentVo vo = new GeminiContentVo(role, Collections.singletonList(part));
+      GeminiContentVo vo = new GeminiContentVo(role, chatMessage);
       contents.add(vo);
     }
     this.contents = contents;

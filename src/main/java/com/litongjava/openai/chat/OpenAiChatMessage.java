@@ -2,6 +2,8 @@ package com.litongjava.openai.chat;
 
 import java.util.List;
 
+import com.litongjava.chat.ChatMessage;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

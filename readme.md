@@ -995,6 +995,50 @@ public class LlmOcrServiceTest {
 }
 ```
 
+```json
+{
+  "contents":
+  [
+    {
+      "parts":
+      [
+        {
+          "text": "text"
+        },
+        {
+          "inlineData":
+          {
+            "data":"base64Code",
+            "mimeType": "image/png"
+          }
+        },
+        {
+          "inlineData":
+          {
+            "data": "base64Code",
+            "mimeType": "image/png"
+          }
+        }
+      ],
+      "role": "user"
+    }
+  ],
+  "generationConfig":
+  {
+    "temperature": 0.0
+  },
+  "system_instruction":
+  {
+    "parts":
+    [
+      {
+        "text": "Answer the question using the format below:\r\n**Answer**:\r\n{{correct_answer}}\r\n**Steps**:\r\n{{key steps}}\r\n\r\nOutput using the language of the en."
+      }
+    ]
+  }
+}
+```
+
 ### GOOGLE GEMINI Function Call
 
 **Request Body JSON Example:**

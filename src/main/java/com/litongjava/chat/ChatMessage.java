@@ -1,4 +1,8 @@
-package com.litongjava.openai.chat;
+package com.litongjava.chat;
+
+import java.util.List;
+
+import com.litongjava.openai.chat.MessageRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatMessage {
   private String role, content;
-  private String type = "text";
+  private String type = "auto";
+  //data:image base64 code, url:image http url
+  private List<ChatFile> files;
+
   private ChatMessageArgs args;
 
   public ChatMessage(String role, String content) {
