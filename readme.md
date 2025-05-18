@@ -1432,6 +1432,70 @@ public class GeminiClientTest {
 ```java
 package com.litongjava.manim.services;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.claude.ClaudeClient;
+import com.litongjava.exception.GenerateException;
+import com.litongjava.gemini.GeminiClient;
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.manim.config.AdminAppConfig;
+import com.litongjava.tio.boot.admin.services.AwsS3StorageService;
+import com.litongjava.tio.boot.admin.vo.UploadResultVo;
+import com.litongjava.tio.boot.testing.TioBootTest;
+import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.http.ContentTypeUtils;
+import com.litongjava.tio.utils.http.HttpDownloadUtils;
+import com.litongjava.tio.utils.hutool.FilenameUtils;
+
+public class AnswerServiceTest {
+
+  @Test
+  public void testWithClaude() {
+    TioBootTest.runWith(AdminAppConfig.class);
+    String string = "识别文件内容";
+    List<Long> imageIds = new ArrayList<>();
+    imageIds.add(513563844319756288L);
+    imageIds.add(513561326562951168L);
+
+    List<ChatFile> files = new ArrayList<>(imageIds.size());
+    for (Long id : imageIds) {
+      UploadResultVo resultVo = Aop.get(AwsS3StorageService.class).getUrlById(id);
+      String url = resultVo.getUrl();
+      //files.add(ChatFile.url());
+      String suffix = FilenameUtils.getSuffix(url);
+      String mimeType = ContentTypeUtils.getContentType(suffix);
+      ByteArrayOutputStream download = HttpDownloadUtils.download(url, null);
+      byte[] data = download.toByteArray();
+      String encodeImage = Base64Utils.encodeToString(data);
+      ChatFile base64 = ChatFile.base64(mimeType, encodeImage);
+      files.add(base64);
+    }
+
+    ClaudeClient.debug = true;
+    ChatMessage chatMessage = new ChatMessage(string);
+    chatMessage.setFiles(files);
+    try {
+      String answer = Aop.get(AnswerService.class).genAnswer(chatMessage, "en");
+      System.out.println(answer);
+    } catch (GenerateException e) {
+      e.printStackTrace();
+      String responseBody = e.getResponseBody();
+      String requestJson = e.getRequestJson();
+      System.out.println(requestJson);
+      System.out.println(responseBody);
+    }
+  }
+}
+```
+```java
+package com.litongjava.manim.services;
+
 import java.util.ArrayList;
 import java.util.List;
 
