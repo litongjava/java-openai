@@ -50,9 +50,12 @@ public class GeminiContentVo {
       parts.add(geminiPartVo);
     }
     List<ChatFile> files = chatMessage.getFiles();
-    for (ChatFile chatFile : files) {
-      parts.add(new GeminiPartVo(chatFile));
+    if (files != null) {
+      for (ChatFile chatFile : files) {
+        parts.add(new GeminiPartVo(chatFile));
+      }
     }
+
     this.parts = parts;
   }
 
