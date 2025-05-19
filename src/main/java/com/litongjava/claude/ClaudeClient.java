@@ -31,6 +31,7 @@ import okhttp3.Response;
 @Slf4j
 public class ClaudeClient {
   public static boolean debug = false;
+  private static String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
 
   /**
    * 
@@ -75,6 +76,7 @@ public class ClaudeClient {
     Map<String, String> header = new HashMap<>(1);
     String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     header.put("x-api-key", apiKey);
+    header.put("anthropic-version", "2023-06-01");
     return chatCompletions(header, bodyString, callback);
   }
 
@@ -128,11 +130,11 @@ public class ClaudeClient {
    * @return
    */
   public static ClaudeChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
-    if(chatRequestVo.getMax_tokens()==null) {
+    if (chatRequestVo.getMax_tokens() == null) {
       chatRequestVo.setMax_tokens(64000);
     }
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
-    if(debug) {
+    if (debug) {
       System.out.println(json);
     }
     ClaudeChatResponseVo respVo = null;
@@ -181,6 +183,10 @@ public class ClaudeClient {
    * @return
    */
   public static ClaudeChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
+    Integer max_tokens = chatRequestVo.getMax_tokens();
+    if (max_tokens == null) {
+      chatRequestVo.setMax_tokens(64000);
+    }
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     ClaudeChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
@@ -207,6 +213,7 @@ public class ClaudeClient {
   public static Response chatCompletions(String apiPerfixUrl, String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>(1);
     header.put("x-api-key", apiKey);
+    header.put("anthropic-version", "2023-06-01");
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 
@@ -221,6 +228,7 @@ public class ClaudeClient {
   public static Call chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     header.put("x-api-key", apiKey);
+    header.put("anthropic-version", "2023-06-01");
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
@@ -325,6 +333,11 @@ public class ClaudeClient {
     return chatCompletions(model, chatMessage);
   }
 
+  public static ClaudeChatResponseVo chatWithModel(String key, String model, String role, String prompt) {
+    OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
+    return chatCompletions(apiPerfixUrl, key, model, chatMessage);
+  }
+
   public static ClaudeChatResponseVo chatWithModel(String apiUrl, String key, String model, String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(apiUrl, key, model, chatMessage);
@@ -365,6 +378,7 @@ public class ClaudeClient {
 
     Map<String, String> requestHeaders = new HashMap<>(1);
     requestHeaders.put("x-api-key", apiKey);
+    requestHeaders.put("anthropic-version", "2023-06-01");
 
     Headers headers = Headers.of(requestHeaders);
 

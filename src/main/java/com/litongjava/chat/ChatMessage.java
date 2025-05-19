@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessage {
-
   private String role = "user";
   private String content;
   //data:image base64 code, url:image http url
