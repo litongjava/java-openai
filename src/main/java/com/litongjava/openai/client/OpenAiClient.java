@@ -138,7 +138,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.CHAT_GPT, "ChatGPT generateContent failed", OpenAiConstants.API_PERFIX_URL, json, code, bodyString);
+        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", OpenAiConstants.API_PERFIX_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -184,7 +184,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.CHAT_GPT, "ChatGPT generateContent failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

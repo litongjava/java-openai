@@ -1,6 +1,5 @@
 package com.litongjava.gemini;
 
-import java.util.Arrays;
 import java.util.List;
 
 import lombok.AllArgsConstructor;

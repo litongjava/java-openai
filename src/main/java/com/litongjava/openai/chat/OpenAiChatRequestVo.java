@@ -60,7 +60,7 @@ public class OpenAiChatRequestVo {
   }
 
   public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages, String provider) {
-    if (AiProviderName.CLAUDE.equals(provider)) {
+    if (AiProviderName.ANTHROPIC.equals(provider)) {
       List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
       for (ChatMessage message : messages) {
         openAiMessages.add(new OpenAiChatMessage(message, provider));

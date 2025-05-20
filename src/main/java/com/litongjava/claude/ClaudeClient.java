@@ -145,7 +145,7 @@ public class ClaudeClient {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
         String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
-        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.ANTHROPIC, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -195,7 +195,7 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.ANTHROPIC, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -418,7 +418,7 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", serverUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.ANTHROPIC, "Claude generateContent failed", serverUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -435,7 +435,7 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.CLAUDE, "Claude generateContent failed", ClaudeConsts.API_PERFIX_URL, json, code, bodyString);
+        throw new GenerateException(AiProviderName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PERFIX_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

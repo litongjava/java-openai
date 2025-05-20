@@ -24,9 +24,9 @@ import com.litongjava.openai.client.OpenAiClient;
 public class UniChatClient {
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
-    if (AiProviderName.GEMINI.equals(uniChatRequest.getProvider())) {
+    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
       return useGemeni(key, uniChatRequest);
-    } else if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
+    } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
       return useClaude(key, uniChatRequest);
     } else {
       return useOpenAi(key, uniChatRequest);
@@ -34,9 +34,9 @@ public class UniChatClient {
   }
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
-    if (AiProviderName.GEMINI.equals(uniChatRequest.getProvider())) {
+    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
       return useGemeni(uniChatRequest);
-    } else if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
+    } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
       return useClaude(uniChatRequest);
     } else {
       return useOpenAi(uniChatRequest);
@@ -151,7 +151,7 @@ public class UniChatClient {
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (AiProviderName.CLAUDE.equals(uniChatRequest.getProvider())) {
+      if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
         ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());

@@ -65,7 +65,7 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        throw new GenerateException(AiProviderName.GEMINI, "Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
+        throw new GenerateException(AiProviderName.GOOGLE, "Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
     } catch (IOException e) {

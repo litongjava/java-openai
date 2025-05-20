@@ -109,7 +109,7 @@ public class OpenAiChatMessage {
   public OpenAiChatMessage(ChatMessage message, String provider) {
     this.role = message.getRole();
     String content = message.getContent();
-    if (AiProviderName.CLAUDE.equals(provider)) {
+    if (AiProviderName.ANTHROPIC.equals(provider)) {
       if (message.getFiles() != null && message.getFiles().size() > 0) {
         List<ClaudeMessageContent> messageContents = new ArrayList<>();
         List<ChatFile> files = message.getFiles();
