@@ -34,6 +34,7 @@ public class UniChatClient {
       return useGemeni(key, uniChatRequest);
     } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
       return useClaude(key, uniChatRequest);
+
     } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
       return useVolcEngine(key, uniChatRequest);
     } else {
@@ -165,7 +166,7 @@ public class UniChatClient {
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);
+    ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
     if (chatCompletions == null) {
       return null;
     }
