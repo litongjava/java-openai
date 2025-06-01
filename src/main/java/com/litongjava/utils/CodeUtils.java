@@ -12,6 +12,7 @@ public class CodeUtils {
     String code;
     int indexOf = generatedText.indexOf("```python");
     if (indexOf == -1) {
+      generatedText = generatedText.trim();
       if (generatedText.startsWith("{") && generatedText.endsWith("}")) {
         code = generatedText;
 

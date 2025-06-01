@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.litongjava.claude.ClaudeCacheControl;
-import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
+import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.AiProviderName;
 import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
@@ -21,6 +21,7 @@ import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.consts.OpenAiConstants;
+import com.litongjava.openrouter.OpenRouterConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.volcengine.VolcEngineConst;
 
@@ -28,6 +29,11 @@ public class UniChatClient {
 
   private static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
   private static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
+  private static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
+
+  public static UniChatResponse generate(UniChatRequest uniChatRequest) {
+    return generate(uniChatRequest.getApiKey(), uniChatRequest);
+  }
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
     if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
@@ -37,36 +43,20 @@ public class UniChatClient {
 
     } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
       return useVolcEngine(key, uniChatRequest);
+
+    } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
+      return useOpenRouter(key, uniChatRequest);
     } else {
       return useOpenAi(key, uniChatRequest);
     }
-  }
-
-  public static UniChatResponse generate(UniChatRequest uniChatRequest) {
-    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
-      return useGemeni(uniChatRequest);
-    } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
-      return useClaude(uniChatRequest);
-    } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
-      return useVolcEngine(uniChatRequest);
-    } else {
-      return useOpenAi(uniChatRequest);
-    }
-
-  }
-
-  private static UniChatResponse useVolcEngine(UniChatRequest uniChatRequest) {
-    String apiKey = uniChatRequest.getApiKey();
-    return useVolcEngine(apiKey, uniChatRequest);
   }
 
   private static UniChatResponse useVolcEngine(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(VOLCENGINE_API_URL, key, uniChatRequest);
   }
 
-  private static UniChatResponse useOpenAi(UniChatRequest uniChatRequest) {
-    String apiKey = uniChatRequest.getApiKey();
-    return useOpenAi(OPENAI_API_URL, apiKey, uniChatRequest);
+  private static UniChatResponse useOpenRouter(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
   }
 
   private static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
@@ -97,44 +87,6 @@ public class UniChatClient {
     }
     ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
     ChatResponseUsage usage = chatCompletions.getUsage();
-    return new UniChatResponse(message, usage);
-  }
-
-  private static UniChatResponse useClaude(UniChatRequest uniChatRequest) {
-    List<ChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<ChatMessage> iterator = messages.iterator();
-
-    while (iterator.hasNext()) {
-      ChatMessage next = iterator.next();
-      if (next.getRole().equals("model")) {
-        //'assistant', 'user'
-        next.setRole("assistant");
-      }
-    }
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
-    if (uniChatRequest.isUseSystemPrompt()) {
-      String systemPrompt = uniChatRequest.getSystemPrompt();
-      ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
-      if (uniChatRequest.isCacheSystemPrompt()) {
-        claudeChatMessage.setCache_control(new ClaudeCacheControl());
-      }
-      openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
-    }
-
-    openAiChatRequestVo.setModel(uniChatRequest.getModel());
-    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages);
-    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
-
-    ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(openAiChatRequestVo);
-    if (chatCompletions == null) {
-      return null;
-    }
-
-    String role = chatCompletions.getRole();
-    ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
-    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
-    ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
     return new UniChatResponse(message, usage);
   }
 
@@ -175,30 +127,6 @@ public class UniChatClient {
     ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
-    return new UniChatResponse(message, usage);
-  }
-
-  private static UniChatResponse useGemeni(UniChatRequest uniChatRequest) {
-    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
-    geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
-
-    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
-    geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
-    geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
-    geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
-    geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
-
-    GeminiChatResponseVo chatResponse = GeminiClient.generate(uniChatRequest.getModel(), geminiChatRequestVo);
-    if (chatResponse == null) {
-      return null;
-    }
-
-    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
-    String role = content.getRole();
-    GeminiPartVo geminiPartVo = content.getParts().get(0);
-    GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
-    ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
-    ChatResponseMessage message = new ChatResponseMessage(role, geminiPartVo);
     return new UniChatResponse(message, usage);
   }
 

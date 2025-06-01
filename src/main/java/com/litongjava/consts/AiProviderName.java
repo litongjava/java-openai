@@ -5,4 +5,5 @@ public interface AiProviderName {
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
   String VOLC_ENGINE = "volcengine";
+  String OPENROUTER = "openrouter";
 }
