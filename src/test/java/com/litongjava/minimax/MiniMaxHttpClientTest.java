@@ -2,11 +2,10 @@ package com.litongjava.minimax;
 
 import java.io.File;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.hex.HexUtils;
 import com.litongjava.tio.utils.hutool.FileUtil;
 
 public class MiniMaxHttpClientTest {
@@ -20,12 +19,8 @@ public class MiniMaxHttpClientTest {
     System.out.println(speech);
     String audio = speech.getData().getAudio();
     byte[] decodeToBytes;
-    try {
-      decodeToBytes = Hex.decodeHex(audio);
-      FileUtil.writeBytes(decodeToBytes, new File("how_are_you.mp3"));
-    } catch (DecoderException e) {
-      e.printStackTrace();
-    }
-    
+    decodeToBytes = HexUtils.decodeHex(audio);
+    FileUtil.writeBytes(decodeToBytes, new File("how_are_you.mp3"));
+
   }
 }

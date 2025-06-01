@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.litongjava</groupId>
   <artifactId>java-openai</artifactId>
-  <version>1.1.9</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
   <name>java-openai</name>
   <description>java openai http client</description>
@@ -21,10 +21,15 @@
       <artifactId>okhttp</artifactId>
       <version>4.12.0</version>
     </dependency>
+     <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp-brotli</artifactId>
+      <version>4.12.0</version>
+    </dependency>
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-utils</artifactId>
-      <version>3.7.3.v20250501-RELEASE</version>
+      <version>3.7.3.v20250601-RELEASE</version>
     </dependency>
 
     <dependency>

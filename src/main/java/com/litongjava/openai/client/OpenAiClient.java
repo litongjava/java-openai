@@ -55,7 +55,6 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-
     return chatCompletions(apiPerfixUrl, header, bodyString);
   }
 

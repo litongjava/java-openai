@@ -1744,8 +1744,7 @@ public class AskWithImageDeepSeek {
 ```
 
 ---
-
-## Additional Integrations
+## VOLCENGINE
 
 ### VOLCENGINE: DEEPSEEK
 
@@ -1782,7 +1781,53 @@ public class VolcEngineDeepSeekClient {
   }
 }
 ```
+## OpenRouter
+```java
+package com.litongjava.manim.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatClient;
+import com.litongjava.chat.UniChatRequest;
+import com.litongjava.chat.UniChatResponse;
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
+import com.litongjava.openrouter.OpenRouterModels;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class OpenRouterTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    String apiKey = EnvUtils.getStr("OPENROUTER_API_KEY");
+    String systemPrompt = "请回答问题";
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage("什么是勾股定理"));
+
+    UniChatRequest uniChatRequest = new UniChatRequest(messages);
+    uniChatRequest.setTemperature(0.0f);
+    uniChatRequest.setProvider(AiProviderName.OPENROUTER);
+    uniChatRequest.setModel(OpenRouterModels.DEEPSEEK_R1_250528);
+    uniChatRequest.setSystemPrompt(systemPrompt).setUseSystemPrompt(true);
+    try {
+      UniChatResponse response = UniChatClient.generate(apiKey, uniChatRequest);
+      String content = response.getMessage().getContent();
+      System.out.println(content);
+    }catch (GenerateException e) {
+      String responseBody = e.getResponseBody();
+      System.out.println(responseBody);
+    }
+    
+  }
+}
+```
+## Additional Integrations
 ### Groq Integration
 
 #### GroqSpeechClientTest
