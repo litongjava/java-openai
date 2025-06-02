@@ -415,12 +415,14 @@ public class OpenAiClient {
 
   public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
     EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(apiKey, Json.getSkipNullJson().toJson(reoVo))) {
+    String json = Json.getSkipNullJson().toJson(reoVo);
+    try (Response response = embeddings(apiKey, json)) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new RuntimeException("status:" + response.code() + ",body:" + bodyString);
+        String serverUrl = EnvUtils.get("OPENAI_API_URL");
+        throw new GenerateException(AiProviderName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(), bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

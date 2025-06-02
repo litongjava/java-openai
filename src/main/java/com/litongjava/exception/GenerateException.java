@@ -23,5 +23,4 @@ public class GenerateException extends RuntimeException {
     this.code = code;
     this.responseBody = responseBody;
   }
-
 }
