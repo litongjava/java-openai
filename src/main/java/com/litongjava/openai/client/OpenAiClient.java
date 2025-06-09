@@ -103,7 +103,7 @@ public class OpenAiClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(Map<String, String> header, String bodyString,EventSourceListener listener) {
+  public static EventSource chatCompletions(Map<String, String> header, String bodyString, EventSourceListener listener) {
     String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, listener);
   }
