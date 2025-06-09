@@ -27,6 +27,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
+import okhttp3.sse.EventSources;
 
 @Slf4j
 public class ClaudeClient {
@@ -235,6 +238,13 @@ public class ClaudeClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
+    Map<String, String> header = new HashMap<>(1);
+    header.put("x-api-key", apiKey);
+    header.put("anthropic-version", "2023-06-01");
+    return chatCompletions(apiPerfixUrl, header, bodyString, listener);
+  }
+
   /**
    * 
    * @param uri
@@ -260,6 +270,16 @@ public class ClaudeClient {
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage(), e);
     }
+  }
+
+  public static Call chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+    return chatCompletions(apiPerfixUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
+  }
+
+  public static EventSource chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+    return chatCompletions(apiPerfixUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), listener);
   }
 
   /**
@@ -300,6 +320,24 @@ public class ClaudeClient {
     Call newCall = httpClient.newCall(request);
     newCall.enqueue(callback);
     return newCall;
+  }
+  
+  public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, EventSourceListener listener) {
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+
+    if (debug) {
+      log.info(bodyString);
+    }
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+
+    Headers headers = Headers.of(requestHeaders);
+
+    String url = apiPrefixUrl + "/messages";
+    Request request = new Request.Builder() //
+        .url(url) //
+        .method("POST", body).headers(headers) //
+        .build();
+    return EventSources.createFactory(httpClient).newEventSource(request, listener);
   }
 
   /**
