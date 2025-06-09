@@ -30,6 +30,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
+import okhttp3.sse.EventSources;
 
 @Slf4j
 public class OpenAiClient {
@@ -81,6 +84,13 @@ public class OpenAiClient {
     return chatCompletions(header, bodyString, callback);
   }
 
+  public static EventSource chatCompletions(String bodyString, EventSourceListener listener) {
+    Map<String, String> header = new HashMap<>(1);
+    String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    header.put("Authorization", "Bearer " + apiKey);
+    return chatCompletions(header, bodyString, listener);
+  }
+
   /**
    * 
    * @param header
@@ -91,6 +101,11 @@ public class OpenAiClient {
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
     String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
+  }
+
+  public static EventSource chatCompletions(Map<String, String> header, String bodyString,EventSourceListener listener) {
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    return chatCompletions(apiPerfixUrl, header, bodyString, listener);
   }
 
   /**
@@ -166,6 +181,11 @@ public class OpenAiClient {
   public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     return chatCompletions(json, callback);
+  }
+
+  public static EventSource chatCompletions(OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+    String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    return chatCompletions(json, listener);
   }
 
   /**
@@ -284,6 +304,27 @@ public class OpenAiClient {
     Call newCall = httpClient.newCall(request);
     newCall.enqueue(callback);
     return newCall;
+  }
+
+  public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, EventSourceListener listener) {
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+
+    if (debug) {
+      log.info(bodyString);
+    }
+    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+
+    Headers headers = Headers.of(requestHeaders);
+
+    String url = apiPrefixUrl + "/chat/completions";
+    Request request = new Request.Builder() //
+        .url(url) //
+        .method("POST", body).headers(headers) //
+        .build();
+
+    // 这里就发起 SSE 请求了
+    EventSource source = EventSources.createFactory(httpClient).newEventSource(request, listener);
+    return source;
   }
 
   /**
