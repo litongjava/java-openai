@@ -1,6 +1,6 @@
-package com.litongjava.qwen;
+package com.litongjava.bailian;
 
-public interface QwenAiModels {
+public interface BaiLianAiModels {
   String QVQ_MAX = "qvq-max";
   String QVQ_MAX_LATEST = "qvq-max-latest";
   String QVQ_MAX_2025_03_25 = "qvq-max-2025-03-25";
