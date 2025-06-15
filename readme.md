@@ -1918,12 +1918,12 @@ import com.litongjava.chat.UniChatRequest;
 import com.litongjava.chat.UniChatResponse;
 import com.litongjava.consts.AiProviderName;
 import com.litongjava.exception.GenerateException;
+import com.litongjava.manim.utils.AlarmUtils;
 import com.litongjava.template.PromptEngine;
 import com.litongjava.tio.utils.encoder.Base64Utils;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.hutool.FilenameUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
 
 public class LlmQwenOcrService {
 
@@ -1954,13 +1954,14 @@ public class LlmQwenOcrService {
     // 2. generateContent
     try {
       UniChatResponse generated = UniChatClient.generate(uniChatRequest);
+      return generated.getMessage().getContent();
     } catch (GenerateException e) {
       e.printStackTrace();
       String responseBody = e.getResponseBody();
       System.out.println(responseBody);
       String name = "tio-boot";
       String warningName = "LlmOcrService Failed to ocr file:" + filename;
-      //AlarmUtils.sendExcpetion(name, warningName, responseBody, e);
+      AlarmUtils.sendExcpetion(name, warningName, responseBody, e);
     }
 
     return null;
