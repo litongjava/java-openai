@@ -26,6 +26,7 @@ public class UniChatRequest {
   private Float temperature;
   private String cachedId;
   private Integer max_tokens;
+  private Boolean enable_thinking;
 
   public UniChatRequest(List<ChatMessage> messages) {
     this.messages = messages;

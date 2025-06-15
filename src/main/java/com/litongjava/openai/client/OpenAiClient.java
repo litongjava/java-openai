@@ -197,6 +197,9 @@ public class OpenAiClient {
    */
   public static OpenAiChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    if (debug) {
+      log.info("request json:{}", json);
+    }
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       String bodyString = response.body().string();
@@ -238,7 +241,7 @@ public class OpenAiClient {
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
-  
+
   public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
     header.put("Authorization", "Bearer " + apiKey);
@@ -283,7 +286,7 @@ public class OpenAiClient {
   public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
-  
+
   public static EventSource chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), listener);
   }

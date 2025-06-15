@@ -1,8 +1,10 @@
 package com.litongjava.chat;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.litongjava.bailian.BaiLianConst;
 import com.litongjava.claude.ClaudeCacheControl;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
@@ -15,14 +17,18 @@ import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfigVo;
 import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.openai.chat.ChatMesageContent;
+import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
+import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.consts.OpenAiConstants;
 import com.litongjava.openrouter.OpenRouterConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.volcengine.VolcEngineConst;
 
 import okhttp3.sse.EventSource;
@@ -33,6 +39,7 @@ public class UniChatClient {
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
+  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -49,6 +56,10 @@ public class UniChatClient {
 
     } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
       return useOpenRouter(key, uniChatRequest);
+    } else if (AiProviderName.BAILIAN.equals(uniChatRequest.getProvider())) {
+
+      return useBailian(key, uniChatRequest);
+
     } else {
       return useOpenAi(key, uniChatRequest);
     }
@@ -62,27 +73,63 @@ public class UniChatClient {
     return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
   }
 
+  public static UniChatResponse useBailian(String key, UniChatRequest uniChatRequest) {
+    uniChatRequest.setEnable_thinking(false);
+    return useOpenAi(BAILIAN_API_URL, key, uniChatRequest);
+  }
+
   public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
+    List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
     Iterator<ChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
       ChatMessage next = iterator.next();
+      String role = next.getRole();
       if (next.getRole().equals("model")) {
-        next.setRole("assistant");
+        role = "assistant";
+      }
+      String content = next.getContent();
+      if (content != null) {
+        openAiChatMesages.add(new OpenAiChatMessage(role, content));
+      }
+      List<ChatFile> files = next.getFiles();
+      // files
+      if (files != null && files.size() > 0) {
+        List<ChatMesageContent> multiContents = new ArrayList<>();
+        for (ChatFile file : files) {
+          String data = file.getData();
+          ChatRequestImage chatRequestImage = new ChatRequestImage();
+          chatRequestImage.setDetail("auto");
+          chatRequestImage.setUrl(data);
+          ChatMesageContent image = new ChatMesageContent(chatRequestImage);
+          multiContents.add(image);
+
+        }
+        OpenAiChatMessage openAiFileMesage = new OpenAiChatMessage();
+        openAiFileMesage.role(role);
+        openAiFileMesage.multiContents(multiContents);
+        openAiChatMesages.add(openAiFileMesage);
       }
     }
+
     if (uniChatRequest.isUseSystemPrompt()) {
-      messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
+      String systemPrompt = uniChatRequest.getSystemPrompt();
+      if (StrUtil.isNotBlank(systemPrompt)) {
+        openAiChatMesages.add(0, new OpenAiChatMessage("system", systemPrompt));
+      }
     }
+
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    openAiChatRequestVo.setMessages(openAiChatMesages);
+
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages);
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
+    openAiChatRequestVo.setEnable_thinking(uniChatRequest.getEnable_thinking());
 
     OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
     if (chatCompletions == null) {

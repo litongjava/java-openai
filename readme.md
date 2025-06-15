@@ -1827,6 +1827,146 @@ public class OpenRouterTest {
   }
 }
 ```
+
+## Aliyun Bailian
+
+### Text
+```java
+package com.litongjava.manim.services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.litongjava.bailian.BaiLianAiModels;
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatClient;
+import com.litongjava.chat.UniChatRequest;
+import com.litongjava.chat.UniChatResponse;
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class AliyunBailianTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    String apiKey = EnvUtils.getStr("BAILIAN_API_KEY");
+    String systemPrompt = "请回答问题";
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage("什么是勾股定理"));
+
+    UniChatRequest uniChatRequest = new UniChatRequest(messages);
+    uniChatRequest.setTemperature(0.0f);
+    uniChatRequest.setProvider(AiProviderName.BAILIAN);
+    uniChatRequest.setModel(BaiLianAiModels.QWEN3_235B_A22B);
+    uniChatRequest.setSystemPrompt(systemPrompt).setUseSystemPrompt(true);
+
+    try {
+      UniChatResponse response = UniChatClient.generate(apiKey, uniChatRequest);
+      String content = response.getMessage().getContent();
+      System.out.println(content);
+    } catch (GenerateException e) {
+      String responseBody = e.getResponseBody();
+      System.out.println(responseBody);
+    }
+
+  }
+}
+```
+### Image
+```java
+package com.litongjava.manim.services;
+
+import java.io.File;
+
+import org.junit.Test;
+
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.openai.client.OpenAiClient;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.hutool.FileUtil;
+
+public class LlmQwenOcrServiceTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    String path = "C:\\Users\\Administrator\\Pictures\\200-dpi.png";
+    File file = new File(path);
+    byte[] bytes = FileUtil.readBytes(file);
+    OpenAiClient.debug = true;
+    Aop.get(LlmQwenOcrService.class).ocr(bytes, file.getName());
+  }
+}
+```
+
+```java
+package com.litongjava.manim.services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.litongjava.bailian.BaiLianAiModels;
+import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatClient;
+import com.litongjava.chat.UniChatRequest;
+import com.litongjava.chat.UniChatResponse;
+import com.litongjava.consts.AiProviderName;
+import com.litongjava.exception.GenerateException;
+import com.litongjava.template.PromptEngine;
+import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.ContentTypeUtils;
+import com.litongjava.tio.utils.hutool.FilenameUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class LlmQwenOcrService {
+
+  public String ocr(byte[] data, String filename) {
+    String prompt = PromptEngine.renderToString("ocr_prompt.txt");
+
+    String suffix = FilenameUtils.getSuffix(filename);
+    String mimeType = ContentTypeUtils.getContentType(suffix.toLowerCase());
+    String encodeImage = Base64Utils.encodeImage(data, mimeType );
+
+    //api key
+    String apiKey = EnvUtils.getStr("BAILIAN_API_KEY");
+
+    // 1. Build request body
+    ChatMessage chatMessage = new ChatMessage();
+
+    ChatFile chatFile = ChatFile.base64(mimeType, encodeImage);
+    List<ChatFile> chatFiles = new ArrayList<>();
+    chatFiles.add(chatFile);
+    chatMessage.setFiles(chatFiles);
+
+    List<ChatMessage> messages = new ArrayList<>();
+    messages.add(new ChatMessage("system", prompt));
+    messages.add(chatMessage);
+    UniChatRequest uniChatRequest = new UniChatRequest(messages);
+    uniChatRequest.setApiKey(apiKey).setProvider(AiProviderName.BAILIAN).setModel(BaiLianAiModels.QWEN_VL_MAX);
+
+    // 2. generateContent
+    try {
+      UniChatResponse generated = UniChatClient.generate(uniChatRequest);
+    } catch (GenerateException e) {
+      e.printStackTrace();
+      String responseBody = e.getResponseBody();
+      System.out.println(responseBody);
+      String name = "tio-boot";
+      String warningName = "LlmOcrService Failed to ocr file:" + filename;
+      //AlarmUtils.sendExcpetion(name, warningName, responseBody, e);
+    }
+
+    return null;
+  }
+}
+```
 ## Additional Integrations
 ### Groq Integration
 

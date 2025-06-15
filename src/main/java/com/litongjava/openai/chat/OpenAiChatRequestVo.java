@@ -32,6 +32,7 @@ public class OpenAiChatRequestVo {
   private String stop;
   private Boolean stream;
   private ChatStreamOptions stream_options;
+  private Boolean enable_thinking;
 
   public void fromMessages(List<ChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
