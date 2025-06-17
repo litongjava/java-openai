@@ -434,9 +434,9 @@ public class OpenAiClient {
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
-  public static float[] embeddingArray(String serverUrl, String input, String model) {
+  public static float[] embeddingArray(String apiKey, String input, String model) {
     EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
-    return embeddings(serverUrl, embeddingRequestVo).getData().get(0).getEmbedding();
+    return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
   public static float[] embeddingArray(String input) {

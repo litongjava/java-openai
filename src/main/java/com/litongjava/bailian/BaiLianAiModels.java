@@ -133,4 +133,6 @@ public interface BaiLianAiModels {
   String QWEN1_5_0_5B_CHAT = "qwen1.5-0.5b-chat";
 
   String CODEQWEN1_5_7B_CHAT = "codeqwen1.5-7b-chat";
+
+  String TEXT_EMBEDDING_V4 = "text-embedding-v4";
 }
