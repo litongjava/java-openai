@@ -27,6 +27,7 @@ import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.consts.OpenAiConstants;
 import com.litongjava.openrouter.OpenRouterConst;
+import com.litongjava.tencent.TencentConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.volcengine.VolcEngineConst;
@@ -40,6 +41,7 @@ public class UniChatClient {
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
+  public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -56,13 +58,20 @@ public class UniChatClient {
 
     } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
       return useOpenRouter(key, uniChatRequest);
-    } else if (AiProviderName.BAILIAN.equals(uniChatRequest.getProvider())) {
 
+    } else if (AiProviderName.BAILIAN.equals(uniChatRequest.getProvider())) {
       return useBailian(key, uniChatRequest);
+
+    } else if (AiProviderName.TENCENT.equals(uniChatRequest.getProvider())) {
+      return useTencent(key, uniChatRequest);
 
     } else {
       return useOpenAi(key, uniChatRequest);
     }
+  }
+
+  public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useVolcEngine(String key, UniChatRequest uniChatRequest) {
@@ -78,8 +87,9 @@ public class UniChatClient {
     return useOpenAi(BAILIAN_API_URL, key, uniChatRequest);
   }
 
-  public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
+  public static UniChatResponse useTencent(String key, UniChatRequest uniChatRequest) {
+    uniChatRequest.setEnable_thinking(false);
+    return useOpenAi(TENCENT_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
@@ -137,7 +147,8 @@ public class UniChatClient {
     }
     ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
     ChatResponseUsage usage = chatCompletions.getUsage();
-    return new UniChatResponse(message, usage);
+    String model = chatCompletions.getModel();
+    return new UniChatResponse(model, message, usage);
   }
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
@@ -174,10 +185,11 @@ public class UniChatClient {
     }
 
     String role = chatCompletions.getRole();
+    String model = chatCompletions.getModel();
     ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
-    return new UniChatResponse(message, usage);
+    return new UniChatResponse(model, message, usage);
   }
 
   public static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
@@ -196,12 +208,13 @@ public class UniChatClient {
     }
 
     GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
+    String modelVersion = chatResponse.getModelVersion();
     String role = content.getRole();
     GeminiPartVo geminiPartVo = content.getParts().get(0);
     GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
     ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
     ChatResponseMessage message = new ChatResponseMessage(role, geminiPartVo);
-    return new UniChatResponse(message, usage);
+    return new UniChatResponse(modelVersion, message, usage);
   }
 
   public static EventSource stream(UniChatRequest uniChatRequest, EventSourceListener listener) {

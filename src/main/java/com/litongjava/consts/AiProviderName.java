@@ -9,5 +9,6 @@ public interface AiProviderName {
   String VOLC_ENGINE = "volcengine";
   
   String BAILIAN = "bailian";
+  String TENCENT = "tencent";
 
 }

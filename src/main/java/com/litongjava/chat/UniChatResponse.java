@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UniChatResponse {
+  private String model;
   private ChatResponseMessage message;
   private ChatResponseUsage usage;
 }
