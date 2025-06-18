@@ -238,11 +238,11 @@ public class ClaudeClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey,  OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
     String bodyString = JsonUtils.toSkipNullJson(chatRequestVo);
     return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
   }
-  
+
   public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
     header.put("x-api-key", apiKey);
@@ -266,10 +266,7 @@ public class ClaudeClient {
     Headers headers = Headers.of(requestHeaders);
 
     String url = uri + "/messages";
-    Request request = new Request.Builder() //
-        .url(url) //
-        .method("POST", body).headers(headers) //
-        .build();
+    Request request = new Request.Builder().url(url).method("POST", body).headers(headers).build();
     try {
       return httpClient.newCall(request).execute();
     } catch (IOException e) {
@@ -326,7 +323,7 @@ public class ClaudeClient {
     newCall.enqueue(callback);
     return newCall;
   }
-  
+
   public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, EventSourceListener listener) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
