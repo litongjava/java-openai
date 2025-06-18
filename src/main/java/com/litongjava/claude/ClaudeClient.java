@@ -238,6 +238,11 @@ public class ClaudeClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey,  OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+    String bodyString = JsonUtils.toSkipNullJson(chatRequestVo);
+    return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
+  }
+  
   public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
     header.put("x-api-key", apiKey);
@@ -279,7 +284,7 @@ public class ClaudeClient {
 
   public static EventSource chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
     String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
-    return chatCompletions(apiPerfixUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), listener);
+    return chatCompletions(apiPerfixUrl, apiKey, chatRequestVo, listener);
   }
 
   /**

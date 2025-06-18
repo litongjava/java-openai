@@ -7,8 +7,10 @@ public interface AiProviderName {
   String OPENROUTER = "openrouter";
 
   String VOLC_ENGINE = "volcengine";
-  
+
   String BAILIAN = "bailian";
   String TENCENT = "tencent";
+
+  String MOONSHOT = "moonshot";
 
 }

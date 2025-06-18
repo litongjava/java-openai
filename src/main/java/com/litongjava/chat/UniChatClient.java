@@ -16,7 +16,9 @@ import com.litongjava.gemini.GeminiClient;
 import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfigVo;
 import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiThinkingConfig;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.moonshot.MoonshotConst;
 import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatResponseMessage;
@@ -42,6 +44,7 @@ public class UniChatClient {
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
   public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);
+  public static final String MOONSHOT_API_URL = EnvUtils.get("MOONSHOT_API_URL", MoonshotConst.API_PERFIX_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -50,6 +53,7 @@ public class UniChatClient {
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
     if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
       return useGemeni(key, uniChatRequest);
+
     } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
       return useClaude(key, uniChatRequest);
 
@@ -140,8 +144,14 @@ public class UniChatClient {
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
     openAiChatRequestVo.setEnable_thinking(uniChatRequest.getEnable_thinking());
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    OpenAiChatResponseVo chatCompletions = null;
+    if (apiPrefixUrl != null) {
+      chatCompletions = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
+    } else {
+      chatCompletions = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
+    }
 
-    OpenAiChatResponseVo chatCompletions = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
     if (chatCompletions == null) {
       return null;
     }
@@ -152,6 +162,7 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     List<ChatMessage> messages = uniChatRequest.getMessages();
     Iterator<ChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -179,7 +190,13 @@ public class UniChatClient {
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    ClaudeChatResponseVo chatCompletions = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
+    ClaudeChatResponseVo chatCompletions = null;
+    if (apiPrefixUrl != null) {
+      chatCompletions = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
+    } else {
+      chatCompletions = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
+    }
+
     if (chatCompletions == null) {
       return null;
     }
@@ -193,16 +210,41 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
-    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
-    geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
     GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
-    geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
-    geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
-    geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
+    String cachedId = uniChatRequest.getCachedId();
+    //CachedContent can not be used with GenerateContent request setting system_instruction, tools or tool_config. 
+    //Proposed fix: move those values to CachedContent from GenerateContent request
+    if (cachedId != null) {
+      geminiChatRequestVo.setCachedContent(cachedId);
+    } else {
+      geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
+    }
 
-    GeminiChatResponseVo chatResponse = GeminiClient.generate(key, uniChatRequest.getModel(), geminiChatRequestVo);
+    Boolean enable_thinking = uniChatRequest.getEnable_thinking();
+    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
+
+    Float temperature = uniChatRequest.getTemperature();
+    if (temperature != null) {
+      geminiGenerationConfigVo.setTemperature(temperature);
+    }
+
+    if (enable_thinking != null && !enable_thinking) {
+      GeminiThinkingConfig geminiThinkingConfig = new GeminiThinkingConfig(0);
+      geminiGenerationConfigVo.setThinkingConfig(geminiThinkingConfig);
+    }
+
+    geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
+
+    GeminiChatResponseVo chatResponse = null;
+    if (apiPrefixUrl != null) {
+      chatResponse = GeminiClient.generate(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo);
+    } else {
+      chatResponse = GeminiClient.generate(key, uniChatRequest.getModel(), geminiChatRequestVo);
+    }
+
     if (chatResponse == null) {
       return null;
     }
@@ -266,8 +308,14 @@ public class UniChatClient {
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
-
-    return OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo, listener);
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    EventSource eventSource = null;
+    if (apiPrefixUrl != null) {
+      eventSource = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo, listener);
+    } else {
+      eventSource = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo, listener);
+    }
+    return eventSource;
   }
 
   public static EventSource useClaude(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
@@ -298,7 +346,15 @@ public class UniChatClient {
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    return ClaudeClient.chatCompletions(key, openAiChatRequestVo, listener);
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    EventSource eventSource = null;
+    if (apiPrefixUrl == null) {
+      eventSource = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo, listener);
+    } else {
+      eventSource = ClaudeClient.chatCompletions(key, openAiChatRequestVo, listener);
+    }
+
+    return eventSource;
 
   }
 
@@ -312,7 +368,14 @@ public class UniChatClient {
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
     geminiChatRequestVo.setCachedContent(uniChatRequest.getCachedId());
 
-    return GeminiClient.stream(key, uniChatRequest.getModel(), geminiChatRequestVo, listener);
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    EventSource eventSource = null;
+    if (apiPrefixUrl != null) {
+      eventSource = GeminiClient.stream(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo, listener);
+    } else {
+      eventSource = GeminiClient.stream(key, uniChatRequest.getModel(), geminiChatRequestVo, listener);
+    }
+    return eventSource;
 
   }
 

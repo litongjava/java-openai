@@ -31,6 +31,7 @@ public class GeminiGenerationConfigVo {
   private List<String> responseModalities;
   private String responseMimeType;
   private GeminiResponseSchema responseSchema;
+  private GeminiThinkingConfig thinkingConfig;
 
   public GeminiGenerationConfigVo buildJsonValue() {
     return this.setResponseMimeType("application/json");

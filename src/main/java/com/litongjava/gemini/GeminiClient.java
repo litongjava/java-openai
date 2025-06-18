@@ -162,9 +162,13 @@ public class GeminiClient {
   public static EventSource stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(googleApiKey, modelName, requestJson, listener);
-
   }
-  
+
+  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
+    String requestJson = Json.getSkipNullJson().toJson(requestVo);
+    return stream(apiPrefixUrl, googleApiKey, modelName, requestJson, listener);
+  }
+
   public static Call stream(String modelName, GeminiChatRequestVo requestVo, Callback callback) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -172,7 +176,7 @@ public class GeminiClient {
     }
     return stream(apiKey, modelName, requestVo, callback);
   }
-  
+
   public static EventSource stream(String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -188,7 +192,7 @@ public class GeminiClient {
     }
     return stream(apiKey, modelName, bodyString, callback);
   }
-  
+
   public static EventSource stream(String modelName, String bodyString, EventSourceListener listener) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -196,7 +200,6 @@ public class GeminiClient {
     }
     return stream(apiKey, modelName, bodyString, listener);
   }
-
 
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
@@ -216,7 +219,12 @@ public class GeminiClient {
 
   public static EventSource stream(String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
     // 拼接 URL
-    String url = GeminiConsts.GEMINI_API_MODEL_BASE + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+    return stream(GeminiConsts.GEMINI_API_MODEL_BASE, googleApiKey, modelName, bodyString, listener);
+  }
+
+  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
+    // 拼接 URL
+    String url = apiPrefixUrl + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
     if (debug) {
       log.info("{} {}", url, bodyString);
     }
