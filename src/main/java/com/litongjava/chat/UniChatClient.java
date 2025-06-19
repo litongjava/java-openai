@@ -18,6 +18,7 @@ import com.litongjava.gemini.GeminiGenerationConfigVo;
 import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiThinkingConfig;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
 import com.litongjava.openai.chat.ChatMesageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
@@ -45,6 +46,7 @@ public class UniChatClient {
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
   public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);
   public static final String MOONSHOT_API_URL = EnvUtils.get("MOONSHOT_API_URL", MoonshotConst.API_PERFIX_URL);
+  public static final String MINIMAX_API_URL = EnvUtils.get("MINIMAX_API_URL", MiniMaxConst.API_PREFIX_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -68,6 +70,9 @@ public class UniChatClient {
 
     } else if (AiProviderName.TENCENT.equals(uniChatRequest.getProvider())) {
       return useTencent(key, uniChatRequest);
+
+    } else if (AiProviderName.MINIMAX.equals(uniChatRequest.getProvider())) {
+      return useMiniMax(key, uniChatRequest);
 
     } else {
       return useOpenAi(key, uniChatRequest);
@@ -94,6 +99,11 @@ public class UniChatClient {
   public static UniChatResponse useTencent(String key, UniChatRequest uniChatRequest) {
     uniChatRequest.setEnable_thinking(false);
     return useOpenAi(TENCENT_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useMiniMax(String key, UniChatRequest uniChatRequest) {
+    uniChatRequest.setEnable_thinking(false);
+    return useOpenAi(MINIMAX_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
@@ -145,6 +155,7 @@ public class UniChatClient {
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
     openAiChatRequestVo.setEnable_thinking(uniChatRequest.getEnable_thinking());
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    
     OpenAiChatResponseVo chatCompletions = null;
     if (apiPrefixUrl != null) {
       chatCompletions = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
