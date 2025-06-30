@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.base64.Base64Utils;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;

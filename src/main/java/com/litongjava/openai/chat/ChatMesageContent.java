@@ -1,6 +1,6 @@
 package com.litongjava.openai.chat;
 
-import com.litongjava.tio.utils.encoder.Base64Utils;
+import com.litongjava.tio.utils.base64.Base64Utils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 
 import lombok.AllArgsConstructor;
