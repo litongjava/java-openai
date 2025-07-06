@@ -14,13 +14,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LinuxClient {
+public class JavaKitClient {
 
   private static OkHttpClient client = OkHttpClientPool.get1000HttpClient();
 
   public static ProcessResult executePythonCode(String code) {
-    String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
-    String key = EnvUtils.getStr("LINUX_API_KEY");
+    String apiBase = EnvUtils.getStr("JAVA_KIT_BASE_URL");
+    String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
     String targetUrl = apiBase + "/python";
     return post(targetUrl, key, code);
@@ -54,14 +54,14 @@ public class LinuxClient {
   }
 
   public static ProcessResult executeMainmCode(String apiBase, String code) {
-    String key = EnvUtils.getStr("LINUX_API_KEY");
+    String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
     String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, code);
   }
 
   public static ProcessResult executeMainmCode(String code) {
-    String apiBase = EnvUtils.getStr("LINUX_BASE_URL");
-    String key = EnvUtils.getStr("LINUX_API_KEY");
+    String apiBase = EnvUtils.getStr("JAVA_KIT_BASE_URL");
+    String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
     String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, code);
