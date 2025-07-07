@@ -32,6 +32,7 @@ public class GeminiClient {
 
   public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
+  public static final String GEMINI_API_URL = EnvUtils.get("GEMINI_API_URL", GeminiConsts.GEMINI_API_MODEL_BASE);
 
   /**
    * 单次生成内容 (同步请求)
@@ -43,7 +44,7 @@ public class GeminiClient {
    * @return GeminiResponseVo - 响应实体
    */
   public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
-    return generate(GeminiConsts.GEMINI_API_MODEL_BASE, googleApiKey, modelName, requestVo);
+    return generate(GEMINI_API_URL, googleApiKey, modelName, requestVo);
   }
 
   public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
@@ -94,7 +95,7 @@ public class GeminiClient {
 
   public static Response generate(String googleApiKey, String modelName, String bodyString) {
     // 拼接 URL
-    String url = GeminiConsts.GEMINI_API_MODEL_BASE + modelName + ":generateContent?key=" + googleApiKey;
+    String url = GEMINI_API_URL + modelName + ":generateContent?key=" + googleApiKey;
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
@@ -203,7 +204,7 @@ public class GeminiClient {
 
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
-    String url = GeminiConsts.GEMINI_API_MODEL_BASE + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+    String url = GEMINI_API_URL + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
     if (debug) {
       log.info("{} {}", url, bodyString);
     }
@@ -219,7 +220,7 @@ public class GeminiClient {
 
   public static EventSource stream(String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
     // 拼接 URL
-    return stream(GeminiConsts.GEMINI_API_MODEL_BASE, googleApiKey, modelName, bodyString, listener);
+    return stream(GEMINI_API_URL, googleApiKey, modelName, bodyString, listener);
   }
 
   public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
