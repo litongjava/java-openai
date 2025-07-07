@@ -37,7 +37,7 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class OpenAiClient {
   public static boolean debug = false;
-  private static final String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
 
   /**
    * 
@@ -58,7 +58,7 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-    return chatCompletions(apiPerfixUrl, header, bodyString);
+    return chatCompletions(OPENAI_API_URL, header, bodyString);
   }
 
   /**
@@ -153,7 +153,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", OPENAI_API_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);

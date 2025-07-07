@@ -5,12 +5,11 @@ import java.util.Map;
 
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Request.Builder;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.sse.EventSource;
@@ -25,9 +24,13 @@ public class AiChatProxyClient {
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
-    Headers headers = Headers.of(requestHeaders);
+    Builder builder = new Request.Builder().url(url).method("POST", body);
+    
+    if (requestHeaders != null) {
+      builder.headers(Headers.of(requestHeaders));
+    }
+    Request request = builder.build();
 
-    Request request = new Request.Builder().url(url).method("POST", body).headers(headers).build();
     try {
       return httpClient.newCall(request).execute();
     } catch (IOException e) {
@@ -40,12 +43,11 @@ public class AiChatProxyClient {
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
-    Headers headers = Headers.of(requestHeaders);
-
-    Request request = new Request.Builder() //
-        .url(url) //
-        .method("POST", body).headers(headers) //
-        .build();
+    Builder builder = new Request.Builder().url(url).method("POST", body);
+    if (requestHeaders != null) {
+      builder.headers(Headers.of(requestHeaders));
+    }
+    Request request = builder.build();
 
     // 这里就发起 SSE 请求了
     EventSource source = EventSources.createFactory(httpClient).newEventSource(request, listener);

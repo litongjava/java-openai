@@ -34,7 +34,7 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class ClaudeClient {
   public static boolean debug = false;
-  private static String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+  public static String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
 
   /**
    * 
@@ -55,8 +55,7 @@ public class ClaudeClient {
    * @return
    */
   public static Response chatCompletions(Map<String, String> header, String bodyString) {
-    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
-    return chatCompletions(apiPerfixUrl, header, bodyString);
+    return chatCompletions(CLAUDE_API_URL, header, bodyString);
   }
 
   /**
@@ -378,7 +377,7 @@ public class ClaudeClient {
 
   public static ClaudeChatResponseVo chatWithModel(String key, String model, String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
-    return chatCompletions(apiPerfixUrl, key, model, chatMessage);
+    return chatCompletions(CLAUDE_API_URL, key, model, chatMessage);
   }
 
   public static ClaudeChatResponseVo chatWithModel(String apiUrl, String key, String model, String role, String prompt) {
