@@ -2,6 +2,9 @@ package com.litongjava.gemini;
 
 import java.util.List;
 
+import com.litongjava.chat.UniResponseSchema;
+import com.litongjava.chat.UniThinkingConfig;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +25,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class GeminiGenerationConfigVo {
+public class GeminiGenerationConfig {
   private Float temperature;
   private Integer topK;
   private Double topP;
@@ -30,10 +33,10 @@ public class GeminiGenerationConfigVo {
   private List<String> stopSequences;
   private List<String> responseModalities;
   private String responseMimeType;
-  private GeminiResponseSchema responseSchema;
-  private GeminiThinkingConfig thinkingConfig;
+  private UniResponseSchema responseSchema;
+  private UniThinkingConfig thinkingConfig;
 
-  public GeminiGenerationConfigVo buildJsonValue() {
+  public GeminiGenerationConfig buildJsonValue() {
     return this.setResponseMimeType("application/json");
   }
 }

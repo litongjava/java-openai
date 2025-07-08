@@ -46,7 +46,7 @@ public class GeminiChatRequestVo {
   /**
    * 可选：文本生成配置
    */
-  private GeminiGenerationConfigVo generationConfig;
+  private GeminiGenerationConfig generationConfig;
 
   private String responseMimeType;
 

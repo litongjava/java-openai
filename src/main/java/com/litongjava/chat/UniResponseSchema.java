@@ -1,6 +1,7 @@
-package com.litongjava.gemini;
+package com.litongjava.chat;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -10,9 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiResponseSchema {
+public class UniResponseSchema {
   private String type = "object";
-  private Map<String, GeminiResponseProperty> properties;
+  private Map<String, UniResponseProperty> properties;
+  private List<String> required;
 
   /**
     "responseSchema": {
@@ -27,12 +29,13 @@ public class GeminiResponseSchema {
       }
     }
    */
-  public static GeminiResponseSchema array(String key) {
-    Map<String, String> items = itemType("string");
-    Map<String, GeminiResponseProperty> properties = new HashMap<>();
-    properties.put(key, new GeminiResponseProperty("array", items));
+  public static UniResponseSchema array(String key) {
+    UniResponseProperty itemProp = new UniResponseProperty("string");
+    UniResponseProperty arrayProp = new UniResponseProperty("array", itemProp);
+    Map<String, UniResponseProperty> properties = new HashMap<>();
+    properties.put(key, arrayProp);
 
-    GeminiResponseSchema schema = new GeminiResponseSchema();
+    UniResponseSchema schema = new UniResponseSchema();
     schema.setProperties(properties);
     return schema;
   }
@@ -56,12 +59,12 @@ public class GeminiResponseSchema {
     }
    * @return
    */
-  public static GeminiResponseSchema pythonCode() {
-    Map<String, GeminiResponseProperty> properties = new HashMap<>();
-    properties.put("action", new GeminiResponseProperty("string"));
-    properties.put("tool", new GeminiResponseProperty("string"));
-    properties.put("code", new GeminiResponseProperty("string"));
-    GeminiResponseSchema schema = new GeminiResponseSchema();
+  public static UniResponseSchema pythonCode() {
+    Map<String, UniResponseProperty> properties = new HashMap<>();
+    properties.put("action", new UniResponseProperty("string"));
+    properties.put("tool", new UniResponseProperty("string"));
+    properties.put("code", new UniResponseProperty("string"));
+    UniResponseSchema schema = new UniResponseSchema();
     schema.setProperties(properties);
     return schema;
   }

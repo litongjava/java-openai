@@ -14,9 +14,8 @@ import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiClient;
 import com.litongjava.gemini.GeminiContentResponseVo;
-import com.litongjava.gemini.GeminiGenerationConfigVo;
+import com.litongjava.gemini.GeminiGenerationConfig;
 import com.litongjava.gemini.GeminiPartVo;
-import com.litongjava.gemini.GeminiThinkingConfig;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
@@ -235,7 +234,7 @@ public class UniChatClient {
     }
 
     Boolean enable_thinking = uniChatRequest.getEnable_thinking();
-    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
+    GeminiGenerationConfig geminiGenerationConfigVo = new GeminiGenerationConfig();
 
     Float temperature = uniChatRequest.getTemperature();
     if (temperature != null) {
@@ -243,7 +242,7 @@ public class UniChatClient {
     }
 
     if (enable_thinking != null && !enable_thinking) {
-      GeminiThinkingConfig geminiThinkingConfig = new GeminiThinkingConfig(0);
+      UniThinkingConfig geminiThinkingConfig = new UniThinkingConfig(0);
       geminiGenerationConfigVo.setThinkingConfig(geminiThinkingConfig);
     }
 
@@ -370,7 +369,7 @@ public class UniChatClient {
   }
 
   public static EventSource useGemeni(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    GeminiGenerationConfigVo geminiGenerationConfigVo = new GeminiGenerationConfigVo();
+    GeminiGenerationConfig geminiGenerationConfigVo = new GeminiGenerationConfig();
     geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
 
     GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();

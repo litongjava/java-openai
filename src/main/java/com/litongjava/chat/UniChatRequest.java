@@ -17,7 +17,7 @@ public class UniChatRequest {
   private String groupName;
   private Long taskId;
   private String taskName;
-  private boolean useSystemPrompt;
+  private boolean useSystemPrompt = true;
   private String apiKey;
   private String provider;
   private String model;
@@ -28,6 +28,9 @@ public class UniChatRequest {
   private String cachedId;
   private Integer max_tokens;
   private Boolean enable_thinking;
+  private UniThinkingConfig thinkingConfig;
+  private String responseMimeType;
+  private UniResponseSchema responseSchema;
 
   public UniChatRequest(List<ChatMessage> messages) {
     this.messages = messages;
