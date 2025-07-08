@@ -154,7 +154,7 @@ public class UniChatClient {
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
     openAiChatRequestVo.setEnable_thinking(uniChatRequest.getEnable_thinking());
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
-    
+
     OpenAiChatResponseVo chatCompletions = null;
     if (apiPrefixUrl != null) {
       chatCompletions = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
@@ -234,19 +234,30 @@ public class UniChatClient {
     }
 
     Boolean enable_thinking = uniChatRequest.getEnable_thinking();
-    GeminiGenerationConfig geminiGenerationConfigVo = new GeminiGenerationConfig();
+    GeminiGenerationConfig config = new GeminiGenerationConfig();
 
     Float temperature = uniChatRequest.getTemperature();
     if (temperature != null) {
-      geminiGenerationConfigVo.setTemperature(temperature);
+      config.setTemperature(temperature);
     }
 
     if (enable_thinking != null && !enable_thinking) {
       UniThinkingConfig geminiThinkingConfig = new UniThinkingConfig(0);
-      geminiGenerationConfigVo.setThinkingConfig(geminiThinkingConfig);
+      config.setThinkingConfig(geminiThinkingConfig);
     }
 
-    geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
+    String responseMimeType = uniChatRequest.getResponseMimeType();
+    if (responseMimeType != null) {
+      config.setResponseMimeType(responseMimeType);
+    }
+
+    UniResponseSchema responseSchema = uniChatRequest.getResponseSchema();
+    if (responseSchema != null) {
+      config.setResponseSchema(responseSchema);
+      config.setResponseMimeType(ResponseMimeType.APPLICATION_JSON);
+    }
+
+    geminiChatRequestVo.setGenerationConfig(config);
 
     GeminiChatResponseVo chatResponse = null;
     if (apiPrefixUrl != null) {
