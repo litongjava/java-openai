@@ -46,10 +46,22 @@ public class UniChatRequest {
     this.temperature = temperature;
   }
 
+
+
+  public UniChatRequest(String systemPrompt) {
+    this.systemPrompt = systemPrompt;
+  }
+  
+  public UniChatRequest(String systemPrompt,Float temperature) {
+    this.systemPrompt = systemPrompt;
+    this.temperature = temperature;
+  }
+  
   public UniChatRequest(String systemPrompt, List<ChatMessage> messages, Float temperature) {
     this.systemPrompt = systemPrompt;
     this.messages = messages;
     this.temperature = temperature;
   }
+  
 
 }

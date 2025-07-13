@@ -40,40 +40,71 @@ import okhttp3.sse.EventSourceListener;
 public class UniChatClient {
 
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+  public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
+
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
+  public static final String VOLCENGINE_API_KEY = EnvUtils.get("VOLCENGINE_API_KEY");
+
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
+  public static final String OPENROUTER_API_KEY = EnvUtils.get("OPENROUTER_API_KEY");
+
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
+  public static final String BAILIAN_API_KEY = EnvUtils.get("BAILIAN_API_KEY");
+
   public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);
+  public static final String TENCENT_API_KEY = EnvUtils.get("TENCENT_API_KEY");
+
   public static final String MOONSHOT_API_URL = EnvUtils.get("MOONSHOT_API_URL", MoonshotConst.API_PERFIX_URL);
+  public static final String MOONSHOT_API_KEY = EnvUtils.get("MOONSHOT_API_KEY");
+
   public static final String MINIMAX_API_URL = EnvUtils.get("MINIMAX_API_URL", MiniMaxConst.API_PREFIX_URL);
+  public static final String MINIMAX_API_KEY = EnvUtils.get("MINIMAX_API_KEY");
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
+
     if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
       return useGemeni(key, uniChatRequest);
-
     } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
       return useClaude(key, uniChatRequest);
 
     } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = VOLCENGINE_API_KEY;
+      }
       return useVolcEngine(key, uniChatRequest);
 
     } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = OPENROUTER_API_KEY;
+      }
       return useOpenRouter(key, uniChatRequest);
 
     } else if (AiProviderName.BAILIAN.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = BAILIAN_API_KEY;
+      }
       return useBailian(key, uniChatRequest);
 
     } else if (AiProviderName.TENCENT.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = TENCENT_API_KEY;
+      }
       return useTencent(key, uniChatRequest);
 
     } else if (AiProviderName.MINIMAX.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = MINIMAX_API_KEY;
+      }
       return useMiniMax(key, uniChatRequest);
 
     } else {
+      if (key == null) {
+        key = OPENAI_API_KEY;
+      }
       return useOpenAi(key, uniChatRequest);
     }
   }
@@ -108,34 +139,36 @@ public class UniChatClient {
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     List<ChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
-    Iterator<ChatMessage> iterator = messages.iterator();
-    while (iterator.hasNext()) {
-      ChatMessage next = iterator.next();
-      String role = next.getRole();
-      if (next.getRole().equals("model")) {
-        role = "assistant";
-      }
-      String content = next.getContent();
-      if (content != null) {
-        openAiChatMesages.add(new OpenAiChatMessage(role, content));
-      }
-      List<ChatFile> files = next.getFiles();
-      // files
-      if (files != null && files.size() > 0) {
-        List<ChatMesageContent> multiContents = new ArrayList<>();
-        for (ChatFile file : files) {
-          String data = file.getData();
-          ChatRequestImage chatRequestImage = new ChatRequestImage();
-          chatRequestImage.setDetail("auto");
-          chatRequestImage.setUrl(data);
-          ChatMesageContent image = new ChatMesageContent(chatRequestImage);
-          multiContents.add(image);
-
+    if (messages != null && messages.size() > 0) {
+      Iterator<ChatMessage> iterator = messages.iterator();
+      while (iterator.hasNext()) {
+        ChatMessage next = iterator.next();
+        String role = next.getRole();
+        if (next.getRole().equals("model")) {
+          role = "assistant";
         }
-        OpenAiChatMessage openAiFileMesage = new OpenAiChatMessage();
-        openAiFileMesage.role(role);
-        openAiFileMesage.multiContents(multiContents);
-        openAiChatMesages.add(openAiFileMesage);
+        String content = next.getContent();
+        if (content != null) {
+          openAiChatMesages.add(new OpenAiChatMessage(role, content));
+        }
+        List<ChatFile> files = next.getFiles();
+        // files
+        if (files != null && files.size() > 0) {
+          List<ChatMesageContent> multiContents = new ArrayList<>();
+          for (ChatFile file : files) {
+            String data = file.getData();
+            ChatRequestImage chatRequestImage = new ChatRequestImage();
+            chatRequestImage.setDetail("auto");
+            chatRequestImage.setUrl(data);
+            ChatMesageContent image = new ChatMesageContent(chatRequestImage);
+            multiContents.add(image);
+
+          }
+          OpenAiChatMessage openAiFileMesage = new OpenAiChatMessage();
+          openAiFileMesage.role(role);
+          openAiFileMesage.multiContents(multiContents);
+          openAiChatMesages.add(openAiFileMesage);
+        }
       }
     }
 
@@ -145,7 +178,6 @@ public class UniChatClient {
         openAiChatMesages.add(0, new OpenAiChatMessage("system", systemPrompt));
       }
     }
-
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setMessages(openAiChatMesages);
 

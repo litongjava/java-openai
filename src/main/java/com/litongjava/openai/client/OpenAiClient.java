@@ -207,7 +207,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(AiProviderName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
