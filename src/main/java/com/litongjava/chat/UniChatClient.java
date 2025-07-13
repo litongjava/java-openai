@@ -75,6 +75,10 @@ public class UniChatClient {
       if (key == null) {
         key = VOLCENGINE_API_KEY;
       }
+      Integer max_tokens = uniChatRequest.getMax_tokens();
+      if(max_tokens==null) {
+        uniChatRequest.setMax_tokens(16384);
+      }
       return useVolcEngine(key, uniChatRequest);
 
     } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
