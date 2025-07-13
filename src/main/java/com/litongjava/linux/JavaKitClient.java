@@ -25,6 +25,12 @@ public class JavaKitClient {
     String targetUrl = apiBase + "/python";
     return post(targetUrl, key, null, code);
   }
+  
+  public static ProcessResult manimImage(String apiBase, String key, String code) {
+    String targetUrl = apiBase + "/manim/image";
+    return post(targetUrl, key, null, code);
+  }
+
 
   public static ProcessResult startMainmSession(String apiBase, String key) {
     String targetUrl = apiBase + "/manim/start";
@@ -42,13 +48,9 @@ public class JavaKitClient {
     return post(targetUrl, key, null, code);
   }
 
-  public static ProcessResult manimImage(String apiBase, String key, String code) {
-    String targetUrl = apiBase + "/manim/image";
-    return post(targetUrl, key, null, code);
-  }
 
   public static ProcessResult executeMainmCode(String apiBase, String key, Long id,String code) {
-    String targetUrl = apiBase + "/manim/image";
+    String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, id, code);
   }
   
