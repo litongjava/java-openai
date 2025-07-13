@@ -23,7 +23,7 @@ public class JavaKitClient {
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
     String targetUrl = apiBase + "/python";
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, null, code);
   }
 
   public static ProcessResult startMainmSession(String apiBase, String key) {
@@ -39,24 +39,33 @@ public class JavaKitClient {
 
   public static ProcessResult executeMainmCode(String apiBase, String key, String code) {
     String targetUrl = apiBase + "/manim";
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, null, code);
   }
 
   public static ProcessResult manimImage(String apiBase, String key, String code) {
     String targetUrl = apiBase + "/manim/image";
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, null, code);
   }
 
+  public static ProcessResult executeMainmCode(String apiBase, String key, Long id,String code) {
+    String targetUrl = apiBase + "/manim/image";
+    return post(targetUrl, key, id, code);
+  }
+  
   public static ProcessResult executeMainmCode(String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
+    return executeMainmCode(null, apiBase, key, code, sessionPrt, m3u8_path);
+  }
+
+  public static ProcessResult executeMainmCode(Long id, String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
     String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8_path);
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, id, code);
   }
 
   public static ProcessResult executeMainmCode(String apiBase, String code) {
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
     String targetUrl = apiBase + "/manim";
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, null, code);
   }
 
   public static ProcessResult executeMainmCode(String code) {
@@ -64,7 +73,7 @@ public class JavaKitClient {
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
     String targetUrl = apiBase + "/manim";
-    return post(targetUrl, key, code);
+    return post(targetUrl, key, null, code);
   }
 
   private static ProcessResult get(String targetUrl, String key) {
@@ -83,11 +92,17 @@ public class JavaKitClient {
     }
   }
 
-  private static ProcessResult post(String targetUrl, String key, String code) {
+  private static ProcessResult post(String targetUrl, String key, Long id, String code) {
     MediaType mediaType = MediaType.parse("text/plain");
 
     RequestBody body = RequestBody.create(code, mediaType);
-    Request request = new Request.Builder().url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key).build();
+    Request.Builder builder = new Request.Builder();
+    builder.url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key);
+    if (id != null) {
+      builder.addHeader("code_id", id.toString());
+    }
+
+    Request request = builder.build();
     Call call = client.newCall(request);
     try (Response response = call.execute()) {
       String string = response.body().string();
