@@ -25,12 +25,11 @@ public class JavaKitClient {
     String targetUrl = apiBase + "/python";
     return post(targetUrl, key, null, code);
   }
-  
+
   public static ProcessResult manimImage(String apiBase, String key, String code) {
     String targetUrl = apiBase + "/manim/image";
     return post(targetUrl, key, null, code);
   }
-
 
   public static ProcessResult startMainmSession(String apiBase, String key) {
     String targetUrl = apiBase + "/manim/start";
@@ -48,17 +47,16 @@ public class JavaKitClient {
     return post(targetUrl, key, null, code);
   }
 
-
-  public static ProcessResult executeMainmCode(String apiBase, String key, Long id,String code) {
+  public static ProcessResult executeMainmCode(String apiBase, String key, Long id, String code) {
     String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, id, code);
   }
-  
+
   public static ProcessResult executeMainmCode(String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
-    return executeMainmCode(null, apiBase, key, code, sessionPrt, m3u8_path);
+    return executeMainmCode(apiBase, key, null, code, sessionPrt, m3u8_path);
   }
 
-  public static ProcessResult executeMainmCode(Long id, String apiBase, String key, String code, long sessionPrt, String m3u8_path) {
+  public static ProcessResult executeMainmCode(String apiBase, String key, Long id, String code, long sessionPrt, String m3u8_path) {
     String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8_path);
     return post(targetUrl, key, id, code);
