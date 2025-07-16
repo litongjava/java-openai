@@ -14,5 +14,6 @@ public interface AiProviderName {
   String MOONSHOT = "moonshot";
 
   String MINIMAX = "minimax";
+  
 
 }

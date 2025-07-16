@@ -10,4 +10,5 @@ public interface MoonshotModels {
   String KIMI_LATEST = "kimi-latest";
   String KIMI_THINKING_PREVIEW = "kimi-thinking-preview";
   String MOONSHOT_V1_AUTO = "moonshot-v1-auto";
+  String KIMI_K2_0711_PREVIEW="kimi-k2-0711-preview";
 }

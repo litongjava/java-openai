@@ -51,12 +51,6 @@ public interface GoogleGeminiModels {
 
   String GEMINI_2_5_PRO = "gemini-2.5-pro";
   String GEMINI_2_5_FLASH = "gemini-2.5-flash";
-  
-  String GEMINI_2_5_PRO_EXP_03_25 = "gemini-2.5-pro-exp-03-25";
-  String GEMINI_2_5_PRO_PREVIEW_03_25 = "gemini-2.5-pro-preview-03-25";
-  String GEMINI_2_5_PRO_PREVIEW_05_06 = "gemini-2.5-pro-preview-05-06";
-  String GEMINI_2_5_FLASH_PREVIEW_04_17 = "gemini-2.5-flash-preview-04-17";
-  String GEMINI_2_5_FLASH_PREVIEW_05_20 = "gemini-2.5-flash-preview-05-20";
 
   String GEMINI_2_5_FLASH_LITE_PREVIEW_06_17 = "gemini-2.5-flash-lite-preview-06-17";
 

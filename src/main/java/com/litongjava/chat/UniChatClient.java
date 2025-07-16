@@ -76,7 +76,7 @@ public class UniChatClient {
         key = VOLCENGINE_API_KEY;
       }
       Integer max_tokens = uniChatRequest.getMax_tokens();
-      if(max_tokens==null) {
+      if (max_tokens == null) {
         uniChatRequest.setMax_tokens(16384);
       }
       return useVolcEngine(key, uniChatRequest);
@@ -105,6 +105,12 @@ public class UniChatClient {
       }
       return useMiniMax(key, uniChatRequest);
 
+    } else if (AiProviderName.MOONSHOT.equals(uniChatRequest.getProvider())) {
+      if (key == null) {
+        key = MOONSHOT_API_KEY;
+      }
+      return useMoonshot(key, uniChatRequest);
+
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -131,13 +137,15 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useTencent(String key, UniChatRequest uniChatRequest) {
-    uniChatRequest.setEnable_thinking(false);
     return useOpenAi(TENCENT_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useMiniMax(String key, UniChatRequest uniChatRequest) {
-    uniChatRequest.setEnable_thinking(false);
     return useOpenAi(MINIMAX_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useMoonshot(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(MOONSHOT_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
