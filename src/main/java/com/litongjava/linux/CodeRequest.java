@@ -13,6 +13,7 @@ public class CodeRequest {
   private Long id;
   private String code;
   private Integer timeout;
+  // l low,m medium,h high
   private String quality;
 
   public CodeRequest(String code) {
