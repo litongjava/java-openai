@@ -87,6 +87,7 @@ public class JavaKitClient {
     Long id = codeRequest.getId();
     String code = codeRequest.getCode();
     Integer timeout = codeRequest.getTimeout();
+    String quality = codeRequest.getQuality();
 
     MediaType mediaType = MediaType.parse("text/plain");
 
@@ -94,10 +95,13 @@ public class JavaKitClient {
     Request.Builder builder = new Request.Builder();
     builder.url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key);
     if (id != null) {
-      builder.addHeader("code_id", id.toString());
+      builder.addHeader("code-id", id.toString());
     }
     if (timeout != null) {
-      builder.addHeader("code_timeout", timeout.toString());
+      builder.addHeader("code-timeout", timeout.toString());
+    }
+    if(quality!=null) {
+      builder.addHeader("quality", quality);
     }
 
     Request request = builder.build();
