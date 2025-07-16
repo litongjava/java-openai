@@ -14,6 +14,7 @@ public class CodeRequest {
   private String code;
   private Integer timeout;
   private String quality;
+
   public CodeRequest(String code) {
     this.code = code;
   }
@@ -21,5 +22,11 @@ public class CodeRequest {
   public CodeRequest(long id, String code) {
     this.id = id;
     this.code = code;
+  }
+
+  public CodeRequest(long id, String code, Integer timeout) {
+    this.id = id;
+    this.code = code;
+    this.timeout = timeout;
   }
 }
