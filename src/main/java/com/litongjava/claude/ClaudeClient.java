@@ -34,7 +34,8 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class ClaudeClient {
   public static boolean debug = false;
-  public static String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+  public static final String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+  public static final String CLAUDE_API_KEY = EnvUtils.get("CLAUDE_API_KEY");
 
   /**
    * 
@@ -64,8 +65,7 @@ public class ClaudeClient {
    * @return
    */
   public static Response chatCompletions(String bodyString) {
-    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
-    return chatCompletions(apiKey, bodyString);
+    return chatCompletions(CLAUDE_API_KEY, bodyString);
   }
 
   /**
@@ -76,8 +76,7 @@ public class ClaudeClient {
    */
   public static Call chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
-    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
-    header.put("x-api-key", apiKey);
+    header.put("x-api-key", CLAUDE_API_KEY);
     header.put("anthropic-version", "2023-06-01");
     return chatCompletions(header, bodyString, callback);
   }
@@ -162,8 +161,7 @@ public class ClaudeClient {
    * @return
    */
   public static ClaudeChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
-    String apiKey = EnvUtils.get("CLAUDE_API_KEY");
-    return chatCompletions(apiKey, chatRequestVo);
+    return chatCompletions(CLAUDE_API_KEY, chatRequestVo);
   }
 
   /**

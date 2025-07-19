@@ -9,6 +9,7 @@ import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
+import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -33,6 +34,7 @@ public class GeminiClient {
   public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
   public static final String GEMINI_API_URL = EnvUtils.get("GEMINI_API_URL", GeminiConsts.GEMINI_API_MODEL_BASE);
+  public static final String GEMINI_API_KEY = EnvUtils.get("GEMINI_API_KEY");
 
   /**
    * 单次生成内容 (同步请求)
@@ -48,6 +50,9 @@ public class GeminiClient {
   }
 
   public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
+    if(StrUtil.isBlank(googleApiKey)) {
+      throw new RuntimeException("api key can not be empty");
+    }
     // 拼接 URL
     String urlPerfix = baseUrl + modelName + ":generateContent?key=";
     String url = urlPerfix + googleApiKey;
