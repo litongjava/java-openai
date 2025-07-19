@@ -9,7 +9,7 @@ import com.litongjava.claude.ClaudeCacheControl;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
-import com.litongjava.consts.AiProviderName;
+import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiClient;
@@ -66,12 +66,12 @@ public class UniChatClient {
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
 
-    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
+    if (ModelPlatformName.GOOGLE.equals(uniChatRequest.getPlatform())) {
       return useGemeni(key, uniChatRequest);
-    } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
       return useClaude(key, uniChatRequest);
 
-    } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.VOLC_ENGINE.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = VOLCENGINE_API_KEY;
       }
@@ -81,31 +81,31 @@ public class UniChatClient {
       }
       return useVolcEngine(key, uniChatRequest);
 
-    } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.OPENROUTER.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = OPENROUTER_API_KEY;
       }
       return useOpenRouter(key, uniChatRequest);
 
-    } else if (AiProviderName.BAILIAN.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.BAILIAN.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = BAILIAN_API_KEY;
       }
       return useBailian(key, uniChatRequest);
 
-    } else if (AiProviderName.TENCENT.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.TENCENT.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = TENCENT_API_KEY;
       }
       return useTencent(key, uniChatRequest);
 
-    } else if (AiProviderName.MINIMAX.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.MINIMAX.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = MINIMAX_API_KEY;
       }
       return useMiniMax(key, uniChatRequest);
 
-    } else if (AiProviderName.MOONSHOT.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.MOONSHOT.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = MOONSHOT_API_KEY;
       }
@@ -230,7 +230,7 @@ public class UniChatClient {
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
+      if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
         ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
@@ -241,7 +241,7 @@ public class UniChatClient {
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
+    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     ClaudeChatResponseVo chatCompletions = null;
@@ -329,15 +329,15 @@ public class UniChatClient {
   }
 
   public static EventSource stream(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    if (AiProviderName.GOOGLE.equals(uniChatRequest.getProvider())) {
+    if (ModelPlatformName.GOOGLE.equals(uniChatRequest.getPlatform())) {
       return useGemeni(key, uniChatRequest, listener);
-    } else if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
       return useClaude(key, uniChatRequest, listener);
 
-    } else if (AiProviderName.VOLC_ENGINE.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.VOLC_ENGINE.equals(uniChatRequest.getPlatform())) {
       return useVolcEngine(key, uniChatRequest, listener);
 
-    } else if (AiProviderName.OPENROUTER.equals(uniChatRequest.getProvider())) {
+    } else if (ModelPlatformName.OPENROUTER.equals(uniChatRequest.getPlatform())) {
       return useOpenRouter(key, uniChatRequest, listener);
     } else {
       return useOpenAi(key, uniChatRequest, listener);
@@ -397,7 +397,7 @@ public class UniChatClient {
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (AiProviderName.ANTHROPIC.equals(uniChatRequest.getProvider())) {
+      if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
         ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
@@ -408,7 +408,7 @@ public class UniChatClient {
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getProvider());
+    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();

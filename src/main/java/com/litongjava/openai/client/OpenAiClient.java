@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.consts.AiProviderName;
+import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
@@ -153,7 +153,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.OPENAI, "ChatGPT generateContent failed", OPENAI_API_URL, json, code, bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "ChatGPT generateContent failed", OPENAI_API_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -207,7 +207,7 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
       } else {
-        throw new GenerateException(AiProviderName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -476,7 +476,7 @@ public class OpenAiClient {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
         String serverUrl = EnvUtils.get("OPENAI_API_URL");
-        throw new GenerateException(AiProviderName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(), bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(), bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

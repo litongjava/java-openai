@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.claude.ClaudeMessageContent;
-import com.litongjava.consts.AiProviderName;
+import com.litongjava.consts.ModelPlatformName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -61,7 +61,7 @@ public class OpenAiChatRequestVo {
   }
 
   public OpenAiChatRequestVo setChatMessages(List<UniChatMessage> messages, String provider) {
-    if (AiProviderName.ANTHROPIC.equals(provider)) {
+    if (ModelPlatformName.ANTHROPIC.equals(provider)) {
       List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
       for (UniChatMessage message : messages) {
         openAiMessages.add(new OpenAiChatMessage(message, provider));

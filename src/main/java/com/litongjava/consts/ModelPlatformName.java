@@ -1,6 +1,6 @@
 package com.litongjava.consts;
 
-public interface AiProviderName {
+public interface ModelPlatformName {
   String OPENAI = "openai";
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
