@@ -11,15 +11,15 @@ public class GenerateException extends RuntimeException {
   private String provider;
   private String message;
   private String urlPerfix;
-  private String requestJson;
+  private String requestBody;
   private Integer statusCode;
   private String responseBody;
 
-  public GenerateException(String provider, String message, String urlPerfix, String requestJson, Integer code, String responseBody) {
+  public GenerateException(String provider, String message, String urlPerfix, String requestBody, Integer code, String responseBody) {
     this.provider = provider;
     this.message = message;
     this.urlPerfix = urlPerfix;
-    this.requestJson = requestJson;
+    this.requestBody = requestBody;
     this.statusCode = code;
     this.responseBody = responseBody;
   }
