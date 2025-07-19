@@ -18,6 +18,7 @@ import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
+import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -47,6 +48,9 @@ public class OpenAiClient {
    */
   public static Response chatCompletions(String apiKey, String bodyString) {
     Map<String, String> header = new HashMap<>();
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(header, bodyString);
   }
@@ -80,6 +84,9 @@ public class OpenAiClient {
   public static Call chatCompletions(String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(header, bodyString, callback);
   }
@@ -87,6 +94,10 @@ public class OpenAiClient {
   public static EventSource chatCompletions(String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
+
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(header, bodyString, listener);
   }
@@ -206,6 +217,7 @@ public class OpenAiClient {
       int code = response.code();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        respVo.setRawResponse(bodyString);
       } else {
         throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
       }
@@ -223,6 +235,9 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(String apiPerfixUrl, String apiKey, String bodyString) {
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     Map<String, String> header = new HashMap<>(1);
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString);
@@ -238,12 +253,18 @@ public class OpenAiClient {
    */
   public static Call chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, Callback callback) {
     Map<String, String> header = new HashMap<>(1);
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
   public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     header.put("Authorization", "Bearer " + apiKey);
     return chatCompletions(apiPerfixUrl, header, bodyString, listener);
   }
@@ -413,6 +434,9 @@ public class OpenAiClient {
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Map<String, String> requestHeaders = new HashMap<>(1);
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
     requestHeaders.put("Authorization", "Bearer " + apiKey);
 
     Headers headers = Headers.of(requestHeaders);
