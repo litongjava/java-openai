@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.litongjava.chat.ChatFile;
-import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class GeminiContentVo {
    */
   private List<GeminiPartVo> parts;
 
-  public GeminiContentVo(ChatMessage chatMessage) {
+  public GeminiContentVo(UniChatMessage chatMessage) {
     this.role = chatMessage.getRole();
     this.parts = Collections.singletonList(new GeminiPartVo(chatMessage.getContent()));
   }
@@ -40,7 +40,7 @@ public class GeminiContentVo {
     this.parts = Collections.singletonList(new GeminiPartVo(content));
   }
 
-  public GeminiContentVo(String role, ChatMessage chatMessage) {
+  public GeminiContentVo(String role, UniChatMessage chatMessage) {
     this.role = role;
     String content = chatMessage.getContent();
     List<GeminiPartVo> parts = new ArrayList<>();

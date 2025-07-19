@@ -13,9 +13,9 @@ public class OpenAiChatRequestVoTest {
   public void testToJson() {
     ChatRequestImage chatRequestImage = new ChatRequestImage("1234", "1234");
 
-    List<ChatMesageContent> multiContents = new ArrayList<>();
-    multiContents.add(new ChatMesageContent("1234"));
-    multiContents.add(new ChatMesageContent(chatRequestImage));
+    List<ChatMessageContent> multiContents = new ArrayList<>();
+    multiContents.add(new ChatMessageContent("1234"));
+    multiContents.add(new ChatMessageContent(chatRequestImage));
 
     OpenAiChatMessage openAiChatMessage = new OpenAiChatMessage();
     openAiChatMessage.role("user");

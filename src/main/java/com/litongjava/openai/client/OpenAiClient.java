@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.litongjava.consts.AiProviderName;
 import com.litongjava.exception.GenerateException;
-import com.litongjava.openai.chat.ChatMesageContent;
+import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
@@ -501,10 +501,10 @@ public class OpenAiClient {
 
   public static OpenAiChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
 
-    ChatMesageContent text = new ChatMesageContent(prompt);
-    ChatMesageContent image = new ChatMesageContent(bytes, suffix);
+    ChatMessageContent text = new ChatMessageContent(prompt);
+    ChatMessageContent image = new ChatMessageContent(bytes, suffix);
 
-    List<ChatMesageContent> multiContents = new ArrayList<>();
+    List<ChatMessageContent> multiContents = new ArrayList<>();
     multiContents.add(text);
     multiContents.add(image);
 

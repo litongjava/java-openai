@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMesageContent {
+public class ChatMessageContent {
   private String type = "text";
   private String text;
   private ChatRequestImage image_url;
 
-  public ChatMesageContent(ChatRequestImage chatRequestImage) {
+  public ChatMessageContent(ChatRequestImage chatRequestImage) {
     this.type = "image_url";
     this.image_url = chatRequestImage;
   }
 
-  public ChatMesageContent(String text) {
+  public ChatMessageContent(String text) {
     this.text = text;
   }
 
-  public ChatMesageContent(byte[] bytes, String suffix) {
+  public ChatMessageContent(byte[] bytes, String suffix) {
     String mimeType = ContentTypeUtils.getContentType(suffix);
     String byteArrayToAltBase64 = Base64Utils.encodeImage(bytes, mimeType);
 

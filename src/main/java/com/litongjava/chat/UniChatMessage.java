@@ -11,47 +11,47 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class UniChatMessage {
   private String role = "user";
   private String content;
   //data:image base64 code, url:image http url
   private List<ChatFile> files;
   private ChatMessageArgs args;
 
-  public ChatMessage(String role, String content) {
+  public UniChatMessage(String role, String content) {
     this.role = role;
     this.content = content;
   }
 
-  public ChatMessage(String role, String content, ChatMessageArgs args) {
+  public UniChatMessage(String role, String content, ChatMessageArgs args) {
     this.role = role;
     this.content = content;
     this.args = args;
   }
 
-  public static ChatMessage buildSystem(String content) {
-    return new ChatMessage(MessageRole.system, content);
+  public static UniChatMessage buildSystem(String content) {
+    return new UniChatMessage(MessageRole.system, content);
   }
 
-  public static ChatMessage buildUser(String content) {
-    return new ChatMessage(MessageRole.user, content);
+  public static UniChatMessage buildUser(String content) {
+    return new UniChatMessage(MessageRole.user, content);
   }
 
-  public static ChatMessage buildAssistant(String content) {
-    return new ChatMessage(MessageRole.assistant, content);
+  public static UniChatMessage buildAssistant(String content) {
+    return new UniChatMessage(MessageRole.assistant, content);
   }
 
-  public ChatMessage role(String role) {
+  public UniChatMessage role(String role) {
     this.role = role;
     return this;
   }
 
-  public ChatMessage content(String content) {
+  public UniChatMessage content(String content) {
     this.content = content;
     return this;
   }
 
-  public ChatMessage(String content) {
+  public UniChatMessage(String content) {
     this.role = "user";
     this.content = content;
   }

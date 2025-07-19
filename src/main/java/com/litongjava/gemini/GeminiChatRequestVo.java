@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
@@ -63,9 +63,9 @@ public class GeminiChatRequestVo {
     this.contents = contents;
   }
 
-  public void setChatMessages(List<ChatMessage> messages) {
+  public void setChatMessages(List<UniChatMessage> messages) {
     List<GeminiContentVo> contents = new ArrayList<>(messages.size());
-    for (ChatMessage chatMessage : messages) {
+    for (UniChatMessage chatMessage : messages) {
       String role = chatMessage.getRole();
       String content = chatMessage.getContent();
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.litongjava.chat.ChatFile;
-import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatMessage;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.AiProviderName;
 import com.litongjava.tio.utils.hutool.StrUtil;
@@ -53,7 +53,7 @@ public class OpenAiChatMessage {
     this.content = prompt;
   }
 
-  public OpenAiChatMessage(ChatMessage chatMessage) {
+  public OpenAiChatMessage(UniChatMessage chatMessage) {
     this.role = chatMessage.getRole();
     this.content = chatMessage.getContent();
   }
@@ -72,7 +72,7 @@ public class OpenAiChatMessage {
     return this;
   }
 
-  public OpenAiChatMessage multiContents(List<ChatMesageContent> multiContents) {
+  public OpenAiChatMessage multiContents(List<ChatMessageContent> multiContents) {
     this.content = multiContents;
     return this;
   }
@@ -106,7 +106,7 @@ public class OpenAiChatMessage {
     this.prefix = prefix;
   }
 
-  public OpenAiChatMessage(ChatMessage message, String provider) {
+  public OpenAiChatMessage(UniChatMessage message, String provider) {
     this.role = message.getRole();
     String content = message.getContent();
     if (AiProviderName.ANTHROPIC.equals(provider)) {

@@ -19,7 +19,7 @@ import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
-import com.litongjava.openai.chat.ChatMesageContent;
+import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
@@ -149,12 +149,12 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
-    List<ChatMessage> messages = uniChatRequest.getMessages();
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
     if (messages != null && messages.size() > 0) {
-      Iterator<ChatMessage> iterator = messages.iterator();
+      Iterator<UniChatMessage> iterator = messages.iterator();
       while (iterator.hasNext()) {
-        ChatMessage next = iterator.next();
+        UniChatMessage next = iterator.next();
         String role = next.getRole();
         if (next.getRole().equals("model")) {
           role = "assistant";
@@ -166,13 +166,13 @@ public class UniChatClient {
         List<ChatFile> files = next.getFiles();
         // files
         if (files != null && files.size() > 0) {
-          List<ChatMesageContent> multiContents = new ArrayList<>();
+          List<ChatMessageContent> multiContents = new ArrayList<>();
           for (ChatFile file : files) {
             String data = file.getData();
             ChatRequestImage chatRequestImage = new ChatRequestImage();
             chatRequestImage.setDetail("auto");
             chatRequestImage.setUrl(data);
-            ChatMesageContent image = new ChatMesageContent(chatRequestImage);
+            ChatMessageContent image = new ChatMessageContent(chatRequestImage);
             multiContents.add(image);
 
           }
@@ -217,10 +217,10 @@ public class UniChatClient {
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
-    List<ChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<ChatMessage> iterator = messages.iterator();
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
+    Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
-      ChatMessage next = iterator.next();
+      UniChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
         //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
         next.setRole("assistant");
@@ -357,16 +357,16 @@ public class UniChatClient {
   }
 
   public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    List<ChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<ChatMessage> iterator = messages.iterator();
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
+    Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
-      ChatMessage next = iterator.next();
+      UniChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
         next.setRole("assistant");
       }
     }
     if (uniChatRequest.isUseSystemPrompt()) {
-      messages.add(0, new ChatMessage("system", uniChatRequest.getSystemPrompt()));
+      messages.add(0, new UniChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
     OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
@@ -384,10 +384,10 @@ public class UniChatClient {
   }
 
   public static EventSource useClaude(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    List<ChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<ChatMessage> iterator = messages.iterator();
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
+    Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
-      ChatMessage next = iterator.next();
+      UniChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
         //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
         next.setRole("assistant");

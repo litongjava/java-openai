@@ -23,7 +23,7 @@ public class UniChatRequest {
   private String model;
   private String systemPrompt;;
   private boolean cacheSystemPrompt;
-  private List<ChatMessage> messages;
+  private List<UniChatMessage> messages;
   private Float temperature;
   private String cachedId;
   private Integer max_tokens;
@@ -32,7 +32,7 @@ public class UniChatRequest {
   private String responseMimeType;
   private UniResponseSchema responseSchema;
 
-  public UniChatRequest(List<ChatMessage> messages) {
+  public UniChatRequest(List<UniChatMessage> messages) {
     this.messages = messages;
   }
 
@@ -41,7 +41,7 @@ public class UniChatRequest {
     this.groupName = groupName;
   }
 
-  public UniChatRequest(List<ChatMessage> messages, Float temperature) {
+  public UniChatRequest(List<UniChatMessage> messages, Float temperature) {
     this.messages = messages;
     this.temperature = temperature;
   }
@@ -57,7 +57,7 @@ public class UniChatRequest {
     this.temperature = temperature;
   }
   
-  public UniChatRequest(String systemPrompt, List<ChatMessage> messages, Float temperature) {
+  public UniChatRequest(String systemPrompt, List<UniChatMessage> messages, Float temperature) {
     this.systemPrompt = systemPrompt;
     this.messages = messages;
     this.temperature = temperature;

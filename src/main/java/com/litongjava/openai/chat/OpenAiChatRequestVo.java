@@ -3,7 +3,7 @@ package com.litongjava.openai.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.chat.ChatMessage;
+import com.litongjava.chat.UniChatMessage;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.AiProviderName;
 
@@ -34,7 +34,7 @@ public class OpenAiChatRequestVo {
   private ChatStreamOptions stream_options;
   private Boolean enable_thinking;
 
-  public void fromMessages(List<ChatMessage> messages) {
+  public void fromMessages(List<UniChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
     for (int i = 0; i < messages.size(); i++) {
       openAimessages.add(new OpenAiChatMessage(messages.get(i)));
@@ -51,19 +51,19 @@ public class OpenAiChatRequestVo {
 
   }
 
-  public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages) {
+  public OpenAiChatRequestVo setChatMessages(List<UniChatMessage> messages) {
     List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
-    for (ChatMessage message : messages) {
+    for (UniChatMessage message : messages) {
       openAiMessages.add(new OpenAiChatMessage(message));
     }
     this.messages = openAiMessages;
     return this;
   }
 
-  public OpenAiChatRequestVo setChatMessages(List<ChatMessage> messages, String provider) {
+  public OpenAiChatRequestVo setChatMessages(List<UniChatMessage> messages, String provider) {
     if (AiProviderName.ANTHROPIC.equals(provider)) {
       List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
-      for (ChatMessage message : messages) {
+      for (UniChatMessage message : messages) {
         openAiMessages.add(new OpenAiChatMessage(message, provider));
       }
       this.messages = openAiMessages;
