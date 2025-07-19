@@ -4,7 +4,7 @@ package com.litongjava.gemini;
  * 列出 Google Gemini & PaLM 等模型名称常量
  * 对应 JSON 中的 "name" 字段
  */
-public interface GoogleGeminiModels {
+public interface GoogleModels {
 
   // PaLM 系列
   String CHAT_BISON_001 = "chat-bison-001";
