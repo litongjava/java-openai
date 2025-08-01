@@ -16,7 +16,7 @@
     - [3. Run With PromptEngine](#3-run-with-promptengine)
     - [4. Run a Simple Test](#4-run-a-simple-test)
     - [5. Another Simplified Example Using Roles](#5-another-simplified-example-using-roles)
-  - [Examples](#examples)
+  - [OpenAi](#OpenAi)
     - [Chat Example](#chat-example)
     - [Ask with Image](#ask-with-image)
     - [Chat with Image](#chat-with-image)
@@ -334,9 +334,11 @@ public class ChatCompletionsWithRoleExample {
 
 ---
 
-## Examples
+## OpenAi
 
-### Chat Example
+### GPT
+
+#### Chat Example
 
 ```java
 package com.litongjava.openai.example;
@@ -390,7 +392,7 @@ public class SimpleAskExample {
 }
 ```
 
-### Ask with Image
+#### Ask with Image
 
 ```java
 package com.litongjava.perplexica.services;
@@ -462,7 +464,7 @@ public class AskWithImageOpenai {
 }
 ```
 
-### Chat with Image
+#### Chat with Image
 
 ```java
 package com.litongjava.maxkb.service;
@@ -496,7 +498,7 @@ public class DatasetDocumentSplitServiceTest {
 }
 ```
 
-### Ask with Tools
+#### Ask with Tools
 
 ```java
 import java.io.IOException;
@@ -584,7 +586,7 @@ public class AskWithTools {
 ```
 
 ### Whisper Transcription
-
+#### srt
 ```java
 package com.litongjava.client;
 

@@ -96,6 +96,7 @@ public interface BaiLianAiModels {
   String QWEN3_4B = "qwen3-4b";
   String QWEN3_1_7B = "qwen3-1.7b";
   String QWEN3_0_6B = "qwen3-0.6b";
+  String QWEN3_CODER_PLUS = "qwen3-coder-plus";
 
   String QWEN2_5_14B_INSTRUCT_1M = "qwen2.5-14b-instruct-1m";
   String QWEN2_5_7B_INSTRUCT_1M = "qwen2.5-7b-instruct-1m";

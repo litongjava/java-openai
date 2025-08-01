@@ -13,7 +13,6 @@ import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiClient;
-import com.litongjava.gemini.GeminiConsts;
 import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfig;
 import com.litongjava.gemini.GeminiPartVo;
@@ -62,6 +61,7 @@ public class UniChatClient {
   public static final String MINIMAX_API_KEY = EnvUtils.get("MINIMAX_API_KEY");
 
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
+  public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -73,13 +73,12 @@ public class UniChatClient {
       if (key == null) {
         key = GEMINI_API_KEY;
       }
-
       return useGemeni(key, uniChatRequest);
+
     } else if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
-        key = VOLCENGINE_API_KEY;
+        key = CLAUDE_API_KEY;
       }
-
       return useClaude(key, uniChatRequest);
 
     } else if (ModelPlatformName.VOLC_ENGINE.equals(uniChatRequest.getPlatform())) {
