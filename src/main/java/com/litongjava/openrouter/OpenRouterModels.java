@@ -7,4 +7,9 @@ public interface OpenRouterModels {
   String DEEPSEEK_R1_250528 = "deepseek/deepseek-r1-0528";
   String DEEPSEEK_R1_250120 = "deepseek/deepseek-r1-250120";
   String KIMI_DEV_72B_FREE = "moonshotai/kimi-dev-72b:free";
+
+  String OPENAI_GPT_5 = "openai/gpt-5";
+  String OPENAI_GPT_5_MINI = "openai/gpt-5-mini";
+  String OPENAI_GPT_5_NANO = "openai/gpt-5-nano";
+  String OPENAI_GPT_5_CHAT = "openai/gpt-5-chat";
 }
