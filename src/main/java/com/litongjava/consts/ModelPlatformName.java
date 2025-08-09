@@ -7,14 +7,12 @@ public interface ModelPlatformName {
   String OPENROUTER = "openrouter";
 
   String VOLC_ENGINE = "volcengine";
-
   String BAILIAN = "bailian";
-  String TENCENT = "tencent";
-
-  String MOONSHOT = "moonshot";
-
-  String MINIMAX = "minimax";
+  String CHAT_GLM = "chat_glm";
   
+  String TENCENT = "tencent";
+  String MOONSHOT = "moonshot";
+  String MINIMAX = "minimax";
   String SILICONFLOW = "siliconflow";
   
 
