@@ -34,7 +34,7 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class ClaudeClient {
   public static boolean debug = false;
-  public static final String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+  public static final String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
   public static final String CLAUDE_API_KEY = EnvUtils.get("CLAUDE_API_KEY");
 
   /**
@@ -89,7 +89,7 @@ public class ClaudeClient {
    * @return
    */
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
-    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
@@ -145,7 +145,7 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
-        String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+        String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
         throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {
@@ -272,12 +272,12 @@ public class ClaudeClient {
   }
 
   public static Call chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
-    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
   public static EventSource chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
-    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, apiKey, chatRequestVo, listener);
   }
 
@@ -409,7 +409,7 @@ public class ClaudeClient {
 
   public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
     if (api_perfix_url == null) {
-      api_perfix_url = ClaudeConsts.API_PERFIX_URL;
+      api_perfix_url = ClaudeConsts.API_PREFIX_URL;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
@@ -475,7 +475,7 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PERFIX_URL, json, code, bodyString);
+        throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PREFIX_URL, json, code, bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

@@ -2,6 +2,6 @@ package com.litongjava.claude;
 
 public class ClaudeConsts {
 
-  public static final String API_PERFIX_URL = "https://api.anthropic.com/v1";
+  public static final String API_PREFIX_URL = "https://api.anthropic.com/v1";
 
 }

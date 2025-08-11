@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.litongjava.bailian.BaiLianConst;
+import com.litongjava.cerebras.CerebrasConsts;
 import com.litongjava.claude.ClaudeCacheControl;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
@@ -59,6 +60,9 @@ public class UniChatClient {
 
   public static final String MINIMAX_API_URL = EnvUtils.get("MINIMAX_API_URL", MiniMaxConst.API_PREFIX_URL);
   public static final String MINIMAX_API_KEY = EnvUtils.get("MINIMAX_API_KEY");
+
+  public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConsts.API_PREFIX_URL);
+  public static final String CEREBRAS_API_KEY = EnvUtils.get("CEREBRAS_API_KEY");
 
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
@@ -121,6 +125,12 @@ public class UniChatClient {
       }
       return useMoonshot(key, uniChatRequest);
 
+    } else if (ModelPlatformName.CEREBRAS.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = CEREBRAS_API_KEY;
+      }
+      return useCerebras(key, uniChatRequest);
+
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -156,6 +166,10 @@ public class UniChatClient {
 
   public static UniChatResponse useMoonshot(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(MOONSHOT_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useCerebras(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(CEREBRAS_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
@@ -232,7 +246,7 @@ public class UniChatClient {
     while (iterator.hasNext()) {
       UniChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
-        //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
+        // 'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
         next.setRole("assistant");
       }
     }
@@ -279,8 +293,9 @@ public class UniChatClient {
     GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
     String cachedId = uniChatRequest.getCachedId();
-    //CachedContent can not be used with GenerateContent request setting system_instruction, tools or tool_config. 
-    //Proposed fix: move those values to CachedContent from GenerateContent request
+    // CachedContent can not be used with GenerateContent request setting
+    // system_instruction, tools or tool_config.
+    // Proposed fix: move those values to CachedContent from GenerateContent request
     if (cachedId != null) {
       geminiChatRequestVo.setCachedContent(cachedId);
     } else {
@@ -366,7 +381,8 @@ public class UniChatClient {
     return useOpenAi(OPENAI_API_URL, key, uniChatRequest, listener);
   }
 
-  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest, EventSourceListener listener) {
+  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest,
+      EventSourceListener listener) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -399,7 +415,7 @@ public class UniChatClient {
     while (iterator.hasNext()) {
       UniChatMessage next = iterator.next();
       if (next.getRole().equals("model")) {
-        //'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
+        // 'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
         next.setRole("assistant");
       }
     }

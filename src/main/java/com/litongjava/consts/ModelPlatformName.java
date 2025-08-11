@@ -15,5 +15,9 @@ public interface ModelPlatformName {
   String MINIMAX = "minimax";
   String SILICONFLOW = "siliconflow";
   
+  String CEREBRAS = "cerebras";
+  
+  
+  
 
 }
