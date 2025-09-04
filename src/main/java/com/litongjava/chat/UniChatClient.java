@@ -218,9 +218,26 @@ public class UniChatClient {
     openAiChatRequestVo.setMessages(openAiChatMesages);
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
-    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
-    openAiChatRequestVo.setEnable_thinking(uniChatRequest.getEnable_thinking());
+    Float temperature = uniChatRequest.getTemperature();
+    if (temperature != null) {
+      openAiChatRequestVo.setTemperature(temperature);
+    }
+
+    Integer max_tokens = uniChatRequest.getMax_tokens();
+    if (max_tokens != null) {
+      openAiChatRequestVo.setMax_tokens(max_tokens);
+    }
+
+    Boolean enable_thinking = uniChatRequest.getEnable_thinking();
+    if (enable_thinking != null) {
+      openAiChatRequestVo.setEnable_thinking(enable_thinking);
+    }
+
+    String responseFormat = uniChatRequest.getResponseFormat();
+    if (responseFormat != null) {
+      openAiChatRequestVo.setResponse_format(responseFormat);
+    }
+
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
     OpenAiChatResponseVo chatCompletions = null;
@@ -315,7 +332,7 @@ public class UniChatClient {
       config.setThinkingConfig(geminiThinkingConfig);
     }
 
-    String responseMimeType = uniChatRequest.getResponseMimeType();
+    String responseMimeType = uniChatRequest.getResponseFormat();
     if (responseMimeType != null) {
       config.setResponseMimeType(responseMimeType);
     }

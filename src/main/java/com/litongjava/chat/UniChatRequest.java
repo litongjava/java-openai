@@ -29,7 +29,7 @@ public class UniChatRequest {
   private Integer max_tokens;
   private Boolean enable_thinking;
   private UniThinkingConfig thinkingConfig;
-  private String responseMimeType;
+  private String responseFormat;
   private UniResponseSchema responseSchema;
 
   public UniChatRequest(List<UniChatMessage> messages) {
