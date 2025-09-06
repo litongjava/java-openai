@@ -347,7 +347,7 @@ public class ClaudeClient {
    */
   public static ClaudeChatResponseVo chat(String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage("user", prompt);
-    return chatCompletions(ClaudeModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
+    return chatCompletions(AnthropicModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
   }
 
   /**
@@ -358,7 +358,7 @@ public class ClaudeClient {
    */
   public static ClaudeChatResponseVo chatWithRole(String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
-    return chatCompletions(ClaudeModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
+    return chatCompletions(AnthropicModels.CLAUDE_3_7_SONNET_20250219, chatMessage);
   }
 
   /**
@@ -520,7 +520,7 @@ public class ClaudeClient {
   }
 
   public static ClaudeChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
-    return chatWithImage(apiKey, ClaudeModels.CLAUDE_3_7_SONNET_20250219, prompt, bytes, suffix);
+    return chatWithImage(apiKey, AnthropicModels.CLAUDE_3_7_SONNET_20250219, prompt, bytes, suffix);
   }
 
 }

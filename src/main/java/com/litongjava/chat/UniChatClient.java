@@ -280,11 +280,15 @@ public class UniChatClient {
       }
     }
 
-    openAiChatRequestVo.setModel(uniChatRequest.getModel());
+    String model = uniChatRequest.getModel();
+    if (model != null) {
+      openAiChatRequestVo.setModel(model);
+    }
+
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
-
+    
     ClaudeChatResponseVo chatCompletions = null;
     if (apiPrefixUrl != null) {
       chatCompletions = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
@@ -297,7 +301,6 @@ public class UniChatClient {
     }
 
     String role = chatCompletions.getRole();
-    String model = chatCompletions.getModel();
     ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
     ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());

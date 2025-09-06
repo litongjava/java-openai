@@ -1,6 +1,6 @@
 package com.litongjava.claude;
 
-public interface ClaudeModels {
+public interface AnthropicModels {
   //Claude 4.0
   String CLAUDE_SONNET_4_20250514 = "claude-sonnet-4-20250514";
   String CLAUDE_OPUS_4_20250514= "claude-opus-4-20250514";
