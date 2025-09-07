@@ -1,5 +1,5 @@
 package com.litongjava.openrouter;
 
 public interface OpenRouterConst {
-  String API_PERFIX_URL = "https://openrouter.ai/api/v1";
+  String API_PREFIX_URL = "https://openrouter.ai/api/v1";
 }

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.litongjava.bailian.BaiLianConst;
-import com.litongjava.cerebras.CerebrasConsts;
+import com.litongjava.cerebras.CerebrasConst;
 import com.litongjava.claude.ClaudeCacheControl;
 import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
@@ -46,7 +46,7 @@ public class UniChatClient {
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
   public static final String VOLCENGINE_API_KEY = EnvUtils.get("VOLCENGINE_API_KEY");
 
-  public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PERFIX_URL);
+  public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PREFIX_URL);
   public static final String OPENROUTER_API_KEY = EnvUtils.get("OPENROUTER_API_KEY");
 
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
@@ -61,7 +61,7 @@ public class UniChatClient {
   public static final String MINIMAX_API_URL = EnvUtils.get("MINIMAX_API_URL", MiniMaxConst.API_PREFIX_URL);
   public static final String MINIMAX_API_KEY = EnvUtils.get("MINIMAX_API_KEY");
 
-  public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConsts.API_PREFIX_URL);
+  public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConst.API_PREFIX_URL);
   public static final String CEREBRAS_API_KEY = EnvUtils.get("CEREBRAS_API_KEY");
 
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
