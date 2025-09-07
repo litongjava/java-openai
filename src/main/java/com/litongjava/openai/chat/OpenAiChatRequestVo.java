@@ -26,7 +26,7 @@ public class OpenAiChatRequestVo {
   private Float temperature;
   private Float top_p;
   private Float frequency_penalty;
-  private Float presence_penalty;
+  private Float prescene_penalty;
 
   private ChatResponseFormat response_format;
   private String stop;

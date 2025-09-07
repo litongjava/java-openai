@@ -1,9 +1,16 @@
 package com.litongjava.claude;
 
+/**
+ * https://docs.anthropic.com/en/docs/about-claude/models/overview
+ * 
+ * @author Tong Li
+ *
+ */
 public interface AnthropicModels {
-  //Claude 4.0
+  String CLAUDE_OPUS_4_1_20250805 = "claude-opus-4-1-20250805";
+  // Claude 4.0
   String CLAUDE_SONNET_4_20250514 = "claude-sonnet-4-20250514";
-  String CLAUDE_OPUS_4_20250514= "claude-opus-4-20250514";
+  String CLAUDE_OPUS_4_20250514 = "claude-opus-4-20250514";
   // Claude 3.7
   String CLAUDE_3_7_SONNET_20250219 = "claude-3-7-sonnet-20250219";
 

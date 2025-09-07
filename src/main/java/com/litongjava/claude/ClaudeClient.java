@@ -256,7 +256,7 @@ public class ClaudeClient {
    */
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
 
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 

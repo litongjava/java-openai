@@ -220,7 +220,13 @@ public class OpenAiClient {
       int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        try {
+          respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        } catch (Exception e) {
+          log.error("status code:{},response body:{}", code, bodyString);
+          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,
+              bodyString);
+        }
         respVo.setRawResponse(bodyString);
       } else {
         log.error("status code:{},response body:{}", code, bodyString);
