@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UniChatRequest {
+  private String domain;
   private String apiPrefixUrl;
   private Long groupId;
   private String groupName;
