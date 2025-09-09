@@ -164,10 +164,17 @@ public class OpenAiClient {
       String bodyString = response.body().string();
       int code = response.code();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+        try {
+          respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+          respVo.setRawResponse(bodyString);
+        } catch (Exception e) {
+          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
+              bodyString);
+        }
+
       } else {
-        throw new GenerateException(ModelPlatformName.OPENAI, "ChatGPT generateContent failed", OPENAI_API_URL, json,
-            code, bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
+            bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -222,6 +229,8 @@ public class OpenAiClient {
       if (response.isSuccessful()) {
         try {
           respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+          respVo.setRawResponse(bodyString);
+
         } catch (Exception e) {
           log.error("status code:{},response body:{}", code, bodyString);
           throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,

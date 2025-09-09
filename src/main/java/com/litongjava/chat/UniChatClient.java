@@ -36,9 +36,11 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.volcengine.VolcEngineConst;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 
+@Slf4j
 public class UniChatClient {
 
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
@@ -241,27 +243,35 @@ public class UniChatClient {
 
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
-    OpenAiChatResponseVo chatCompletions = null;
+    OpenAiChatResponseVo chatResponse = null;
     if (apiPrefixUrl != null) {
-      chatCompletions = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
+      chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
     } else {
-      chatCompletions = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
+      chatResponse = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
     }
 
-    if (chatCompletions == null) {
+    if (chatResponse == null) {
       return null;
     }
-    List<Choice> choices = chatCompletions.getChoices();
+    ChatResponseUsage usage = chatResponse.getUsage();
+    String model = chatResponse.getModel();
+
+    List<Choice> choices = chatResponse.getChoices();
     if (choices == null) {
+      log.error("raw response:{}", chatResponse.getRawResponse());
       return null;
     }
     Choice choice = choices.get(0);
     if (choice == null) {
+      log.error("raw response:{}", chatResponse.getRawResponse());
       return null;
     }
     ChatResponseMessage message = choice.getMessage();
-    ChatResponseUsage usage = chatCompletions.getUsage();
-    String model = chatCompletions.getModel();
+    if (message == null) {
+      log.error("raw response:{}", chatResponse.getRawResponse());
+      return null;
+    }
+
     return new UniChatResponse(model, message, usage);
   }
 
