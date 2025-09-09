@@ -24,6 +24,7 @@ import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
+import com.litongjava.openai.chat.Choice;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
@@ -250,7 +251,15 @@ public class UniChatClient {
     if (chatCompletions == null) {
       return null;
     }
-    ChatResponseMessage message = chatCompletions.getChoices().get(0).getMessage();
+    List<Choice> choices = chatCompletions.getChoices();
+    if (choices == null) {
+      return null;
+    }
+    Choice choice = choices.get(0);
+    if (choice == null) {
+      return null;
+    }
+    ChatResponseMessage message = choice.getMessage();
     ChatResponseUsage usage = chatCompletions.getUsage();
     String model = chatCompletions.getModel();
     return new UniChatResponse(model, message, usage);
@@ -288,7 +297,7 @@ public class UniChatClient {
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
-    
+
     ClaudeChatResponseVo chatCompletions = null;
     if (apiPrefixUrl != null) {
       chatCompletions = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
