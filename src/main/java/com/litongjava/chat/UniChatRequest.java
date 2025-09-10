@@ -96,7 +96,7 @@ public class UniChatRequest {
   public static UniChatRequest platform(String platform, String modelName, ChatProvider provider) {
     UniChatRequest uniChatRequest = new UniChatRequest();
     uniChatRequest.setPlatform(platform).setModel(modelName).setProvider(provider);
-    return null;
+    return uniChatRequest;
   }
 
 }
