@@ -47,7 +47,7 @@ public class UniChatClient {
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
 
-  public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PERFIX_URL);
+  public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PREFIX_URL);
   public static final String VOLCENGINE_API_KEY = EnvUtils.get("VOLCENGINE_API_KEY");
 
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PREFIX_URL);
