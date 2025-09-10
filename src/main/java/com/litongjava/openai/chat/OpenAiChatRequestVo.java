@@ -6,6 +6,7 @@ import java.util.List;
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
+import com.litongjava.openai.ChatProvider;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,9 @@ public class OpenAiChatRequestVo {
   private Boolean stream;
   private ChatStreamOptions stream_options;
   private Boolean enable_thinking;
+
+  // https://inference-docs.cerebras.ai/resources/openrouter-cerebras
+  private ChatProvider provider;
 
   public void fromMessages(List<UniChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());

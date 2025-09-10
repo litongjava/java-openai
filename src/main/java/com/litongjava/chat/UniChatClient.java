@@ -20,6 +20,7 @@ import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
+import com.litongjava.openai.ChatProvider;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.ChatRequestImage;
 import com.litongjava.openai.chat.ChatResponseMessage;
@@ -240,6 +241,9 @@ public class UniChatClient {
     if (responseFormat != null) {
       openAiChatRequestVo.setResponse_format(responseFormat);
     }
+
+    ChatProvider provider = uniChatRequest.getProvider();
+    openAiChatRequestVo.setProvider(provider);
 
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
