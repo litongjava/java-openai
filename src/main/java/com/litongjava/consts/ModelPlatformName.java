@@ -9,15 +9,17 @@ public interface ModelPlatformName {
   String VOLC_ENGINE = "volcengine";
   String BAILIAN = "bailian";
   String CHAT_GLM = "chat_glm";
-  
+
   String TENCENT = "tencent";
   String MOONSHOT = "moonshot";
   String MINIMAX = "minimax";
   String SILICONFLOW = "siliconflow";
-  
+
   String CEREBRAS = "cerebras";
-  
-  
-  
+  String OLLAMA = "ollama";
+  String LLAMACPP = "llamacpp";
+  String VLLM = "vllm";
+  String SWIFT = "swift";
+  String TITANIUM = "titanium";
 
 }

@@ -44,6 +44,9 @@ import okhttp3.sse.EventSourceListener;
 @Slf4j
 public class UniChatClient {
 
+  public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
+  public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
+
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
 
@@ -68,8 +71,20 @@ public class UniChatClient {
   public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConst.API_PREFIX_URL);
   public static final String CEREBRAS_API_KEY = EnvUtils.get("CEREBRAS_API_KEY");
 
-  public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
-  public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
+  public static final String OLLAMA_API_URL = EnvUtils.get("OLLAMA_API_URL");
+  public static final String OLLAMA_API_KEY = EnvUtils.get("OLLAMA_API_KEY");
+
+  public static final String LLAMACPP_API_URL = EnvUtils.get("LLAMACPP_API_URL");
+  public static final String LLAMACPP_API_KEY = EnvUtils.get("LLAMACPP_API_KEY");
+
+  public static final String VLLM_API_URL = EnvUtils.get("VLLM_API_URL");
+  public static final String VLLM_API_KEY = EnvUtils.get("VLLM_API_KEY");
+
+  public static final String SWIFT_API_URL = EnvUtils.get("SWIFT_API_URL");
+  public static final String SWIFT_API_KEY = EnvUtils.get("SWIFT_API_KEY");
+
+  public static final String TITANIUM_API_KEY = EnvUtils.get("TITANIUM_API_KEY");
+  public static final String TITANIUM_API_URL = EnvUtils.get("TITANIUM_API_URL");
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -135,13 +150,44 @@ public class UniChatClient {
       }
       return useCerebras(key, uniChatRequest);
 
-    } else {
+    } else if (ModelPlatformName.OLLAMA.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = OLLAMA_API_KEY;
+      }
+      return useOllama(key, uniChatRequest);
+
+    }else if (ModelPlatformName.LLAMACPP.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = LLAMACPP_API_KEY;
+      }
+      return useLlamacpp(key, uniChatRequest);
+
+    }else if (ModelPlatformName.VLLM.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = VLLM_API_KEY;
+      }
+      return useVllm(key, uniChatRequest);
+
+    }else if (ModelPlatformName.SWIFT.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = SWIFT_API_KEY;
+      }
+      return useSwift(key, uniChatRequest);
+
+    }else if (ModelPlatformName.TITANIUM.equals(uniChatRequest.getPlatform())) {
+      if (key == null) {
+        key = TITANIUM_API_KEY;
+      }
+      return useTitanium(key, uniChatRequest);
+
+    }else {
       if (key == null) {
         key = OPENAI_API_KEY;
       }
       return useOpenAi(key, uniChatRequest);
     }
   }
+
 
   public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
@@ -174,6 +220,26 @@ public class UniChatClient {
 
   public static UniChatResponse useCerebras(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(CEREBRAS_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useOllama(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OLLAMA_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useLlamacpp(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(LLAMACPP_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useVllm(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(VLLM_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useSwift(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(SWIFT_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useTitanium(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(TITANIUM_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
