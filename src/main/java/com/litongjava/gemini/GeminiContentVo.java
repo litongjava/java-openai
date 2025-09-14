@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
@@ -49,9 +49,9 @@ public class GeminiContentVo {
       GeminiPartVo geminiPartVo = new GeminiPartVo(content);
       parts.add(geminiPartVo);
     }
-    List<ChatFile> files = chatMessage.getFiles();
+    List<ChatImageFile> files = chatMessage.getFiles();
     if (files != null) {
-      for (ChatFile chatFile : files) {
+      for (ChatImageFile chatFile : files) {
         parts.add(new GeminiPartVo(chatFile));
       }
     }

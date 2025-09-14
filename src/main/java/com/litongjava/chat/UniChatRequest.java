@@ -35,6 +35,7 @@ public class UniChatRequest {
   private String responseFormat;
   private UniResponseSchema responseSchema;
   private ChatProvider provider;
+  private List<String> responseModalities;
 
   public UniChatRequest(List<UniChatMessage> messages) {
     this.messages = messages;

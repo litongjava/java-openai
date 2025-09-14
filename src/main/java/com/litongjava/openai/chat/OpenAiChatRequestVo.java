@@ -37,6 +37,8 @@ public class OpenAiChatRequestVo {
 
   // https://inference-docs.cerebras.ai/resources/openrouter-cerebras
   private ChatProvider provider;
+  // https://openrouter.ai/docs/features/multimodal/image-generation
+  private List<String> modalities;
 
   public void fromMessages(List<UniChatMessage> messages) {
     List<OpenAiChatMessage> openAimessages = new ArrayList<>(messages.size());
@@ -84,4 +86,5 @@ public class OpenAiChatRequestVo {
     system.add(claudeChatMessage);
     this.system = system;
   }
+
 }

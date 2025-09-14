@@ -16,4 +16,5 @@ public class UniChatResponse {
   private String model;
   private ChatResponseMessage message;
   private ChatResponseUsage usage;
+  private String rawResponse;
 }

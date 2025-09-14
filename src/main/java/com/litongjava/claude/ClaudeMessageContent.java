@@ -1,6 +1,6 @@
 package com.litongjava.claude;
 
-import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatImageFile;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class ClaudeMessageContent {
     this.text = text;
   }
 
-  public ClaudeMessageContent(ChatFile file) {
+  public ClaudeMessageContent(ChatImageFile file) {
     this.type = "image";
     if (StrUtil.isNotBlank(file.getUrl())) {
       this.source = ClaudeChatSource.url(file.getUrl());

@@ -1,8 +1,7 @@
 package com.litongjava.gemini;
 
 /**
- * 列出 Google Gemini & PaLM 等模型名称常量
- * 对应 JSON 中的 "name" 字段
+ * 列出 Google Gemini & PaLM 等模型名称常量 对应 JSON 中的 "name" 字段
  */
 public interface GoogleModels {
 
@@ -53,6 +52,7 @@ public interface GoogleModels {
   String GEMINI_2_5_FLASH = "gemini-2.5-flash";
 
   String GEMINI_2_5_FLASH_LITE_PREVIEW_06_17 = "gemini-2.5-flash-lite-preview-06-17";
+  String GEMINI_2_5_FLASH_IMAGE_PREVIEW = "gemini-2.5-flash-image-preview";
 
   // Gemini Experimental
   String GEMINI_EXP_1206 = "gemini-exp-1206";

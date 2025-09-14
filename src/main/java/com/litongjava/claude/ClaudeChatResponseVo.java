@@ -18,4 +18,5 @@ public class ClaudeChatResponseVo {
   private String stop_sequence;
   private ClaudeChatUsage usage;
   private List<ClaudeMessageContent> content;
+  private String rawResponse;
 }

@@ -7,28 +7,28 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatFile {
+public class ChatImageFile {
   private String mimeType = "image/png";
   //data:image base64 code, url:image http url
   private String data, url;
   private boolean cached;
 
-  public ChatFile(String url) {
+  public ChatImageFile(String url) {
     this.url = url;
   }
 
-  public static ChatFile url(String url) {
-    return new ChatFile(url);
+  public static ChatImageFile url(String url) {
+    return new ChatImageFile(url);
   }
 
-  public static ChatFile base64(String encodeImage) {
-    ChatFile chatFile = new ChatFile();
+  public static ChatImageFile base64(String encodeImage) {
+    ChatImageFile chatFile = new ChatImageFile();
     chatFile.setData(encodeImage);
     return chatFile;
   }
 
-  public static ChatFile base64(String mimeType, String encodeImage) {
-    ChatFile chatFile = new ChatFile();
+  public static ChatImageFile base64(String mimeType, String encodeImage) {
+    ChatImageFile chatFile = new ChatImageFile();
     chatFile.setMimeType(mimeType);
     chatFile.setData(encodeImage);
     return chatFile;

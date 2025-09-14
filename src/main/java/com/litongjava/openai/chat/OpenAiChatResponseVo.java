@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OpenAiChatResponseVo {
   private String id;
+  private String provider;
+  private String model;
   private String object;
   private Long created;
-  private String model;
   private String system_fingerprint;
   private List<Choice> choices;
   private ChatResponseUsage usage;

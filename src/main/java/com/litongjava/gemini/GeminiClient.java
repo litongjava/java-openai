@@ -37,8 +37,8 @@ public class GeminiClient {
   public static final String GEMINI_API_KEY = EnvUtils.get("GEMINI_API_KEY");
 
   /**
-   * 单次生成内容 (同步请求)
-   * POST https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GOOGLE_API_KEY}
+   * 单次生成内容 (同步请求) POST
+   * https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GOOGLE_API_KEY}
    *
    * @param googleApiKey - 你的 Google API Key
    * @param modelName    - 要使用的模型名称，如 "gemini-1.5-flash"
@@ -49,8 +49,9 @@ public class GeminiClient {
     return generate(GEMINI_API_URL, googleApiKey, modelName, requestVo);
   }
 
-  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
-    if(StrUtil.isBlank(googleApiKey)) {
+  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName,
+      GeminiChatRequestVo requestVo) {
+    if (StrUtil.isBlank(googleApiKey)) {
       throw new RuntimeException("api key can not be empty");
     }
     // 拼接 URL
@@ -74,9 +75,12 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        throw new GenerateException(ModelPlatformName.GOOGLE, "Gemini generateContent failed", urlPerfix, requestJson, response.code(), responseBody);
+        throw new GenerateException(ModelPlatformName.GOOGLE, "Gemini generate content failed", urlPerfix, requestJson,
+            response.code(), responseBody);
       }
-      return JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
+      GeminiChatResponseVo chatResponse = JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
+      chatResponse.setRawResponse(responseBody);
+      return chatResponse;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -149,8 +153,8 @@ public class GeminiClient {
   }
 
   /**
-   * 流式生成内容 (SSE，异步请求)
-   * POST https://generativelanguage.googleapis.com/v1beta/models/{model_name}:streamGenerateContent?alt=sse&key={GOOGLE_API_KEY}
+   * 流式生成内容 (SSE，异步请求) POST
+   * https://generativelanguage.googleapis.com/v1beta/models/{model_name}:streamGenerateContent?alt=sse&key={GOOGLE_API_KEY}
    * 注：请求体还是 JSON，但响应会通过 SSE 分段返回.
    *
    * @param googleApiKey - 你的 Google API Key
@@ -165,12 +169,14 @@ public class GeminiClient {
 
   }
 
-  public static EventSource stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
+  public static EventSource stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo,
+      EventSourceListener listener) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(googleApiKey, modelName, requestJson, listener);
   }
 
-  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
+  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName,
+      GeminiChatRequestVo requestVo, EventSourceListener listener) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(apiPrefixUrl, googleApiKey, modelName, requestJson, listener);
   }
@@ -223,12 +229,14 @@ public class GeminiClient {
     return call;
   }
 
-  public static EventSource stream(String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
+  public static EventSource stream(String googleApiKey, String modelName, String bodyString,
+      EventSourceListener listener) {
     // 拼接 URL
     return stream(GEMINI_API_URL, googleApiKey, modelName, bodyString, listener);
   }
 
-  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, String bodyString, EventSourceListener listener) {
+  public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, String bodyString,
+      EventSourceListener listener) {
     // 拼接 URL
     String url = apiPrefixUrl + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
     if (debug) {
@@ -245,6 +253,7 @@ public class GeminiClient {
 
   /**
    * 上传文件到 Google Gemini API
+   * 
    * @param googleApiKey - 你的 Google API Key
    */
   public static String uploadFile(String googleApiKey, byte[] bytes) {
@@ -308,8 +317,8 @@ public class GeminiClient {
   }
 
   /**
-   * Creates a new cached content entry.
-   * POST https://generativelanguage.googleapis.com/v1beta/cachedContents?key={GOOGLE_API_KEY}
+   * Creates a new cached content entry. POST
+   * https://generativelanguage.googleapis.com/v1beta/cachedContents?key={GOOGLE_API_KEY}
    *
    * @param googleApiKey - Your Google API Key
    * @param requestVo    - The request body for creating the cache
@@ -325,8 +334,10 @@ public class GeminiClient {
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
       if (!response.isSuccessful()) {
-        String truncatedRequestJson = requestJson.length() > 1024 ? requestJson.substring(0, 1024) + "..." : requestJson;
-        throw new RuntimeException("Gemini createCache failed, request url=" + url + " request body=" + truncatedRequestJson + " statusCode=" + response.code() + ", body=" + responseBody);
+        String truncatedRequestJson = requestJson.length() > 1024 ? requestJson.substring(0, 1024) + "..."
+            : requestJson;
+        throw new RuntimeException("Gemini createCache failed, request url=" + url + " request body="
+            + truncatedRequestJson + " statusCode=" + response.code() + ", body=" + responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiCacheVo.class);
     } catch (IOException e) {
@@ -335,11 +346,11 @@ public class GeminiClient {
   }
 
   /**
-  * Creates a new cached content entry using API key from environment.
-  *
-  * @param requestVo - The request body for creating the cache
-  * @return GeminiCacheVo - The created cache metadata
-  */
+   * Creates a new cached content entry using API key from environment.
+   *
+   * @param requestVo - The request body for creating the cache
+   * @return GeminiCacheVo - The created cache metadata
+   */
   public static GeminiCacheVo createCache(GeminiCreateCacheRequestVo requestVo) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -349,11 +360,12 @@ public class GeminiClient {
   }
 
   /**
-   * Gets metadata for a specific cached content entry.
-   * GET https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
+   * Gets metadata for a specific cached content entry. GET
+   * https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
    *
    * @param googleApiKey - Your Google API Key
-   * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
+   * @param cacheName    - The full name of the cache (e.g.,
+   *                     "cachedContents/12345")
    * @return GeminiCacheVo - The cache metadata
    */
   public static GeminiCacheVo getCache(String googleApiKey, String cacheName) {
@@ -364,7 +376,8 @@ public class GeminiClient {
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
       if (!response.isSuccessful()) {
-        throw new RuntimeException("Gemini getCache failed, request url=" + url + " statusCode=" + response.code() + ", body=" + responseBody);
+        throw new RuntimeException(
+            "Gemini getCache failed, request url=" + url + " statusCode=" + response.code() + ", body=" + responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiCacheVo.class);
     } catch (IOException e) {
@@ -373,11 +386,12 @@ public class GeminiClient {
   }
 
   /**
-  * Gets metadata for a specific cached content entry using API key from environment.
-  *
-  * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
-  * @return GeminiCacheVo - The cache metadata
-  */
+   * Gets metadata for a specific cached content entry using API key from
+   * environment.
+   *
+   * @param cacheName - The full name of the cache (e.g., "cachedContents/12345")
+   * @return GeminiCacheVo - The cache metadata
+   */
   public static GeminiCacheVo getCache(String cacheName) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -387,8 +401,8 @@ public class GeminiClient {
   }
 
   /**
-   * Lists metadata for all cached content entries.
-   * GET https://generativelanguage.googleapis.com/v1beta/cachedContents?key={GOOGLE_API_KEY}
+   * Lists metadata for all cached content entries. GET
+   * https://generativelanguage.googleapis.com/v1beta/cachedContents?key={GOOGLE_API_KEY}
    *
    * @param googleApiKey - Your Google API Key
    * @return GeminiListCachesResponseVo - A list of cache metadata
@@ -401,7 +415,8 @@ public class GeminiClient {
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
       if (!response.isSuccessful()) {
-        throw new RuntimeException("Gemini listCaches failed, request url=" + url + " statusCode=" + response.code() + ", body=" + responseBody);
+        throw new RuntimeException("Gemini listCaches failed, request url=" + url + " statusCode=" + response.code()
+            + ", body=" + responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiListCachesResponseVo.class);
     } catch (IOException e) {
@@ -410,10 +425,10 @@ public class GeminiClient {
   }
 
   /**
-  * Lists metadata for all cached content entries using API key from environment.
-  *
-  * @return GeminiListCachesResponseVo - A list of cache metadata
-  */
+   * Lists metadata for all cached content entries using API key from environment.
+   *
+   * @return GeminiListCachesResponseVo - A list of cache metadata
+   */
   public static GeminiListCachesResponseVo listCaches() {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -423,15 +438,18 @@ public class GeminiClient {
   }
 
   /**
-   * Updates a cached content entry (only ttl or expireTime can be updated).
-   * PATCH https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
+   * Updates a cached content entry (only ttl or expireTime can be updated). PATCH
+   * https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
    *
-   * @param googleApiKey - Your Google API Key
-   * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
-   * @param updateRequestVo - The request body containing the fields to update (ttl or expireTime)
+   * @param googleApiKey    - Your Google API Key
+   * @param cacheName       - The full name of the cache (e.g.,
+   *                        "cachedContents/12345")
+   * @param updateRequestVo - The request body containing the fields to update
+   *                        (ttl or expireTime)
    * @return GeminiCacheVo - The updated cache metadata
    */
-  public static GeminiCacheVo updateCache(String googleApiKey, String cacheName, GeminiUpdateCacheRequestVo updateRequestVo) {
+  public static GeminiCacheVo updateCache(String googleApiKey, String cacheName,
+      GeminiUpdateCacheRequestVo updateRequestVo) {
     String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
     String requestJson = Json.getSkipNullJson().toJson(updateRequestVo);
 
@@ -441,8 +459,10 @@ public class GeminiClient {
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
       if (!response.isSuccessful()) {
-        String truncatedRequestJson = requestJson.length() > 1024 ? requestJson.substring(0, 1024) + "..." : requestJson;
-        throw new RuntimeException("Gemini updateCache failed, request url=" + url + " request body=" + truncatedRequestJson + " statusCode=" + response.code() + ", body=" + responseBody);
+        String truncatedRequestJson = requestJson.length() > 1024 ? requestJson.substring(0, 1024) + "..."
+            : requestJson;
+        throw new RuntimeException("Gemini updateCache failed, request url=" + url + " request body="
+            + truncatedRequestJson + " statusCode=" + response.code() + ", body=" + responseBody);
       }
       return JsonUtils.parse(responseBody, GeminiCacheVo.class);
     } catch (IOException e) {
@@ -451,12 +471,14 @@ public class GeminiClient {
   }
 
   /**
-  * Updates a cached content entry using API key from environment.
-  *
-  * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
-  * @param updateRequestVo - The request body containing the fields to update (ttl or expireTime)
-  * @return GeminiCacheVo - The updated cache metadata
-  */
+   * Updates a cached content entry using API key from environment.
+   *
+   * @param cacheName       - The full name of the cache (e.g.,
+   *                        "cachedContents/12345")
+   * @param updateRequestVo - The request body containing the fields to update
+   *                        (ttl or expireTime)
+   * @return GeminiCacheVo - The updated cache metadata
+   */
   public static GeminiCacheVo updateCache(String cacheName, GeminiUpdateCacheRequestVo updateRequestVo) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
@@ -466,11 +488,12 @@ public class GeminiClient {
   }
 
   /**
-   * Deletes a cached content entry.
-   * DELETE https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
+   * Deletes a cached content entry. DELETE
+   * https://generativelanguage.googleapis.com/v1beta/{cache_name}?key={GOOGLE_API_KEY}
    *
    * @param googleApiKey - Your Google API Key
-   * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
+   * @param cacheName    - The full name of the cache (e.g.,
+   *                     "cachedContents/12345")
    */
   public static void deleteCache(String googleApiKey, String cacheName) {
     String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
@@ -480,9 +503,11 @@ public class GeminiClient {
     try (Response response = httpClient.newCall(request).execute()) {
       if (!response.isSuccessful()) {
         String responseBody = response.body() != null ? response.body().string() : "N/A";
-        throw new RuntimeException("Gemini deleteCache failed, request url=" + url + " statusCode=" + response.code() + ", body=" + responseBody);
+        throw new RuntimeException("Gemini deleteCache failed, request url=" + url + " statusCode=" + response.code()
+            + ", body=" + responseBody);
       }
-      // Successful delete usually returns 200 OK with an empty body or a simple status.
+      // Successful delete usually returns 200 OK with an empty body or a simple
+      // status.
       // No specific JSON parsing needed based on the curl example.
     } catch (IOException e) {
       throw new RuntimeException("Gemini deleteCache failed: " + e.getMessage(), e);
@@ -490,10 +515,10 @@ public class GeminiClient {
   }
 
   /**
-  * Deletes a cached content entry using API key from environment.
-  *
-  * @param cacheName    - The full name of the cache (e.g., "cachedContents/12345")
-  */
+   * Deletes a cached content entry using API key from environment.
+   *
+   * @param cacheName - The full name of the cache (e.g., "cachedContents/12345")
+   */
   public static void deleteCache(String cacheName) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {

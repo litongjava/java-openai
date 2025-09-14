@@ -15,4 +15,5 @@ public class GeminiChatResponseVo {
   private List<GeminiCandidateVo> candidates;
   private GeminiUsageMetadataVo usageMetadata;
   private String modelVersion;
+  private String rawResponse;
 }

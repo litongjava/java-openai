@@ -197,6 +197,7 @@ public class ClaudeClient {
       int code = response.code();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
+        respVo.setRawResponse(bodyString);
       } else {
         throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }

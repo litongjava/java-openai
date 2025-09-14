@@ -15,7 +15,7 @@ public class UniChatMessage {
   private String role = "user";
   private String content;
   //data:image base64 code, url:image http url
-  private List<ChatFile> files;
+  private List<ChatImageFile> files;
   private ChatMessageArgs args;
 
   public UniChatMessage(String role, String content) {

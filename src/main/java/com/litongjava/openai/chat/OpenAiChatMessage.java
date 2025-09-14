@@ -3,7 +3,7 @@ package com.litongjava.openai.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.chat.ChatFile;
+import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
@@ -112,8 +112,8 @@ public class OpenAiChatMessage {
     if (ModelPlatformName.ANTHROPIC.equals(provider)) {
       if (message.getFiles() != null && message.getFiles().size() > 0) {
         List<ClaudeMessageContent> messageContents = new ArrayList<>();
-        List<ChatFile> files = message.getFiles();
-        for (ChatFile file : files) {
+        List<ChatImageFile> files = message.getFiles();
+        for (ChatImageFile file : files) {
           ClaudeMessageContent e = new ClaudeMessageContent(file);
           messageContents.add(e);
         }

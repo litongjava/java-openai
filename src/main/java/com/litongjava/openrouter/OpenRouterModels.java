@@ -16,4 +16,6 @@ public interface OpenRouterModels {
   String GROK_CODE_FAST_1 = "x-ai/grok-code-fast-1";
 
   String QWEN_QWEN3_CODER = "qwen/qwen3-coder";
+
+  String GEMINI_2_5_FLASH_IMAGE_PREVIEW = "google/gemini-2.5-flash-image-preview";
 }

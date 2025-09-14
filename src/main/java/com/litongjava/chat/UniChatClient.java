@@ -156,38 +156,37 @@ public class UniChatClient {
       }
       return useOllama(key, uniChatRequest);
 
-    }else if (ModelPlatformName.LLAMACPP.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.LLAMACPP.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = LLAMACPP_API_KEY;
       }
       return useLlamacpp(key, uniChatRequest);
 
-    }else if (ModelPlatformName.VLLM.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.VLLM.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = VLLM_API_KEY;
       }
       return useVllm(key, uniChatRequest);
 
-    }else if (ModelPlatformName.SWIFT.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.SWIFT.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = SWIFT_API_KEY;
       }
       return useSwift(key, uniChatRequest);
 
-    }else if (ModelPlatformName.TITANIUM.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.TITANIUM.equals(uniChatRequest.getPlatform())) {
       if (key == null) {
         key = TITANIUM_API_KEY;
       }
       return useTitanium(key, uniChatRequest);
 
-    }else {
+    } else {
       if (key == null) {
         key = OPENAI_API_KEY;
       }
       return useOpenAi(key, uniChatRequest);
     }
   }
-
 
   public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
@@ -257,11 +256,11 @@ public class UniChatClient {
         if (content != null) {
           openAiChatMesages.add(new OpenAiChatMessage(role, content));
         }
-        List<ChatFile> files = next.getFiles();
+        List<ChatImageFile> files = next.getFiles();
         // files
         if (files != null && files.size() > 0) {
           List<ChatMessageContent> multiContents = new ArrayList<>();
-          for (ChatFile file : files) {
+          for (ChatImageFile file : files) {
             String data = file.getData();
             ChatRequestImage chatRequestImage = new ChatRequestImage();
             chatRequestImage.setDetail("auto");
@@ -308,6 +307,8 @@ public class UniChatClient {
       openAiChatRequestVo.setResponse_format(responseFormat);
     }
 
+    openAiChatRequestVo.setModalities(uniChatRequest.getResponseModalities());
+
     ChatProvider provider = uniChatRequest.getProvider();
     openAiChatRequestVo.setProvider(provider);
 
@@ -327,22 +328,23 @@ public class UniChatClient {
     String model = chatResponse.getModel();
 
     List<Choice> choices = chatResponse.getChoices();
+    String rawResponse = chatResponse.getRawResponse();
     if (choices == null) {
-      log.error("raw response:{}", chatResponse.getRawResponse());
+      log.error("raw response:{}", rawResponse);
       return null;
     }
     Choice choice = choices.get(0);
     if (choice == null) {
-      log.error("raw response:{}", chatResponse.getRawResponse());
+      log.error("raw response:{}", rawResponse);
       return null;
     }
     ChatResponseMessage message = choice.getMessage();
     if (message == null) {
-      log.error("raw response:{}", chatResponse.getRawResponse());
+      log.error("raw response:{}", rawResponse);
       return null;
     }
 
-    return new UniChatResponse(model, message, usage);
+    return new UniChatResponse(model, message, usage, rawResponse);
   }
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
@@ -378,22 +380,22 @@ public class UniChatClient {
     openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
     openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    ClaudeChatResponseVo chatCompletions = null;
+    ClaudeChatResponseVo chatResponse = null;
     if (apiPrefixUrl != null) {
-      chatCompletions = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
+      chatResponse = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
     } else {
-      chatCompletions = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
+      chatResponse = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
     }
 
-    if (chatCompletions == null) {
+    if (chatResponse == null) {
       return null;
     }
 
-    String role = chatCompletions.getRole();
-    ClaudeMessageContent claudeChatMessage = chatCompletions.getContent().get(0);
+    String role = chatResponse.getRole();
+    ClaudeMessageContent claudeChatMessage = chatResponse.getContent().get(0);
     ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
-    ChatResponseUsage usage = new ChatResponseUsage(chatCompletions.getUsage());
-    return new UniChatResponse(model, message, usage);
+    ChatResponseUsage usage = new ChatResponseUsage(chatResponse.getUsage());
+    return new UniChatResponse(model, message, usage, chatResponse.getRawResponse());
   }
 
   public static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
@@ -428,6 +430,8 @@ public class UniChatClient {
     if (responseMimeType != null) {
       config.setResponseMimeType(responseMimeType);
     }
+    List<String> responseModalities = uniChatRequest.getResponseModalities();
+    config.setResponseModalities(responseModalities);
 
     UniResponseSchema responseSchema = uniChatRequest.getResponseSchema();
     if (responseSchema != null) {
@@ -447,15 +451,24 @@ public class UniChatClient {
     if (chatResponse == null) {
       return null;
     }
-
-    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
-    String modelVersion = chatResponse.getModelVersion();
-    String role = content.getRole();
-    GeminiPartVo geminiPartVo = content.getParts().get(0);
     GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
     ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
-    ChatResponseMessage message = new ChatResponseMessage(role, geminiPartVo);
-    return new UniChatResponse(modelVersion, message, usage);
+    String modelVersion = chatResponse.getModelVersion();
+    
+    UniChatResponse uniChatResponse = new UniChatResponse();
+    uniChatResponse.setUsage(usage).setRawResponse(chatResponse.getRawResponse()).setModel(modelVersion);
+    
+    
+    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
+    
+    String role = content.getRole();
+    List<GeminiPartVo> parts = content.getParts();
+    
+    ChatResponseMessage message = new ChatResponseMessage(role, parts);
+    
+    uniChatResponse.setMessage(message);
+
+    return uniChatResponse;
   }
 
   public static EventSource stream(UniChatRequest uniChatRequest, EventSourceListener listener) {
