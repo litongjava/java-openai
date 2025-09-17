@@ -44,7 +44,8 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult finishMainmSession(String apiBase, String key, long sessionPrt, String m3u8Path, String videos) {
+  public static ProcessResult finishMainmSession(String apiBase, String key, long sessionPrt, String m3u8Path,
+      String videos) {
     String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos);
     return get(targetUrl, key);
@@ -55,7 +56,8 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult executeMainmCode(String apiBase, String key, CodeRequest codeRequest, long sessionPrt, String m3u8_path) {
+  public static ProcessResult executeMainmCode(String apiBase, String key, CodeRequest codeRequest, long sessionPrt,
+      String m3u8_path) {
     String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8_path);
     return post(targetUrl, key, codeRequest);
@@ -70,11 +72,17 @@ public class JavaKitClient {
   private static ProcessResult get(String targetUrl, String key) {
     Request request = new Request.Builder().url(targetUrl).addHeader("authorization", "Bearer " + key).get().build();
     Call call = client.newCall(request);
+    long start = System.currentTimeMillis();
     try (Response response = call.execute()) {
       String string = response.body().string();
       int resposneCode = response.code();
       if (response.isSuccessful()) {
-        return JsonUtils.parse(string, ProcessResult.class);
+        long end = System.currentTimeMillis();
+        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
+        if (result != null) {
+          result.setElapsed(end - start);
+        }
+        return result;
       } else {
         throw new RuntimeException("code:" + resposneCode + " response:" + string);
       }
@@ -100,17 +108,23 @@ public class JavaKitClient {
     if (timeout != null) {
       builder.addHeader("code-timeout", timeout.toString());
     }
-    if(quality!=null) {
+    if (quality != null) {
       builder.addHeader("quality", quality);
     }
 
     Request request = builder.build();
+    long start = System.currentTimeMillis();
     Call call = client.newCall(request);
     try (Response response = call.execute()) {
       String string = response.body().string();
       int resposneCode = response.code();
       if (response.isSuccessful()) {
-        return JsonUtils.parse(string, ProcessResult.class);
+        long end = System.currentTimeMillis();
+        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
+        if (result != null) {
+          result.setElapsed(end - start);
+        }
+        return result;
       } else {
         throw new RuntimeException("code:" + resposneCode + " response:" + string);
       }
