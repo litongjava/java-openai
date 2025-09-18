@@ -39,6 +39,11 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
+  public static ProcessResult startMainmSession(String apiBase, String key, long sessionId) {
+    String targetUrl = apiBase + "/manim/start?session-id" + sessionId;
+    return get(targetUrl, key);
+  }
+
   public static ProcessResult startMainmSession(String apiBase, String key) {
     String targetUrl = apiBase + "/manim/start";
     return get(targetUrl, key);
