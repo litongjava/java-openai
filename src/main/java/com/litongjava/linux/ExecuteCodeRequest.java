@@ -16,7 +16,7 @@ public class ExecuteCodeRequest {
   private Integer timeout;
   // l low,m medium,h high
   private String quality;
-  private long sessionPrt;
+  private Long sessionPrt;
   private String m3u8Path;
 
   public ExecuteCodeRequest(String code) {

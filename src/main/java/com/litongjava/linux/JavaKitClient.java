@@ -56,16 +56,17 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult executeMainmVideoCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
-    String targetUrl = apiBase + "/manim";
-    return post(targetUrl, key, codeRequest);
-  }
-
   public static ProcessResult executeMainmCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
-    long sessionPrt = codeRequest.getSessionPrt();
+    Long sessionPrt = codeRequest.getSessionPrt();
     String m3u8Path = codeRequest.getM3u8Path();
-    String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
-    targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
+    String targetUrl = null;
+    if (sessionPrt != null && m3u8Path != null) {
+      targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
+      targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
+    } else {
+      targetUrl = apiBase + "/manim";
+    }
+
     return post(targetUrl, key, codeRequest);
   }
 
