@@ -40,7 +40,7 @@ public class JavaKitClient {
   }
 
   public static ProcessResult startMainmSession(String apiBase, String key, long sessionId) {
-    String targetUrl = apiBase + "/manim/start?session-id" + sessionId;
+    String targetUrl = apiBase + "/manim/start?session-id=" + sessionId;
     return get(targetUrl, key);
   }
 
@@ -61,7 +61,7 @@ public class JavaKitClient {
     String m3u8Path = codeRequest.getM3u8Path();
     String targetUrl = null;
     if (sessionPrt != null && m3u8Path != null) {
-      targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
+      targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path=%s";
       targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
     } else {
       targetUrl = apiBase + "/manim";
@@ -111,7 +111,7 @@ public class JavaKitClient {
     Request.Builder builder = new Request.Builder();
     builder.url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key);
     if (sessionId != null) {
-      builder.addHeader("session-id", id.toString());
+      builder.addHeader("session-id", sessionId.toString());
     }
     if (id != null) {
       builder.addHeader("code-id", id.toString());
