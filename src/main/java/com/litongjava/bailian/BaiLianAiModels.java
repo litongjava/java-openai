@@ -88,6 +88,7 @@ public interface BaiLianAiModels {
   String QWQ_32B = "qwq-32b";
   String QWQ_32B_PREVIEW = "qwq-32b-preview";
 
+  String QWEN3_MAX_PREVIEW="qwen3-max-preview";
   String QWEN3_235B_A22B = "qwen3-235b-a22b";
   String QWEN3_32B = "qwen3-32b";
   String QWEN3_30B_A3B = "qwen3-30b-a3b";
