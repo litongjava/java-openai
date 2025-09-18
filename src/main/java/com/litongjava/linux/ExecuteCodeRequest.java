@@ -9,23 +9,26 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CodeRequest {
+public class ExecuteCodeRequest {
+  private Long sessionId;
   private Long id;
   private String code;
   private Integer timeout;
   // l low,m medium,h high
   private String quality;
+  private long sessionPrt;
+  private String m3u8Path;
 
-  public CodeRequest(String code) {
+  public ExecuteCodeRequest(String code) {
     this.code = code;
   }
 
-  public CodeRequest(long id, String code) {
+  public ExecuteCodeRequest(long id, String code) {
     this.id = id;
     this.code = code;
   }
 
-  public CodeRequest(long id, String code, Integer timeout) {
+  public ExecuteCodeRequest(long id, String code, Integer timeout) {
     this.id = id;
     this.code = code;
     this.timeout = timeout;

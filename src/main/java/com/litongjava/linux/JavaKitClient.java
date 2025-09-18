@@ -18,7 +18,7 @@ public class JavaKitClient {
 
   private static OkHttpClient client = OkHttpClientPool.get1000HttpClient();
 
-  public static ProcessResult executePythonCode(CodeRequest codeRequest) {
+  public static ProcessResult executePythonCode(ExecuteCodeRequest codeRequest) {
     String apiBase = EnvUtils.getStr("JAVA_KIT_BASE_URL");
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
@@ -26,7 +26,7 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult executeMainmCode(CodeRequest codeRequest) {
+  public static ProcessResult executeMainmCode(ExecuteCodeRequest codeRequest) {
     String apiBase = EnvUtils.getStr("JAVA_KIT_BASE_URL");
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
@@ -34,7 +34,7 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult executeManimImageCode(String apiBase, String key, CodeRequest codeRequest) {
+  public static ProcessResult executeManimImageCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
     String targetUrl = apiBase + "/manim/image";
     return post(targetUrl, key, codeRequest);
   }
@@ -56,19 +56,20 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult executeMainmVideoCode(String apiBase, String key, CodeRequest codeRequest) {
+  public static ProcessResult executeMainmVideoCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
     String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult executeMainmCode(String apiBase, String key, CodeRequest codeRequest, long sessionPrt,
-      String m3u8_path) {
+  public static ProcessResult executeMainmCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
+    long sessionPrt = codeRequest.getSessionPrt();
+    String m3u8Path = codeRequest.getM3u8Path();
     String targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path%s";
-    targetUrl = String.format(targetUrl, sessionPrt, m3u8_path);
+    targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult executeMainmCode(String apiBase, CodeRequest codeRequest) {
+  public static ProcessResult executeMainmCode(String apiBase, ExecuteCodeRequest codeRequest) {
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
     String targetUrl = apiBase + "/manim";
     return post(targetUrl, key, codeRequest);
@@ -96,7 +97,8 @@ public class JavaKitClient {
     }
   }
 
-  private static ProcessResult post(String targetUrl, String key, CodeRequest codeRequest) {
+  private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
+    Long sessionId = codeRequest.getSessionId();
     Long id = codeRequest.getId();
     String code = codeRequest.getCode();
     Integer timeout = codeRequest.getTimeout();
@@ -107,6 +109,9 @@ public class JavaKitClient {
     RequestBody body = RequestBody.create(code, mediaType);
     Request.Builder builder = new Request.Builder();
     builder.url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key);
+    if (sessionId != null) {
+      builder.addHeader("session-id", id.toString());
+    }
     if (id != null) {
       builder.addHeader("code-id", id.toString());
     }
