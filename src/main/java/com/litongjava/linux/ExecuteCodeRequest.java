@@ -33,4 +33,13 @@ public class ExecuteCodeRequest {
     this.code = code;
     this.timeout = timeout;
   }
+
+  public ExecuteCodeRequest(Long sessionId, long id, String code, Integer timeout, long sessionPrt, String m3u8Path) {
+    this.sessionId = sessionId;
+    this.id = id;
+    this.code = code;
+    this.timeout = timeout;
+    this.sessionPrt = sessionPrt;
+    this.m3u8Path = m3u8Path;
+  }
 }
