@@ -1,8 +1,10 @@
 package com.litongjava.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.litongjava.openai.ChatProvider;
+import com.litongjava.tio.utils.hutool.StrUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class UniChatRequest {
   private Integer max_tokens;
   private Boolean enable_thinking;
   private UniThinkingConfig thinkingConfig;
+  //ChatResponseFormatType
   private String responseFormat;
   private UniResponseSchema responseSchema;
   private ChatProvider provider;
@@ -88,6 +91,19 @@ public class UniChatRequest {
     this.temperature = temperature;
   }
 
+  public UniChatRequest setUserPrompts(String... prompts) {
+    List<UniChatMessage> messages = new ArrayList<>(prompts.length);
+    for (String prompt : prompts) {
+      if (StrUtil.isNotBlank(prompt)) {
+        UniChatMessage part = new UniChatMessage(prompt);
+        messages.add(part);
+      }
+    }
+    
+    this.messages = messages;
+    return this;
+  }
+  
   public static UniChatRequest platform(String platform, String modelName) {
     UniChatRequest uniChatRequest = new UniChatRequest();
     uniChatRequest.setPlatform(platform).setModel(modelName);
