@@ -1970,8 +1970,34 @@ public class LlmQwenOcrService {
   }
 }
 ```
-## Additional Integrations
-### Groq Integration
+
+### Generate Image
+```java
+import org.junit.Test;
+
+import com.litongjava.bailian.image.MultiModalRequest;
+import com.litongjava.bailian.image.MultiModalResponse;
+import com.litongjava.tio.utils.environment.EnvUtils;
+
+public class BaiLianClientTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    String text = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启通义”，字体飘逸，中间挂在一着一副中国风的画作，内容是岳阳楼。";
+    MultiModalRequest request = MultiModalRequest.build(text);
+    MultiModalResponse response = BaiLianClient.generateImage(request);
+    String imageUrl = response.getOutput().getChoices().get(0).getMessage().getContent().get(0).getImage();
+    System.out.println(imageUrl);
+  }
+}
+
+```
+output
+```
+https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/7d/31/20250929/c1a4ba8a/91ede254-4b0b-4879-9cef-7e372bd78862-1.png?Expires=1759708547&OSSAccessKeyId=xxxx&Signature=
+```
+## Groq Integration
 
 #### GroqSpeechClientTest
 
@@ -2010,9 +2036,9 @@ public class GroqSpeechClientTest {
 }
 ```
 
-### ApiFy
+## ApiFy
 
-#### LinkedIn Profile Scraper
+### LinkedIn Profile Scraper
 
 ```java
 package com.litongjava.client;
