@@ -14,4 +14,8 @@ public class MultiModalResponse {
   private String request_id;
   private MultiModalUsage usage;
   private MultiModalOutput output;
+
+  public String getImageUrl() {
+    return output.getChoices().get(0).getMessage().getContent().get(0).getImage();
+  }
 }
