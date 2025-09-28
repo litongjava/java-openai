@@ -11,16 +11,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MultiModalRequest {
   private String model;
-  private MultiModalConversationInput input;
+  private MultiModalInput input;
   private MultiModalConversationParam parameters;
 
   public static MultiModalRequest build(String text) {
-    MultiModalConversationInput input = MultiModalConversationInput.build(text);
+    MultiModalInput input = MultiModalInput.build(text);
     MultiModalConversationParam parameters = new MultiModalConversationParam();
     return build(input, parameters);
   }
 
-  public static MultiModalRequest build(MultiModalConversationInput input, MultiModalConversationParam parameters) {
+  public static MultiModalRequest build(MultiModalInput input, MultiModalConversationParam parameters) {
     return new MultiModalRequest("qwen-image-plus", input, parameters);
   }
 

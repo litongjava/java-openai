@@ -8,5 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MultiModalContent {
+
   private String text;
+  private String image;
+
+  public MultiModalContent(String text) {
+    this.text = text;
+  }
 }

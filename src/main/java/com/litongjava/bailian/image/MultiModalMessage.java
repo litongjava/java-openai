@@ -13,8 +13,10 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class MultiModalMessage {
+  
   private String role;
   private List<MultiModalContent> content;
+  
 
   public static MultiModalMessage build(String text) {
     MultiModalContent multiModalContent = new MultiModalContent(text);
