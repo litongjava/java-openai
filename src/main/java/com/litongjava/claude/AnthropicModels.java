@@ -7,9 +7,17 @@ package com.litongjava.claude;
  *
  */
 public interface AnthropicModels {
+  String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
+  String CLAUDE_SONNET_4_5_20250929 = "claude-sonnet-4-5-20250929";
+
+  // Claude 4.1
+  String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
   String CLAUDE_OPUS_4_1_20250805 = "claude-opus-4-1-20250805";
+
   // Claude 4.0
+  String CLAUDE_SONNET_4_0 = "claude-sonnet-4-0";
   String CLAUDE_SONNET_4_20250514 = "claude-sonnet-4-20250514";
+  String CLAUDE_OPUS_4_0 = "claude-opus-4-0";
   String CLAUDE_OPUS_4_20250514 = "claude-opus-4-20250514";
   // Claude 3.7
   String CLAUDE_3_7_SONNET_20250219 = "claude-3-7-sonnet-20250219";
