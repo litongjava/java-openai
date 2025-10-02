@@ -11,13 +11,16 @@ import com.litongjava.claude.ClaudeChatResponseVo;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
+import com.litongjava.gemini.GeminiCandidateVo;
 import com.litongjava.gemini.GeminiChatRequestVo;
 import com.litongjava.gemini.GeminiChatResponseVo;
 import com.litongjava.gemini.GeminiClient;
 import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfig;
 import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiToolVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.gemini.GroundingMetadata;
 import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
 import com.litongjava.openai.ChatProvider;
@@ -413,7 +416,6 @@ public class UniChatClient {
       geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
     }
 
-    Boolean enable_thinking = uniChatRequest.getEnable_thinking();
     GeminiGenerationConfig config = new GeminiGenerationConfig();
 
     Float temperature = uniChatRequest.getTemperature();
@@ -421,6 +423,7 @@ public class UniChatClient {
       config.setTemperature(temperature);
     }
 
+    Boolean enable_thinking = uniChatRequest.getEnable_thinking();
     if (enable_thinking != null && !enable_thinking) {
       UniThinkingConfig geminiThinkingConfig = new UniThinkingConfig(0);
       config.setThinkingConfig(geminiThinkingConfig);
@@ -441,6 +444,18 @@ public class UniChatClient {
 
     geminiChatRequestVo.setGenerationConfig(config);
 
+    List<GeminiToolVo> tools = new ArrayList<>();
+    Boolean enable_search = uniChatRequest.getEnable_search();
+    if (enable_search != null && enable_search) {
+      GeminiToolVo geminiToolVo = new GeminiToolVo();
+      geminiToolVo.enableSearch();
+      tools.add(geminiToolVo);
+    }
+
+    if (tools.size() > 0) {
+      geminiChatRequestVo.setTools(tools);
+    }
+
     GeminiChatResponseVo chatResponse = null;
     if (apiPrefixUrl != null) {
       chatResponse = GeminiClient.generate(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo);
@@ -454,18 +469,22 @@ public class UniChatClient {
     GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
     ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
     String modelVersion = chatResponse.getModelVersion();
-    
+
     UniChatResponse uniChatResponse = new UniChatResponse();
     uniChatResponse.setUsage(usage).setRawResponse(chatResponse.getRawResponse()).setModel(modelVersion);
-    
-    
-    GeminiContentResponseVo content = chatResponse.getCandidates().get(0).getContent();
-    
+
+    GeminiCandidateVo geminiCandidateVo = chatResponse.getCandidates().get(0);
+    GeminiContentResponseVo content = geminiCandidateVo.getContent();
+
     String role = content.getRole();
     List<GeminiPartVo> parts = content.getParts();
-    
+
     ChatResponseMessage message = new ChatResponseMessage(role, parts);
-    
+    GroundingMetadata groundingMetadata = geminiCandidateVo.getGroundingMetadata();
+    if (groundingMetadata != null) {
+      message.setUniSources(new UniSources(groundingMetadata));
+    }
+
     uniChatResponse.setMessage(message);
 
     return uniChatResponse;

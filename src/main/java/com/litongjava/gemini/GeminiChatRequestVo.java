@@ -10,6 +10,7 @@ import com.litongjava.tio.utils.hutool.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 顶层请求体 - 修改后
@@ -17,18 +18,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class GeminiChatRequestVo {
 
   /**
-   * -- 新增字段 --
-   * system_instruction, tools, tool_config
-   * 来对应你示例中的 JSON 结构：
-   * {
-   *   "system_instruction": {...},
-   *   "tools": [...],
-   *   "tool_config": {...},
-   *   "contents": {...或list...}
-   * }
+   * -- 新增字段 -- system_instruction, tools, tool_config 来对应你示例中的 JSON 结构： {
+   * "system_instruction": {...}, "tools": [...], "tool_config": {...},
+   * "contents": {...或list...} }
    */
   private GeminiSystemInstructionVo system_instruction;
 

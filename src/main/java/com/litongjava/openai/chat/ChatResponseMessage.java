@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatFile;
+import com.litongjava.chat.UniSources;
 import com.litongjava.gemini.GeminiInlineDataVo;
 import com.litongjava.gemini.GeminiPartVo;
 
@@ -24,6 +25,7 @@ public class ChatResponseMessage {
   private String reasoning_content;
   private List<ToolCall> tool_calls;
   private List<UniChatFile> images;
+  private UniSources uniSources;
 
   public ChatResponseMessage(String role, String content) {
     this.role = role;

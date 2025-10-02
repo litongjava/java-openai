@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeminiCandidateVo {
+  private Integer index;
   private GeminiContentResponseVo content;
   private String finishReason;
   private Double avgLogprobs;
+  private GroundingMetadata groundingMetadata;
 }
