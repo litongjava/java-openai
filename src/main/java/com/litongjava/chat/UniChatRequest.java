@@ -39,6 +39,8 @@ public class UniChatRequest {
   private UniResponseSchema responseSchema;
   private ChatProvider provider;
   private List<String> responseModalities;
+  private Boolean enable_search;
+
 
   public UniChatRequest(List<UniChatMessage> messages) {
     this.messages = messages;

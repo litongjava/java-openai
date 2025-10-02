@@ -13,7 +13,7 @@ import com.litongjava.mcp.model.McpToolsListResult;
  * 初始化握手 notificationsInitialized -> 客户端确认可接收事件 listTools -> 列出工具 callTool ->
  * 调用工具 shutdown -> （可选）优雅关闭 sessionClosed -> （可选）会话结束清理
  */
-public interface McpServer {
+public interface IMcpServer {
 
   /**
    * 对应: method = "initialize"
