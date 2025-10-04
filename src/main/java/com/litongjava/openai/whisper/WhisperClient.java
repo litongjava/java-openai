@@ -84,7 +84,7 @@ public class WhisperClient {
     String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
 
     WhisperTranscriptionsRequest entity = new WhisperTranscriptionsRequest(responseFormat, prompt);
-    return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes,entity);
+    return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, entity);
   }
 
   /**
@@ -170,7 +170,7 @@ public class WhisperClient {
     if (temperature != null) {
       bodyBuilder.addFormDataPart("temperature", temperature.toString());
     }
-    if (stream) {
+    if (stream != null) {
       bodyBuilder.addFormDataPart("stream", stream.toString());
     }
 
