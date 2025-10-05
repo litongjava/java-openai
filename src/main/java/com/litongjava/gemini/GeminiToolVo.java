@@ -27,4 +27,8 @@ public class GeminiToolVo {
     this.googleSearch = null;
     return this;
   }
+
+  public GeminiToolVo(List<GeminiFunctionDeclarationVo> function_declarations) {
+    this.function_declarations = function_declarations;
+  }
 }
