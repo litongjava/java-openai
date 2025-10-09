@@ -39,6 +39,7 @@ import com.litongjava.tencent.TencentConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.volcengine.VolcEngineConst;
+import com.litongjava.zenmux.ZenmuxConst;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.sse.EventSource;
@@ -58,6 +59,9 @@ public class UniChatClient {
 
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PREFIX_URL);
   public static final String OPENROUTER_API_KEY = EnvUtils.get("OPENROUTER_API_KEY");
+
+  public static final String ZENMUX_API_URL = EnvUtils.get("ZENMUX_API_URL", ZenmuxConst.API_PREFIX_URL);
+  public static final String ZENMUX_API_KEY = EnvUtils.get("ZENMUX_API_KEY");
 
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
   public static final String BAILIAN_API_KEY = EnvUtils.get("BAILIAN_API_KEY");
@@ -201,6 +205,10 @@ public class UniChatClient {
 
   public static UniChatResponse useOpenRouter(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useZenmux(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useBailian(String key, UniChatRequest uniChatRequest) {
@@ -516,6 +524,10 @@ public class UniChatClient {
 
   public static EventSource useOpenRouter(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static EventSource useZenmux(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest, listener);
   }
 
   public static EventSource useOpenAi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {

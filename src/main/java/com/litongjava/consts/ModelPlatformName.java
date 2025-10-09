@@ -22,4 +22,6 @@ public interface ModelPlatformName {
   String SWIFT = "swift";
   String TITANIUM = "titanium";
 
+  String ZENMUX = "zenmux";
+
 }
