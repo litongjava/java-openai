@@ -99,19 +99,21 @@ public class UniChatClient {
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
 
-    if (ModelPlatformName.GOOGLE.equals(uniChatRequest.getPlatform())) {
+    String platform = uniChatRequest.getPlatform();
+
+    if (ModelPlatformName.GOOGLE.equals(platform)) {
       if (key == null) {
         key = GEMINI_API_KEY;
       }
       return useGemeni(key, uniChatRequest);
 
-    } else if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
       }
       return useClaude(key, uniChatRequest);
 
-    } else if (ModelPlatformName.VOLC_ENGINE.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
       if (key == null) {
         key = VOLCENGINE_API_KEY;
       }
@@ -121,67 +123,73 @@ public class UniChatClient {
       }
       return useVolcEngine(key, uniChatRequest);
 
-    } else if (ModelPlatformName.OPENROUTER.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.OPENROUTER.equals(platform)) {
       if (key == null) {
         key = OPENROUTER_API_KEY;
       }
       return useOpenRouter(key, uniChatRequest);
 
-    } else if (ModelPlatformName.BAILIAN.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.ZENMUX.equals(platform)) {
+      if (key == null) {
+        key = ZENMUX_API_KEY;
+      }
+      return useZenmux(key, uniChatRequest);
+
+    } else if (ModelPlatformName.BAILIAN.equals(platform)) {
       if (key == null) {
         key = BAILIAN_API_KEY;
       }
       return useBailian(key, uniChatRequest);
 
-    } else if (ModelPlatformName.TENCENT.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.TENCENT.equals(platform)) {
       if (key == null) {
         key = TENCENT_API_KEY;
       }
       return useTencent(key, uniChatRequest);
 
-    } else if (ModelPlatformName.MINIMAX.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.MINIMAX.equals(platform)) {
       if (key == null) {
         key = MINIMAX_API_KEY;
       }
       return useMiniMax(key, uniChatRequest);
 
-    } else if (ModelPlatformName.MOONSHOT.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.MOONSHOT.equals(platform)) {
       if (key == null) {
         key = MOONSHOT_API_KEY;
       }
       return useMoonshot(key, uniChatRequest);
 
-    } else if (ModelPlatformName.CEREBRAS.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.CEREBRAS.equals(platform)) {
       if (key == null) {
         key = CEREBRAS_API_KEY;
       }
       return useCerebras(key, uniChatRequest);
 
-    } else if (ModelPlatformName.OLLAMA.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.OLLAMA.equals(platform)) {
       if (key == null) {
         key = OLLAMA_API_KEY;
       }
       return useOllama(key, uniChatRequest);
 
-    } else if (ModelPlatformName.LLAMACPP.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.LLAMACPP.equals(platform)) {
       if (key == null) {
         key = LLAMACPP_API_KEY;
       }
       return useLlamacpp(key, uniChatRequest);
 
-    } else if (ModelPlatformName.VLLM.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.VLLM.equals(platform)) {
       if (key == null) {
         key = VLLM_API_KEY;
       }
       return useVllm(key, uniChatRequest);
 
-    } else if (ModelPlatformName.SWIFT.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.SWIFT.equals(platform)) {
       if (key == null) {
         key = SWIFT_API_KEY;
       }
       return useSwift(key, uniChatRequest);
 
-    } else if (ModelPlatformName.TITANIUM.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.TITANIUM.equals(platform)) {
       if (key == null) {
         key = TITANIUM_API_KEY;
       }
