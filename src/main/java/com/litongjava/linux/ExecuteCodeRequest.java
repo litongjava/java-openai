@@ -35,7 +35,15 @@ public class ExecuteCodeRequest {
     this.timeout = timeout;
   }
 
-  public ExecuteCodeRequest(Long sessionId, long id, String code, Integer timeout, Long sessionPrt, String m3u8Path) {
+  public ExecuteCodeRequest(Long sessionId, String code, int timeout, Long sessionPrt, String m3u8Path) {
+    this.sessionId = sessionId;
+    this.code = code;
+    this.timeout = timeout;
+    this.sessionPrt = sessionPrt;
+    this.m3u8Path = m3u8Path;
+  }
+
+  public ExecuteCodeRequest(Long id, Long sessionId, String code, Integer timeout, Long sessionPrt, String m3u8Path) {
     this.sessionId = sessionId;
     this.id = id;
     this.code = code;
@@ -44,9 +52,10 @@ public class ExecuteCodeRequest {
     this.m3u8Path = m3u8Path;
   }
 
-  public ExecuteCodeRequest(Long sessionId, String code, int timeout, Long sessionPrt, String m3u8Path) {
+  public ExecuteCodeRequest(Long sessionId, String code, String figure, int timeout, Long sessionPrt, String m3u8Path) {
     this.sessionId = sessionId;
     this.code = code;
+    this.figure = figure;
     this.timeout = timeout;
     this.sessionPrt = sessionPrt;
     this.m3u8Path = m3u8Path;
