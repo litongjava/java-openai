@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 public class UniChatMessage {
   private String role = "user";
   private String content;
-  //data:image base64 code, url:image http url
+  // data:image base64 code, url:image http url
   private List<ChatImageFile> files;
   private ChatMessageArgs args;
+  private List<String> attachments;
 
   public UniChatMessage(String role, String content) {
     this.role = role;
