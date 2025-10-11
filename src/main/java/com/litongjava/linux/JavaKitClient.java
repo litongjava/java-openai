@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import com.litongjava.tio.utils.commandline.ProcessResult;
 import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -102,14 +104,12 @@ public class JavaKitClient {
     Long sessionId = codeRequest.getSessionId();
     Long id = codeRequest.getId();
     String code = codeRequest.getCode();
+    String figure = codeRequest.getFigure();
     Integer timeout = codeRequest.getTimeout();
     String quality = codeRequest.getQuality();
 
-    MediaType mediaType = MediaType.parse("text/plain");
-
-    RequestBody body = RequestBody.create(code, mediaType);
     Request.Builder builder = new Request.Builder();
-    builder.url(targetUrl).method("POST", body).addHeader("authorization", "Bearer " + key);
+    builder.url(targetUrl).addHeader("authorization", "Bearer " + key);
     if (sessionId != null) {
       builder.addHeader("session-id", sessionId.toString());
     }
@@ -121,6 +121,26 @@ public class JavaKitClient {
     }
     if (quality != null) {
       builder.addHeader("quality", quality);
+    }
+
+    if (figure == null) {
+      MediaType mediaType = MediaType.parse("text/plain");
+      RequestBody body = RequestBody.create(code, mediaType);
+      builder.method("POST", body);
+    } else {
+
+      okhttp3.MultipartBody.Builder formBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      // Create the request body with file and image media type
+      RequestBody fileBody = getFileBody("main.py", code);
+      // Create MultipartBody
+      formBuilder.addFormDataPart("code", "main.py", fileBody);
+
+      RequestBody figureBody = getFileBody("pgdp-output.json", code);
+      // Create MultipartBody
+      formBuilder.addFormDataPart("figure", "pgdp-output.json", figureBody);
+
+      RequestBody requestBody = formBuilder.build();
+      builder.method("POST", requestBody);
     }
 
     Request request = builder.build();
@@ -142,6 +162,12 @@ public class JavaKitClient {
     } catch (IOException e) {
       throw new RuntimeException("Failed to request:" + targetUrl + " body:" + code, e);
     }
+  }
+
+  private static RequestBody getFileBody(String filename, String content) {
+    String contentType = ContentTypeUtils.getContentType(filename);
+    RequestBody fileBody = RequestBody.create(content.getBytes(), MediaType.parse(contentType));
+    return fileBody;
   }
 
 }

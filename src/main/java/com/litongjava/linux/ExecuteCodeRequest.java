@@ -10,9 +10,10 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ExecuteCodeRequest {
-  private Long sessionId;
   private Long id;
+  private Long sessionId;
   private String code;
+  private String figure;
   private Integer timeout;
   // l low,m medium,h high
   private String quality;
