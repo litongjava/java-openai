@@ -2,9 +2,11 @@ package com.litongjava.linux;
 
 import java.io.IOException;
 
+import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.commandline.ProcessResult;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
+import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -41,17 +43,17 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
-  public static ProcessResult startMainmSession(String apiBase, String key, long sessionId) {
+  public static ProcessResult startManimSession(String apiBase, String key, long sessionId) {
     String targetUrl = apiBase + "/manim/start?session-id=" + sessionId;
     return get(targetUrl, key);
   }
 
-  public static ProcessResult startMainmSession(String apiBase, String key) {
+  public static ProcessResult startManimSession(String apiBase, String key) {
     String targetUrl = apiBase + "/manim/start";
     return get(targetUrl, key);
   }
 
-  public static ProcessResult finishMainmSession(String apiBase, String key, long sessionPrt, String m3u8Path,
+  public static ProcessResult finishManimSession(String apiBase, String key, long sessionPrt, String m3u8Path,
       String videos) {
     String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos);
@@ -100,6 +102,11 @@ public class JavaKitClient {
     }
   }
 
+  public static ResponseVo delete(String apiBaseUrl, String key, String path) {
+    String url = apiBaseUrl + "/delete?path=" + path;
+    return HttpUtils.get(url, key);
+  }
+
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
     Long sessionId = codeRequest.getSessionId();
     Long id = codeRequest.getId();
@@ -135,7 +142,7 @@ public class JavaKitClient {
       // Create MultipartBody
       formBuilder.addFormDataPart("code", "main.py", fileBody);
 
-      RequestBody figureBody = getFileBody("pgdp-output.json", code);
+      RequestBody figureBody = getFileBody("pgdp-output.json", figure);
       // Create MultipartBody
       formBuilder.addFormDataPart("figure", "pgdp-output.json", figureBody);
 
@@ -169,5 +176,4 @@ public class JavaKitClient {
     RequestBody fileBody = RequestBody.create(content.getBytes(), MediaType.parse(contentType));
     return fileBody;
   }
-
 }
