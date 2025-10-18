@@ -11,6 +11,7 @@ import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 import okhttp3.Call;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -105,6 +106,41 @@ public class JavaKitClient {
   public static ResponseVo delete(String apiBaseUrl, String key, String path) {
     String url = apiBaseUrl + "/delete?path=" + path;
     return HttpUtils.get(url, key);
+  }
+
+  public static ResponseVo downloadVideo(String apiBaseUrl, String key, String m3u8Path) {
+    String url = apiBaseUrl + "/video/download?path=" + m3u8Path;
+    return download(url, key);
+  }
+
+  /**
+   * downlaod.
+   * 
+   * @param url
+   * @return
+   */
+  public static ResponseVo download(String url, String key) {
+    Request request = new Request.Builder().url(url).addHeader("authorization", "Bearer " + key).get().build();
+
+    try (Response response = OkHttpClientPool.getHttpClient().newCall(request).execute()) {
+      Headers headers = response.headers();
+
+      int code = response.code();
+      if (response.isSuccessful()) {
+        byte[] bytes = response.body().bytes();
+        ResponseVo responseVo = ResponseVo.ok(headers, bytes);
+        responseVo.setCode(code);
+        return responseVo;
+      } else {
+        // not 2xx
+        String bodyString = response.body() != null ? response.body().string() : "";
+        ResponseVo responseVo = ResponseVo.fail(headers, bodyString);
+        responseVo.setCode(code);
+        return responseVo;
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to download content from " + url, e);
+    }
   }
 
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
