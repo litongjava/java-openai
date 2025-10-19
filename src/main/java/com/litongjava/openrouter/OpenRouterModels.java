@@ -13,6 +13,9 @@ public interface OpenRouterModels {
   String OPENAI_GPT_5_NANO = "openai/gpt-5-nano";
   String OPENAI_GPT_5_CHAT = "openai/gpt-5-chat";
 
+  String ANTHROPIC_CLAUDE_HAIKU_4_5 = "anthropic/claude-haiku-4.5";
+  String ANTHROPIC_CLAUDE_SONNET_4_5 = "anthropic/claude-sonnet-4.5";
+
   String GROK_CODE_FAST_1 = "x-ai/grok-code-fast-1";
 
   String QWEN_QWEN3_CODER = "qwen/qwen3-coder";
