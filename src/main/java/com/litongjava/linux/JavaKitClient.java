@@ -61,7 +61,7 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult executeMainmCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
+  public static ProcessResult executeManimCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
     Long sessionPrt = codeRequest.getSessionPrt();
     String m3u8Path = codeRequest.getM3u8Path();
     String targetUrl = null;
@@ -81,31 +81,15 @@ public class JavaKitClient {
     return post(targetUrl, key, codeRequest);
   }
 
-  private static ProcessResult get(String targetUrl, String key) {
-    Request request = new Request.Builder().url(targetUrl).addHeader("authorization", "Bearer " + key).get().build();
-    Call call = client.newCall(request);
-    long start = System.currentTimeMillis();
-    try (Response response = call.execute()) {
-      String string = response.body().string();
-      int resposneCode = response.code();
-      if (response.isSuccessful()) {
-        long end = System.currentTimeMillis();
-        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
-        if (result != null) {
-          result.setElapsed(end - start);
-        }
-        return result;
-      } else {
-        throw new RuntimeException("code:" + resposneCode + " response:" + string);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to request:" + targetUrl, e);
-    }
-  }
-
   public static ResponseVo delete(String apiBaseUrl, String key, String path) {
     String url = apiBaseUrl + "/delete?path=" + path;
     return HttpUtils.get(url, key);
+  }
+
+  public static ProcessResult executeMotionCanvasCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
+    String targetUrl = apiBase + "/motion-canvas";
+
+    return post(targetUrl, key, codeRequest);
   }
 
   public static ResponseVo downloadVideo(String apiBaseUrl, String key, String m3u8Path) {
@@ -143,10 +127,36 @@ public class JavaKitClient {
     }
   }
 
+
+  private static ProcessResult get(String targetUrl, String key) {
+    Request request = new Request.Builder().url(targetUrl).addHeader("authorization", "Bearer " + key).get().build();
+    Call call = client.newCall(request);
+    long start = System.currentTimeMillis();
+    try (Response response = call.execute()) {
+      String string = response.body().string();
+      int resposneCode = response.code();
+      if (response.isSuccessful()) {
+        long end = System.currentTimeMillis();
+        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
+        if (result != null) {
+          result.setElapsed(end - start);
+        }
+        return result;
+      } else {
+        throw new RuntimeException("code:" + resposneCode + " response:" + string);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + targetUrl, e);
+    }
+  }
+
+  
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
     Long sessionId = codeRequest.getSessionId();
     Long id = codeRequest.getId();
+    String name = codeRequest.getName();
     String code = codeRequest.getCode();
+
     String figure = codeRequest.getFigure();
     Integer timeout = codeRequest.getTimeout();
     String quality = codeRequest.getQuality();
@@ -159,6 +169,11 @@ public class JavaKitClient {
     if (id != null) {
       builder.addHeader("code-id", id.toString());
     }
+
+    if (name != null) {
+      builder.addHeader("code-name", name);
+    }
+
     if (timeout != null) {
       builder.addHeader("code-timeout", timeout.toString());
     }

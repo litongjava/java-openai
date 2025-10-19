@@ -10,11 +10,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ExecuteCodeRequest {
-  private Long id;
   private Long sessionId;
+  private Long id;
+  private String name;
   private String code;
-  private String figure;
   private Integer timeout;
+  private String figure;
   // l low,m medium,h high
   private String quality;
   private Long sessionPrt;
@@ -59,5 +60,12 @@ public class ExecuteCodeRequest {
     this.timeout = timeout;
     this.sessionPrt = sessionPrt;
     this.m3u8Path = m3u8Path;
+  }
+
+  public ExecuteCodeRequest(Long sessionId, String name, String code, int timeout) {
+    this.sessionId = sessionId;
+    this.name = name;
+    this.code = code;
+    this.timeout = timeout;
   }
 }

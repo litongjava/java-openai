@@ -17,10 +17,10 @@ public class CodeBlockUtils {
   public static final String EMPTY_LINE_REGEX = "(?m)^(?:[ \\t]*\\r?\\n)+";
 
   /**
-   * Extracts JSON content from the generated text.
-   * If the text contains ```json fences, returns the content between them.
-   * Otherwise, if the text looks like a JSON object (starts with { and ends with }),
-   * returns the trimmed text.
+   * Extracts JSON content from the generated text. If the text contains ```json
+   * fences, returns the content between them. Otherwise, if the text looks like a
+   * JSON object (starts with { and ends with }), returns the trimmed text.
+   * 
    * @param generatedText the raw text containing JSON
    * @return the extracted JSON or null if none found
    */
@@ -61,7 +61,6 @@ public class CodeBlockUtils {
     }
   }
 
-  
   public static String parsePythonCode(String generatedText) {
     String code;
     int indexOf = generatedText.indexOf("```python");
@@ -215,6 +214,59 @@ public class CodeBlockUtils {
         }
       }
       return code;
+    }
+  }
+
+  /**
+   * Extracts TypeScript code from the generated text. Supports ```typescript and
+   * ```ts fences. If no fence is found, returns trimmed text when non-empty.
+   *
+   * @param generatedText the raw text containing TypeScript code
+   * @return the extracted TypeScript code or null if none found
+   */
+  public static String parseTypescriptCode(String generatedText) {
+    if (generatedText == null) {
+      log.error("Generated text is null");
+      return null;
+    }
+
+    String code;
+    int idxLong = generatedText.indexOf("```typescript");
+    int idxShort = generatedText.indexOf("```ts");
+    int indexOf = -1;
+    String fence = null;
+
+    if (idxLong >= 0 && (idxShort == -1 || idxLong <= idxShort)) {
+      indexOf = idxLong;
+      fence = "```typescript";
+    } else if (idxShort >= 0) {
+      indexOf = idxShort;
+      fence = "```ts";
+    }
+
+    if (indexOf == -1) {
+      generatedText = generatedText.trim();
+      if (!generatedText.isEmpty()) {
+        return generatedText;
+      } else {
+        log.error("No TypeScript code found in the output:{}", generatedText);
+        return null;
+      }
+    } else {
+      int lastIndexOf = generatedText.lastIndexOf("```");
+      log.info("TypeScript fence index:{},{}", indexOf, lastIndexOf);
+      int start = indexOf + fence.length();
+      try {
+        if (lastIndexOf > start) {
+          code = generatedText.substring(start, lastIndexOf);
+        } else {
+          code = generatedText.substring(start);
+        }
+      } catch (Exception e) {
+        log.error("Error extracting TypeScript from text:{}", generatedText, e);
+        return null;
+      }
+      return code.trim();
     }
   }
 
