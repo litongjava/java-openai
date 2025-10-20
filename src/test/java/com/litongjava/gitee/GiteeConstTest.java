@@ -13,7 +13,7 @@ public class GiteeConstTest {
   public void test() {
     EnvUtils.load();
     String apiKey = EnvUtils.get("GITEE_API_KEY");
-    OpenAiChatResponseVo chatResponse = OpenAiClient.chatWithModel(GiteeConst.API_PERFIX_URL, apiKey, GiteeModel.QWEN2_7B_INSTRUCT, "user", "什么是向量");
+    OpenAiChatResponseVo chatResponse = OpenAiClient.chatWithModel(GiteeConst.API_PERFIX_URL, apiKey, GiteeModels.QWEN2_7B_INSTRUCT, "user", "什么是向量");
     System.out.println(JsonUtils.toSkipNullJson(chatResponse));
   }
 

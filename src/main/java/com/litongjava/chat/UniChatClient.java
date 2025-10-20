@@ -369,12 +369,14 @@ public class UniChatClient {
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     List<UniChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<UniChatMessage> iterator = messages.iterator();
-    while (iterator.hasNext()) {
-      UniChatMessage next = iterator.next();
-      if (next.getRole().equals("model")) {
-        // 'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
-        next.setRole("assistant");
+    if (messages != null) {
+      Iterator<UniChatMessage> iterator = messages.iterator();
+      while (iterator.hasNext()) {
+        UniChatMessage next = iterator.next();
+        if (next.getRole().equals("model")) {
+          // 'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
+          next.setRole("assistant");
+        }
       }
     }
 
