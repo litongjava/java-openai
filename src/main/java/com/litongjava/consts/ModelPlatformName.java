@@ -24,4 +24,5 @@ public interface ModelPlatformName {
 
   String ZENMUX = "zenmux";
 
+  String GITEE = "gitee";
 }
