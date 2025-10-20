@@ -21,6 +21,7 @@ import com.litongjava.gemini.GeminiPartVo;
 import com.litongjava.gemini.GeminiToolVo;
 import com.litongjava.gemini.GeminiUsageMetadataVo;
 import com.litongjava.gemini.GroundingMetadata;
+import com.litongjava.gitee.GiteeConst;
 import com.litongjava.minimax.MiniMaxConst;
 import com.litongjava.moonshot.MoonshotConst;
 import com.litongjava.openai.ChatProvider;
@@ -77,6 +78,9 @@ public class UniChatClient {
 
   public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConst.API_PREFIX_URL);
   public static final String CEREBRAS_API_KEY = EnvUtils.get("CEREBRAS_API_KEY");
+
+  public static final String GITEE_API_URL = EnvUtils.get("GITEE_API_URL", GiteeConst.API_PREFIX_URL);
+  public static final String GITEE_API_KEY = EnvUtils.get("GITEE_API_KEY");
 
   public static final String OLLAMA_API_URL = EnvUtils.get("OLLAMA_API_URL");
   public static final String OLLAMA_API_KEY = EnvUtils.get("OLLAMA_API_KEY");
@@ -195,6 +199,12 @@ public class UniChatClient {
       }
       return useTitanium(key, uniChatRequest);
 
+    } else if (ModelPlatformName.GITEE.equals(platform)) {
+      if (key == null) {
+        key = GITEE_API_KEY;
+      }
+      return useGitee(key, uniChatRequest);
+
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -254,6 +264,10 @@ public class UniChatClient {
 
   public static UniChatResponse useSwift(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(SWIFT_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useGitee(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(GITEE_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useTitanium(String key, UniChatRequest uniChatRequest) {
