@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.openai.consts.OpenAiConstants;
+import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
@@ -53,12 +53,12 @@ public class WhisperClient {
   }
 
   public static ResponseVo transcriptions(String apiKey, File file, String responseFormat) {
-    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return transcriptions(apiPrefixUrl, apiKey, file, responseFormat);
   }
 
   public static ResponseVo transcriptions(String apiKey, File file, String responseFormat, String prompt) {
-    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return transcriptions(apiPrefixUrl, apiKey, file, responseFormat, prompt);
   }
 
@@ -73,7 +73,7 @@ public class WhisperClient {
    */
   public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat) {
     // Get base API URL from environment or use default constant
-    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
 
     return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, responseFormat);
   }
@@ -81,7 +81,7 @@ public class WhisperClient {
   public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat,
       String prompt) {
     // Get base API URL from environment or use default constant
-    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
 
     WhisperTranscriptionsRequest entity = new WhisperTranscriptionsRequest(responseFormat, prompt);
     return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, entity);

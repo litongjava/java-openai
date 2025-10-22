@@ -12,7 +12,7 @@ import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.consts.OpenAiConstants;
+import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openai.consts.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
@@ -38,7 +38,7 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class OpenAiClient {
   public static boolean debug = false;
-  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
 
   /**
    * 
@@ -110,13 +110,13 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(Map<String, String> header, String bodyString, Callback callback) {
-    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
   public static EventSource chatCompletions(Map<String, String> header, String bodyString,
       EventSourceListener listener) {
-    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, listener);
   }
 
@@ -455,7 +455,7 @@ public class OpenAiClient {
 
   public static Response embeddings(String api_perfix_url, String apiKey, String bodyString) {
     if (api_perfix_url == null) {
-      api_perfix_url = OpenAiConstants.API_PERFIX_URL;
+      api_perfix_url = OpenAiConst.API_PREFIX_URL;
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();

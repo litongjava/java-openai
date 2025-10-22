@@ -1,4 +1,4 @@
-package com.litongjava.gitee.image;
+package com.litongjava.image;
 
 import java.util.List;
 
@@ -17,14 +17,21 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class GiteeImageResponse {
+public class UniImageResponse {
   private String rawResponse;
   private Long created;
-  private List<GiteeImageData> data;
+  private List<UniImageData> data;
 
   public String getImageUrl() {
     if (this.data != null && data.size() > 0) {
       return data.get(0).getUrl();
+    }
+    return null;
+  }
+
+  public String getB64Data() {
+    if (this.data != null && data.size() > 0) {
+      return data.get(0).getB64_json();
     }
     return null;
   }

@@ -34,7 +34,7 @@ import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequestVo;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.consts.OpenAiConstants;
+import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openrouter.OpenRouterConst;
 import com.litongjava.tencent.TencentConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -52,7 +52,7 @@ public class UniChatClient {
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
 
-  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
 
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PREFIX_URL);

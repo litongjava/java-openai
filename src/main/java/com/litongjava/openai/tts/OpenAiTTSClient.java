@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.openai.consts.OpenAiConstants;
+import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
@@ -32,7 +32,7 @@ public class OpenAiTTSClient {
   }
 
   public static ResponseVo speech(String apiKey, OpenAiTTSRequestVo vo) {
-    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConstants.API_PERFIX_URL);
+    String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return speech(apiPrefixUrl, apiKey, vo);
   }
 

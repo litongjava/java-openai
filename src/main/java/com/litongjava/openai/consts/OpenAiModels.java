@@ -33,4 +33,5 @@ public interface OpenAiModels {
   String TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large";
   String WHISPER_1 = "whisper-1";
 
+  String GPT_IMAGE_1 = "gpt-image-1";
 }
