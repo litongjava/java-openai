@@ -83,6 +83,8 @@ public class CodeBlockUtils {
         return generatedText;
       } else if (generatedText.startsWith("# -*- coding: utf-8 -*-")) {
         return generatedText;
+      } else if (generatedText.startsWith("-*- coding: utf-8 -*-")) {
+        return generatedText;
       } else {
         log.error("No code data found in the output:{}", generatedText);
         return null;
