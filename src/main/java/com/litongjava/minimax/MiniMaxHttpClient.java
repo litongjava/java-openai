@@ -31,6 +31,11 @@ public class MiniMaxHttpClient {
     return speech(miniMaxTTSRequest);
   }
 
+  public static MiniMaxTTSResponse speech(String text, String voice, String language_boost) {
+    MiniMaxTTSRequest miniMaxTTSRequest = new MiniMaxTTSRequest(text, voice, language_boost);
+    return speech(miniMaxTTSRequest);
+  }
+
   /**
    * 传入 FishAudioTTSRequestVo 对象。
    *
@@ -61,7 +66,7 @@ public class MiniMaxHttpClient {
    * @param apiPrefixUrl 接口前缀地址，如 https://api.fish.audio/v1
    * @param apiKey       API 密钥
    * @param vo           请求对象
-   * @return MiniMaxTTSResponse   响应结果
+   * @return MiniMaxTTSResponse 响应结果
    */
   public static MiniMaxTTSResponse speech(String apiPrefixUrl, String groupId, String apiKey, MiniMaxTTSRequest vo) {
     // 使用 msgpack 工具将请求对象序列化成Base64
@@ -75,7 +80,7 @@ public class MiniMaxHttpClient {
    * @param apiPrefixUrl 接口前缀
    * @param apiKey       API 密钥
    * @param payload      msgpack 序列化后的请求数据
-   * @return MiniMaxTTSResponse  响应结果，成功时包含音频Base64数据
+   * @return MiniMaxTTSResponse 响应结果，成功时包含音频Base64数据
    */
   public static MiniMaxTTSResponse speechRequest(String apiPrefixUrl, String groupId, String apiKey, String payload) {
     // 接口地址为 “/tts”

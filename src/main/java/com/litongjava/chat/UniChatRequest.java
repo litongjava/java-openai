@@ -34,13 +34,12 @@ public class UniChatRequest {
   private Integer max_tokens;
   private Boolean enable_thinking;
   private UniThinkingConfig thinkingConfig;
-  //ChatResponseFormatType
+  // ChatResponseFormatType
   private String responseFormat;
   private UniResponseSchema responseSchema;
   private ChatProvider provider;
   private List<String> responseModalities;
   private Boolean enable_search;
-
 
   public UniChatRequest(List<UniChatMessage> messages) {
     this.messages = messages;
@@ -63,6 +62,11 @@ public class UniChatRequest {
   public UniChatRequest(String systemPrompt, Float temperature) {
     this.systemPrompt = systemPrompt;
     this.temperature = temperature;
+  }
+
+  public UniChatRequest(String systemPrompt, List<UniChatMessage> messages) {
+    this.systemPrompt = systemPrompt;
+    this.messages = messages;
   }
 
   public UniChatRequest(String systemPrompt, List<UniChatMessage> messages, Float temperature) {
@@ -101,11 +105,11 @@ public class UniChatRequest {
         messages.add(part);
       }
     }
-    
+
     this.messages = messages;
     return this;
   }
-  
+
   public static UniChatRequest platform(String platform, String modelName) {
     UniChatRequest uniChatRequest = new UniChatRequest();
     uniChatRequest.setPlatform(platform).setModel(modelName);

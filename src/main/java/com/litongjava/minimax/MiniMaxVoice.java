@@ -20,6 +20,7 @@ public interface MiniMaxVoice {
   String Exuberant_Girl = "Exuberant_Girl";
   String English_expressive_narrator = "English_expressive_narrator";
 
+  String English_magnetic_voiced_man = "English_magnetic_voiced_man";
   String Chinese_Mandarin_Gentleman = "Chinese (Mandarin)_Gentleman";
   String Japanese_IntellectualSenior = "Japanese_IntellectualSenior";
   String French_Male_Speech_New = "French_Male_Speech_New";

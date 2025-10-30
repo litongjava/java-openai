@@ -13,10 +13,13 @@ public class MiniMaxHttpClientTest {
   @Test
   public void test() {
     EnvUtils.load();
-    //MINIMAX_GROUP_ID and MINIMAX_API_KEY
+    // MINIMAX_GROUP_ID and MINIMAX_API_KEY
     // English_expressive_narrator and Chinese_Mandarin_Gentleman
-    MiniMaxTTSResponse speech = MiniMaxHttpClient.speech("How are you", MiniMaxVoice.English_expressive_narrator);
-    System.out.println(speech);
+    // String text = "At 0 degrees, cosine equals 1.";
+    String text = "At 0 degress, consine equals 1.";
+    
+    MiniMaxTTSResponse speech = MiniMaxHttpClient.speech(text, MiniMaxVoice.English_magnetic_voiced_man);
+    // System.out.println(speech);
     String audio = speech.getData().getAudio();
     byte[] decodeToBytes;
     decodeToBytes = HexUtils.decodeHex(audio);

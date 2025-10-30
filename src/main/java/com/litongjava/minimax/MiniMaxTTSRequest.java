@@ -4,13 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * https://platform.minimax.io/document/T2A%20V2
+ * 
+ * @author Tong Li
+ *
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class MiniMaxTTSRequest {
-  private String model = "speech-02-hd";
+  private String model = "speech-2.6-hd";
   private String text;
   private boolean stream = false;
+  private String language_booststring;
   private boolean subtitle_enable = false;
   private MiniMaxVoiceSetting voice_setting;
   private MiniMaxAudioSetting audio_setting;
@@ -24,5 +31,12 @@ public class MiniMaxTTSRequest {
     this.voice_setting = new MiniMaxVoiceSetting(voice);
     this.audio_setting = new MiniMaxAudioSetting();
 
+  }
+
+  public MiniMaxTTSRequest(String text, String voice, String language_boost) {
+    this.text = text;
+    this.voice_setting = new MiniMaxVoiceSetting(voice);
+    this.language_booststring = language_boost;
+    this.audio_setting = new MiniMaxAudioSetting();
   }
 }
