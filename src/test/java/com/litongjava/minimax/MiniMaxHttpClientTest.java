@@ -17,8 +17,8 @@ public class MiniMaxHttpClientTest {
     // English_expressive_narrator and Chinese_Mandarin_Gentleman
     // String text = "At 0 degrees, cosine equals 1.";
     String text = "At 0 degress, consine equals 1.";
-    
-    MiniMaxTTSResponse speech = MiniMaxHttpClient.speech(text, MiniMaxVoice.English_magnetic_voiced_man);
+
+    MiniMaxTTSResponse speech = MiniMaxHttpClient.speech(text, MiniMaxVoice.English_magnetic_voiced_man, "English");
     // System.out.println(speech);
     String audio = speech.getData().getAudio();
     byte[] decodeToBytes;

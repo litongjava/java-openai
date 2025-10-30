@@ -17,7 +17,7 @@ public class MiniMaxTTSRequest {
   private String model = "speech-2.6-hd";
   private String text;
   private boolean stream = false;
-  private String language_booststring;
+  private String language_boost;
   private boolean subtitle_enable = false;
   private MiniMaxVoiceSetting voice_setting;
   private MiniMaxAudioSetting audio_setting;
@@ -36,7 +36,7 @@ public class MiniMaxTTSRequest {
   public MiniMaxTTSRequest(String text, String voice, String language_boost) {
     this.text = text;
     this.voice_setting = new MiniMaxVoiceSetting(voice);
-    this.language_booststring = language_boost;
+    this.language_boost = language_boost;
     this.audio_setting = new MiniMaxAudioSetting();
   }
 }

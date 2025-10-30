@@ -43,9 +43,8 @@ public class MiniMaxHttpClient {
    * @return MiniMaxTTSResponse 响应结果
    */
   public static MiniMaxTTSResponse speech(MiniMaxTTSRequest vo) {
-    String groupId = EnvUtils.get("MINIMAX_GROUP_ID");
     String apiKey = EnvUtils.get("MINIMAX_API_KEY");
-    return speech(groupId, apiKey, vo);
+    return speech(apiKey, vo);
   }
 
   /**
@@ -55,9 +54,9 @@ public class MiniMaxHttpClient {
    * @param vo     请求对象
    * @return MiniMaxTTSResponse 响应结果
    */
-  public static MiniMaxTTSResponse speech(String groupId, String apiKey, MiniMaxTTSRequest vo) {
-    String apiPrefixUrl = EnvUtils.get("FISHAUDIO_API_URL", TTS_URL);
-    return speech(apiPrefixUrl, groupId, apiKey, vo);
+  public static MiniMaxTTSResponse speech(String apiKey, MiniMaxTTSRequest vo) {
+    String apiPrefixUrl = EnvUtils.get("MINIMAX_API_URL", TTS_URL);
+    return speech(apiPrefixUrl, apiKey, vo);
   }
 
   /**
@@ -68,10 +67,10 @@ public class MiniMaxHttpClient {
    * @param vo           请求对象
    * @return MiniMaxTTSResponse 响应结果
    */
-  public static MiniMaxTTSResponse speech(String apiPrefixUrl, String groupId, String apiKey, MiniMaxTTSRequest vo) {
+  public static MiniMaxTTSResponse speech(String apiPrefixUrl, String apiKey, MiniMaxTTSRequest vo) {
     // 使用 msgpack 工具将请求对象序列化成Base64
     String json = JsonUtils.toJson(vo);
-    return speechRequest(apiPrefixUrl, groupId, apiKey, json);
+    return speechRequest(apiPrefixUrl, apiKey, json);
   }
 
   /**
@@ -82,9 +81,9 @@ public class MiniMaxHttpClient {
    * @param payload      msgpack 序列化后的请求数据
    * @return MiniMaxTTSResponse 响应结果，成功时包含音频Base64数据
    */
-  public static MiniMaxTTSResponse speechRequest(String apiPrefixUrl, String groupId, String apiKey, String payload) {
+  public static MiniMaxTTSResponse speechRequest(String apiPrefixUrl, String apiKey, String payload) {
     // 接口地址为 “/tts”
-    String baseUrl = apiPrefixUrl + "/t2a_v2?GroupId=" + groupId;
+    String baseUrl = apiPrefixUrl + "/t2a_v2";
     Map<String, String> header = new HashMap<>();
     header.put("Authorization", "Bearer " + apiKey);
     return execute(baseUrl, header, payload);
