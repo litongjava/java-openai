@@ -53,7 +53,7 @@ public interface GiteeModels {
   String NOMIC_EMBED_CODE = "nomic-embed-code";
   String QWEN2_5_CODER_14B_INSTRUCT = "Qwen2.5-Coder-14B-Instruct";
   String QWEN2_5_CODER_32B_INSTRUCT = "Qwen2.5-Coder-32B-Instruct";
-  String qwen3_coder_480b_a35b_instruct = "qwen3-coder-480b-a35b-instruct";
+  String QWEN3_CODER_480B_A35B_INSTRUCT = "qwen3-coder-480b-a35b-instruct";
 
   // ===== Cog / THUDM / GLM / CogVideo =====
   String COGVIDE0X_5B = "CogVideoX-5b";
