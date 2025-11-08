@@ -10,7 +10,7 @@ import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openai.consts.OpenAiModels;
@@ -134,7 +134,7 @@ public class OpenAiClient {
   }
 
   public static OpenAiChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -144,7 +144,7 @@ public class OpenAiClient {
   public static OpenAiChatResponseVo chatCompletions(String model, String systemPrompt,
       List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -157,7 +157,7 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
+  public static OpenAiChatResponseVo chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     OpenAiChatResponseVo respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
@@ -188,7 +188,7 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
+  public static OpenAiChatResponseVo chatCompletions(OpenAiChatRequest chatRequestVo) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return chatCompletions(apiKey, chatRequestVo);
   }
@@ -199,12 +199,12 @@ public class OpenAiClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
+  public static Call chatCompletions(OpenAiChatRequest chatRequestVo, Callback callback) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
 
-  public static EventSource chatCompletions(OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+  public static EventSource chatCompletions(OpenAiChatRequest chatRequestVo, EventSourceListener listener) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     return chatCompletions(json, listener);
   }
@@ -217,7 +217,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey,
-      OpenAiChatRequestVo chatRequestVo) {
+      OpenAiChatRequest chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     if (debug) {
       log.info("request json:{}", json);
@@ -326,12 +326,12 @@ public class OpenAiClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo,
+  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
       Callback callback) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
-  public static EventSource chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo,
+  public static EventSource chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
       EventSourceListener listener) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), listener);
   }
@@ -436,7 +436,7 @@ public class OpenAiClient {
 
   public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model,
       List<OpenAiChatMessage> messages) {
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -569,7 +569,7 @@ public class OpenAiClient {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(user);
 
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setModel(model);
     openAiChatRequestVo.setMessages(messages);
     return chatCompletions(apiKey, openAiChatRequestVo);

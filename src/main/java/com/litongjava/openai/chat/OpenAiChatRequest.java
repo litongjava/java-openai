@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class OpenAiChatRequestVo {
+public class OpenAiChatRequest {
   private String model;
   private Boolean return_images;
   private List<ClaudeMessageContent> system;
@@ -57,7 +57,7 @@ public class OpenAiChatRequestVo {
 
   }
 
-  public OpenAiChatRequestVo setChatMessages(List<UniChatMessage> messages) {
+  public OpenAiChatRequest setChatMessages(List<UniChatMessage> messages) {
     List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
     for (UniChatMessage message : messages) {
       openAiMessages.add(new OpenAiChatMessage(message));
@@ -66,7 +66,7 @@ public class OpenAiChatRequestVo {
     return this;
   }
 
-  public OpenAiChatRequestVo setChatMessages(List<UniChatMessage> messages, String provider) {
+  public OpenAiChatRequest setChatMessages(List<UniChatMessage> messages, String provider) {
     if (ModelPlatformName.ANTHROPIC.equals(provider)) {
       List<OpenAiChatMessage> openAiMessages = new ArrayList<>();
       for (UniChatMessage message : messages) {

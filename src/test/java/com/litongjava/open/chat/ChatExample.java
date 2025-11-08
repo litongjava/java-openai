@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -29,7 +29,7 @@ public class ChatExample {
 
     messages.add(message);
 
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setStream(false);
     chatRequestVo.setModel("gpt-4o-2024-05-13");
     chatRequestVo.setMessages(messages);

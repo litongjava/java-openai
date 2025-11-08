@@ -24,7 +24,7 @@ public class OpenAiChatRequestVoTest {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(openAiChatMessage);
 
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel("4o");
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);

@@ -22,12 +22,14 @@ public class UniChatRequest {
   private String groupName;
   private Long taskId;
   private String taskName;
+
   private boolean useSystemPrompt = true;
   private String apiKey;
   private String platform;
   private String model;
   private String systemPrompt;;
   private boolean cacheSystemPrompt;
+  private Boolean stream;
   private List<UniChatMessage> messages;
   private Float temperature;
   private String cachedId;
@@ -88,8 +90,7 @@ public class UniChatRequest {
     this.temperature = temperature;
   }
 
-  public UniChatRequest(String provider, String model, String systemPrompt, List<UniChatMessage> messages,
-      Float temperature) {
+  public UniChatRequest(String provider, String model, String systemPrompt, List<UniChatMessage> messages, Float temperature) {
     this.systemPrompt = systemPrompt;
     this.platform = provider;
     this.model = model;

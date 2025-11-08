@@ -31,7 +31,7 @@ import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.Choice;
 import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.openai.chat.OpenAiChatResponseVo;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.consts.OpenAiConst;
@@ -213,67 +213,6 @@ public class UniChatClient {
     }
   }
 
-  public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useVolcEngine(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(VOLCENGINE_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useOpenRouter(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useZenmux(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useBailian(String key, UniChatRequest uniChatRequest) {
-    uniChatRequest.setEnable_thinking(false);
-    return useOpenAi(BAILIAN_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useTencent(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(TENCENT_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useMiniMax(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(MINIMAX_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useMoonshot(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(MOONSHOT_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useCerebras(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(CEREBRAS_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useOllama(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(OLLAMA_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useLlamacpp(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(LLAMACPP_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useVllm(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(VLLM_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useSwift(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(SWIFT_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useGitee(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(GITEE_API_URL, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useTitanium(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(TITANIUM_API_URL, key, uniChatRequest);
-  }
-
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
@@ -316,7 +255,7 @@ public class UniChatClient {
         openAiChatMesages.add(0, new OpenAiChatMessage("system", systemPrompt));
       }
     }
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setMessages(openAiChatMesages);
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
@@ -394,7 +333,7 @@ public class UniChatClient {
       }
     }
 
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
@@ -527,39 +466,118 @@ public class UniChatClient {
   }
 
   public static EventSource stream(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    if (ModelPlatformName.GOOGLE.equals(uniChatRequest.getPlatform())) {
+
+    String platform = uniChatRequest.getPlatform();
+
+    if (ModelPlatformName.GOOGLE.equals(platform)) {
+      if (key == null) {
+        key = GEMINI_API_KEY;
+      }
       return useGemeni(key, uniChatRequest, listener);
-    } else if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
+
+    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+      if (key == null) {
+        key = CLAUDE_API_KEY;
+      }
       return useClaude(key, uniChatRequest, listener);
 
-    } else if (ModelPlatformName.VOLC_ENGINE.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
+      if (key == null) {
+        key = VOLCENGINE_API_KEY;
+      }
+      Integer max_tokens = uniChatRequest.getMax_tokens();
+      if (max_tokens == null) {
+        uniChatRequest.setMax_tokens(16384);
+      }
       return useVolcEngine(key, uniChatRequest, listener);
 
-    } else if (ModelPlatformName.OPENROUTER.equals(uniChatRequest.getPlatform())) {
+    } else if (ModelPlatformName.OPENROUTER.equals(platform)) {
+      if (key == null) {
+        key = OPENROUTER_API_KEY;
+      }
       return useOpenRouter(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.ZENMUX.equals(platform)) {
+      if (key == null) {
+        key = ZENMUX_API_KEY;
+      }
+      return useZenmux(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.BAILIAN.equals(platform)) {
+      if (key == null) {
+        key = BAILIAN_API_KEY;
+      }
+      return useBailian(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.TENCENT.equals(platform)) {
+      if (key == null) {
+        key = TENCENT_API_KEY;
+      }
+      return useTencent(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.MINIMAX.equals(platform)) {
+      if (key == null) {
+        key = MINIMAX_API_KEY;
+      }
+      return useMiniMax(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.MOONSHOT.equals(platform)) {
+      if (key == null) {
+        key = MOONSHOT_API_KEY;
+      }
+      return useMoonshot(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.CEREBRAS.equals(platform)) {
+      if (key == null) {
+        key = CEREBRAS_API_KEY;
+      }
+      return useCerebras(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.OLLAMA.equals(platform)) {
+      if (key == null) {
+        key = OLLAMA_API_KEY;
+      }
+      return useOllama(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.LLAMACPP.equals(platform)) {
+      if (key == null) {
+        key = LLAMACPP_API_KEY;
+      }
+      return useLlamacpp(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.VLLM.equals(platform)) {
+      if (key == null) {
+        key = VLLM_API_KEY;
+      }
+      return useVllm(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.SWIFT.equals(platform)) {
+      if (key == null) {
+        key = SWIFT_API_KEY;
+      }
+      return useSwift(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.TITANIUM.equals(platform)) {
+      if (key == null) {
+        key = TITANIUM_API_KEY;
+      }
+      return useTitanium(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.GITEE.equals(platform)) {
+      if (key == null) {
+        key = GITEE_API_KEY;
+      }
+      return useGitee(key, uniChatRequest, listener);
+
     } else {
+      if (key == null) {
+        key = OPENAI_API_KEY;
+      }
       return useOpenAi(key, uniChatRequest, listener);
     }
   }
 
-  public static EventSource useVolcEngine(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    return useOpenAi(VOLCENGINE_API_URL, key, uniChatRequest, listener);
-  }
-
-  public static EventSource useOpenRouter(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest, listener);
-  }
-
-  public static EventSource useZenmux(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest, listener);
-  }
-
-  public static EventSource useOpenAi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    return useOpenAi(OPENAI_API_URL, key, uniChatRequest, listener);
-  }
-
-  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest,
-      EventSourceListener listener) {
+  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest, EventSourceListener listener) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -571,7 +589,7 @@ public class UniChatClient {
     if (uniChatRequest.isUseSystemPrompt()) {
       messages.add(0, new UniChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
     openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
     openAiChatRequestVo.setChatMessages(messages);
@@ -597,7 +615,7 @@ public class UniChatClient {
       }
     }
 
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openaiChatRequest = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
@@ -605,21 +623,22 @@ public class UniChatClient {
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
         }
-        openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
+        openaiChatRequest.setSystemChatMessage(claudeChatMessage);
       }
     }
 
-    openAiChatRequestVo.setModel(uniChatRequest.getModel());
-    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
-    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
+    openaiChatRequest.setModel(uniChatRequest.getModel());
+    openaiChatRequest.setTemperature(uniChatRequest.getTemperature());
+    openaiChatRequest.setChatMessages(messages, uniChatRequest.getPlatform());
+    openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
+    openaiChatRequest.setStream(uniChatRequest.getStream());
 
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     EventSource eventSource = null;
-    if (apiPrefixUrl == null) {
-      eventSource = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo, listener);
+    if (apiPrefixUrl != null) {
+      eventSource = ClaudeClient.chatCompletions(apiPrefixUrl, key, openaiChatRequest, listener);
     } else {
-      eventSource = ClaudeClient.chatCompletions(key, openAiChatRequestVo, listener);
+      eventSource = ClaudeClient.chatCompletions(key, openaiChatRequest, listener);
     }
 
     return eventSource;
@@ -647,4 +666,124 @@ public class UniChatClient {
 
   }
 
+  public static EventSource useVolcEngine(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(VOLCENGINE_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static EventSource useOpenRouter(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static EventSource useZenmux(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static EventSource useOpenAi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(OPENAI_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useVolcEngine(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(VOLCENGINE_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useOpenRouter(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useZenmux(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(ZENMUX_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useBailian(String key, UniChatRequest uniChatRequest) {
+    uniChatRequest.setEnable_thinking(false);
+    return useOpenAi(BAILIAN_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useBailian(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(BAILIAN_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useTencent(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(TENCENT_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useTencent(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(TENCENT_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useMiniMax(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(MINIMAX_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useMiniMax(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(MINIMAX_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useMoonshot(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(MOONSHOT_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useMoonshot(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(MOONSHOT_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useCerebras(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(CEREBRAS_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useCerebras(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(CEREBRAS_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useOllama(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(OLLAMA_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useOllama(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(OLLAMA_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useLlamacpp(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(LLAMACPP_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useLlamacpp(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(LLAMACPP_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useVllm(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(VLLM_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useVllm(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(VLLM_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useSwift(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(SWIFT_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useSwift(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(SWIFT_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useGitee(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(GITEE_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useGitee(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(GITEE_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useTitanium(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(TITANIUM_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useTitanium(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(TITANIUM_API_URL, key, uniChatRequest, listener);
+  }
 }

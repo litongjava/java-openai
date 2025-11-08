@@ -10,7 +10,7 @@ import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
+import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -107,7 +107,7 @@ public class ClaudeClient {
   }
 
   public static ClaudeChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -117,7 +117,7 @@ public class ClaudeClient {
 
   public static ClaudeChatResponseVo chatCompletions(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -130,7 +130,7 @@ public class ClaudeClient {
    * @param chatRequestVo
    * @return
    */
-  public static ClaudeChatResponseVo chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo) {
+  public static ClaudeChatResponseVo chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo) {
     if (chatRequestVo.getMax_tokens() == null) {
       chatRequestVo.setMax_tokens(64000);
     }
@@ -160,7 +160,7 @@ public class ClaudeClient {
    * @param chatRequestVo
    * @return
    */
-  public static ClaudeChatResponseVo chatCompletions(OpenAiChatRequestVo chatRequestVo) {
+  public static ClaudeChatResponseVo chatCompletions(OpenAiChatRequest chatRequestVo) {
     return chatCompletions(CLAUDE_API_KEY, chatRequestVo);
   }
 
@@ -170,7 +170,7 @@ public class ClaudeClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(OpenAiChatRequestVo chatRequestVo, Callback callback) {
+  public static Call chatCompletions(OpenAiChatRequest chatRequestVo, Callback callback) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
@@ -182,7 +182,7 @@ public class ClaudeClient {
    * @param chatRequestVo
    * @return
    */
-  public static ClaudeChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo) {
+  public static ClaudeChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequest chatRequestVo) {
     Integer max_tokens = chatRequestVo.getMax_tokens();
     if (max_tokens == null) {
       chatRequestVo.setMax_tokens(64000);
@@ -236,7 +236,7 @@ public class ClaudeClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequest chatRequestVo, EventSourceListener listener) {
     String bodyString = JsonUtils.toSkipNullJson(chatRequestVo);
     return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
   }
@@ -272,12 +272,12 @@ public class ClaudeClient {
     }
   }
 
-  public static Call chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
+  public static Call chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo, Callback callback) {
     String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
-  public static EventSource chatCompletions(String apiKey, OpenAiChatRequestVo chatRequestVo, EventSourceListener listener) {
+  public static EventSource chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo, EventSourceListener listener) {
     String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, apiKey, chatRequestVo, listener);
   }
@@ -290,7 +290,7 @@ public class ClaudeClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequestVo chatRequestVo, Callback callback) {
+  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo, Callback callback) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
@@ -391,7 +391,7 @@ public class ClaudeClient {
   }
 
   public static ClaudeChatResponseVo chatCompletions(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
-    OpenAiChatRequestVo chatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
     chatRequestVo.setMessages(messages);
@@ -514,7 +514,7 @@ public class ClaudeClient {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(user);
 
-    OpenAiChatRequestVo openAiChatRequestVo = new OpenAiChatRequestVo();
+    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setModel(model);
     openAiChatRequestVo.setMessages(messages);
     return chatCompletions(apiKey, openAiChatRequestVo);
