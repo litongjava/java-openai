@@ -168,11 +168,13 @@ public class OpenAiClient {
           respVo = JsonUtils.parse(bodyString, OpenAiChatResponse.class);
           respVo.setRawResponse(bodyString);
         } catch (Exception e) {
+          log.error("AI generate failed status code:{},response body:{}", code, bodyString);
           throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
               bodyString);
         }
 
       } else {
+        log.error("AI generate failed status code:{},response body:{}", code, bodyString);
         throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
             bodyString);
       }
@@ -232,13 +234,13 @@ public class OpenAiClient {
           respVo.setRawResponse(bodyString);
 
         } catch (Exception e) {
-          log.error("status code:{},response body:{}", code, bodyString);
+          log.error("AI generate failed status code:{},response body:{}", code, bodyString);
           throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,
               bodyString);
         }
         respVo.setRawResponse(bodyString);
       } else {
-        log.error("status code:{},response body:{}", code, bodyString);
+        log.error("AI generate failed status code:{},response body:{}", code, bodyString);
         throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,
             bodyString);
       }
@@ -524,11 +526,13 @@ public class OpenAiClient {
     EmbeddingResponseVo respVo = null;
     String json = Json.getSkipNullJson().toJson(reoVo);
     try (Response response = embeddings(apiKey, json)) {
+      int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
         String serverUrl = EnvUtils.get("OPENAI_API_URL");
+        log.error("AI generate failed status code:{},response body:{}", code, bodyString);
         throw new GenerateException(ModelPlatformName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(),
             bodyString);
       }

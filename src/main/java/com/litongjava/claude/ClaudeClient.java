@@ -146,6 +146,7 @@ public class ClaudeClient {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponseVo.class);
       } else {
         String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
+        log.error("Claude generate failed {}", bodyString);
         throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", apiPerfixUrl, json, code, bodyString);
       }
     } catch (IOException e) {

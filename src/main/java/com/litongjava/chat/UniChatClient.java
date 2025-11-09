@@ -335,13 +335,15 @@ public class UniChatClient {
 
     OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
-      String systemPrompt = uniChatRequest.getSystemPrompt();
       if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
-        ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
-        if (uniChatRequest.isCacheSystemPrompt()) {
-          claudeChatMessage.setCache_control(new ClaudeCacheControl());
+        String systemPrompt = uniChatRequest.getSystemPrompt();
+        if (systemPrompt != null) {
+          ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
+          if (uniChatRequest.isCacheSystemPrompt()) {
+            claudeChatMessage.setCache_control(new ClaudeCacheControl());
+          }
+          openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
         }
-        openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
       }
     }
 
@@ -595,7 +597,7 @@ public class UniChatClient {
     openaiChatRequest.setChatMessages(messages);
     openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
     openaiChatRequest.setStream(uniChatRequest.getStream());
-    
+
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     EventSource eventSource = null;
     if (apiPrefixUrl != null) {
