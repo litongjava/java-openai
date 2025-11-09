@@ -236,8 +236,12 @@ public class ClaudeClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequest chatRequestVo, EventSourceListener listener) {
-    String bodyString = JsonUtils.toSkipNullJson(chatRequestVo);
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequest chatRequest,
+      EventSourceListener listener) {
+    if (chatRequest.getMax_tokens() == null) {
+      chatRequest.setMax_tokens(64000);
+    }
+    String bodyString = JsonUtils.toSkipNullJson(chatRequest);
     return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
   }
 
@@ -322,7 +326,8 @@ public class ClaudeClient {
     return newCall;
   }
 
-  public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, EventSourceListener listener) {
+  public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString,
+      EventSourceListener listener) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     if (debug) {
@@ -476,7 +481,8 @@ public class ClaudeClient {
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
       } else {
-        throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PREFIX_URL, json, code, bodyString);
+        throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PREFIX_URL, json, code,
+            bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

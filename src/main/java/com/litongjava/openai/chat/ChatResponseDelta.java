@@ -15,6 +15,9 @@ public class ChatResponseDelta {
   private String refusal;
   private ChatFunctionCall function_call;
 
+  // claude
+  private String text;
+
   public ChatResponseDelta(String role, String content) {
     this.role = role;
     this.content = content;

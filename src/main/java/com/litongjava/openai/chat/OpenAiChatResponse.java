@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenAiChatResponseVo {
+public class OpenAiChatResponse {
   private String id;
   private String provider;
   private String model;

@@ -32,7 +32,7 @@ import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.Choice;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequest;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.openai.client.OpenAiClient;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openrouter.OpenRouterConst;
@@ -286,7 +286,7 @@ public class UniChatClient {
 
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
-    OpenAiChatResponseVo chatResponse = null;
+    OpenAiChatResponse chatResponse = null;
     if (apiPrefixUrl != null) {
       chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
     } else {
@@ -589,17 +589,19 @@ public class UniChatClient {
     if (uniChatRequest.isUseSystemPrompt()) {
       messages.add(0, new UniChatMessage("system", uniChatRequest.getSystemPrompt()));
     }
-    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
-    openAiChatRequestVo.setModel(uniChatRequest.getModel());
-    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages);
-    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
+    OpenAiChatRequest openaiChatRequest = new OpenAiChatRequest();
+    openaiChatRequest.setModel(uniChatRequest.getModel());
+    openaiChatRequest.setTemperature(uniChatRequest.getTemperature());
+    openaiChatRequest.setChatMessages(messages);
+    openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
+    openaiChatRequest.setStream(uniChatRequest.getStream());
+    
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     EventSource eventSource = null;
     if (apiPrefixUrl != null) {
-      eventSource = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo, listener);
+      eventSource = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openaiChatRequest, listener);
     } else {
-      eventSource = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo, listener);
+      eventSource = OpenAiClient.chatCompletions(prefixUrl, apiKey, openaiChatRequest, listener);
     }
     return eventSource;
   }

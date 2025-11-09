@@ -11,7 +11,7 @@ import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequest;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openai.consts.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
@@ -126,14 +126,14 @@ public class OpenAiClient {
    * @param chatMessage
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String model, OpenAiChatMessage chatMessage) {
+  public static OpenAiChatResponse chatCompletions(String model, OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
 
     return chatCompletions(model, messages);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String model, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponse chatCompletions(String model, List<OpenAiChatMessage> messages) {
     OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -141,7 +141,7 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String model, String systemPrompt,
+  public static OpenAiChatResponse chatCompletions(String model, String systemPrompt,
       List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
     OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
@@ -157,15 +157,15 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo) {
+  public static OpenAiChatResponse chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
-    OpenAiChatResponseVo respVo = null;
+    OpenAiChatResponse respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
       int code = response.code();
       if (response.isSuccessful()) {
         try {
-          respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+          respVo = JsonUtils.parse(bodyString, OpenAiChatResponse.class);
           respVo.setRawResponse(bodyString);
         } catch (Exception e) {
           throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
@@ -188,7 +188,7 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(OpenAiChatRequest chatRequestVo) {
+  public static OpenAiChatResponse chatCompletions(OpenAiChatRequest chatRequestVo) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return chatCompletions(apiKey, chatRequestVo);
   }
@@ -216,19 +216,19 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponseVo chatCompletions(String apiPerfixUrl, String apiKey,
+  public static OpenAiChatResponse chatCompletions(String apiPerfixUrl, String apiKey,
       OpenAiChatRequest chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     if (debug) {
       log.info("request json:{}", json);
     }
-    OpenAiChatResponseVo respVo = null;
+    OpenAiChatResponse respVo = null;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         try {
-          respVo = JsonUtils.parse(bodyString, OpenAiChatResponseVo.class);
+          respVo = JsonUtils.parse(bodyString, OpenAiChatResponse.class);
           respVo.setRawResponse(bodyString);
 
         } catch (Exception e) {
@@ -393,7 +393,7 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chat(String prompt) {
+  public static OpenAiChatResponse chat(String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage("user", prompt);
     return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
   }
@@ -404,7 +404,7 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chatWithRole(String role, String prompt) {
+  public static OpenAiChatResponse chatWithRole(String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(OpenAiModels.GPT_4O_MINI, chatMessage);
   }
@@ -416,25 +416,25 @@ public class OpenAiClient {
    * @param prompt
    * @return
    */
-  public static OpenAiChatResponseVo chatWithModel(String model, String role, String prompt) {
+  public static OpenAiChatResponse chatWithModel(String model, String role, String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(model, chatMessage);
   }
 
-  public static OpenAiChatResponseVo chatWithModel(String apiUrl, String key, String model, String role,
+  public static OpenAiChatResponse chatWithModel(String apiUrl, String key, String model, String role,
       String prompt) {
     OpenAiChatMessage chatMessage = new OpenAiChatMessage(role, prompt);
     return chatCompletions(apiUrl, key, model, chatMessage);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model,
+  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model,
       OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
     return chatCompletions(apiUrl, key, model, messages);
   }
 
-  public static OpenAiChatResponseVo chatCompletions(String apiUrl, String key, String model,
+  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model,
       List<OpenAiChatMessage> messages) {
     OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
@@ -548,12 +548,12 @@ public class OpenAiClient {
     return embeddings.getData().get(0).getEmbedding();
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String prompt, byte[] bytes, String suffix) {
+  public static OpenAiChatResponse chatWithImage(String prompt, byte[] bytes, String suffix) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return chatWithImage(apiKey, prompt, bytes, suffix);
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String apiKey, String model, String prompt, byte[] bytes,
+  public static OpenAiChatResponse chatWithImage(String apiKey, String model, String prompt, byte[] bytes,
       String suffix) {
 
     ChatMessageContent text = new ChatMessageContent(prompt);
@@ -575,7 +575,7 @@ public class OpenAiClient {
     return chatCompletions(apiKey, openAiChatRequestVo);
   }
 
-  public static OpenAiChatResponseVo chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
+  public static OpenAiChatResponse chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
     return chatWithImage(apiKey, OpenAiModels.GPT_4O_MINI, prompt, bytes, suffix);
   }
 

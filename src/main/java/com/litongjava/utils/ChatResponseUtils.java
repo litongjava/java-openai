@@ -12,12 +12,12 @@ import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.ChatRole;
 import com.litongjava.openai.chat.Choice;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatResponse;
 
 public class ChatResponseUtils {
 
-  public static OpenAiChatResponseVo toOpenAiChatResponseVo(GeminiChatResponseVo geminiResponseVo, boolean isStream) {
-    OpenAiChatResponseVo chatResponseVo = new OpenAiChatResponseVo();
+  public static OpenAiChatResponse toOpenAiChatResponseVo(GeminiChatResponseVo geminiResponseVo, boolean isStream) {
+    OpenAiChatResponse chatResponseVo = new OpenAiChatResponse();
     if (geminiResponseVo != null && geminiResponseVo.getCandidates() != null) {
       GeminiUsageMetadataVo usageMetadata = geminiResponseVo.getUsageMetadata();
       ChatResponseUsage chatResponseUsage = new ChatResponseUsage();

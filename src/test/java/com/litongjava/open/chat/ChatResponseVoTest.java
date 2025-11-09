@@ -2,7 +2,7 @@ package com.litongjava.open.chat;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
+import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class ChatResponseVoTest {
@@ -10,7 +10,7 @@ public class ChatResponseVoTest {
   @Test
   public void testParse() {
     String content = "{\"id\":\"chatcmpl-9P3fvvyk4IuCprCnvMytoKN8UtskC\",\"object\":\"chat.completion.chunk\",\"created\":1715759355,\"model\":\"gpt-3.5-turbo-0125\",\"system_fingerprint\":null,\"choices\":[{\"index\":0,\"delta\":{\"content\":\" How\"},\"logprobs\":null,\"finish_reason\":null}]}";
-    OpenAiChatResponseVo chatResponseVo = JsonUtils.parse(content, OpenAiChatResponseVo.class);
+    OpenAiChatResponse chatResponseVo = JsonUtils.parse(content, OpenAiChatResponse.class);
     String json = JsonUtils.toJson(chatResponseVo);
     System.out.println(json);
   }
@@ -33,7 +33,7 @@ public class ChatResponseVoTest {
         + "      \"finish_reason\": \"tool_calls\"\r\n" + "    }\r\n" + "  ],\r\n" + "  \"usage\": {\r\n"
         + "    \"prompt_tokens\": 1356,\r\n" + "    \"completion_tokens\": 90,\r\n" + "    \"total_tokens\": 1446\r\n"
         + "  },\r\n" + "  \"system_fingerprint\": \"fp_4008e3b719\"\r\n" + "}";
-    OpenAiChatResponseVo chatResponseVo = JsonUtils.parse(content, OpenAiChatResponseVo.class);
+    OpenAiChatResponse chatResponseVo = JsonUtils.parse(content, OpenAiChatResponse.class);
 
     System.out.println(JsonUtils.toJson(chatResponseVo));
 
