@@ -12,8 +12,8 @@ import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.gemini.GeminiCandidateVo;
-import com.litongjava.gemini.GeminiChatRequestVo;
-import com.litongjava.gemini.GeminiChatResponseVo;
+import com.litongjava.gemini.GeminiChatRequest;
+import com.litongjava.gemini.GeminiChatResponse;
 import com.litongjava.gemini.GeminiClient;
 import com.litongjava.gemini.GeminiContentResponseVo;
 import com.litongjava.gemini.GeminiGenerationConfig;
@@ -377,7 +377,7 @@ public class UniChatClient {
   public static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
-    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
     String cachedId = uniChatRequest.getCachedId();
     // CachedContent can not be used with GenerateContent request setting
@@ -429,7 +429,7 @@ public class UniChatClient {
       geminiChatRequestVo.setTools(tools);
     }
 
-    GeminiChatResponseVo chatResponse = null;
+    GeminiChatResponse chatResponse = null;
     if (apiPrefixUrl != null) {
       chatResponse = GeminiClient.generate(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo);
     } else {
@@ -653,7 +653,7 @@ public class UniChatClient {
     GeminiGenerationConfig geminiGenerationConfigVo = new GeminiGenerationConfig();
     geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
 
-    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
     geminiChatRequestVo.setGenerationConfig(geminiGenerationConfigVo);
     geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());

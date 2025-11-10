@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiChatResponseVo {
+public class GeminiChatResponse {
   private List<GeminiCandidateVo> candidates;
   private GeminiUsageMetadataVo usageMetadata;
   private String modelVersion;

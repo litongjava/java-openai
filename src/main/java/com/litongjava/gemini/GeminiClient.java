@@ -45,12 +45,12 @@ public class GeminiClient {
    * @param requestVo    - 请求体实体
    * @return GeminiResponseVo - 响应实体
    */
-  public static GeminiChatResponseVo generate(String googleApiKey, String modelName, GeminiChatRequestVo requestVo) {
+  public static GeminiChatResponse generate(String googleApiKey, String modelName, GeminiChatRequest requestVo) {
     return generate(GEMINI_API_URL, googleApiKey, modelName, requestVo);
   }
 
-  public static GeminiChatResponseVo generate(String baseUrl, String googleApiKey, String modelName,
-      GeminiChatRequestVo requestVo) {
+  public static GeminiChatResponse generate(String baseUrl, String googleApiKey, String modelName,
+      GeminiChatRequest requestVo) {
     if (StrUtil.isBlank(googleApiKey)) {
       throw new RuntimeException("api key can not be empty");
     }
@@ -78,7 +78,7 @@ public class GeminiClient {
         throw new GenerateException(ModelPlatformName.GOOGLE, "Gemini generate content failed", urlPerfix, requestJson,
             response.code(), responseBody);
       }
-      GeminiChatResponseVo chatResponse = JsonUtils.parse(responseBody, GeminiChatResponseVo.class);
+      GeminiChatResponse chatResponse = JsonUtils.parse(responseBody, GeminiChatResponse.class);
       chatResponse.setRawResponse(responseBody);
       return chatResponse;
     } catch (IOException e) {
@@ -86,7 +86,7 @@ public class GeminiClient {
     }
   }
 
-  public static GeminiChatResponseVo generate(String modelName, GeminiChatRequestVo requestVo) {
+  public static GeminiChatResponse generate(String modelName, GeminiChatRequest requestVo) {
     String key = EnvUtils.getStr("GEMINI_API_KEY");
     if (key == null || key.isEmpty()) {
       new RuntimeException("GEMINI_API_KEY is empty");
@@ -145,9 +145,9 @@ public class GeminiClient {
     // 1. 构造请求体
     GeminiPartVo part = new GeminiPartVo(prompt);
     GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
-    GeminiChatRequestVo reqVo = new GeminiChatRequestVo(Collections.singletonList(content));
+    GeminiChatRequest reqVo = new GeminiChatRequest(Collections.singletonList(content));
     // 2.发送请求
-    GeminiChatResponseVo chatResponse = GeminiClient.generate(apiKey, model, reqVo);
+    GeminiChatResponse chatResponse = GeminiClient.generate(apiKey, model, reqVo);
     // 3.返回结果
     return chatResponse.getCandidates().get(0).getContent().getParts().get(0).getText();
   }
@@ -163,25 +163,25 @@ public class GeminiClient {
    * @param callback     - 用于处理 SSE 流式回调
    * @return OkHttp Call 对象，可根据需求执行取消等操作
    */
-  public static Call stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo, Callback callback) {
+  public static Call stream(String googleApiKey, String modelName, GeminiChatRequest requestVo, Callback callback) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(googleApiKey, modelName, requestJson, callback);
 
   }
 
-  public static EventSource stream(String googleApiKey, String modelName, GeminiChatRequestVo requestVo,
+  public static EventSource stream(String googleApiKey, String modelName, GeminiChatRequest requestVo,
       EventSourceListener listener) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(googleApiKey, modelName, requestJson, listener);
   }
 
   public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName,
-      GeminiChatRequestVo requestVo, EventSourceListener listener) {
+      GeminiChatRequest requestVo, EventSourceListener listener) {
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     return stream(apiPrefixUrl, googleApiKey, modelName, requestJson, listener);
   }
 
-  public static Call stream(String modelName, GeminiChatRequestVo requestVo, Callback callback) {
+  public static Call stream(String modelName, GeminiChatRequest requestVo, Callback callback) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
       new RuntimeException("GEMINI_API_KEY is empty");
@@ -189,7 +189,7 @@ public class GeminiClient {
     return stream(apiKey, modelName, requestVo, callback);
   }
 
-  public static EventSource stream(String modelName, GeminiChatRequestVo requestVo, EventSourceListener listener) {
+  public static EventSource stream(String modelName, GeminiChatRequest requestVo, EventSourceListener listener) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
       new RuntimeException("GEMINI_API_KEY is empty");
@@ -290,10 +290,10 @@ public class GeminiClient {
     GeminiContentVo content = new GeminiContentVo("user", parts);
     contents.add(content);
 
-    GeminiChatRequestVo geminiChatRequestVo = new GeminiChatRequestVo();
+    GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
     geminiChatRequestVo.setContents(contents);
 
-    GeminiChatResponseVo reponseVo = GeminiClient.generate(model, geminiChatRequestVo);
+    GeminiChatResponse reponseVo = GeminiClient.generate(model, geminiChatRequestVo);
     String text = reponseVo.getCandidates().get(0).getContent().getParts().get(0).getText();
     return text;
   }

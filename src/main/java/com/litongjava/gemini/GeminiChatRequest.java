@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class GeminiChatRequestVo {
+public class GeminiChatRequest {
 
   /**
    * -- 新增字段 -- system_instruction, tools, tool_config 来对应你示例中的 JSON 结构： {
@@ -48,11 +48,11 @@ public class GeminiChatRequestVo {
 
   private String cachedContent;
 
-  public GeminiChatRequestVo(List<GeminiContentVo> contents) {
+  public GeminiChatRequest(List<GeminiContentVo> contents) {
     this.contents = contents;
   }
 
-  public GeminiChatRequestVo(String prompt) {
+  public GeminiChatRequest(String prompt) {
     GeminiPartVo part = new GeminiPartVo(prompt);
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
     List<GeminiContentVo> contents = Collections.singletonList(content);
@@ -79,7 +79,7 @@ public class GeminiChatRequestVo {
     this.contents = contents;
   }
 
-  public GeminiChatRequestVo setSystemPrompt(String systemPrompt) {
+  public GeminiChatRequest setSystemPrompt(String systemPrompt) {
     if (StrUtil.isNotBlank(systemPrompt)) {
       GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(systemPrompt);
       this.system_instruction = geminiSystemInstructionVo;
@@ -87,7 +87,7 @@ public class GeminiChatRequestVo {
     return this;
   }
 
-  public GeminiChatRequestVo setUserPrompts(String... prompts) {
+  public GeminiChatRequest setUserPrompts(String... prompts) {
     List<GeminiPartVo> parts = new ArrayList<>(prompts.length);
     for (String prompt : prompts) {
       if (StrUtil.isNotBlank(prompt)) {
@@ -102,7 +102,7 @@ public class GeminiChatRequestVo {
     return this;
   }
 
-  public GeminiChatRequestVo setUserPrompt(String userPrompt) {
+  public GeminiChatRequest setUserPrompt(String userPrompt) {
     GeminiPartVo part = new GeminiPartVo(userPrompt);
     List<GeminiPartVo> parts = new ArrayList<>();
     parts.add(part);
