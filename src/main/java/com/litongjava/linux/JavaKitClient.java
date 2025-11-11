@@ -54,8 +54,7 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult finishManimSession(String apiBase, String key, long sessionPrt, String m3u8Path,
-      String videos) {
+  public static ProcessResult finishManimSession(String apiBase, String key, long sessionPrt, String m3u8Path, String videos) {
     String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s";
     targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos);
     return get(targetUrl, key);
@@ -88,6 +87,12 @@ public class JavaKitClient {
 
   public static ProcessResult executeMotionCanvasCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
     String targetUrl = apiBase + "/motion-canvas";
+
+    return post(targetUrl, key, codeRequest);
+  }
+
+  public static ProcessResult motionCanvasFinish(String apiBase, String key, SessionFinishRequest codeRequest) {
+    String targetUrl = apiBase + "/motion-canvas/finish";
 
     return post(targetUrl, key, codeRequest);
   }
@@ -127,7 +132,6 @@ public class JavaKitClient {
     }
   }
 
-
   private static ProcessResult get(String targetUrl, String key) {
     Request request = new Request.Builder().url(targetUrl).addHeader("authorization", "Bearer " + key).get().build();
     Call call = client.newCall(request);
@@ -150,7 +154,6 @@ public class JavaKitClient {
     }
   }
 
-  
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
     Long sessionId = codeRequest.getSessionId();
     Long id = codeRequest.getId();
@@ -220,6 +223,28 @@ public class JavaKitClient {
     } catch (IOException e) {
       throw new RuntimeException("Failed to request:" + targetUrl + " body:" + code, e);
     }
+  }
+
+  private static ProcessResult post(String targetUrl, String key, SessionFinishRequest codeRequest) {
+    String json = JsonUtils.toJson(codeRequest);
+
+    long start = System.currentTimeMillis();
+
+    ResponseVo responseVo = HttpUtils.postJson(targetUrl, key, json);
+
+    String bodyString = responseVo.getBodyString();
+    int resposneCode = responseVo.getCode();
+    if (responseVo.isOk()) {
+      long end = System.currentTimeMillis();
+      ProcessResult result = JsonUtils.parse(bodyString, ProcessResult.class);
+      if (result != null) {
+        result.setElapsed(end - start);
+      }
+      return result;
+    } else {
+      throw new RuntimeException("code:" + resposneCode + " response:" + bodyString);
+    }
+
   }
 
   private static RequestBody getFileBody(String filename, String content) {
