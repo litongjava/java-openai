@@ -43,6 +43,16 @@ public class UniChatRequest {
   private List<String> responseModalities;
   private Boolean enable_search;
 
+  public UniChatRequest(String platform, String model) {
+    this.platform = platform;
+    this.model = model;
+  }
+
+  public UniChatRequest(PlatformInput platformInput) {
+    this.platform = platformInput.getPlatform();
+    this.model = platformInput.getModel();
+  }
+
   public UniChatRequest(List<UniChatMessage> messages) {
     this.messages = messages;
   }
