@@ -154,3 +154,4 @@ Debug/
 vcpkg_installed/
 .env
 audio/
+secrets.txt
