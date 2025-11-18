@@ -2,7 +2,7 @@ package com.litongjava.openrouter;
 
 public interface OpenRouterModels {
   String AUTO = "auto";
-  
+
   String DEEPSEEK_V3_250324 = "deepseek/deepseek-v3-250324";
   String DEEPSEEK_V3_250324_FREE = "deepseek/deepseek-chat-v3-0324:free";
   String DEEPSEEK_V3_241226 = "deepseek/deepseek-v3-241226";
@@ -21,9 +21,10 @@ public interface OpenRouterModels {
   String GROK_CODE_FAST_1 = "x-ai/grok-code-fast-1";
 
   String QWEN_QWEN3_CODER = "qwen/qwen3-coder";
-  
+  String QWEN_QWEN3_235B_A22B_2507 = "qwen/qwen3-235b-a22b-2507";
+
+  String Z_AI_GLM_4_6 = "z-ai/glm-4.6";
 
   String GEMINI_2_5_FLASH_IMAGE_PREVIEW = "google/gemini-2.5-flash-image-preview";
-  
-  
+  String MISTRALAI_MINISTRAL_8B = "mistralai/ministral-8b";
 }
