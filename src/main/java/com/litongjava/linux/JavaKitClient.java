@@ -86,7 +86,7 @@ public class JavaKitClient {
   }
 
   public static ProcessResult executeMotionCanvasCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
-    String targetUrl = apiBase + "/motion-canvas";
+    String targetUrl = apiBase + "/motion-canvas/run";
 
     return post(targetUrl, key, codeRequest);
   }
