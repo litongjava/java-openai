@@ -7,8 +7,8 @@ import com.litongjava.tio.utils.hutool.ResourceUtil;
 
 public class PromptResource {
 
-  public String readString(String filename) {
-    URL resource = ResourceUtil.getResource(filename);
+  public static String readString(String filename) {
+    URL resource = ResourceUtil.getResource("prompts/" + filename);
     if (resource != null) {
       return FileUtil.readString(resource);
     }
