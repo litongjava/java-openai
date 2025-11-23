@@ -1,5 +1,6 @@
 package com.litongjava.openai.chat;
 
+import com.litongjava.chat.ChatImageFile;
 import com.litongjava.tio.utils.base64.Base64Utils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 
@@ -33,6 +34,15 @@ public class ChatMessageContent {
     chatRequestImage.setUrl(byteArrayToAltBase64);
 
     this.type = "image_url";
+    this.image_url = chatRequestImage;
+  }
+
+  public ChatMessageContent(ChatImageFile chatImageFile) {
+    this.type = "image_url";
+    ChatRequestImage chatRequestImage = new ChatRequestImage();
+    chatRequestImage.setDetail("auto");
+    chatRequestImage.setUrl(chatImageFile.getUrl());
+    
     this.image_url = chatRequestImage;
   }
 

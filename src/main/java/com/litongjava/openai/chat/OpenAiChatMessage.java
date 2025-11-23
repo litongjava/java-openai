@@ -55,7 +55,31 @@ public class OpenAiChatMessage {
 
   public OpenAiChatMessage(UniChatMessage chatMessage) {
     this.role = chatMessage.getRole();
-    this.content = chatMessage.getContent();
+
+    String chatContent = chatMessage.getContent();
+    List<ChatImageFile> files = chatMessage.getFiles();
+    if (chatContent != null && files != null) {
+      List<ChatMessageContent> contents = new ArrayList<>();
+
+      contents.add(new ChatMessageContent(chatContent));
+
+      for (ChatImageFile chatImageFile : files) {
+        ChatMessageContent chatMessageContent = new ChatMessageContent(chatImageFile);
+        contents.add(chatMessageContent);
+      }
+
+      this.content = contents;
+
+    } else if (chatContent != null) {
+      this.content = chatContent;
+
+    } else if (files != null) {
+      List<ChatMessageContent> contents = new ArrayList<>();
+      for (ChatImageFile chatImageFile : files) {
+        ChatMessageContent chatMessageContent = new ChatMessageContent(chatImageFile);
+        contents.add(chatMessageContent);
+      }
+    }
   }
 
   public OpenAiChatMessage(String role, String prompt) {

@@ -24,6 +24,11 @@ public class UniChatMessage {
     this.content = content;
   }
 
+  public UniChatMessage(String role, List<ChatImageFile> files) {
+    this.role = role;
+    this.files = files;
+  }
+
   public UniChatMessage(String role, String content, ChatMessageArgs args) {
     this.role = role;
     this.content = content;
@@ -36,6 +41,10 @@ public class UniChatMessage {
 
   public static UniChatMessage buildUser(String content) {
     return new UniChatMessage(MessageRole.user, content);
+  }
+
+  public static UniChatMessage buildUser(List<ChatImageFile> files) {
+    return new UniChatMessage(MessageRole.user, files);
   }
 
   public static UniChatMessage buildAssistant(String content) {
