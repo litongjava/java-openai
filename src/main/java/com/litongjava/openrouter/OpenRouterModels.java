@@ -25,6 +25,7 @@ public interface OpenRouterModels {
 
   String Z_AI_GLM_4_6 = "z-ai/glm-4.6";
 
+  String GOOGLE_GEMINI_2_5_FLASH = "google/gemini-2.5-flash";
   String GEMINI_2_5_FLASH_IMAGE_PREVIEW = "google/gemini-2.5-flash-image-preview";
   String MISTRALAI_MINISTRAL_8B = "mistralai/ministral-8b";
 }

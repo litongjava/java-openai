@@ -14,7 +14,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <langchain4j.version>0.34.0</langchain4j.version>
-    <fastjson2.version>2.0.52</fastjson2.version>
+    <fastjson2.version>2.0.60</fastjson2.version>
   </properties>
   <dependencies>
     <dependency>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-utils</artifactId>
-      <version>3.7.3.v20251001-RELEASE</version>
+      <version>3.7.3.v20251101-RELEASE</version>
     </dependency>
 
     <dependency>
