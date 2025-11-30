@@ -5,7 +5,8 @@ import java.util.List;
 public class PromptPayload {
 
   private String type;
-  private List<PromptChatMessage> prompt;
+//  private List<PromptChatMessage> prompt;
+  private Object prompt;
   private String name;
   private int version;
   private List<String> labels;
@@ -19,10 +20,14 @@ public class PromptPayload {
     return type;
   }
 
-  public List<PromptChatMessage> getPrompt() {
+  public Object getPromptRaw() {
     return prompt;
   }
 
+  public void setPrompt(Object prompt) {
+    this.prompt = prompt;
+  }
+  
   public String getName() {
     return name;
   }
@@ -45,10 +50,6 @@ public class PromptPayload {
 
   public void setType(String type) {
     this.type = type;
-  }
-
-  public void setPrompt(List<PromptChatMessage> prompt) {
-    this.prompt = prompt;
   }
 
   public void setName(String name) {

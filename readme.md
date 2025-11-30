@@ -2292,6 +2292,37 @@ public class MiniMaxHttpClientTest {
 }
 
 ```
+
+## Langfuse
+
+```
+LANGFUSE_BASE_URL = https://cloud.langfuse.com
+LANGFUSE_PUBLIC_KEY = pk-lf-2
+LANGFUSE_SECRET_KEY = sk-lf-c
+```
+
+示例代码
+
+```
+package com.litongjava.langfuse;
+
+import org.junit.Test;
+
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
+
+public class LangfuseClientTest {
+
+  @Test
+  public void test() {
+    EnvUtils.load();
+    LangfuseClient client = new LangfuseClient();
+    PromptPayload payload = client.getPrompt("Static Scene Write");
+    System.out.println(JsonUtils.toJson(payload));
+  }
+}
+
+```
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to contribute, report issues, or submit pull requests for improvements.

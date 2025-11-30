@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.FastJson2Utils;
-import com.litongjava.tio.utils.json.JsonUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Credentials;

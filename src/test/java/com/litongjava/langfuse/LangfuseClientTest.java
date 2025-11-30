@@ -11,16 +11,7 @@ public class LangfuseClientTest {
   public void test() {
     EnvUtils.load();
     LangfuseClient client = new LangfuseClient();
-
-    // 最新版本
     PromptPayload payload = client.getPrompt("Static Scene Write");
     System.out.println(JsonUtils.toJson(payload));
-
-
-    // 填充模板
-//    Map<String, String> data = Map.of("userName", "Alice");
-//    var filledMessages = payload.getPrompt().fillIn(data);
-
   }
-
 }
