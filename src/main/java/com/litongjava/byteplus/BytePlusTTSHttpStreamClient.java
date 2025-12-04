@@ -129,7 +129,7 @@ public class BytePlusTTSHttpStreamClient {
 
         if (code > 0) {
           log.error("error response: " + line);
-          break;
+          return null;
         }
       }
 
