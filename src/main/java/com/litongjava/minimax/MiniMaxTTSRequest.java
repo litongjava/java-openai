@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class MiniMaxTTSRequest {
-  private String model = "speech-2.6-hd";
+  private String model = MinixModels.SPEECH_2_6_TURBO;
   private String text;
   private boolean stream = false;
   private String language_boost;
