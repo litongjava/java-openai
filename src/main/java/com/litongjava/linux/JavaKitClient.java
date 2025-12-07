@@ -54,9 +54,13 @@ public class JavaKitClient {
     return get(targetUrl, key);
   }
 
-  public static ProcessResult finishManimSession(String apiBase, String key, long sessionPrt, String m3u8Path, String videos) {
-    String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s";
-    targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos);
+  public static ProcessResult finishManimSession(String apiBase, String key, VideoFinishRequest request) {
+    Long sessionPrt = request.getSessionPrt();
+    String m3u8Path = request.getM3u8Path();
+    String videos = request.getVideos();
+    String watermark = request.getWatermark();
+    String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s&watermark=%s";
+    targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos, watermark);
     return get(targetUrl, key);
   }
 
