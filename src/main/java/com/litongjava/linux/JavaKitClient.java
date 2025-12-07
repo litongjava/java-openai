@@ -35,7 +35,7 @@ public class JavaKitClient {
     String apiBase = EnvUtils.getStr("JAVA_KIT_BASE_URL");
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
 
-    String targetUrl = apiBase + "/manim";
+    String targetUrl = apiBase + "/manim/run";
     return post(targetUrl, key, codeRequest);
   }
 
@@ -65,10 +65,10 @@ public class JavaKitClient {
     String m3u8Path = codeRequest.getM3u8Path();
     String targetUrl = null;
     if (sessionPrt != null && m3u8Path != null) {
-      targetUrl = apiBase + "/manim?session_prt=%d&m3u8_path=%s";
+      targetUrl = apiBase + "/manim/run?session_prt=%d&m3u8_path=%s";
       targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
     } else {
-      targetUrl = apiBase + "/manim";
+      targetUrl = apiBase + "/manim/run";
     }
 
     return post(targetUrl, key, codeRequest);
@@ -76,7 +76,7 @@ public class JavaKitClient {
 
   public static ProcessResult executeMainmCode(String apiBase, ExecuteCodeRequest codeRequest) {
     String key = EnvUtils.getStr("JAVA_KIT_API_KEY");
-    String targetUrl = apiBase + "/manim";
+    String targetUrl = apiBase + "/manim/run";
     return post(targetUrl, key, codeRequest);
   }
 
@@ -230,21 +230,32 @@ public class JavaKitClient {
 
     long start = System.currentTimeMillis();
 
-    ResponseVo responseVo = HttpUtils.postJson(targetUrl, key, json);
+    OkHttpClient client = OkHttpClientPool.get600HttpClient();
+    MediaType mediaType = MediaType.parse("application/json");
 
-    String bodyString = responseVo.getBodyString();
-    int resposneCode = responseVo.getCode();
-    if (responseVo.isOk()) {
-      long end = System.currentTimeMillis();
-      ProcessResult result = JsonUtils.parse(bodyString, ProcessResult.class);
-      if (result != null) {
-        result.setElapsed(end - start);
+    RequestBody body = RequestBody.create(json, mediaType);
+    Request request = new Request.Builder()
+        //
+        .url(targetUrl).post(body)
+        //
+        .addHeader("Authorization", "Bearer " + key).build();
+    try (Response response = client.newCall(request).execute()) {
+      int code = response.code();
+      String bodyString = response.body().string();
+      if (response.isSuccessful()) {
+        long end = System.currentTimeMillis();
+        ProcessResult result = JsonUtils.parse(bodyString, ProcessResult.class);
+        if (result != null) {
+          result.setElapsed(end - start);
+        }
+        return result;
+      } else {
+        throw new RuntimeException("code:" + code + " response:" + bodyString);
       }
-      return result;
-    } else {
-      throw new RuntimeException("code:" + resposneCode + " response:" + bodyString);
-    }
 
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + targetUrl, e);
+    }
   }
 
   private static RequestBody getFileBody(String filename, String content) {
