@@ -82,7 +82,8 @@ public interface GiteeModels {
   String DEEPSEEK_V3_1_TERMINUS = "DeepSeek-V3_1-Terminus";
   String DEEPSEEK_V3_2_EXP = "DeepSeek-V3.2-Exp";
   String DEEPSEEK_PROVER_V2_7B = "DeepSeek-Prover-V2-7B";
-  String DEEPSEEK_OCR="DeepSeek-OCR";
+  String DEEPSEEK_OCR = "DeepSeek-OCR";
+  String DEEPSEEK_V3_2 = "DeepSeek-V3.2";
 
   // ===== DianJin =====
   String DIANJIN_R1_32B = "DianJin-R1-32B";
@@ -312,6 +313,6 @@ public interface GiteeModels {
   String GLM_4_32B_ALIAS = GLM_4_32B;
 
   String KIMI_K2_INSTRUCT = "kimi-k2-instruct";
-  
-  String PADDLEOCR_VL="PaddleOCR-VL";
+
+  String PADDLEOCR_VL = "PaddleOCR-VL";
 }
