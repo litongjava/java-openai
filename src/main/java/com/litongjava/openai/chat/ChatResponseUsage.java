@@ -38,5 +38,6 @@ public class ChatResponseUsage {
     this.total_tokens = prompt_tokens + completion_tokens;
     this.cache_creation_input_tokens = usage.getCache_creation_input_tokens();
     this.cache_read_input_tokens = usage.getCache_read_input_tokens();
+    
   }
 }

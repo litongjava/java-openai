@@ -32,6 +32,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSource.Factory;
 import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 
@@ -418,7 +419,8 @@ public class OpenAiClient {
         .build();
 
     // 这里就发起 SSE 请求了
-    EventSource source = EventSources.createFactory(httpClient).newEventSource(request, listener);
+    Factory createFactory = EventSources.createFactory(httpClient);
+    EventSource source = createFactory.newEventSource(request, listener);
     return source;
   }
 

@@ -10,7 +10,7 @@ public class ClaudeClientTest {
   @Test
   public void test() {
     EnvUtils.load();
-    ClaudeChatResponseVo chat = ClaudeClient.chat("Hi");
+    ClaudeChatResponse chat = ClaudeClient.chat("Hi");
     System.out.println(JsonUtils.toJson(chat));
   }
 }

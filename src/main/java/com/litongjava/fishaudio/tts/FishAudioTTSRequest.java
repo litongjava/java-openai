@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class FishAudioTTSRequestVo {
+public class FishAudioTTSRequest {
   // 合成的文本内容
   private String text;
 

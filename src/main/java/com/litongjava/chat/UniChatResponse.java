@@ -1,5 +1,8 @@
 package com.litongjava.chat;
 
+import java.util.List;
+
+import com.litongjava.openai.chat.ChatResponseDelta;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
 
@@ -13,8 +16,18 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UniChatResponse {
+
+  private transient String rawData;
   private String model;
   private ChatResponseMessage message;
+  private ChatResponseDelta delta;
   private ChatResponseUsage usage;
-  private transient String rawResponse;
+  private List<String> citations;
+
+  public UniChatResponse(String model, ChatResponseMessage message, ChatResponseUsage usage, String rawData) {
+    this.model = model;
+    this.message = message;
+    this.usage = usage;
+    this.rawData = rawData;
+  }
 }

@@ -27,7 +27,7 @@ public class FishAudioClient {
    * @return ResponseVo 响应结果（成功时包含音频二进制数据）
    */
   public static ResponseVo speech(String text) {
-    FishAudioTTSRequestVo req = new FishAudioTTSRequestVo().setText(text);
+    FishAudioTTSRequest req = new FishAudioTTSRequest().setText(text);
     // 其他参数均采用默认值，如 chunk_length = 200, format = "mp3" 等
     return speech(req);
   }
@@ -38,7 +38,7 @@ public class FishAudioClient {
    * @param vo 请求对象
    * @return ResponseVo 响应结果
    */
-  public static ResponseVo speech(FishAudioTTSRequestVo vo) {
+  public static ResponseVo speech(FishAudioTTSRequest vo) {
     String apiKey = EnvUtils.get("FISHAUDIO_API_KEY");
     return speech(apiKey, vo);
   }
@@ -50,7 +50,7 @@ public class FishAudioClient {
    * @param vo     请求对象
    * @return ResponseVo 响应结果
    */
-  public static ResponseVo speech(String apiKey, FishAudioTTSRequestVo vo) {
+  public static ResponseVo speech(String apiKey, FishAudioTTSRequest vo) {
     String apiPrefixUrl = EnvUtils.get("FISHAUDIO_API_URL", TTS_URL);
     return speech(apiPrefixUrl, apiKey, vo);
   }
@@ -63,7 +63,7 @@ public class FishAudioClient {
    * @param vo           请求对象
    * @return ResponseVo   响应结果
    */
-  public static ResponseVo speech(String apiPrefixUrl, String apiKey, FishAudioTTSRequestVo vo) {
+  public static ResponseVo speech(String apiPrefixUrl, String apiKey, FishAudioTTSRequest vo) {
     // 使用 msgpack 工具将请求对象序列化成二进制
     byte[] payload = com.litongjava.fishaudio.tts.FishAudioMsgPackConverter.encodeFishAudioTTSRequestVo(vo);
     return speechRequest(apiPrefixUrl, apiKey, payload);

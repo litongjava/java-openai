@@ -18,7 +18,7 @@ public class FishAudioMsgPackConverter {
    * @param vo 请求对象
    * @return msgpack 编码后的字节数组
    */
-  public static byte[] encodeFishAudioTTSRequestVo(FishAudioTTSRequestVo vo) {
+  public static byte[] encodeFishAudioTTSRequestVo(FishAudioTTSRequest vo) {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       DataOutputStream out = new DataOutputStream(baos);

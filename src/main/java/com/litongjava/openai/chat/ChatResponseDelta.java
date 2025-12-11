@@ -16,6 +16,7 @@ public class ChatResponseDelta {
   private ChatFunctionCall function_call;
 
   // claude
+  private String type;
   private String text;
 
   public ChatResponseDelta(String role, String content) {

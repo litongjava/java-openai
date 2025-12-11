@@ -7,7 +7,7 @@ import java.util.List;
 import com.litongjava.bailian.BaiLianConst;
 import com.litongjava.cerebras.CerebrasConst;
 import com.litongjava.claude.ClaudeCacheControl;
-import com.litongjava.claude.ClaudeChatResponseVo;
+import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
@@ -333,7 +333,7 @@ public class UniChatClient {
       }
     }
 
-    OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
+    OpenAiChatRequest openAiChatRequest = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
       if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
         String systemPrompt = uniChatRequest.getSystemPrompt();
@@ -342,25 +342,25 @@ public class UniChatClient {
           if (uniChatRequest.isCacheSystemPrompt()) {
             claudeChatMessage.setCache_control(new ClaudeCacheControl());
           }
-          openAiChatRequestVo.setSystemChatMessage(claudeChatMessage);
+          openAiChatRequest.setSystemChatMessage(claudeChatMessage);
         }
       }
     }
 
     String model = uniChatRequest.getModel();
     if (model != null) {
-      openAiChatRequestVo.setModel(model);
+      openAiChatRequest.setModel(model);
     }
 
-    openAiChatRequestVo.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequestVo.setChatMessages(messages, uniChatRequest.getPlatform());
-    openAiChatRequestVo.setMax_tokens(uniChatRequest.getMax_tokens());
+    openAiChatRequest.setTemperature(uniChatRequest.getTemperature());
+    openAiChatRequest.setChatMessages(messages, uniChatRequest.getPlatform());
+    openAiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    ClaudeChatResponseVo chatResponse = null;
+    ClaudeChatResponse chatResponse = null;
     if (apiPrefixUrl != null) {
-      chatResponse = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequestVo);
+      chatResponse = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequest);
     } else {
-      chatResponse = ClaudeClient.chatCompletions(key, openAiChatRequestVo);
+      chatResponse = ClaudeClient.chatCompletions(key, openAiChatRequest);
     }
 
     if (chatResponse == null) {
@@ -444,7 +444,7 @@ public class UniChatClient {
     String modelVersion = chatResponse.getModelVersion();
 
     UniChatResponse uniChatResponse = new UniChatResponse();
-    uniChatResponse.setUsage(usage).setRawResponse(chatResponse.getRawResponse()).setModel(modelVersion);
+    uniChatResponse.setUsage(usage).setRawData(chatResponse.getRawResponse()).setModel(modelVersion);
 
     GeminiCandidateVo geminiCandidateVo = chatResponse.getCandidates().get(0);
     GeminiContentResponseVo content = geminiCandidateVo.getContent();
@@ -465,6 +465,13 @@ public class UniChatClient {
 
   public static EventSource stream(UniChatRequest uniChatRequest, EventSourceListener listener) {
     return stream(uniChatRequest.getApiKey(), uniChatRequest, listener);
+  }
+
+  public static EventSource stream(UniChatRequest uniChatRequest, UniChatEventListener listener) {
+    String platform = uniChatRequest.getPlatform();
+    listener.setPlatform(platform);
+    String apiKey = uniChatRequest.getApiKey();
+    return stream(apiKey, uniChatRequest, listener);
   }
 
   public static EventSource stream(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
@@ -620,9 +627,10 @@ public class UniChatClient {
     }
 
     OpenAiChatRequest openaiChatRequest = new OpenAiChatRequest();
+    String platform = uniChatRequest.getPlatform();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
+      if (ModelPlatformName.ANTHROPIC.equals(platform) && systemPrompt != null) {
         ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
@@ -633,7 +641,7 @@ public class UniChatClient {
 
     openaiChatRequest.setModel(uniChatRequest.getModel());
     openaiChatRequest.setTemperature(uniChatRequest.getTemperature());
-    openaiChatRequest.setChatMessages(messages, uniChatRequest.getPlatform());
+    openaiChatRequest.setChatMessages(messages, platform);
     openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
     openaiChatRequest.setStream(uniChatRequest.getStream());
 
