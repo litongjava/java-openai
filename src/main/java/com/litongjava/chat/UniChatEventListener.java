@@ -79,6 +79,8 @@ public abstract class UniChatEventListener extends EventSourceListener {
   }
 
   private UniChatResponse openai(String data) {
+    UniChatResponse uniChatResponse = new UniChatResponse();
+    
     // 1. 解析 JSON
     OpenAiChatResponse chatResp = FastJson2Utils.parse(data, OpenAiChatResponse.class);
     String model = chatResp.getModel();
@@ -87,15 +89,20 @@ public abstract class UniChatEventListener extends EventSourceListener {
     List<String> citations = chatResp.getCitations();
 
     // 3. 拿到 delta
-    Choice choice = chatResp.getChoices().get(0);
-    ChatResponseDelta delta = choice.getDelta();
+    List<Choice> choices = chatResp.getChoices();
+    if(choices!=null) {
+      Choice choice = choices.get(0);
+      ChatResponseDelta delta = choice.getDelta();
+      uniChatResponse.setDelta(delta);
+    }
+    
 
     ChatResponseUsage usage = chatResp.getUsage();
 
-    UniChatResponse uniChatResponse = new UniChatResponse();
+    
     uniChatResponse.setModel(model);
     uniChatResponse.setCitations(citations);
-    uniChatResponse.setDelta(delta);
+    
     uniChatResponse.setRawData(data);
     uniChatResponse.setUsage(usage);
     return uniChatResponse;

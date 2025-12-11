@@ -23,4 +23,12 @@ public class ChatResponseDelta {
     this.role = role;
     this.content = content;
   }
+
+  public String getContent() {
+    if (this.content != null) {
+      return content;
+    } else {
+      return text;
+    }
+  }
 }

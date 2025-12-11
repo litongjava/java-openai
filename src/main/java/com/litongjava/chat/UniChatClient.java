@@ -477,6 +477,7 @@ public class UniChatClient {
   public static EventSource stream(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
 
     String platform = uniChatRequest.getPlatform();
+    uniChatRequest.setStream(true);
 
     if (ModelPlatformName.GOOGLE.equals(platform)) {
       if (key == null) {
