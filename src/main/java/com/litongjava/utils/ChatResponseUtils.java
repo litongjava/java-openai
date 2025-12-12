@@ -3,10 +3,10 @@ package com.litongjava.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.gemini.GeminiCandidateVo;
-import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiCandidate;
+import com.litongjava.gemini.GeminiPart;
 import com.litongjava.gemini.GeminiChatResponse;
-import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.gemini.GeminiUsageMetadata;
 import com.litongjava.openai.chat.ChatResponseDelta;
 import com.litongjava.openai.chat.ChatResponseMessage;
 import com.litongjava.openai.chat.ChatResponseUsage;
@@ -19,7 +19,7 @@ public class ChatResponseUtils {
   public static OpenAiChatResponse toOpenAiChatResponse(GeminiChatResponse geminiResponseVo, boolean isStream) {
     OpenAiChatResponse chatResponseVo = new OpenAiChatResponse();
     if (geminiResponseVo != null && geminiResponseVo.getCandidates() != null) {
-      GeminiUsageMetadataVo usageMetadata = geminiResponseVo.getUsageMetadata();
+      GeminiUsageMetadata usageMetadata = geminiResponseVo.getUsageMetadata();
       ChatResponseUsage chatResponseUsage = new ChatResponseUsage();
       chatResponseUsage.setPrompt_tokens(usageMetadata.getPromptTokenCount());
       chatResponseUsage.setTotal_tokens(usageMetadata.getTotalTokenCount());
@@ -29,13 +29,13 @@ public class ChatResponseUtils {
 
       List<Choice> choices = new ArrayList<>();
 
-      List<GeminiCandidateVo> candidates = geminiResponseVo.getCandidates();
-      for (GeminiCandidateVo candidate : candidates) {
+      List<GeminiCandidate> candidates = geminiResponseVo.getCandidates();
+      for (GeminiCandidate candidate : candidates) {
         Choice choice = new Choice();
 
         if (candidate.getContent() != null && candidate.getContent().getParts() != null) {
-          List<GeminiPartVo> parts = candidate.getContent().getParts();
-          for (GeminiPartVo partVo : parts) {
+          List<GeminiPart> parts = candidate.getContent().getParts();
+          for (GeminiPart partVo : parts) {
             String text = partVo.getText();
             if (isStream) {
               ChatResponseDelta delta = new ChatResponseDelta(ChatRole.assistant, text);

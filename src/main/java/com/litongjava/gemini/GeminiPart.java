@@ -13,25 +13,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiPartVo {
+public class GeminiPart {
   private String text;
   private GeminiInlineDataVo inlineData;
   private GeminiFileDataVo fileData;
   private GeminiFunctionCallVo functionCall;
 
-  public GeminiPartVo(String text) {
+  public GeminiPart(String text) {
     this.text = text;
   }
 
-  public GeminiPartVo(GeminiInlineDataVo inlineData) {
+  public GeminiPart(GeminiInlineDataVo inlineData) {
     this.inlineData = inlineData;
   }
 
-  public GeminiPartVo(GeminiFileDataVo fileData) {
+  public GeminiPart(GeminiFileDataVo fileData) {
     this.fileData = fileData;
   }
 
-  public GeminiPartVo(ChatImageFile chatFile) {
+  public GeminiPart(ChatImageFile chatFile) {
     String type = chatFile.getMimeType();
     String data = chatFile.getData();
     String url = chatFile.getUrl();

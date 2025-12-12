@@ -79,7 +79,7 @@ public class GeminiClient {
             response.code(), responseBody);
       }
       GeminiChatResponse chatResponse = JsonUtils.parse(responseBody, GeminiChatResponse.class);
-      chatResponse.setRawResponse(responseBody);
+      chatResponse.setRawData(responseBody);
       return chatResponse;
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -143,7 +143,7 @@ public class GeminiClient {
    */
   public static String chatWithModel(String apiKey, String model, String role, String prompt) {
     // 1. 构造请求体
-    GeminiPartVo part = new GeminiPartVo(prompt);
+    GeminiPart part = new GeminiPart(prompt);
     GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
     GeminiChatRequest reqVo = new GeminiChatRequest(Collections.singletonList(content));
     // 2.发送请求
@@ -283,9 +283,9 @@ public class GeminiClient {
 
   public static String parseYoutubeSubtitle(String model, String url, String userPrompt) {
     GeminiFileDataVo geminiFileDataVo = new GeminiFileDataVo("video/*", url);
-    List<GeminiPartVo> parts = new ArrayList<>();
-    parts.add(new GeminiPartVo(userPrompt));
-    parts.add(new GeminiPartVo(geminiFileDataVo));
+    List<GeminiPart> parts = new ArrayList<>();
+    parts.add(new GeminiPart(userPrompt));
+    parts.add(new GeminiPart(geminiFileDataVo));
     List<GeminiContentVo> contents = new ArrayList<>();
     GeminiContentVo content = new GeminiContentVo("user", parts);
     contents.add(content);

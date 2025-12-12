@@ -28,31 +28,31 @@ public class GeminiContentVo {
   /**
    * 内容拆分成多个 part
    */
-  private List<GeminiPartVo> parts;
+  private List<GeminiPart> parts;
 
   public GeminiContentVo(UniChatMessage chatMessage) {
     this.role = chatMessage.getRole();
-    this.parts = Collections.singletonList(new GeminiPartVo(chatMessage.getContent()));
+    this.parts = Collections.singletonList(new GeminiPart(chatMessage.getContent()));
   }
 
   public GeminiContentVo(String role, String content) {
     this.role = role;
-    this.parts = Collections.singletonList(new GeminiPartVo(content));
+    this.parts = Collections.singletonList(new GeminiPart(content));
   }
 
   public GeminiContentVo(String role, UniChatMessage chatMessage) {
     this.role = role;
     String content = chatMessage.getContent();
-    List<GeminiPartVo> parts = new ArrayList<>();
+    List<GeminiPart> parts = new ArrayList<>();
 
     if (StrUtil.isNotBlank(content)) {
-      GeminiPartVo geminiPartVo = new GeminiPartVo(content);
+      GeminiPart geminiPartVo = new GeminiPart(content);
       parts.add(geminiPartVo);
     }
     List<ChatImageFile> files = chatMessage.getFiles();
     if (files != null) {
       for (ChatImageFile chatFile : files) {
-        parts.add(new GeminiPartVo(chatFile));
+        parts.add(new GeminiPart(chatFile));
       }
     }
 

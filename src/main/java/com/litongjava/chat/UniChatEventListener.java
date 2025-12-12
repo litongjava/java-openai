@@ -5,6 +5,11 @@ import java.util.List;
 import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeChatUsage;
 import com.litongjava.consts.ModelPlatformName;
+import com.litongjava.gemini.GeminiCandidate;
+import com.litongjava.gemini.GeminiChatResponse;
+import com.litongjava.gemini.GeminiContentResponse;
+import com.litongjava.gemini.GeminiPart;
+import com.litongjava.gemini.GeminiUsageMetadata;
 import com.litongjava.openai.chat.ChatResponseDelta;
 import com.litongjava.openai.chat.ChatResponseUsage;
 import com.litongjava.openai.chat.Choice;
@@ -75,12 +80,39 @@ public abstract class UniChatEventListener extends EventSourceListener {
   }
 
   private UniChatResponse google(String data) {
-    return null;
+    UniChatResponse uniChatResponse = new UniChatResponse();
+
+    GeminiChatResponse chatResp = FastJson2Utils.parse(data, GeminiChatResponse.class);
+
+    // System.out.println(data);
+    // 2. 第一次发 citations
+    // List<String> citations = chatResp.get
+//    uniChatResponse.setCitations(citations);
+
+    GeminiUsageMetadata usageMetadata = chatResp.getUsageMetadata();
+    ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
+    String modelVersion = chatResp.getModelVersion();
+
+    uniChatResponse.setUsage(usage).setRawData(chatResp.getRawData()).setModel(modelVersion);
+
+    List<GeminiCandidate> candidates = chatResp.getCandidates();
+    if (candidates != null) {
+
+    }
+    GeminiCandidate geminiCandidateVo = candidates.get(0);
+    GeminiContentResponse content = geminiCandidateVo.getContent();
+
+    String role = content.getRole();
+    List<GeminiPart> parts = content.getParts();
+
+    ChatResponseDelta delta = new ChatResponseDelta(role, parts);
+    uniChatResponse.setDelta(delta);
+    return uniChatResponse;
   }
 
   private UniChatResponse openai(String data) {
     UniChatResponse uniChatResponse = new UniChatResponse();
-    
+
     // 1. 解析 JSON
     OpenAiChatResponse chatResp = FastJson2Utils.parse(data, OpenAiChatResponse.class);
     String model = chatResp.getModel();
@@ -90,19 +122,17 @@ public abstract class UniChatEventListener extends EventSourceListener {
 
     // 3. 拿到 delta
     List<Choice> choices = chatResp.getChoices();
-    if(choices!=null) {
+    if (choices != null) {
       Choice choice = choices.get(0);
       ChatResponseDelta delta = choice.getDelta();
       uniChatResponse.setDelta(delta);
     }
-    
 
     ChatResponseUsage usage = chatResp.getUsage();
 
-    
     uniChatResponse.setModel(model);
     uniChatResponse.setCitations(citations);
-    
+
     uniChatResponse.setRawData(data);
     uniChatResponse.setUsage(usage);
     return uniChatResponse;

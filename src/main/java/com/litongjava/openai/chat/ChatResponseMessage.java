@@ -7,7 +7,7 @@ import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatFile;
 import com.litongjava.chat.UniSources;
 import com.litongjava.gemini.GeminiInlineDataVo;
-import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiPart;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,14 +32,14 @@ public class ChatResponseMessage {
     this.content = content;
   }
 
-  public ChatResponseMessage(String role, GeminiPartVo geminiPartVo) {
+  public ChatResponseMessage(String role, GeminiPart geminiPartVo) {
     this.role = role;
     this.content = geminiPartVo.getText();
   }
 
-  public ChatResponseMessage(String role, List<GeminiPartVo> parts) {
+  public ChatResponseMessage(String role, List<GeminiPart> parts) {
     this.role = role;
-    for (GeminiPartVo geminiPartVo : parts) {
+    for (GeminiPart geminiPartVo : parts) {
       String text = geminiPartVo.getText();
       if (text != null) {
         this.content = text;

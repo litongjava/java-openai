@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiContentResponseVo {
-  private List<GeminiPartVo> parts;
+public class GeminiContentResponse {
+  private List<GeminiPart> parts;
   private String role; // "model"
 }

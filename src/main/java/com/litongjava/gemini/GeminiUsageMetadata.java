@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiUsageMetadataVo {
+public class GeminiUsageMetadata {
   private int promptTokenCount;
   private int candidatesTokenCount;
   private int totalTokenCount;

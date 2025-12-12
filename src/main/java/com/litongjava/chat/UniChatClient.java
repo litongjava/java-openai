@@ -11,15 +11,15 @@ import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
-import com.litongjava.gemini.GeminiCandidateVo;
+import com.litongjava.gemini.GeminiCandidate;
 import com.litongjava.gemini.GeminiChatRequest;
 import com.litongjava.gemini.GeminiChatResponse;
 import com.litongjava.gemini.GeminiClient;
-import com.litongjava.gemini.GeminiContentResponseVo;
+import com.litongjava.gemini.GeminiContentResponse;
 import com.litongjava.gemini.GeminiGenerationConfig;
-import com.litongjava.gemini.GeminiPartVo;
+import com.litongjava.gemini.GeminiPart;
 import com.litongjava.gemini.GeminiToolVo;
-import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.gemini.GeminiUsageMetadata;
 import com.litongjava.gemini.GroundingMetadata;
 import com.litongjava.gitee.GiteeConst;
 import com.litongjava.minimax.MiniMaxConst;
@@ -109,7 +109,7 @@ public class UniChatClient {
       if (key == null) {
         key = GEMINI_API_KEY;
       }
-      return useGemeni(key, uniChatRequest);
+      return useGoogle(key, uniChatRequest);
 
     } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
@@ -374,7 +374,7 @@ public class UniChatClient {
     return new UniChatResponse(model, message, usage, chatResponse.getRawResponse());
   }
 
-  public static UniChatResponse useGemeni(String key, UniChatRequest uniChatRequest) {
+  public static UniChatResponse useGoogle(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
     GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
@@ -439,18 +439,18 @@ public class UniChatClient {
     if (chatResponse == null) {
       return null;
     }
-    GeminiUsageMetadataVo usageMetadata = chatResponse.getUsageMetadata();
+    GeminiUsageMetadata usageMetadata = chatResponse.getUsageMetadata();
     ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
     String modelVersion = chatResponse.getModelVersion();
 
     UniChatResponse uniChatResponse = new UniChatResponse();
-    uniChatResponse.setUsage(usage).setRawData(chatResponse.getRawResponse()).setModel(modelVersion);
+    uniChatResponse.setUsage(usage).setRawData(chatResponse.getRawData()).setModel(modelVersion);
 
-    GeminiCandidateVo geminiCandidateVo = chatResponse.getCandidates().get(0);
-    GeminiContentResponseVo content = geminiCandidateVo.getContent();
+    GeminiCandidate geminiCandidateVo = chatResponse.getCandidates().get(0);
+    GeminiContentResponse content = geminiCandidateVo.getContent();
 
     String role = content.getRole();
-    List<GeminiPartVo> parts = content.getParts();
+    List<GeminiPart> parts = content.getParts();
 
     ChatResponseMessage message = new ChatResponseMessage(role, parts);
     GroundingMetadata groundingMetadata = geminiCandidateVo.getGroundingMetadata();
@@ -483,7 +483,7 @@ public class UniChatClient {
       if (key == null) {
         key = GEMINI_API_KEY;
       }
-      return useGemeni(key, uniChatRequest, listener);
+      return useGoogle(key, uniChatRequest, listener);
 
     } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
@@ -658,7 +658,7 @@ public class UniChatClient {
 
   }
 
-  public static EventSource useGemeni(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+  public static EventSource useGoogle(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     GeminiGenerationConfig geminiGenerationConfigVo = new GeminiGenerationConfig();
     geminiGenerationConfigVo.setTemperature(uniChatRequest.getTemperature());
 

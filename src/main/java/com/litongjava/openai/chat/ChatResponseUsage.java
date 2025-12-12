@@ -1,7 +1,7 @@
 package com.litongjava.openai.chat;
 
 import com.litongjava.claude.ClaudeChatUsage;
-import com.litongjava.gemini.GeminiUsageMetadataVo;
+import com.litongjava.gemini.GeminiUsageMetadata;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class ChatResponseUsage {
   private Integer cache_creation_input_tokens;
   private Integer cache_read_input_tokens;
 
-  public ChatResponseUsage(GeminiUsageMetadataVo usageMetadata) {
+  public ChatResponseUsage(GeminiUsageMetadata usageMetadata) {
     this.prompt_tokens = usageMetadata.getPromptTokenCount();
     this.completion_tokens = usageMetadata.getCandidatesTokenCount();
     this.total_tokens = usageMetadata.getTotalTokenCount();

@@ -53,7 +53,7 @@ public class GeminiChatRequest {
   }
 
   public GeminiChatRequest(String prompt) {
-    GeminiPartVo part = new GeminiPartVo(prompt);
+    GeminiPart part = new GeminiPart(prompt);
     GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
     List<GeminiContentVo> contents = Collections.singletonList(content);
     this.contents = contents;
@@ -68,7 +68,7 @@ public class GeminiChatRequest {
       if (role.equals("assistant")) {
         role = "model";
       } else if (role.equals("system")) {
-        GeminiPartVo part = new GeminiPartVo(content);
+        GeminiPart part = new GeminiPart(content);
         GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(part);
         this.setSystem_instruction(geminiSystemInstructionVo);
         continue;
@@ -88,10 +88,10 @@ public class GeminiChatRequest {
   }
 
   public GeminiChatRequest setUserPrompts(String... prompts) {
-    List<GeminiPartVo> parts = new ArrayList<>(prompts.length);
+    List<GeminiPart> parts = new ArrayList<>(prompts.length);
     for (String prompt : prompts) {
       if (StrUtil.isNotBlank(prompt)) {
-        GeminiPartVo part = new GeminiPartVo(prompt);
+        GeminiPart part = new GeminiPart(prompt);
         parts.add(part);
       }
     }
@@ -103,8 +103,8 @@ public class GeminiChatRequest {
   }
 
   public GeminiChatRequest setUserPrompt(String userPrompt) {
-    GeminiPartVo part = new GeminiPartVo(userPrompt);
-    List<GeminiPartVo> parts = new ArrayList<>();
+    GeminiPart part = new GeminiPart(userPrompt);
+    List<GeminiPart> parts = new ArrayList<>();
     parts.add(part);
     List<GeminiContentVo> contents = new ArrayList<>();
     GeminiContentVo content = new GeminiContentVo("user", parts);

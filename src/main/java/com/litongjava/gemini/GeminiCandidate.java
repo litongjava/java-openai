@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiCandidateVo {
+public class GeminiCandidate {
   private Integer index;
-  private GeminiContentResponseVo content;
+  private GeminiContentResponse content;
   private String finishReason;
   private Double avgLogprobs;
   private GroundingMetadata groundingMetadata;
