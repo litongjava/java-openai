@@ -96,17 +96,17 @@ public abstract class UniChatEventListener extends EventSourceListener {
     uniChatResponse.setUsage(usage).setRawData(chatResp.getRawData()).setModel(modelVersion);
 
     List<GeminiCandidate> candidates = chatResp.getCandidates();
-    if (candidates != null) {
+    if (candidates != null && candidates.size() > 0) {
+      GeminiCandidate geminiCandidateVo = candidates.get(0);
+      GeminiContentResponse content = geminiCandidateVo.getContent();
 
+      String role = content.getRole();
+      List<GeminiPart> parts = content.getParts();
+
+      ChatResponseDelta delta = new ChatResponseDelta(role, parts);
+      uniChatResponse.setDelta(delta);
     }
-    GeminiCandidate geminiCandidateVo = candidates.get(0);
-    GeminiContentResponse content = geminiCandidateVo.getContent();
 
-    String role = content.getRole();
-    List<GeminiPart> parts = content.getParts();
-
-    ChatResponseDelta delta = new ChatResponseDelta(role, parts);
-    uniChatResponse.setDelta(delta);
     return uniChatResponse;
   }
 
@@ -122,7 +122,7 @@ public abstract class UniChatEventListener extends EventSourceListener {
 
     // 3. 拿到 delta
     List<Choice> choices = chatResp.getChoices();
-    if (choices != null) {
+    if (choices != null && choices.size() > 0) {
       Choice choice = choices.get(0);
       ChatResponseDelta delta = choice.getDelta();
       uniChatResponse.setDelta(delta);
