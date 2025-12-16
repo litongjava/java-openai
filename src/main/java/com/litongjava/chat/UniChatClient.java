@@ -18,7 +18,7 @@ import com.litongjava.gemini.GeminiClient;
 import com.litongjava.gemini.GeminiContentResponse;
 import com.litongjava.gemini.GeminiGenerationConfig;
 import com.litongjava.gemini.GeminiPart;
-import com.litongjava.gemini.GeminiToolVo;
+import com.litongjava.gemini.GeminiTool;
 import com.litongjava.gemini.GeminiUsageMetadata;
 import com.litongjava.gemini.GroundingMetadata;
 import com.litongjava.gitee.GiteeConst;
@@ -417,10 +417,10 @@ public class UniChatClient {
 
     geminiChatRequestVo.setGenerationConfig(config);
 
-    List<GeminiToolVo> tools = new ArrayList<>();
+    List<GeminiTool> tools = new ArrayList<>();
     Boolean enable_search = uniChatRequest.getEnable_search();
     if (enable_search != null && enable_search) {
-      GeminiToolVo geminiToolVo = new GeminiToolVo();
+      GeminiTool geminiToolVo = new GeminiTool();
       geminiToolVo.enableSearch();
       tools.add(geminiToolVo);
     }

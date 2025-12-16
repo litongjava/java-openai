@@ -14,21 +14,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiToolVo {
-  private List<GeminiFunctionDeclarationVo> function_declarations;
+public class GeminiTool {
+  private List<GeminiFunctionDeclaration> function_declarations;
   private Map<String, Object> googleSearch;
 
-  public GeminiToolVo enableSearch() {
+  public GeminiTool enableSearch() {
     this.googleSearch = new HashMap<>(0);
     return this;
   }
 
-  public GeminiToolVo disableSearch() {
+  public GeminiTool disableSearch() {
     this.googleSearch = null;
     return this;
   }
 
-  public GeminiToolVo(List<GeminiFunctionDeclarationVo> function_declarations) {
+  public GeminiTool(List<GeminiFunctionDeclaration> function_declarations) {
     this.function_declarations = function_declarations;
   }
 }

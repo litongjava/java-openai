@@ -144,7 +144,7 @@ public class GeminiClient {
   public static String chatWithModel(String apiKey, String model, String role, String prompt) {
     // 1. 构造请求体
     GeminiPart part = new GeminiPart(prompt);
-    GeminiContentVo content = new GeminiContentVo(role, Collections.singletonList(part));
+    GeminiContent content = new GeminiContent(role, Collections.singletonList(part));
     GeminiChatRequest reqVo = new GeminiChatRequest(Collections.singletonList(content));
     // 2.发送请求
     GeminiChatResponse chatResponse = GeminiClient.generate(apiKey, model, reqVo);
@@ -282,12 +282,12 @@ public class GeminiClient {
   }
 
   public static String parseYoutubeSubtitle(String model, String url, String userPrompt) {
-    GeminiFileDataVo geminiFileDataVo = new GeminiFileDataVo("video/*", url);
+    GeminiFileData geminiFileDataVo = new GeminiFileData("video/*", url);
     List<GeminiPart> parts = new ArrayList<>();
     parts.add(new GeminiPart(userPrompt));
     parts.add(new GeminiPart(geminiFileDataVo));
-    List<GeminiContentVo> contents = new ArrayList<>();
-    GeminiContentVo content = new GeminiContentVo("user", parts);
+    List<GeminiContent> contents = new ArrayList<>();
+    GeminiContent content = new GeminiContent("user", parts);
     contents.add(content);
 
     GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
@@ -324,7 +324,7 @@ public class GeminiClient {
    * @param requestVo    - The request body for creating the cache
    * @return GeminiCacheVo - The created cache metadata
    */
-  public static GeminiCacheVo createCache(String googleApiKey, GeminiCreateCacheRequestVo requestVo) {
+  public static GeminiCacheVo createCache(String googleApiKey, GeminiCreateCacheRequest requestVo) {
     String url = GeminiConsts.GEMINI_API_BASE + "cachedContents?key=" + googleApiKey;
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
 
@@ -351,7 +351,7 @@ public class GeminiClient {
    * @param requestVo - The request body for creating the cache
    * @return GeminiCacheVo - The created cache metadata
    */
-  public static GeminiCacheVo createCache(GeminiCreateCacheRequestVo requestVo) {
+  public static GeminiCacheVo createCache(GeminiCreateCacheRequest requestVo) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
       throw new RuntimeException("GEMINI_API_KEY is empty");
@@ -407,7 +407,7 @@ public class GeminiClient {
    * @param googleApiKey - Your Google API Key
    * @return GeminiListCachesResponseVo - A list of cache metadata
    */
-  public static GeminiListCachesResponseVo listCaches(String googleApiKey) {
+  public static GeminiListCachesResponse listCaches(String googleApiKey) {
     String url = GeminiConsts.GEMINI_API_BASE + "cachedContents?key=" + googleApiKey;
 
     Request request = new Request.Builder().url(url).get().build();
@@ -418,7 +418,7 @@ public class GeminiClient {
         throw new RuntimeException("Gemini listCaches failed, request url=" + url + " statusCode=" + response.code()
             + ", body=" + responseBody);
       }
-      return JsonUtils.parse(responseBody, GeminiListCachesResponseVo.class);
+      return JsonUtils.parse(responseBody, GeminiListCachesResponse.class);
     } catch (IOException e) {
       throw new RuntimeException("Gemini listCaches failed: " + e.getMessage(), e);
     }
@@ -429,7 +429,7 @@ public class GeminiClient {
    *
    * @return GeminiListCachesResponseVo - A list of cache metadata
    */
-  public static GeminiListCachesResponseVo listCaches() {
+  public static GeminiListCachesResponse listCaches() {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
       throw new RuntimeException("GEMINI_API_KEY is empty");
@@ -449,7 +449,7 @@ public class GeminiClient {
    * @return GeminiCacheVo - The updated cache metadata
    */
   public static GeminiCacheVo updateCache(String googleApiKey, String cacheName,
-      GeminiUpdateCacheRequestVo updateRequestVo) {
+      GeminiUpdateCacheRequest updateRequestVo) {
     String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
     String requestJson = Json.getSkipNullJson().toJson(updateRequestVo);
 
@@ -479,7 +479,7 @@ public class GeminiClient {
    *                        (ttl or expireTime)
    * @return GeminiCacheVo - The updated cache metadata
    */
-  public static GeminiCacheVo updateCache(String cacheName, GeminiUpdateCacheRequestVo updateRequestVo) {
+  public static GeminiCacheVo updateCache(String cacheName, GeminiUpdateCacheRequest updateRequestVo) {
     String apiKey = EnvUtils.getStr("GEMINI_API_KEY");
     if (apiKey == null || apiKey.isEmpty()) {
       throw new RuntimeException("GEMINI_API_KEY is empty");

@@ -78,8 +78,7 @@ public class WhisperClient {
     return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, responseFormat);
   }
 
-  public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat,
-      String prompt) {
+  public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat, String prompt) {
     // Get base API URL from environment or use default constant
     String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
 
@@ -97,8 +96,7 @@ public class WhisperClient {
    * @param responseFormat the desired response format (e.g., json)
    * @return a ResponseVo containing the transcription result or error information
    */
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, byte[] audioBytes,
-      String responseFormat) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, byte[] audioBytes, String responseFormat) {
     // Determine the content type based on the file extension
 
     String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
@@ -128,19 +126,17 @@ public class WhisperClient {
     return transcriptions(baseUrl, apiKey, filename, fileBody, responseFormat);
   }
 
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, File file, String responseFormat,
-      String prompt) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, File file, String responseFormat, String prompt) {
     // Determine the content type based on the file extension
     String filename = file.getName();
     String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
     RequestBody fileBody = RequestBody.create(file, MediaType.get(contentType));
     // Build the HTTP header with the API key for authorization
-    return transcriptions(baseUrl, apiKey, filename, fileBody,
-        new WhisperTranscriptionsRequest(responseFormat, prompt));
+    WhisperTranscriptionsRequest requestEntity = new WhisperTranscriptionsRequest(responseFormat, prompt);
+    return transcriptions(baseUrl, apiKey, filename, fileBody, requestEntity);
   }
 
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, RequestBody fileBody,
-      String responseFormat) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, RequestBody fileBody, String responseFormat) {
     return transcriptions(baseUrl, apiKey, filename, fileBody, new WhisperTranscriptionsRequest(responseFormat));
   }
 

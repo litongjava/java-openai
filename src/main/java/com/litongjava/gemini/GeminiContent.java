@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiContentVo {
+public class GeminiContent {
 
   /**
    * 角色：user 或 model 等
@@ -30,17 +30,17 @@ public class GeminiContentVo {
    */
   private List<GeminiPart> parts;
 
-  public GeminiContentVo(UniChatMessage chatMessage) {
+  public GeminiContent(UniChatMessage chatMessage) {
     this.role = chatMessage.getRole();
     this.parts = Collections.singletonList(new GeminiPart(chatMessage.getContent()));
   }
 
-  public GeminiContentVo(String role, String content) {
+  public GeminiContent(String role, String content) {
     this.role = role;
     this.parts = Collections.singletonList(new GeminiPart(content));
   }
 
-  public GeminiContentVo(String role, UniChatMessage chatMessage) {
+  public GeminiContent(String role, UniChatMessage chatMessage) {
     this.role = role;
     String content = chatMessage.getContent();
     List<GeminiPart> parts = new ArrayList<>();

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiCreateCacheRequestVo {
-  private String model = "models/gemini-2.5-pro-preview-05-06";
-  private List<GeminiContentVo> contents;
-  private GeminiSystemInstructionVo systemInstruction;
+public class GeminiCreateCacheRequest {
+  private String model = "models/gemini-2.5-pro";
+  private List<GeminiContent> contents;
+  private GeminiSystemInstruction systemInstruction;
   private String ttl = "300s";
   private String displayName; // Optional display name
 }

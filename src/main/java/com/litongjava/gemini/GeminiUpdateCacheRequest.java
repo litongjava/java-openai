@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiUpdateCacheRequestVo {
+public class GeminiUpdateCacheRequest {
   private String ttl; // e.g., "600s"
   private String expireTime; // Alternative to ttl
 
-  public GeminiUpdateCacheRequestVo(String ttl) {
+  public GeminiUpdateCacheRequest(String ttl) {
     this.ttl = ttl;
   }
 }

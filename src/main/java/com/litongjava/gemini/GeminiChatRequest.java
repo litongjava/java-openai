@@ -26,18 +26,18 @@ public class GeminiChatRequest {
    * "system_instruction": {...}, "tools": [...], "tool_config": {...},
    * "contents": {...或list...} }
    */
-  private GeminiSystemInstructionVo system_instruction;
+  private GeminiSystemInstruction system_instruction;
 
-  private List<GeminiToolVo> tools;
+  private List<GeminiTool> tools;
 
-  private GeminiToolConfigVo tool_config;
+  private GeminiToolConfig tool_config;
 
-  private List<GeminiContentVo> contents;
+  private List<GeminiContent> contents;
 
   /**
    * 可选：安全策略
    */
-  private List<GeminiSafetySettingVo> safetySettings;
+  private List<GeminiSafetySetting> safetySettings;
 
   /**
    * 可选：文本生成配置
@@ -48,19 +48,19 @@ public class GeminiChatRequest {
 
   private String cachedContent;
 
-  public GeminiChatRequest(List<GeminiContentVo> contents) {
+  public GeminiChatRequest(List<GeminiContent> contents) {
     this.contents = contents;
   }
 
   public GeminiChatRequest(String prompt) {
     GeminiPart part = new GeminiPart(prompt);
-    GeminiContentVo content = new GeminiContentVo("user", Collections.singletonList(part));
-    List<GeminiContentVo> contents = Collections.singletonList(content);
+    GeminiContent content = new GeminiContent("user", Collections.singletonList(part));
+    List<GeminiContent> contents = Collections.singletonList(content);
     this.contents = contents;
   }
 
   public void setChatMessages(List<UniChatMessage> messages) {
-    List<GeminiContentVo> contents = new ArrayList<>(messages.size());
+    List<GeminiContent> contents = new ArrayList<>(messages.size());
     for (UniChatMessage chatMessage : messages) {
       String role = chatMessage.getRole();
       String content = chatMessage.getContent();
@@ -69,11 +69,11 @@ public class GeminiChatRequest {
         role = "model";
       } else if (role.equals("system")) {
         GeminiPart part = new GeminiPart(content);
-        GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(part);
+        GeminiSystemInstruction geminiSystemInstructionVo = new GeminiSystemInstruction(part);
         this.setSystem_instruction(geminiSystemInstructionVo);
         continue;
       }
-      GeminiContentVo vo = new GeminiContentVo(role, chatMessage);
+      GeminiContent vo = new GeminiContent(role, chatMessage);
       contents.add(vo);
     }
     this.contents = contents;
@@ -81,7 +81,7 @@ public class GeminiChatRequest {
 
   public GeminiChatRequest setSystemPrompt(String systemPrompt) {
     if (StrUtil.isNotBlank(systemPrompt)) {
-      GeminiSystemInstructionVo geminiSystemInstructionVo = new GeminiSystemInstructionVo(systemPrompt);
+      GeminiSystemInstruction geminiSystemInstructionVo = new GeminiSystemInstruction(systemPrompt);
       this.system_instruction = geminiSystemInstructionVo;
     }
     return this;
@@ -95,8 +95,8 @@ public class GeminiChatRequest {
         parts.add(part);
       }
     }
-    List<GeminiContentVo> contents = new ArrayList<>();
-    GeminiContentVo content = new GeminiContentVo("user", parts);
+    List<GeminiContent> contents = new ArrayList<>();
+    GeminiContent content = new GeminiContent("user", parts);
     contents.add(content);
     this.contents = contents;
     return this;
@@ -106,8 +106,8 @@ public class GeminiChatRequest {
     GeminiPart part = new GeminiPart(userPrompt);
     List<GeminiPart> parts = new ArrayList<>();
     parts.add(part);
-    List<GeminiContentVo> contents = new ArrayList<>();
-    GeminiContentVo content = new GeminiContentVo("user", parts);
+    List<GeminiContent> contents = new ArrayList<>();
+    GeminiContent content = new GeminiContent("user", parts);
     contents.add(content);
     this.contents = contents;
     return this;

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiSafetySettingVo {
+public class GeminiSafetySetting {
   private String category;
   private String threshold;
 }

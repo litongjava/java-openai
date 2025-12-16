@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiFunctionDeclarationVo {
+public class GeminiFunctionDeclaration {
   private String name;
   private String description;
   // 注意示例里 parameters 是一个 JSON 对象，有 type, properties 等

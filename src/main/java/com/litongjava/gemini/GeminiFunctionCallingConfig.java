@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiFunctionCallingConfigVo {
+public class GeminiFunctionCallingConfig {
   private String mode;
 
   private List<String> allowed_function_names;

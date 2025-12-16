@@ -24,15 +24,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiSystemInstructionVo {
+public class GeminiSystemInstruction {
   private List<GeminiPart> parts;
 
-  public GeminiSystemInstructionVo(GeminiPart part) {
+  public GeminiSystemInstruction(GeminiPart part) {
     this.parts = new ArrayList<>();
     parts.add(part);
   }
 
-  public GeminiSystemInstructionVo(String systemPrompt) {
+  public GeminiSystemInstruction(String systemPrompt) {
     GeminiPart part = new GeminiPart(systemPrompt);
     this.parts = new ArrayList<>();
     parts.add(part);

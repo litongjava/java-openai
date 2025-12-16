@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiToolConfigVo {
+public class GeminiToolConfig {
 
-  private GeminiFunctionCallingConfigVo function_calling_config;
+  private GeminiFunctionCallingConfig function_calling_config;
 }

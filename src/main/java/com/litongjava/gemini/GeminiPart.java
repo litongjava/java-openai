@@ -15,19 +15,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GeminiPart {
   private String text;
-  private GeminiInlineDataVo inlineData;
-  private GeminiFileDataVo fileData;
+  private GeminiInlineData inlineData;
+  private GeminiFileData fileData;
   private GeminiFunctionCallVo functionCall;
 
   public GeminiPart(String text) {
     this.text = text;
   }
 
-  public GeminiPart(GeminiInlineDataVo inlineData) {
+  public GeminiPart(GeminiInlineData inlineData) {
     this.inlineData = inlineData;
   }
 
-  public GeminiPart(GeminiFileDataVo fileData) {
+  public GeminiPart(GeminiFileData fileData) {
     this.fileData = fileData;
   }
 
@@ -36,9 +36,9 @@ public class GeminiPart {
     String data = chatFile.getData();
     String url = chatFile.getUrl();
     if (data != null) {
-      this.inlineData = new GeminiInlineDataVo(type, data);
+      this.inlineData = new GeminiInlineData(type, data);
     } else if (url != null) {
-      this.fileData = new GeminiFileDataVo(type, url);
+      this.fileData = new GeminiFileData(type, url);
     }
   }
 }

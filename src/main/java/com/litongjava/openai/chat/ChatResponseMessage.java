@@ -6,7 +6,7 @@ import java.util.List;
 import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatFile;
 import com.litongjava.chat.UniSources;
-import com.litongjava.gemini.GeminiInlineDataVo;
+import com.litongjava.gemini.GeminiInlineData;
 import com.litongjava.gemini.GeminiPart;
 
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ public class ChatResponseMessage {
       if (text != null) {
         this.content = text;
       }
-      GeminiInlineDataVo inlineData = geminiPartVo.getInlineData();
+      GeminiInlineData inlineData = geminiPartVo.getInlineData();
       if (inlineData != null) {
         String mimeType = inlineData.getMimeType();
         String data = inlineData.getData();

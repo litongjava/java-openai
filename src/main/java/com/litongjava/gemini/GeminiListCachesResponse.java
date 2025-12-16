@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeminiListCachesResponseVo {
+public class GeminiListCachesResponse {
   private List<GeminiCacheVo> cachedContents;
 
 }
