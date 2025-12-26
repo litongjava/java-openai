@@ -59,6 +59,7 @@ public interface GiteeModels {
   String COGVIDE0X_5B = "CogVideoX-5b";
   String COGVIEW4_6B = "CogView4_6B";
   String GLM_4_32B = "GLM-4-32B";
+  String GLM_4_7 = "GLM-4.7";
   String GLM_4_6 = "GLM-4.6";
   String GLM_4_5 = "GLM-4_5";
   String GLM_4_5_AIR = "GLM-4_5-Air";

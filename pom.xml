@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.litongjava</groupId>
       <artifactId>tio-utils</artifactId>
-      <version>3.7.3.v20251101-RELEASE</version>
+      <version>3.7.3.v20260101-RELEASE</version>
     </dependency>
 
     <dependency>
@@ -67,7 +67,6 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
       <version>${fastjson2.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

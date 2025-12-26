@@ -11,8 +11,8 @@ public class TaskResponse {
   private Long id;
   private String result;
 
-  public TaskResponse(String markdown) {
-    this.result = markdown;
+  public TaskResponse(String result) {
+    this.result = result;
   }
 
   public TaskResponse(Long taskId) {
