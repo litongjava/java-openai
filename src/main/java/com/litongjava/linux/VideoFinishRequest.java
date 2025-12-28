@@ -8,8 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VideoFinishRequest {
-  private Long sessionPrt;
-  private String m3u8Path;
-  private String videos;
+  private Long session_id;
   private String watermark;
+  private String storage_platform;
+
+  public VideoFinishRequest(long session_id, String watermark) {
+    this.session_id = session_id;
+    this.watermark = watermark;
+  }
 }

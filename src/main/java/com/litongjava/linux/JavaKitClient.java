@@ -1,6 +1,8 @@
 package com.litongjava.linux;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.commandline.ProcessResult;
@@ -55,26 +57,70 @@ public class JavaKitClient {
   }
 
   public static ProcessResult finishManimSession(String apiBase, String key, VideoFinishRequest request) {
-    Long sessionPrt = request.getSessionPrt();
-    String m3u8Path = request.getM3u8Path();
-    String videos = request.getVideos();
-    String watermark = request.getWatermark();
-    String targetUrl = apiBase + "/manim/finish?session_prt=%d&m3u8_path=%s&videos=%s&watermark=%s";
-    targetUrl = String.format(targetUrl, sessionPrt, m3u8Path, videos, watermark);
+    String queryString = toQueryString(request);
+    String targetUrl = apiBase + "/manim/finish?" + queryString;
     return get(targetUrl, key);
   }
 
-  public static ProcessResult executeManimCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
-    Long sessionPrt = codeRequest.getSessionPrt();
-    String m3u8Path = codeRequest.getM3u8Path();
-    String targetUrl = null;
-    if (sessionPrt != null && m3u8Path != null) {
-      targetUrl = apiBase + "/manim/run?session_prt=%d&m3u8_path=%s";
-      targetUrl = String.format(targetUrl, sessionPrt, m3u8Path);
-    } else {
-      targetUrl = apiBase + "/manim/run";
+  public static String toQueryString(VideoFinishRequest request) {
+    StringBuilder sb = new StringBuilder();
+
+    Long session_id = request.getSession_id();
+    String watermark = request.getWatermark();
+    String storage_platform = request.getStorage_platform();
+    if (session_id != null) {
+      sb.append("session_id=").append(session_id).append("&");
+    }
+    if (watermark != null && !watermark.isEmpty()) {
+      sb.append("watermark=").append(URLEncoder.encode(watermark, StandardCharsets.UTF_8)).append("&");
+    }
+    if (storage_platform != null && !storage_platform.isEmpty()) {
+      sb.append("storage_platform=").append(storage_platform).append("&");
     }
 
+    if (sb.length() > 0) {
+      sb.setLength(sb.length() - 1);
+    }
+    return sb.toString();
+  }
+
+  private static String toQueryString(ExecuteCodeRequest codeRequest) {
+    Long session_id = codeRequest.getSessionId();
+    Long code_id = codeRequest.getId();
+    Integer code_timeout = codeRequest.getTimeout();
+    String quality = codeRequest.getQuality();
+    String storage_platform = codeRequest.getStorage_platform();
+
+    StringBuilder sb = new StringBuilder();
+
+    if (session_id != null) {
+      sb.append("session_id=").append(session_id).append("&");
+    }
+    if (code_id != null) {
+      sb.append("code_id=").append(code_id).append("&");
+    }
+
+    if (code_timeout != null) {
+      sb.append("code_timeout=").append(code_timeout).append("&");
+    }
+
+    if (quality != null) {
+      sb.append("quality=").append(quality).append("&");
+    }
+
+    if (storage_platform != null && !storage_platform.isEmpty()) {
+      sb.append("storage_platform=").append(storage_platform).append("&");
+    }
+
+    if (sb.length() > 0) {
+      sb.setLength(sb.length() - 1);
+    }
+    return sb.toString();
+
+  }
+
+  public static ProcessResult executeManimCode(String apiBase, String key, ExecuteCodeRequest codeRequest) {
+    String targetUrl = apiBase + "/manim/run";
     return post(targetUrl, key, codeRequest);
   }
 
@@ -159,41 +205,20 @@ public class JavaKitClient {
   }
 
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
-    Long sessionId = codeRequest.getSessionId();
-    Long id = codeRequest.getId();
-    String name = codeRequest.getName();
-    String code = codeRequest.getCode();
 
+    String code = codeRequest.getCode();
     String figure = codeRequest.getFigure();
-    Integer timeout = codeRequest.getTimeout();
-    String quality = codeRequest.getQuality();
+    targetUrl = targetUrl + "?" + toQueryString(codeRequest);
 
     Request.Builder builder = new Request.Builder();
     builder.url(targetUrl).addHeader("authorization", "Bearer " + key);
-    if (sessionId != null) {
-      builder.addHeader("session-id", sessionId.toString());
-    }
-    if (id != null) {
-      builder.addHeader("code-id", id.toString());
-    }
-
-    if (name != null) {
-      builder.addHeader("code-name", name);
-    }
-
-    if (timeout != null) {
-      builder.addHeader("code-timeout", timeout.toString());
-    }
-    if (quality != null) {
-      builder.addHeader("quality", quality);
-    }
 
     if (figure == null) {
       MediaType mediaType = MediaType.parse("text/plain");
       RequestBody body = RequestBody.create(code, mediaType);
       builder.method("POST", body);
-    } else {
 
+    } else {
       okhttp3.MultipartBody.Builder formBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
       // Create the request body with file and image media type
       RequestBody fileBody = getFileBody("main.py", code);

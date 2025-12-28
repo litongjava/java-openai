@@ -23,6 +23,17 @@ public class MotionCanvasClient {
     return null;
   }
 
-
+  public static MvApiResponse<String> parseMakeScene(String code) {
+    String url = BASE_URL + "/api/parse-make-scene";
+    ResponseVo response = HttpUtils.postText(url, code);
+    if (response.isOk()) {
+      String bodyString = response.getBodyString();
+      TioTypeReference<MvApiResponse<String>> typeReference = new TioTypeReference<MvApiResponse<String>>() {
+      };
+      MvApiResponse<String> apiResponse = JsonUtils.parse(bodyString, typeReference);
+      return apiResponse;
+    }
+    return null;
+  }
 
 }

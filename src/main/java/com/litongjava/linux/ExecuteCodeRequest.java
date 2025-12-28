@@ -18,8 +18,7 @@ public class ExecuteCodeRequest {
   private String figure;
   // l low,m medium,h high
   private String quality;
-  private Long sessionPrt;
-  private String m3u8Path;
+  private String storage_platform;
 
   public ExecuteCodeRequest(String code) {
     this.code = code;
@@ -36,30 +35,36 @@ public class ExecuteCodeRequest {
     this.timeout = timeout;
   }
 
-  public ExecuteCodeRequest(Long sessionId, String code, int timeout, Long sessionPrt, String m3u8Path) {
+  public ExecuteCodeRequest(Long sessionId, String code, int timeout) {
     this.sessionId = sessionId;
     this.code = code;
     this.timeout = timeout;
-    this.sessionPrt = sessionPrt;
-    this.m3u8Path = m3u8Path;
+
   }
 
-  public ExecuteCodeRequest(Long id, Long sessionId, String code, Integer timeout, Long sessionPrt, String m3u8Path) {
+  public ExecuteCodeRequest(Long sessionId, Long id, String code, Integer timeout) {
     this.sessionId = sessionId;
     this.id = id;
     this.code = code;
     this.timeout = timeout;
-    this.sessionPrt = sessionPrt;
-    this.m3u8Path = m3u8Path;
+
   }
 
-  public ExecuteCodeRequest(Long sessionId, String code, String figure, int timeout, Long sessionPrt, String m3u8Path) {
+  public ExecuteCodeRequest(Long sessionId, Long id, String name, String code, String figure, int timeout) {
     this.sessionId = sessionId;
+    this.id = id;
+    this.name = name;
     this.code = code;
     this.figure = figure;
     this.timeout = timeout;
-    this.sessionPrt = sessionPrt;
-    this.m3u8Path = m3u8Path;
+  }
+
+  public ExecuteCodeRequest(Long sessionId, String name, String code, String figure, int timeout) {
+    this.sessionId = sessionId;
+    this.name = name;
+    this.code = code;
+    this.figure = figure;
+    this.timeout = timeout;
   }
 
   public ExecuteCodeRequest(Long sessionId, String name, String code, int timeout) {
