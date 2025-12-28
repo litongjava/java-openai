@@ -11,6 +11,7 @@ import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
+import com.litongjava.tio.utils.url.UrlUtils;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -72,7 +73,8 @@ public class JavaKitClient {
       sb.append("session_id=").append(session_id).append("&");
     }
     if (watermark != null && !watermark.isEmpty()) {
-      sb.append("watermark=").append(URLEncoder.encode(watermark, StandardCharsets.UTF_8)).append("&");
+      String encode = UrlUtils.encode(watermark);
+      sb.append("watermark=").append(encode).append("&");
     }
     if (storage_platform != null && !storage_platform.isEmpty()) {
       sb.append("storage_platform=").append(storage_platform).append("&");
