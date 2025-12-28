@@ -1,8 +1,6 @@
 package com.litongjava.linux;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.commandline.ProcessResult;
@@ -48,7 +46,7 @@ public class JavaKitClient {
   }
 
   public static ProcessResult startManimSession(String apiBase, String key, long sessionId) {
-    String targetUrl = apiBase + "/manim/start?session-id=" + sessionId;
+    String targetUrl = apiBase + "/manim/start?session_id=" + sessionId;
     return get(targetUrl, key);
   }
 
