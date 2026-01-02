@@ -26,6 +26,9 @@ public interface GoogleModels {
   String GEMINI_1_5_PRO_EXP_0801 = "gemini-1.5-pro-exp-0801";
   String GEMINI_1_5_PRO_EXP_0827 = "gemini-1.5-pro-exp-0827";
 
+  String GEMINI_3_FLASH_PREVIEW = "models/gemini-3-flash-preview";
+  String GEMINI_3_PRO_PREVIEW = "models/gemini-3-pro-preview";
+
   // Gemini 1.5 Flash
   String GEMINI_1_5_FLASH_LATEST = "gemini-1.5-flash-latest";
   String GEMINI_1_5_FLASH_001 = "gemini-1.5-flash-001";
