@@ -87,6 +87,7 @@ public class JavaKitClient {
   private static String toQueryString(ExecuteCodeRequest codeRequest) {
     Long session_id = codeRequest.getSessionId();
     Long code_id = codeRequest.getId();
+    String code_name = codeRequest.getName();
     Integer code_timeout = codeRequest.getTimeout();
     String quality = codeRequest.getQuality();
     String storage_platform = codeRequest.getStorage_platform();
@@ -98,6 +99,9 @@ public class JavaKitClient {
     }
     if (code_id != null) {
       sb.append("code_id=").append(code_id).append("&");
+    }
+    if(code_name!=null) {
+      sb.append("code_name=").append(code_name).append("&");
     }
 
     if (code_timeout != null) {
