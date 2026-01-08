@@ -54,6 +54,9 @@ public class GeminiClient {
     if (StrUtil.isBlank(googleApiKey)) {
       throw new RuntimeException("api key can not be empty");
     }
+    if (baseUrl == null) {
+      baseUrl = GEMINI_API_URL;
+    }
     // 拼接 URL
     String urlPerfix = baseUrl + modelName + ":generateContent?key=";
     String url = urlPerfix + googleApiKey;
