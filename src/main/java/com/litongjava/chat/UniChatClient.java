@@ -284,6 +284,9 @@ public class UniChatClient {
     ChatProvider provider = uniChatRequest.getProvider();
     openAiChatRequestVo.setProvider(provider);
 
+    if (prefixUrl == null) {
+
+    }
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
     OpenAiChatResponse chatResponse = null;
@@ -587,7 +590,8 @@ public class UniChatClient {
     }
   }
 
-  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest, EventSourceListener listener) {
+  public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest,
+      EventSourceListener listener) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -705,6 +709,15 @@ public class UniChatClient {
 
   public static UniChatResponse useOpenRouter(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useOpenRouter(String prefixUrl, String key, UniChatRequest uniChatRequest) {
+    if (prefixUrl != null) {
+      return useOpenAi(prefixUrl, key, uniChatRequest);
+    } else {
+      return useOpenAi(OPENROUTER_API_URL, key, uniChatRequest);
+    }
+
   }
 
   public static UniChatResponse useZenmux(String key, UniChatRequest uniChatRequest) {
