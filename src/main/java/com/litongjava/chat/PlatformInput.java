@@ -10,6 +10,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class PlatformInput {
+
   private String platform;
   private String model;
+
+  public PlatformInput(String platform) {
+    this.platform = platform;
+  }
 }
