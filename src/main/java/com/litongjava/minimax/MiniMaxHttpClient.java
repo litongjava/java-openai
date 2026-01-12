@@ -13,6 +13,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
+import okhttp3.sse.EventSources;
+import okhttp3.sse.EventSource.Factory;
 
 /**
  * FishAudioClient 用于调用 Fish.audio 的 TTS 接口。
@@ -68,13 +72,12 @@ public class MiniMaxHttpClient {
    * @return MiniMaxTTSResponse 响应结果
    */
   public static MiniMaxTTSResponse speech(String apiPrefixUrl, String apiKey, MiniMaxTTSRequest vo) {
-    // 使用 msgpack 工具将请求对象序列化成Base64
     String json = JsonUtils.toJson(vo);
     return speechRequest(apiPrefixUrl, apiKey, json);
   }
 
   /**
-   * 发起 HTTP 请求，返回鱼声平台 TTS 接口响应结果。
+   * 发起 HTTP 请求，返回平台 TTS 接口响应结果。
    *
    * @param apiPrefixUrl 接口前缀
    * @param apiKey       API 密钥
@@ -122,5 +125,68 @@ public class MiniMaxHttpClient {
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage(), e);
     }
+  }
+
+  public static EventSource speechStream(String text, String voice, EventSourceListener listener) {
+    MiniMaxTTSRequest miniMaxTTSRequest = new MiniMaxTTSRequest(text, voice);
+    return speechStream(miniMaxTTSRequest, listener);
+  }
+
+  public static EventSource speechStream(String text, String voice, String language_boost,
+      EventSourceListener listener) {
+    MiniMaxTTSRequest miniMaxTTSRequest = new MiniMaxTTSRequest(text, voice, language_boost);
+    return speechStream(miniMaxTTSRequest, listener);
+  }
+
+  public static EventSource speechStream(MiniMaxTTSRequest vo, EventSourceListener listener) {
+    String apiKey = EnvUtils.get("MINIMAX_API_KEY");
+    return speechStream(apiKey, vo, listener);
+  }
+
+  public static EventSource speechStream(String apiKey, MiniMaxTTSRequest vo, EventSourceListener listener) {
+    String apiPrefixUrl = EnvUtils.get("MINIMAX_API_URL", TTS_URL);
+    return speechStream(apiPrefixUrl, apiKey, vo, listener);
+  }
+
+  public static EventSource speechStream(String apiPrefixUrl, String apiKey, MiniMaxTTSRequest vo,
+      EventSourceListener listener) {
+    vo.setStream(true);
+    String json = JsonUtils.toJson(vo);
+    return speechStreamRequest(apiPrefixUrl, apiKey, json, listener);
+  }
+
+  /**
+   * 发起 HTTP 请求，返回平台 TTS 接口响应结果。
+   *
+   * @param apiPrefixUrl 接口前缀
+   * @param apiKey       API 密钥
+   * @param payload      msgpack 序列化后的请求数据
+   * @return EventSource 响应结果，成功时包含音频Base64数据
+   */
+  public static EventSource speechStreamRequest(String apiPrefixUrl, String apiKey, String payload,
+      EventSourceListener listener) {
+    // 接口地址为 “/tts”
+    String baseUrl = apiPrefixUrl + "/t2a_v2";
+    Map<String, String> header = new HashMap<>();
+    header.put("Authorization", "Bearer " + apiKey);
+    return executeStream(baseUrl, header, payload, listener);
+  }
+
+  public static EventSource executeStream(String url, Map<String, String> header, String payload,
+      EventSourceListener listener) {
+    MediaType mediaType = MediaType.parse("application/json");
+    RequestBody body = RequestBody.create(payload, mediaType);
+
+    // 构建请求并添加请求头
+    Request.Builder requestBuilder = new Request.Builder().url(url).post(body);
+    for (Map.Entry<String, String> entry : header.entrySet()) {
+      requestBuilder.addHeader(entry.getKey(), entry.getValue());
+    }
+    Request request = requestBuilder.build();
+
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    Factory createFactory = EventSources.createFactory(httpClient);
+    EventSource source = createFactory.newEventSource(request, listener);
+    return source;
   }
 }
