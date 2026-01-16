@@ -3,20 +3,10 @@ package com.litongjava.bailian.image;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
 public class MultiModalMessage {
-  
+
   private String role;
   private List<MultiModalContent> content;
-  
 
   public static MultiModalMessage build(String text) {
     MultiModalContent multiModalContent = new MultiModalContent(text);
@@ -24,4 +14,32 @@ public class MultiModalMessage {
     content.add(multiModalContent);
     return new MultiModalMessage("user", content);
   }
+
+  public MultiModalMessage() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public MultiModalMessage(String role, List<MultiModalContent> content) {
+    super();
+    this.role = role;
+    this.content = content;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public List<MultiModalContent> getContent() {
+    return content;
+  }
+
+  public void setContent(List<MultiModalContent> content) {
+    this.content = content;
+  }
+
 }

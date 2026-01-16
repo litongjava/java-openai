@@ -1,12 +1,24 @@
 package com.litongjava.groq;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class XGroq {
   private String id;
+
+  public XGroq() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public XGroq(String id) {
+    super();
+    this.id = id;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
 }

@@ -2,17 +2,29 @@ package com.litongjava.gemini; // Adjust package as needed
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * 响应体 for GET /v1beta/cachedContents
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class GeminiListCachesResponse {
   private List<GeminiCacheVo> cachedContents;
+
+  public GeminiListCachesResponse() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public GeminiListCachesResponse(List<GeminiCacheVo> cachedContents) {
+    super();
+    this.cachedContents = cachedContents;
+  }
+
+  public List<GeminiCacheVo> getCachedContents() {
+    return cachedContents;
+  }
+
+  public void setCachedContents(List<GeminiCacheVo> cachedContents) {
+    this.cachedContents = cachedContents;
+  }
 
 }

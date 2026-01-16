@@ -8,13 +8,6 @@ import com.litongjava.gemini.GroundingChunkWeb;
 import com.litongjava.gemini.GroundingMetadata;
 import com.litongjava.model.web.WebPageContent;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UniSources {
 
   private List<WebPageContent> sources;
@@ -31,6 +24,33 @@ public class UniSources {
       String title = web.getTitle();
       sources.add(new WebPageContent(title, uri));
     }
+  }
+
+  public UniSources() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public UniSources(List<WebPageContent> sources, List<String> webSearchQueries) {
+    super();
+    this.sources = sources;
+    this.webSearchQueries = webSearchQueries;
+  }
+
+  public List<WebPageContent> getSources() {
+    return sources;
+  }
+
+  public void setSources(List<WebPageContent> sources) {
+    this.sources = sources;
+  }
+
+  public List<String> getWebSearchQueries() {
+    return webSearchQueries;
+  }
+
+  public void setWebSearchQueries(List<String> webSearchQueries) {
+    this.webSearchQueries = webSearchQueries;
   }
 
 }

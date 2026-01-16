@@ -3,27 +3,12 @@ package com.litongjava.gemini;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
- * 表示 system_instruction 结构
- * 例如:
- * {
- *   "system_instruction": {
- *     "parts": [
- *      {
- *        "text": "You are a helpful lighting system bot..."
- *      }
- *       
- *     ]
- *   }
- * }
+ * 表示 system_instruction 结构 例如: { "system_instruction": { "parts": [ { "text":
+ * "You are a helpful lighting system bot..." }
+ * 
+ * ] } }
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class GeminiSystemInstruction {
   private List<GeminiPart> parts;
 
@@ -37,4 +22,23 @@ public class GeminiSystemInstruction {
     this.parts = new ArrayList<>();
     parts.add(part);
   }
+
+  public GeminiSystemInstruction() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public GeminiSystemInstruction(List<GeminiPart> parts) {
+    super();
+    this.parts = parts;
+  }
+
+  public List<GeminiPart> getParts() {
+    return parts;
+  }
+
+  public void setParts(List<GeminiPart> parts) {
+    this.parts = parts;
+  }
+
 }

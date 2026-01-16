@@ -7,18 +7,9 @@ import java.util.List;
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
 /**
  * 顶层请求体 - 修改后
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
 public class GeminiChatRequest {
 
   /**
@@ -111,6 +102,89 @@ public class GeminiChatRequest {
     contents.add(content);
     this.contents = contents;
     return this;
+  }
+
+  public GeminiChatRequest() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public GeminiChatRequest(GeminiSystemInstruction system_instruction, List<GeminiTool> tools,
+      GeminiToolConfig tool_config, List<GeminiContent> contents, List<GeminiSafetySetting> safetySettings,
+      GeminiGenerationConfig generationConfig, String responseMimeType, String cachedContent) {
+    super();
+    this.system_instruction = system_instruction;
+    this.tools = tools;
+    this.tool_config = tool_config;
+    this.contents = contents;
+    this.safetySettings = safetySettings;
+    this.generationConfig = generationConfig;
+    this.responseMimeType = responseMimeType;
+    this.cachedContent = cachedContent;
+  }
+
+  public GeminiSystemInstruction getSystem_instruction() {
+    return system_instruction;
+  }
+
+  public void setSystem_instruction(GeminiSystemInstruction system_instruction) {
+    this.system_instruction = system_instruction;
+  }
+
+  public List<GeminiTool> getTools() {
+    return tools;
+  }
+
+  public void setTools(List<GeminiTool> tools) {
+    this.tools = tools;
+  }
+
+  public GeminiToolConfig getTool_config() {
+    return tool_config;
+  }
+
+  public void setTool_config(GeminiToolConfig tool_config) {
+    this.tool_config = tool_config;
+  }
+
+  public List<GeminiContent> getContents() {
+    return contents;
+  }
+
+  public void setContents(List<GeminiContent> contents) {
+    this.contents = contents;
+  }
+
+  public List<GeminiSafetySetting> getSafetySettings() {
+    return safetySettings;
+  }
+
+  public void setSafetySettings(List<GeminiSafetySetting> safetySettings) {
+    this.safetySettings = safetySettings;
+  }
+
+  public GeminiGenerationConfig getGenerationConfig() {
+    return generationConfig;
+  }
+
+  public void setGenerationConfig(GeminiGenerationConfig generationConfig) {
+    this.generationConfig = generationConfig;
+  }
+
+  public String getResponseMimeType() {
+    return responseMimeType;
+  }
+
+  public void setResponseMimeType(String responseMimeType) {
+    this.responseMimeType = responseMimeType;
+  }
+
+  public String getCachedContent() {
+    return cachedContent;
+  }
+
+  public void setCachedContent(String cachedContent) {
+    this.cachedContent = cachedContent;
   }
 
 }

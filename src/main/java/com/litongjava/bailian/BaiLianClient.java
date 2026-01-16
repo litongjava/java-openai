@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.bailian.image.MultiModalRequest;
 import com.litongjava.bailian.image.MultiModalResponse;
 import com.litongjava.consts.ModelPlatformName;
@@ -14,7 +17,6 @@ import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -22,9 +24,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-@Slf4j
 public class BaiLianClient {
-
+  private static final Logger log = LoggerFactory.getLogger(BaiLianClient.class);
   public static boolean debug = false;
   public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.BAILIAN_PERFIX_URL);
 

@@ -4,16 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * tools 数组的单个元素 { "function_declarations": [...] }
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class GeminiTool {
   private List<GeminiFunctionDeclaration> function_declarations;
   private Map<String, Object> googleSearch;
@@ -31,4 +24,32 @@ public class GeminiTool {
   public GeminiTool(List<GeminiFunctionDeclaration> function_declarations) {
     this.function_declarations = function_declarations;
   }
+
+  public GeminiTool() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public GeminiTool(List<GeminiFunctionDeclaration> function_declarations, Map<String, Object> googleSearch) {
+    super();
+    this.function_declarations = function_declarations;
+    this.googleSearch = googleSearch;
+  }
+
+  public List<GeminiFunctionDeclaration> getFunction_declarations() {
+    return function_declarations;
+  }
+
+  public void setFunction_declarations(List<GeminiFunctionDeclaration> function_declarations) {
+    this.function_declarations = function_declarations;
+  }
+
+  public Map<String, Object> getGoogleSearch() {
+    return googleSearch;
+  }
+
+  public void setGoogleSearch(Map<String, Object> googleSearch) {
+    this.googleSearch = googleSearch;
+  }
+
 }

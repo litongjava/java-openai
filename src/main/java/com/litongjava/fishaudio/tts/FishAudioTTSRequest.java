@@ -2,18 +2,10 @@ package com.litongjava.fishaudio.tts;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
 /**
  * 请求 Fish.audio TTS 接口时使用的参数对象。
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
+
 public class FishAudioTTSRequest {
   // 合成的文本内容
   private String text;
@@ -38,4 +30,87 @@ public class FishAudioTTSRequest {
 
   // 延迟模式，"normal"（稳定模式）或 "balanced"（低延迟模式，约 300ms），默认 "normal"
   private String latency = "normal";
+
+  public FishAudioTTSRequest() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public FishAudioTTSRequest(String text, Integer chunk_length, String format, Integer mp3_bitrate,
+      List<FishAudioReferenceAudio> references, String reference_id, Boolean normalize, String latency) {
+    super();
+    this.text = text;
+    this.chunk_length = chunk_length;
+    this.format = format;
+    this.mp3_bitrate = mp3_bitrate;
+    this.references = references;
+    this.reference_id = reference_id;
+    this.normalize = normalize;
+    this.latency = latency;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public Integer getChunk_length() {
+    return chunk_length;
+  }
+
+  public void setChunk_length(Integer chunk_length) {
+    this.chunk_length = chunk_length;
+  }
+
+  public String getFormat() {
+    return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
+  }
+
+  public Integer getMp3_bitrate() {
+    return mp3_bitrate;
+  }
+
+  public void setMp3_bitrate(Integer mp3_bitrate) {
+    this.mp3_bitrate = mp3_bitrate;
+  }
+
+  public List<FishAudioReferenceAudio> getReferences() {
+    return references;
+  }
+
+  public void setReferences(List<FishAudioReferenceAudio> references) {
+    this.references = references;
+  }
+
+  public String getReference_id() {
+    return reference_id;
+  }
+
+  public void setReference_id(String reference_id) {
+    this.reference_id = reference_id;
+  }
+
+  public Boolean getNormalize() {
+    return normalize;
+  }
+
+  public void setNormalize(Boolean normalize) {
+    this.normalize = normalize;
+  }
+
+  public String getLatency() {
+    return latency;
+  }
+
+  public void setLatency(String latency) {
+    this.latency = latency;
+  }
+
 }

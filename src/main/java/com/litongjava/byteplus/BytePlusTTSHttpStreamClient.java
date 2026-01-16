@@ -4,10 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,9 +18,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
 
-@Slf4j
 public class BytePlusTTSHttpStreamClient {
-
+  private static final Logger log = LoggerFactory.getLogger(BytePlusTTSHttpStreamClient.class);
   private BytePlusConfig bytePlusConfig;
 
   public BytePlusTTSHttpStreamClient() {

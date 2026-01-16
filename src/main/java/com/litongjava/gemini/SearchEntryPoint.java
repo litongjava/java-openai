@@ -1,12 +1,24 @@
 package com.litongjava.gemini;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class SearchEntryPoint {
   private String renderedContent;
+
+  public SearchEntryPoint() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public SearchEntryPoint(String renderedContent) {
+    super();
+    this.renderedContent = renderedContent;
+  }
+
+  public String getRenderedContent() {
+    return renderedContent;
+  }
+
+  public void setRenderedContent(String renderedContent) {
+    this.renderedContent = renderedContent;
+  }
+
 }

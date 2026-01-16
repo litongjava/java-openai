@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.bailian.BaiLianConst;
 import com.litongjava.cerebras.CerebrasConst;
 import com.litongjava.claude.ClaudeCacheControl;
@@ -42,13 +45,12 @@ import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.volcengine.VolcEngineConst;
 import com.litongjava.zenmux.ZenmuxConst;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 
-@Slf4j
 public class UniChatClient {
-
+  private static final Logger log = LoggerFactory.getLogger(UniChatClient.class);
+  
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
 
@@ -447,7 +449,9 @@ public class UniChatClient {
     String modelVersion = chatResponse.getModelVersion();
 
     UniChatResponse uniChatResponse = new UniChatResponse();
-    uniChatResponse.setUsage(usage).setRawData(chatResponse.getRawData()).setModel(modelVersion);
+    uniChatResponse.setUsage(usage);
+    uniChatResponse.setRawData(chatResponse.getRawData());
+    uniChatResponse.setModel(modelVersion);
 
     GeminiCandidate geminiCandidateVo = chatResponse.getCandidates().get(0);
     GeminiContentResponse content = geminiCandidateVo.getContent();

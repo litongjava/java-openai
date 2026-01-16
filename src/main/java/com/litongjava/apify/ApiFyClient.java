@@ -12,10 +12,10 @@ public class ApiFyClient {
   public static String LINKEDIN_PROFILE_POST_SCRAPER_URL = "https://api.apify.com/v2/acts/apimaestro~linkedin-profile-posts/run-sync-get-dataset-items";
 
   public static ResponseVo linkedinProfileScraper(String url) {
-    return linkedinProfileScraper(new ApiFyLinkedProfileReqVo(url));
+    return linkedinProfileScraper(new ApiFyLinkedProfileReqest(url));
   }
 
-  public static ResponseVo linkedinProfileScraper(ApiFyLinkedProfileReqVo reqVo) {
+  public static ResponseVo linkedinProfileScraper(ApiFyLinkedProfileReqest reqVo) {
     String payload = JsonUtils.toJson(reqVo);
     return postJson(LINKEDIN_PROFILE_SCRAPER_URL, payload);
   }

@@ -1,12 +1,23 @@
 package com.litongjava.chat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UniThinkingConfig {
   public int thinkingBudget;
+
+  public UniThinkingConfig() {
+    super();
+  }
+
+  public UniThinkingConfig(int thinkingBudget) {
+    super();
+    this.thinkingBudget = thinkingBudget;
+  }
+
+  public int getThinkingBudget() {
+    return thinkingBudget;
+  }
+
+  public void setThinkingBudget(int thinkingBudget) {
+    this.thinkingBudget = thinkingBudget;
+  }
+
 }

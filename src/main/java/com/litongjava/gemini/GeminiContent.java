@@ -8,16 +8,9 @@ import com.litongjava.chat.ChatImageFile;
 import com.litongjava.chat.UniChatMessage;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * 表示请求中的单条对话
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class GeminiContent {
 
   /**
@@ -56,6 +49,32 @@ public class GeminiContent {
       }
     }
 
+    this.parts = parts;
+  }
+
+  public GeminiContent() {
+    super();
+  }
+
+  public GeminiContent(String role, List<GeminiPart> parts) {
+    super();
+    this.role = role;
+    this.parts = parts;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public List<GeminiPart> getParts() {
+    return parts;
+  }
+
+  public void setParts(List<GeminiPart> parts) {
     this.parts = parts;
   }
 

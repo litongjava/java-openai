@@ -1,14 +1,5 @@
 package com.litongjava.chat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Accessors(chain = true)
 public class PlatformInput {
 
   private String platform;
@@ -17,4 +8,32 @@ public class PlatformInput {
   public PlatformInput(String platform) {
     this.platform = platform;
   }
+
+  public PlatformInput() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public PlatformInput(String platform, String model) {
+    super();
+    this.platform = platform;
+    this.model = model;
+  }
+
+  public String getPlatform() {
+    return platform;
+  }
+
+  public void setPlatform(String platform) {
+    this.platform = platform;
+  }
+
+  public String getModel() {
+    return model;
+  }
+
+  public void setModel(String model) {
+    this.model = model;
+  }
+
 }

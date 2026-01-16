@@ -27,7 +27,8 @@ public class FishAudioClient {
    * @return ResponseVo 响应结果（成功时包含音频二进制数据）
    */
   public static ResponseVo speech(String text) {
-    FishAudioTTSRequest req = new FishAudioTTSRequest().setText(text);
+    FishAudioTTSRequest req = new FishAudioTTSRequest();
+    req.setText(text);
     // 其他参数均采用默认值，如 chunk_length = 200, format = "mp3" 等
     return speech(req);
   }
@@ -61,7 +62,7 @@ public class FishAudioClient {
    * @param apiPrefixUrl 接口前缀地址，如 https://api.fish.audio/v1
    * @param apiKey       API 密钥
    * @param vo           请求对象
-   * @return ResponseVo   响应结果
+   * @return ResponseVo 响应结果
    */
   public static ResponseVo speech(String apiPrefixUrl, String apiKey, FishAudioTTSRequest vo) {
     // 使用 msgpack 工具将请求对象序列化成二进制
@@ -75,7 +76,7 @@ public class FishAudioClient {
    * @param apiPrefixUrl 接口前缀
    * @param apiKey       API 密钥
    * @param payload      msgpack 序列化后的请求数据
-   * @return ResponseVo  响应结果，成功时包含音频二进制数据
+   * @return ResponseVo 响应结果，成功时包含音频二进制数据
    */
   public static ResponseVo speechRequest(String apiPrefixUrl, String apiKey, byte[] payload) {
     // 接口地址为 “/tts”

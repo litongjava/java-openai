@@ -2,6 +2,9 @@ package com.litongjava.chat;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeChatUsage;
 import com.litongjava.consts.ModelPlatformName;
@@ -16,13 +19,12 @@ import com.litongjava.openai.chat.Choice;
 import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.tio.utils.json.FastJson2Utils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 
-@Slf4j
 public abstract class UniChatEventListener extends EventSourceListener {
-
+  private static final Logger log = LoggerFactory.getLogger(UniChatEventListener.class);
+  
   private String platform;
 
   public void setPlatform(String platform) {
@@ -93,7 +95,9 @@ public abstract class UniChatEventListener extends EventSourceListener {
     ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
     String modelVersion = chatResp.getModelVersion();
 
-    uniChatResponse.setUsage(usage).setRawData(chatResp.getRawData()).setModel(modelVersion);
+    uniChatResponse.setUsage(usage);
+    uniChatResponse.setRawData(chatResp.getRawData());
+    uniChatResponse.setModel(modelVersion);
 
     List<GeminiCandidate> candidates = chatResp.getCandidates();
     if (candidates != null && candidates.size() > 0) {

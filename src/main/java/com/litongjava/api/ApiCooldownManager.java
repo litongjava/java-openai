@@ -3,10 +3,11 @@ package com.litongjava.api;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class ApiCooldownManager {
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
   private final ConcurrentMap<String, Long> cooldownUntilTimestamps = new ConcurrentHashMap<>();
   private final long COOLDOWN_BUFFER_MS = 500; // Add a small buffer to be safe
 

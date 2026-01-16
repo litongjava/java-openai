@@ -1,15 +1,8 @@
 package com.litongjava.chat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ChatImageFile {
   private String mimeType = "image/png";
-  //data:image base64 code, url:image http url
+  // data:image base64 code, url:image http url
   private String data, url;
   private boolean cached;
 
@@ -33,4 +26,50 @@ public class ChatImageFile {
     chatFile.setData(encodeImage);
     return chatFile;
   }
+
+  public ChatImageFile() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public ChatImageFile(String mimeType, String data, String url, boolean cached) {
+    super();
+    this.mimeType = mimeType;
+    this.data = data;
+    this.url = url;
+    this.cached = cached;
+  }
+
+  public String getMimeType() {
+    return mimeType;
+  }
+
+  public void setMimeType(String mimeType) {
+    this.mimeType = mimeType;
+  }
+
+  public String getData() {
+    return data;
+  }
+
+  public void setData(String data) {
+    this.data = data;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public boolean isCached() {
+    return cached;
+  }
+
+  public void setCached(boolean cached) {
+    this.cached = cached;
+  }
+
 }

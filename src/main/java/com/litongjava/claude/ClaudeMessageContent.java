@@ -3,13 +3,6 @@ package com.litongjava.claude;
 import com.litongjava.chat.ChatImageFile;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ClaudeMessageContent {
   private String type;
   private String text;
@@ -35,4 +28,49 @@ public class ClaudeMessageContent {
     }
 
   }
+
+  public ClaudeMessageContent() {
+    super();
+  }
+
+  public ClaudeMessageContent(String type, String text, ClaudeCacheControl cache_control, ClaudeChatSource source) {
+    super();
+    this.type = type;
+    this.text = text;
+    this.cache_control = cache_control;
+    this.source = source;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public ClaudeCacheControl getCache_control() {
+    return cache_control;
+  }
+
+  public void setCache_control(ClaudeCacheControl cache_control) {
+    this.cache_control = cache_control;
+  }
+
+  public ClaudeChatSource getSource() {
+    return source;
+  }
+
+  public void setSource(ClaudeChatSource source) {
+    this.source = source;
+  }
+
 }

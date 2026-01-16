@@ -4,13 +4,6 @@ import java.util.List;
 
 import com.litongjava.openai.chat.MessageRole;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UniChatMessage {
   private String role = "user";
   private String content;
@@ -64,6 +57,61 @@ public class UniChatMessage {
   public UniChatMessage(String content) {
     this.role = "user";
     this.content = content;
+  }
+
+  public UniChatMessage() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
+  public UniChatMessage(String role, String content, List<ChatImageFile> files, ChatMessageArgs args,
+      List<String> attachments) {
+    super();
+    this.role = role;
+    this.content = content;
+    this.files = files;
+    this.args = args;
+    this.attachments = attachments;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public List<ChatImageFile> getFiles() {
+    return files;
+  }
+
+  public void setFiles(List<ChatImageFile> files) {
+    this.files = files;
+  }
+
+  public ChatMessageArgs getArgs() {
+    return args;
+  }
+
+  public void setArgs(ChatMessageArgs args) {
+    this.args = args;
+  }
+
+  public List<String> getAttachments() {
+    return attachments;
+  }
+
+  public void setAttachments(List<String> attachments) {
+    this.attachments = attachments;
   }
 
 }

@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
@@ -18,7 +21,6 @@ import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -32,8 +34,10 @@ import okhttp3.sse.EventSource.Factory;
 import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 
-@Slf4j
 public class ClaudeClient {
+  
+  private static final Logger log = LoggerFactory.getLogger(ClaudeClient.class);
+  
   public static boolean debug = false;
   public static final String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
   public static final String CLAUDE_API_KEY = EnvUtils.get("CLAUDE_API_KEY");

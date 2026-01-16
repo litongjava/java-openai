@@ -4,20 +4,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-@Slf4j
 public class JinaReaderClient {
-
+  private static final Logger log = LoggerFactory.getLogger(JinaReaderClient.class);
+  
   // Reuse a single OkHttpClient instance if possible
   private static final OkHttpClient client = OkHttpClientPool.get120HttpClient();
 
@@ -50,17 +52,17 @@ public class JinaReaderClient {
       builder.header("Content-Type", request.getContentType());
     }
     // 3) X-Retain-Images, X-Site, etc.
-    if (request.getXRetainImages() != null) {
-      builder.header("X-Retain-Images", request.getXRetainImages());
+    if (request.getxRetainImages() != null) {
+      builder.header("X-Retain-Images", request.getxRetainImages());
     }
-    if (request.getXRespondWith() != null) {
-      builder.header("X-Respond-With", request.getXRespondWith());
+    if (request.getxRespondWith() != null) {
+      builder.header("X-Respond-With", request.getxRespondWith());
     }
-    if (request.getXWithGeneratedAlt() != null) {
-      builder.header("X-With-Generated-Alt", request.getXWithGeneratedAlt());
+    if (request.getxWithGeneratedAlt() != null) {
+      builder.header("X-With-Generated-Alt", request.getxWithGeneratedAlt());
     }
-    if (request.getXWithLinksSummary() != null) {
-      builder.header("X-With-Links-Summary", request.getXWithLinksSummary());
+    if (request.getxWithLinksSummary() != null) {
+      builder.header("X-With-Links-Summary", request.getxWithLinksSummary());
     }
     builder.get();
 
@@ -100,7 +102,7 @@ public class JinaReaderClient {
     JinaReaderRequest request = new JinaReaderRequest();
     request.setUrl(url);
     //Remove All Images
-    request.setXRetainImages("none");
+    request.setxRetainImages("none");
     ResponseVo vo = read(request);
     String bodyString = vo.getBodyString();
     if (vo.isOk()) {

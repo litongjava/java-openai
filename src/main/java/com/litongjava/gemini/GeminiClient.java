@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
 import com.litongjava.tio.utils.environment.EnvUtils;
@@ -13,7 +16,6 @@ import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.Json;
 import com.litongjava.tio.utils.json.JsonUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -28,9 +30,9 @@ import okhttp3.sse.EventSources;
 /**
  * Google Gemini 模型客户端示例
  */
-@Slf4j
 public class GeminiClient {
-
+  private static final Logger log = LoggerFactory.getLogger(GeminiClient.class);
+  
   public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
   public static final String GEMINI_API_URL = EnvUtils.get("GEMINI_API_URL", GeminiConsts.GEMINI_API_MODEL_BASE);
