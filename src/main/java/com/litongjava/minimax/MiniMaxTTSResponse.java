@@ -12,4 +12,5 @@ public class MiniMaxTTSResponse {
   private MiniMaxExtraInfo extra_info;
   private String trace_id;
   private MiniMaxBaseResp base_resp;
+  private String rawResponse;
 }

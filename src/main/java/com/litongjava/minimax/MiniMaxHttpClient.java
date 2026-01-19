@@ -117,7 +117,9 @@ public class MiniMaxHttpClient {
       int code = response.code();
       String responseBody = response.body().string();
       if (response.isSuccessful()) {
-        return JsonUtils.parse(responseBody, MiniMaxTTSResponse.class);
+        MiniMaxTTSResponse miniMaxTTSResponse = JsonUtils.parse(responseBody, MiniMaxTTSResponse.class);
+        miniMaxTTSResponse.setRawResponse(responseBody);
+        return miniMaxTTSResponse;
       } else {
         // 失败时返回错误码和响应体
         throw new RuntimeException("Failed to tts code:" + code + " body: " + responseBody);
