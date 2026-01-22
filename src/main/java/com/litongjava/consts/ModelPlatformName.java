@@ -26,4 +26,6 @@ public interface ModelPlatformName {
 
   String GITEE = "gitee";
   String AUTO = "auto";
+
+  String EXCHANGE_TOKEN = "EXCHANGE_TOKEN";
 }

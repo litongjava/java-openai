@@ -14,6 +14,7 @@ import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeClient;
 import com.litongjava.claude.ClaudeMessageContent;
 import com.litongjava.consts.ModelPlatformName;
+import com.litongjava.exchangetoken.ExchangetokenConst;
 import com.litongjava.gemini.GeminiCandidate;
 import com.litongjava.gemini.GeminiChatRequest;
 import com.litongjava.gemini.GeminiChatResponse;
@@ -50,7 +51,7 @@ import okhttp3.sse.EventSourceListener;
 
 public class UniChatClient {
   private static final Logger log = LoggerFactory.getLogger(UniChatClient.class);
-  
+
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
 
@@ -98,6 +99,10 @@ public class UniChatClient {
 
   public static final String TITANIUM_API_KEY = EnvUtils.get("TITANIUM_API_KEY");
   public static final String TITANIUM_API_URL = EnvUtils.get("TITANIUM_API_URL");
+
+  public static final String EXCHANGE_TOKEN_API_KEY = EnvUtils.get("EXCHANGE_TOKEN_API_KEY");
+  public static final String EXCHANGE_TOKEN_API_URL = EnvUtils.get("EXCHANGE_TOKEN_API_URL",
+      ExchangetokenConst.BASE_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
@@ -206,6 +211,12 @@ public class UniChatClient {
         key = GITEE_API_KEY;
       }
       return useGitee(key, uniChatRequest);
+
+    } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useExchangetoken(key, uniChatRequest);
 
     } else {
       if (key == null) {
@@ -586,6 +597,11 @@ public class UniChatClient {
       }
       return useGitee(key, uniChatRequest, listener);
 
+    } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useExchangetoken(key, uniChatRequest, listener);
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -815,5 +831,13 @@ public class UniChatClient {
 
   public static EventSource useTitanium(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     return useOpenAi(TITANIUM_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static UniChatResponse useExchangetoken(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useExchangetoken(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
   }
 }
