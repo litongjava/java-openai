@@ -104,6 +104,9 @@ public class UniChatClient {
   public static final String EXCHANGE_TOKEN_API_URL = EnvUtils.get("EXCHANGE_TOKEN_API_URL",
       ExchangetokenConst.BASE_URL);
 
+  public static final String EXCHANGE_TOKEN_GOOGLE_API_URL = EnvUtils.get("EXCHANGE_TOKEN_GOOGLE_API_URL",
+      ExchangetokenConst.GOOGLE_BASE_URL);
+
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
@@ -117,7 +120,11 @@ public class UniChatClient {
         key = GEMINI_API_KEY;
       }
       return useGoogle(key, uniChatRequest);
-
+    } else if (ModelPlatformName.GOOGLE_EXCHANGE_TOKEN.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useGoogleExchangeToken(key, uniChatRequest);
     } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
@@ -393,6 +400,14 @@ public class UniChatClient {
   public static UniChatResponse useGoogle(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
+    return useGoogle(apiPrefixUrl, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useGoogleExchangeToken(String key, UniChatRequest uniChatRequest) {
+    return useGoogle(EXCHANGE_TOKEN_GOOGLE_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useGoogle(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
     GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
     geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
     String cachedId = uniChatRequest.getCachedId();

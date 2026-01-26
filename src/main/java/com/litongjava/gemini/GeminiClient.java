@@ -60,7 +60,7 @@ public class GeminiClient {
       baseUrl = GEMINI_API_URL;
     }
     // 拼接 URL
-    String url = baseUrl + modelName + ":generateContent";
+    String url = baseUrl + "/" + modelName + ":generateContent";
     // 将 requestVo 转换为 JSON
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     if (debug) {

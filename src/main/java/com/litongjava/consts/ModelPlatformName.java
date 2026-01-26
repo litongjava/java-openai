@@ -4,6 +4,7 @@ public interface ModelPlatformName {
   String OPENAI = "openai";
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
+  String GOOGLE_EXCHANGE_TOKEN = "google_exchange_token";
   String OPENROUTER = "openrouter";
 
   String VOLC_ENGINE = "volcengine";
