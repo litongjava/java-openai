@@ -621,7 +621,10 @@ public class UniChatClient {
       }
     }
     if (uniChatRequest.isUseSystemPrompt()) {
-      messages.add(0, new UniChatMessage("system", uniChatRequest.getSystemPrompt()));
+      String systemPrompt = uniChatRequest.getSystemPrompt();
+      if (systemPrompt != null) {
+        messages.add(0, new UniChatMessage("system", systemPrompt));
+      }
     }
     OpenAiChatRequest openaiChatRequest = new OpenAiChatRequest();
     openaiChatRequest.setModel(uniChatRequest.getModel());

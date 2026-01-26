@@ -32,7 +32,7 @@ import okhttp3.sse.EventSources;
  */
 public class GeminiClient {
   private static final Logger log = LoggerFactory.getLogger(GeminiClient.class);
-  
+
   public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
   public static final String GEMINI_API_URL = EnvUtils.get("GEMINI_API_URL", GeminiConsts.GEMINI_API_MODEL_BASE);
@@ -60,8 +60,7 @@ public class GeminiClient {
       baseUrl = GEMINI_API_URL;
     }
     // 拼接 URL
-    String urlPerfix = baseUrl + modelName + ":generateContent?key=";
-    String url = urlPerfix + googleApiKey;
+    String url = baseUrl + modelName + ":generateContent";
     // 将 requestVo 转换为 JSON
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
     if (debug) {
@@ -70,7 +69,7 @@ public class GeminiClient {
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).build();
+    Request request = new Request.Builder().url(url).post(body).addHeader("x-goog-api-key", googleApiKey).build();
 
     // 发起调用
     try (Response response = httpClient.newCall(request).execute()) {
@@ -80,7 +79,7 @@ public class GeminiClient {
         if (requestJson.length() > 1024) {
           requestJson = requestJson.substring(0, 1024);
         }
-        throw new GenerateException(ModelPlatformName.GOOGLE, "Gemini generate content failed", urlPerfix, requestJson,
+        throw new GenerateException(ModelPlatformName.GOOGLE, "Gemini generate content failed", url, requestJson,
             response.code(), responseBody);
       }
       GeminiChatResponse chatResponse = JsonUtils.parse(responseBody, GeminiChatResponse.class);
@@ -109,11 +108,11 @@ public class GeminiClient {
 
   public static Response generate(String googleApiKey, String modelName, String bodyString) {
     // 拼接 URL
-    String url = GEMINI_API_URL + modelName + ":generateContent?key=" + googleApiKey;
+    String url = GEMINI_API_URL + modelName + ":generateContent";
 
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).build();
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).post(body).build();
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
     // 发起调用
@@ -220,13 +219,13 @@ public class GeminiClient {
 
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
-    String url = GEMINI_API_URL + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+    String url = GEMINI_API_URL + modelName + ":streamGenerateContent?alt=sse";
     if (debug) {
       log.info("{} {}", url, bodyString);
     }
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).build();
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).post(body).build();
 
     // 异步请求
     Call call = httpClient.newCall(request);
@@ -243,13 +242,13 @@ public class GeminiClient {
   public static EventSource stream(String apiPrefixUrl, String googleApiKey, String modelName, String bodyString,
       EventSourceListener listener) {
     // 拼接 URL
-    String url = apiPrefixUrl + modelName + ":streamGenerateContent?alt=sse&key=" + googleApiKey;
+    String url = apiPrefixUrl + modelName + ":streamGenerateContent?alt=sse";
     if (debug) {
       log.info("{} {}", url, bodyString);
     }
     // 构造 HTTP 请求
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).build();
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).post(body).build();
 
     // 异步请求
     EventSource source = EventSources.createFactory(httpClient).newEventSource(request, listener);
@@ -263,13 +262,13 @@ public class GeminiClient {
    */
   public static String uploadFile(String googleApiKey, byte[] bytes) {
 
-    String url = GeminiConsts.GEMINI_API_SERVER + "/upload/v1beta/files?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_SERVER + "/upload/v1beta/files";
 
     RequestBody requestBody = RequestBody.create(bytes);
 
     // 定义自定义 RequestBody，先写入 JSON，然后写入文件的二进制数据
     // 构建请求
-    Request request = new Request.Builder().url(url).post(requestBody).addHeader("x-goog-api-key", "googleApiKey")
+    Request request = new Request.Builder().url(url).post(requestBody).addHeader("x-goog-api-key", googleApiKey)
         //
         .build();
 
@@ -330,11 +329,11 @@ public class GeminiClient {
    * @return GeminiCacheVo - The created cache metadata
    */
   public static GeminiCacheVo createCache(String googleApiKey, GeminiCreateCacheRequest requestVo) {
-    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents";
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
 
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).post(body).build();
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).post(body).build();
 
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
@@ -374,9 +373,10 @@ public class GeminiClient {
    * @return GeminiCacheVo - The cache metadata
    */
   public static GeminiCacheVo getCache(String googleApiKey, String cacheName) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
 
-    Request request = new Request.Builder().url(url).get().build(); // Use GET method
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).get().build(); // Use GET
+                                                                                                              // method
 
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
@@ -413,9 +413,9 @@ public class GeminiClient {
    * @return GeminiListCachesResponseVo - A list of cache metadata
    */
   public static GeminiListCachesResponse listCaches(String googleApiKey) {
-    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents";
 
-    Request request = new Request.Builder().url(url).get().build();
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).get().build();
 
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
@@ -455,11 +455,13 @@ public class GeminiClient {
    */
   public static GeminiCacheVo updateCache(String googleApiKey, String cacheName,
       GeminiUpdateCacheRequest updateRequestVo) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
     String requestJson = Json.getSkipNullJson().toJson(updateRequestVo);
 
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-    Request request = new Request.Builder().url(url).patch(body).build(); // Use PATCH method
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).patch(body).build(); // Use
+                                                                                                                    // PATCH
+                                                                                                                    // method
 
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();
@@ -501,9 +503,11 @@ public class GeminiClient {
    *                     "cachedContents/12345")
    */
   public static void deleteCache(String googleApiKey, String cacheName) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName + "?key=" + googleApiKey;
+    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
 
-    Request request = new Request.Builder().url(url).delete().build(); // Use DELETE method
+    Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).delete().build(); // Use
+                                                                                                                 // DELETE
+                                                                                                                 // method
 
     try (Response response = httpClient.newCall(request).execute()) {
       if (!response.isSuccessful()) {
