@@ -124,7 +124,7 @@ public class UniChatClient {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
       }
-      return useGoogleExchangeToken(key, uniChatRequest);
+      return useExchangeTokenGoogle(key, uniChatRequest);
     } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
@@ -403,7 +403,7 @@ public class UniChatClient {
     return useGoogle(apiPrefixUrl, key, uniChatRequest);
   }
 
-  public static UniChatResponse useGoogleExchangeToken(String key, UniChatRequest uniChatRequest) {
+  public static UniChatResponse useExchangeTokenGoogle(String key, UniChatRequest uniChatRequest) {
     return useGoogle(EXCHANGE_TOKEN_GOOGLE_API_URL, key, uniChatRequest);
   }
 
