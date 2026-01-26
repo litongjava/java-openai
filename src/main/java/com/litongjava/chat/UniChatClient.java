@@ -120,7 +120,7 @@ public class UniChatClient {
         key = GEMINI_API_KEY;
       }
       return useGoogle(key, uniChatRequest);
-    } else if (ModelPlatformName.GOOGLE_EXCHANGE_TOKEN.equals(platform)) {
+    } else if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
       }
