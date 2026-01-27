@@ -105,7 +105,7 @@ public class UniChatClient {
       ExchangetokenConst.BASE_URL);
 
   public static final String EXCHANGE_TOKEN_GOOGLE_API_URL = EnvUtils.get("EXCHANGE_TOKEN_GOOGLE_API_URL",
-      ExchangetokenConst.GOOGLE_BASE_URL);
+      ExchangetokenConst.US_GOOGLE_BASE_URL);
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
