@@ -4,7 +4,7 @@ public interface ModelPlatformName {
   String OPENAI = "openai";
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
-  String EXCHANGE_TOKEN_GOOGLE = "exchange_token_google";
+
   String OPENROUTER = "openrouter";
 
   String VOLC_ENGINE = "volcengine";
@@ -28,5 +28,7 @@ public interface ModelPlatformName {
   String GITEE = "gitee";
   String AUTO = "auto";
 
-  String EXCHANGE_TOKEN = "EXCHANGE_TOKEN";
+  String EXCHANGE_TOKEN = "exchange_token";
+  String EXCHANGE_TOKEN_US = "exchange_token_us";
+  String EXCHANGE_TOKEN_GOOGLE = "exchange_token_google";
 }
