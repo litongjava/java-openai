@@ -107,6 +107,9 @@ public class UniChatClient {
   public static final String EXCHANGE_TOKEN_GOOGLE_API_URL = EnvUtils.get("EXCHANGE_TOKEN_GOOGLE_API_URL",
       ExchangetokenConst.US_GOOGLE_BASE_URL);
 
+  public static final String EXCHANGE_TOKEN_US_API_URL = EnvUtils.get("EXCHANGE_TOKEN_US_API_URL",
+      ExchangetokenConst.US_BASE_URL);
+
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
@@ -224,7 +227,11 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetoken(key, uniChatRequest);
-
+    } else if (ModelPlatformName.EXCHANGE_TOKEN_US.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useExchangetokenUs(key, uniChatRequest);
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -853,6 +860,10 @@ public class UniChatClient {
 
   public static UniChatResponse useExchangetoken(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useExchangetokenUs(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(EXCHANGE_TOKEN_US_API_URL, key, uniChatRequest);
   }
 
   public static EventSource useExchangetoken(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
