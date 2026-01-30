@@ -9,6 +9,18 @@ public class GenerateException extends RuntimeException {
   private String requestBody;
   private Integer statusCode;
   private String responseBody;
+  private Long elapsed;
+
+  public GenerateException(String provider, String message, String urlPerfix, String requestBody, Integer statusCode,
+      String responseBody, Long elapsed) {
+    this.provider = provider;
+    this.message = message;
+    this.urlPerfix = urlPerfix;
+    this.requestBody = requestBody;
+    this.statusCode = statusCode;
+    this.responseBody = responseBody;
+    this.elapsed = elapsed;
+  }
 
   public GenerateException(String provider, String message, String urlPerfix, String requestBody, Integer code,
       String responseBody) {
@@ -72,4 +84,11 @@ public class GenerateException extends RuntimeException {
     return serialVersionUID;
   }
 
+  public Long getElapsed() {
+    return elapsed;
+  }
+
+  public void setElapsed(Long elapsed) {
+    this.elapsed = elapsed;
+  }
 }

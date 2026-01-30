@@ -16,6 +16,7 @@ import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openai.consts.OpenAiModels;
 import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
+import com.litongjava.tio.utils.SystemTimer;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.hutool.StrUtil;
@@ -115,7 +116,8 @@ public class OpenAiClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(Map<String, String> header, String bodyString, EventSourceListener listener) {
+  public static EventSource chatCompletions(Map<String, String> header, String bodyString,
+      EventSourceListener listener) {
     String apiPerfixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
     return chatCompletions(apiPerfixUrl, header, bodyString, listener);
   }
@@ -141,7 +143,8 @@ public class OpenAiClient {
     return chatCompletions(chatRequestVo);
   }
 
-  public static OpenAiChatResponse chatCompletions(String model, String systemPrompt, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponse chatCompletions(String model, String systemPrompt,
+      List<OpenAiChatMessage> messages) {
     messages.add(0, OpenAiChatMessage.buildSystem(systemPrompt));
     OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
@@ -168,12 +171,14 @@ public class OpenAiClient {
           respVo.setRawResponse(bodyString);
         } catch (Exception e) {
           log.error("AI generate failed status code:{},response body:{}", code, bodyString);
-          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code, bodyString);
+          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
+              bodyString);
         }
 
       } else {
         log.error("AI generate failed status code:{},response body:{}", code, bodyString);
-        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code, bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", OPENAI_API_URL, json, code,
+            bodyString);
       }
     } catch (IOException e) {
       log.error(e.getMessage() + " request json:" + json);
@@ -215,12 +220,14 @@ public class OpenAiClient {
    * @param chatRequestVo
    * @return
    */
-  public static OpenAiChatResponse chatCompletions(String apiPerfixUrl, String apiKey, OpenAiChatRequest chatRequestVo) {
+  public static OpenAiChatResponse chatCompletions(String apiPerfixUrl, String apiKey,
+      OpenAiChatRequest chatRequestVo) {
     String json = Json.getSkipNullJson().toJson(chatRequestVo);
     if (debug) {
       log.info("request json:{}", json);
     }
     OpenAiChatResponse respVo = null;
+    long start = SystemTimer.currTime;
     try (Response response = chatCompletions(apiPerfixUrl, apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
@@ -230,13 +237,17 @@ public class OpenAiClient {
           respVo.setRawResponse(bodyString);
 
         } catch (Exception e) {
+          long end = SystemTimer.currTime;
           log.error("AI generate failed status code:{},response body:{}", code, bodyString);
-          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
+          throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,
+              bodyString, (end - start));
         }
         respVo.setRawResponse(bodyString);
       } else {
-        log.error("AI generate failed status code:{},response body:{}", code, bodyString);
-        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code, bodyString);
+        long end = SystemTimer.currTime;
+        log.error("AI generate failed status url:{},code:{},response body:{}", apiPerfixUrl, code, bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "LLM generated failed", apiPerfixUrl, json, code,
+            bodyString, (end - start));
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -277,7 +288,8 @@ public class OpenAiClient {
     return chatCompletions(apiPerfixUrl, header, bodyString, callback);
   }
 
-  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
+  public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString,
+      EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
     if (StrUtil.isBlank(apiKey)) {
       throw new RuntimeException("api key can not empty");
@@ -338,7 +350,7 @@ public class OpenAiClient {
     }
     return respVo;
   }
-  
+
   public static Response generate(String uri, String bodyString) {
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
@@ -364,7 +376,8 @@ public class OpenAiClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo, Callback callback) {
+  public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
+      Callback callback) {
     return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
   }
 
@@ -381,7 +394,8 @@ public class OpenAiClient {
    * @param callback
    * @return
    */
-  public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString, Callback callback) {
+  public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString,
+      Callback callback) {
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
 
     if (debug) {
@@ -463,13 +477,15 @@ public class OpenAiClient {
     return chatCompletions(apiUrl, key, model, chatMessage);
   }
 
-  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model, OpenAiChatMessage chatMessage) {
+  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model,
+      OpenAiChatMessage chatMessage) {
     List<OpenAiChatMessage> messages = new ArrayList<>();
     messages.add(chatMessage);
     return chatCompletions(apiUrl, key, model, messages);
   }
 
-  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model, List<OpenAiChatMessage> messages) {
+  public static OpenAiChatResponse chatCompletions(String apiUrl, String key, String model,
+      List<OpenAiChatMessage> messages) {
     OpenAiChatRequest chatRequestVo = new OpenAiChatRequest();
     chatRequestVo.setModel(model);
     chatRequestVo.setStream(false);
@@ -565,7 +581,8 @@ public class OpenAiClient {
       } else {
         String serverUrl = EnvUtils.get("OPENAI_API_URL");
         log.error("AI generate failed status code:{},response body:{}", code, bodyString);
-        throw new GenerateException(ModelPlatformName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(), bodyString);
+        throw new GenerateException(ModelPlatformName.OPENAI, "Failed to Embedding", serverUrl, json, response.code(),
+            bodyString);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -588,7 +605,8 @@ public class OpenAiClient {
     return chatWithImage(apiKey, prompt, bytes, suffix);
   }
 
-  public static OpenAiChatResponse chatWithImage(String apiKey, String model, String prompt, byte[] bytes, String suffix) {
+  public static OpenAiChatResponse chatWithImage(String apiKey, String model, String prompt, byte[] bytes,
+      String suffix) {
 
     ChatMessageContent text = new ChatMessageContent(prompt);
     ChatMessageContent image = new ChatMessageContent(bytes, suffix);
