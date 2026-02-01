@@ -38,6 +38,8 @@ public interface OpenAiModels {
   String GPT_5_2_PRO = "gpt-5.2-pro";
   String GPT_5_2_PRO_2025_12_11 = "gpt-5.2-pro-2025-12-11";
 
+  String GPT_5_2_CODEX = "gpt-5.2-codex";
+
   // =========================
   // GPT-4.1 SERIES
   // =========================
