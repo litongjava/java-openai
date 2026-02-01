@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.cloudflare.CloudflareModelInfo;
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequest;
@@ -45,12 +45,12 @@ public class OpenAiClient {
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get(OpenAiConst.OPENAI_API_KEY);
 
-  public static ResponseVo models() {
-    
+  public static CloudflareModelInfo models() {
+
     return models(OPENAI_API_URL);
   }
 
-  public static ResponseVo models(String apiPrefixUrl) {
+  public static CloudflareModelInfo models(String apiPrefixUrl) {
     String url = apiPrefixUrl + "/models";
     Map<String, String> header = new HashMap<>();
     if (StrUtil.isBlank(OPENAI_API_KEY)) {
@@ -59,14 +59,15 @@ public class OpenAiClient {
     header.put("Authorization", "Bearer " + OPENAI_API_KEY);
 
     try (Response response = HttpUtils.get(url, header)) {
-      Headers headers = response.headers();
+      //Headers headers = response.headers();
       int code = response.code();
       String body = response.body().string();
 
       if (response.isSuccessful()) {
-        return ResponseVo.ok(code, headers, body);
+        return JsonUtils.parse(body, CloudflareModelInfo.class);
       } else {
-        return ResponseVo.fail(code, headers, body);
+        log.error("Failed to get model:{},{}", code, body);
+        return null;
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

@@ -44,7 +44,7 @@ public class OpenAiTokenizer implements Tokenizer {
    * It should be suitable for all current OpenAI models, as they all use the same cl100k_base encoding.
    */
   public OpenAiTokenizer() {
-    this(OpenAiModels.GPT_35_TURBO);
+    this(OpenAiModels.GPT_3_5_TURBO);
   }
 
   /**
@@ -100,7 +100,7 @@ public class OpenAiTokenizer implements Tokenizer {
       }
     }
 
-    if (userMessage.name() != null && !modelName.equals(OpenAiModels.GPT_4_VISION_PREVIEW.toString())) {
+    if (userMessage.name() != null && !modelName.equals(OpenAiModels.GPT_4_TURBO_PREVIEW.toString())) {
       tokenCount += extraTokensPerName();
       tokenCount += estimateTokenCountInText(userMessage.name());
     }

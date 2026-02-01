@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CloudfalreModelInfo {
+public class CloudflareModelInfo {
   private String object;
   private List<CloudflareModelEntity> data;
 }

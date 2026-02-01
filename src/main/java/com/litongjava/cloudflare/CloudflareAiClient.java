@@ -33,11 +33,11 @@ public class CloudflareAiClient {
     return this.api_base_prefix_url;
   }
 
-  public CloudfalreModelInfo models() {
+  public CloudflareModelInfo models() {
     String url = api_base_prefix_url + "/" + "models";
     ResponseVo responseVo = HttpUtils.get(url);
     if (responseVo.isOk()) {
-      return JsonUtils.parse(responseVo.getBodyString(), CloudfalreModelInfo.class);
+      return JsonUtils.parse(responseVo.getBodyString(), CloudflareModelInfo.class);
     }
     return null;
   }
