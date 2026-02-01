@@ -155,3 +155,4 @@ vcpkg_installed/
 .env
 audio/
 secrets.txt
+my.txt

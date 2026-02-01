@@ -18,6 +18,22 @@ import okhttp3.sse.EventSources;
 
 public class AiChatProxyClient {
 
+  public static Response generate(String url, Map<String, String> requestHeaders) {
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+
+    Builder builder = new Request.Builder().url(url).get();
+    
+    if (requestHeaders != null) {
+      builder.headers(Headers.of(requestHeaders));
+    }
+    Request request = builder.build();
+
+    try {
+      return httpClient.newCall(request).execute();
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage(), e);
+    }
+  }
   public static Response generate(String url, Map<String, String> requestHeaders, String bodyString) {
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();

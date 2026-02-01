@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
+import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequest;
@@ -18,6 +19,7 @@ import com.litongjava.openai.embedding.EmbeddingRequestVo;
 import com.litongjava.openai.embedding.EmbeddingResponseVo;
 import com.litongjava.tio.utils.SystemTimer;
 import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.Json;
@@ -41,6 +43,35 @@ import okhttp3.sse.EventSources;
 public class OpenAiClient {
   public static boolean debug = false;
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
+  public static final String OPENAI_API_KEY = EnvUtils.get(OpenAiConst.OPENAI_API_KEY);
+
+  public static ResponseVo models() {
+    
+    return models(OPENAI_API_URL);
+  }
+
+  public static ResponseVo models(String apiPrefixUrl) {
+    String url = apiPrefixUrl + "/models";
+    Map<String, String> header = new HashMap<>();
+    if (StrUtil.isBlank(OPENAI_API_KEY)) {
+      throw new RuntimeException("api key can not empty");
+    }
+    header.put("Authorization", "Bearer " + OPENAI_API_KEY);
+
+    try (Response response = HttpUtils.get(url, header)) {
+      Headers headers = response.headers();
+      int code = response.code();
+      String body = response.body().string();
+
+      if (response.isSuccessful()) {
+        return ResponseVo.ok(code, headers, body);
+      } else {
+        return ResponseVo.fail(code, headers, body);
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   /**
    * 
