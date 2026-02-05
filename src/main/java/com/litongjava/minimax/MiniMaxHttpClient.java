@@ -22,7 +22,8 @@ import okhttp3.sse.EventSource.Factory;
  * FishAudioClient 用于调用 Fish.audio 的 TTS 接口。
  */
 public class MiniMaxHttpClient {
-  public static final String TTS_URL = "https://api.minimaxi.chat/v1";
+  public static final String TTS_URL = EnvUtils.getStr(MiniMaxConst.MINIMAX_TTS_PERFIX_URL,
+      MiniMaxConst.API_PREFIX_URL);
 
   /**
    * 直接传入文本内容构造请求（使用默认参数）。
