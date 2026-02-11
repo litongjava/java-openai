@@ -1,8 +1,12 @@
 package com.litongjava.linux;
 
+import java.io.File;
+
 import org.junit.Test;
 
 import com.litongjava.tio.utils.commandline.ProcessResult;
+import com.litongjava.tio.utils.environment.EnvUtils;
+import com.litongjava.tio.utils.hutool.FileUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class JavaKitClientTest {
@@ -15,5 +19,22 @@ public class JavaKitClientTest {
 
     ProcessResult motionCanvasFinish = JavaKitClient.motionCanvasFinish("", "", request);
     System.out.println(JsonUtils.toJson(motionCanvasFinish));
+  }
+
+  @Test
+  public void executeMotionCanvasCodeMultipart() {
+    EnvUtils.load();
+    String javaKitUrl = EnvUtils.getStr("java.kit.url");
+
+    String code = FileUtil.readString(new File("examples", "Scene01.tsx"));
+    ExecuteCodeRequest executeCodeRequest = new ExecuteCodeRequest();
+    executeCodeRequest.setSessionId(597361985752285184L).setTimeout(300).setId(597362099749273600L);
+    executeCodeRequest.setCode(code);
+    ProcessResult executeMotionCanvasCodeMultipart = JavaKitClient.executeMotionCanvasCodeMultipart(javaKitUrl,
+        "123456", executeCodeRequest);
+    long start = System.currentTimeMillis();
+    System.out.println(JsonUtils.toJson(executeMotionCanvasCodeMultipart));
+    long end = System.currentTimeMillis();
+    System.out.println(end - start + "(ms)");
   }
 }

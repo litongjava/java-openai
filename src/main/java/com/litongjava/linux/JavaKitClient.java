@@ -100,7 +100,7 @@ public class JavaKitClient {
     if (code_id != null) {
       sb.append("code_id=").append(code_id).append("&");
     }
-    if(code_name!=null) {
+    if (code_name != null) {
       sb.append("code_name=").append(code_name).append("&");
     }
 
@@ -143,6 +143,12 @@ public class JavaKitClient {
     String targetUrl = apiBase + "/motion-canvas/run";
 
     return post(targetUrl, key, codeRequest);
+  }
+
+  public static ProcessResult executeMotionCanvasCodeMultipart(String apiBase, String key,
+      ExecuteCodeRequest codeRequest) {
+    String targetUrl = apiBase + "/motion-canvas/run/multipart";
+    return postExpectMultipart(targetUrl, key, codeRequest);
   }
 
   public static ProcessResult motionCanvasFinish(String apiBase, String key, SessionFinishRequest codeRequest) {
@@ -296,4 +302,54 @@ public class JavaKitClient {
     RequestBody fileBody = RequestBody.create(content.getBytes(), MediaType.parse(contentType));
     return fileBody;
   }
+
+  private static ProcessResult postExpectMultipart(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
+    String code = codeRequest.getCode();
+    String figure = codeRequest.getFigure();
+    targetUrl = targetUrl + "?" + toQueryString(codeRequest);
+
+    Request.Builder builder = new Request.Builder().url(targetUrl).addHeader("authorization", "Bearer " + key);
+
+    if (figure == null) {
+      RequestBody body = RequestBody.create(code, MediaType.parse("text/plain; charset=utf-8"));
+      builder.post(body);
+    } else {
+      MultipartBody.Builder formBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      formBuilder.addFormDataPart("code", "main.py", getFileBody("main.py", code));
+      formBuilder.addFormDataPart("figure", "pgdp-output.json", getFileBody("pgdp-output.json", figure));
+      builder.post(formBuilder.build());
+    }
+
+    Request request = builder.build();
+
+    long start = System.currentTimeMillis();
+    try (Response response = client.newCall(request).execute()) {
+      int responseCode = response.code();
+      if (!response.isSuccessful()) {
+        String err = response.body() != null ? response.body().string() : "";
+        throw new RuntimeException("code:" + responseCode + " response:" + err);
+      }
+
+      long end = System.currentTimeMillis();
+      String ct = response.header("Content-Type", "");
+
+      if (ct != null && ct.toLowerCase().startsWith("multipart/")) {
+        byte[] bytes = response.body().bytes();
+        ProcessResult r = FastProcessResultMultipart.parse(ct, bytes);
+        if (r != null)
+          r.setElapsed(end - start);
+        return r;
+      } else {
+        // 兼容 JSON 响应
+        String bodyString = response.body().string();
+        ProcessResult r = JsonUtils.parse(bodyString, ProcessResult.class);
+        if (r != null)
+          r.setElapsed(end - start);
+        return r;
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + targetUrl + " body:" + code, e);
+    }
+  }
+
 }

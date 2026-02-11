@@ -156,3 +156,4 @@ vcpkg_installed/
 audio/
 secrets.txt
 my.txt
+examples/
