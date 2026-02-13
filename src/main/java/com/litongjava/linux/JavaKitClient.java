@@ -335,7 +335,7 @@ public class JavaKitClient {
 
       if (ct != null && ct.toLowerCase().startsWith("multipart/")) {
         byte[] bytes = response.body().bytes();
-        ProcessResult r = FastProcessResultMultipart.parse(ct, bytes);
+        ProcessResult r = MultipartProcessResultParser.parse(ct, bytes);
         if (r != null)
           r.setElapsed(end - start);
         return r;

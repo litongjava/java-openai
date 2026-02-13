@@ -53,7 +53,7 @@ public class MultipartProcessResultParser {
 
       // part body（去掉末尾 CRLF）
       int partBodyEnd = nextBoundary;
-      if (partBodyEnd >= 2 && raw.substring(partBodyEnd - 2, partBodyEnd).equals("\r\n")) {
+      if (partBodyEnd - 2 >= partBodyStart && raw.startsWith("\r\n", partBodyEnd - 2)) {
         partBodyEnd -= 2;
       }
 
