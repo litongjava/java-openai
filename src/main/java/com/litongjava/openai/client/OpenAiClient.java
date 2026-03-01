@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.chat.ChatModelResponse;
 import com.litongjava.cloudflare.CloudflareModelInfo;
 import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.exception.GenerateException;
@@ -59,7 +60,7 @@ public class OpenAiClient {
     header.put("Authorization", "Bearer " + OPENAI_API_KEY);
 
     try (Response response = HttpUtils.get(url, header)) {
-      //Headers headers = response.headers();
+      // Headers headers = response.headers();
       int code = response.code();
       String body = response.body().string();
 
@@ -661,6 +662,37 @@ public class OpenAiClient {
 
   public static OpenAiChatResponse chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
     return chatWithImage(apiKey, OpenAiModels.GPT_4O_MINI, prompt, bytes, suffix);
+  }
+
+  public static ChatModelResponse getModels(String api_perfix_url, String apiKey) {
+    if (api_perfix_url == null) {
+      api_perfix_url = OpenAiConst.API_PREFIX_URL;
+    }
+
+    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+
+    Map<String, String> requestHeaders = new HashMap<>(1);
+    if (StrUtil.isBlank(apiKey)) {
+      throw new RuntimeException("api key can not empty");
+    }
+    requestHeaders.put("Authorization", "Bearer " + apiKey);
+
+    Headers headers = Headers.of(requestHeaders);
+
+    String url = api_perfix_url + "/models";
+    Request request = new Request.Builder().url(url).headers(headers).get().build();
+    try (Response response = httpClient.newCall(request).execute()) {
+      int code = response.code();
+      String bodyString = response.body().string();
+      if (response.isSuccessful()) {
+        return JsonUtils.parse(bodyString, ChatModelResponse.class);
+      } else {
+        log.error("failed to request url:{}, status code:{},response body:{}", url, code, bodyString);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return null;
   }
 
 }

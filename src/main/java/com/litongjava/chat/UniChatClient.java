@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.litongjava.aiapi.AiApiConst;
 import com.litongjava.bailian.BaiLianConst;
 import com.litongjava.cerebras.CerebrasConst;
 import com.litongjava.claude.ClaudeCacheControl;
@@ -103,10 +104,9 @@ public class UniChatClient {
   public static final String EXCHANGE_TOKEN_API_KEY = EnvUtils.get("EXCHANGE_TOKEN_API_KEY");
   public static final String EXCHANGE_TOKEN_API_URL = EnvUtils.get("EXCHANGE_TOKEN_API_URL",
       ExchangetokenConst.BASE_URL);
-  
+
   public static final String AIAPI_API_KEY = EnvUtils.get("AIAPI_API_KEY");
-  public static final String AIAPI_API_URL = EnvUtils.get("AIAPI_API_URL",
-      ExchangetokenConst.BASE_URL);
+  public static final String AIAPI_API_URL = EnvUtils.get("AIAPI_API_URL", AiApiConst.V1_BASE_URL);
 
   public static final String EXCHANGE_TOKEN_GOOGLE_API_URL = EnvUtils.get("EXCHANGE_TOKEN_GOOGLE_API_URL",
       ExchangetokenConst.US_GOOGLE_BASE_URL);
@@ -236,13 +236,13 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetokenUs(key, uniChatRequest);
-      
+
     } else if (ModelPlatformName.AIAPI.equals(platform)) {
       if (key == null) {
         key = AIAPI_API_KEY;
       }
       return useAiApi(key, uniChatRequest);
-      
+
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -635,7 +635,7 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetoken(key, uniChatRequest, listener);
-      
+
     } else if (ModelPlatformName.AIAPI.equals(platform)) {
       if (key == null) {
         key = AIAPI_API_KEY;
@@ -886,12 +886,151 @@ public class UniChatClient {
   public static EventSource useExchangetoken(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
   }
-  
+
   public static UniChatResponse useAiApi(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(EXCHANGE_TOKEN_US_API_URL, key, uniChatRequest);
   }
 
   public static EventSource useAiApi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
+  }
+
+  public static ChatModelResponse models(String platform) {
+    return models(platform, null);
+
+  }
+
+  public static ChatModelResponse models(String platform, String key) {
+
+//    if (ModelPlatformName.GOOGLE.equals(platform)) {
+//      if (key == null) {
+//        key = GEMINI_API_KEY;
+//      }
+//      return getModels(GEMINI_API_,key);
+//    } else if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
+//      if (key == null) {
+//        key = EXCHANGE_TOKEN_API_KEY;
+//      }
+//      return useExchangeTokenGoogle(key, uniChatRequest);
+//    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+//      if (key == null) {
+//        key = CLAUDE_API_KEY;
+//      }
+//      return useClaude(key, uniChatRequest);
+//
+//    } else 
+    if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
+      if (key == null) {
+        key = VOLCENGINE_API_KEY;
+      }
+
+      return getModels(VOLCENGINE_API_URL, key);
+
+    } else if (ModelPlatformName.OPENROUTER.equals(platform)) {
+      if (key == null) {
+        key = OPENROUTER_API_KEY;
+      }
+      return getModels(OPENROUTER_API_URL, key);
+
+    } else if (ModelPlatformName.ZENMUX.equals(platform)) {
+      if (key == null) {
+        key = ZENMUX_API_KEY;
+      }
+      return getModels(ZENMUX_API_URL, key);
+
+    } else if (ModelPlatformName.BAILIAN.equals(platform)) {
+      if (key == null) {
+        key = BAILIAN_API_KEY;
+      }
+      return getModels(BAILIAN_API_URL, key);
+
+    } else if (ModelPlatformName.TENCENT.equals(platform)) {
+      if (key == null) {
+        key = TENCENT_API_KEY;
+      }
+      return getModels(TENCENT_API_URL, key);
+
+    } else if (ModelPlatformName.MINIMAX.equals(platform)) {
+      if (key == null) {
+        key = MINIMAX_API_KEY;
+      }
+      return getModels(MINIMAX_API_URL, key);
+
+    } else if (ModelPlatformName.MOONSHOT.equals(platform)) {
+      if (key == null) {
+        key = MOONSHOT_API_KEY;
+      }
+      return getModels(MOONSHOT_API_URL, key);
+
+    } else if (ModelPlatformName.CEREBRAS.equals(platform)) {
+      if (key == null) {
+        key = CEREBRAS_API_KEY;
+      }
+      return getModels(CEREBRAS_API_URL, key);
+
+    } else if (ModelPlatformName.OLLAMA.equals(platform)) {
+      if (key == null) {
+        key = OLLAMA_API_KEY;
+      }
+      return getModels(OLLAMA_API_URL, key);
+
+    } else if (ModelPlatformName.LLAMACPP.equals(platform)) {
+      if (key == null) {
+        key = LLAMACPP_API_KEY;
+      }
+      return getModels(LLAMACPP_API_URL, key);
+
+    } else if (ModelPlatformName.VLLM.equals(platform)) {
+      if (key == null) {
+        key = VLLM_API_KEY;
+      }
+      return getModels(VLLM_API_URL, key);
+
+    } else if (ModelPlatformName.SWIFT.equals(platform)) {
+      if (key == null) {
+        key = SWIFT_API_KEY;
+      }
+      return getModels(SWIFT_API_URL, key);
+
+    } else if (ModelPlatformName.TITANIUM.equals(platform)) {
+      if (key == null) {
+        key = TITANIUM_API_KEY;
+      }
+      return getModels(TITANIUM_API_URL, key);
+
+    } else if (ModelPlatformName.GITEE.equals(platform)) {
+      if (key == null) {
+        key = GITEE_API_KEY;
+      }
+      return getModels(GITEE_API_URL, key);
+
+    } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return getModels(EXCHANGE_TOKEN_API_URL, key);
+
+    } else if (ModelPlatformName.EXCHANGE_TOKEN_US.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return getModels(EXCHANGE_TOKEN_US_API_URL, key);
+
+    } else if (ModelPlatformName.AIAPI.equals(platform)) {
+      if (key == null) {
+        key = AIAPI_API_KEY;
+      }
+      return getModels(AIAPI_API_URL, key);
+
+    } else {
+      if (key == null) {
+        key = OPENAI_API_KEY;
+      }
+      return getModels(OPENAI_API_URL, key);
+    }
+  }
+
+  public static ChatModelResponse getModels(String url, String key) {
+    return OpenAiClient.getModels(url,key);
   }
 }
