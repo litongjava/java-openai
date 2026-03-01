@@ -2,15 +2,19 @@ package com.litongjava.openai.whisper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.litongjava.aiapi.AiApiConst;
+import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.hutool.FilenameUtils;
+import com.litongjava.tio.utils.json.JsonUtils;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -20,6 +24,42 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class WhisperClient {
+
+  public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
+  public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
+
+  public static final String AIAPI_API_URL = EnvUtils.get("AIAPI_API_URL", AiApiConst.V1_BASE_URL);
+  public static final String AIAPI_API_KEY = EnvUtils.get("AIAPI_API_KEY");
+
+  public static WhisperTranscriptionResponse transcriptToJson(String platform, File file) {
+    try {
+      String filename = file.getName();
+      byte[] audioBytes = Files.readAllBytes(file.toPath());
+      return transcriptToJson(platform, filename, audioBytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static WhisperTranscriptionResponse transcriptToJson(String platform, String filename, byte[] audioBytes) {
+    if (ModelPlatformName.AIAPI.equals(platform)) {
+      return transcriptToJson(AIAPI_API_URL, AIAPI_API_KEY, filename, audioBytes);
+    } else {
+      return transcriptToJson(OPENAI_API_URL, OPENAI_API_KEY, filename, audioBytes);
+    }
+  }
+
+  private static WhisperTranscriptionResponse transcriptToJson(String apiPrefixUrl, String apiKey, String filename, byte[] audioBytes) {
+    ResponseVo responseVo = transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, WhisperResponseFormat.json);
+    String bodyString = responseVo.getBodyString();
+    if(responseVo.isOk()) {
+      return JsonUtils.parse(bodyString, WhisperTranscriptionResponse.class);
+    }
+    
+    WhisperTranscriptionResponse whisperTranscriptionResponse = new WhisperTranscriptionResponse();
+    whisperTranscriptionResponse.setRasResponse(bodyString);
+    return whisperTranscriptionResponse;
+  }
 
   /**
    * Transcribes the given audio file using the default API key from environment
@@ -78,7 +118,8 @@ public class WhisperClient {
     return transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, responseFormat);
   }
 
-  public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat, String prompt) {
+  public static ResponseVo transcriptions(String apiKey, String filename, byte[] audioBytes, String responseFormat,
+      String prompt) {
     // Get base API URL from environment or use default constant
     String apiPrefixUrl = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
 
@@ -96,7 +137,8 @@ public class WhisperClient {
    * @param responseFormat the desired response format (e.g., json)
    * @return a ResponseVo containing the transcription result or error information
    */
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, byte[] audioBytes, String responseFormat) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, byte[] audioBytes,
+      String responseFormat) {
     // Determine the content type based on the file extension
 
     String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
@@ -126,7 +168,8 @@ public class WhisperClient {
     return transcriptions(baseUrl, apiKey, filename, fileBody, responseFormat);
   }
 
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, File file, String responseFormat, String prompt) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, File file, String responseFormat,
+      String prompt) {
     // Determine the content type based on the file extension
     String filename = file.getName();
     String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
@@ -136,7 +179,8 @@ public class WhisperClient {
     return transcriptions(baseUrl, apiKey, filename, fileBody, requestEntity);
   }
 
-  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, RequestBody fileBody, String responseFormat) {
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, RequestBody fileBody,
+      String responseFormat) {
     return transcriptions(baseUrl, apiKey, filename, fileBody, new WhisperTranscriptionsRequest(responseFormat));
   }
 
