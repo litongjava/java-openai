@@ -103,6 +103,10 @@ public class UniChatClient {
   public static final String EXCHANGE_TOKEN_API_KEY = EnvUtils.get("EXCHANGE_TOKEN_API_KEY");
   public static final String EXCHANGE_TOKEN_API_URL = EnvUtils.get("EXCHANGE_TOKEN_API_URL",
       ExchangetokenConst.BASE_URL);
+  
+  public static final String AIAPI_API_KEY = EnvUtils.get("AIAPI_API_KEY");
+  public static final String AIAPI_API_URL = EnvUtils.get("AIAPI_API_URL",
+      ExchangetokenConst.BASE_URL);
 
   public static final String EXCHANGE_TOKEN_GOOGLE_API_URL = EnvUtils.get("EXCHANGE_TOKEN_GOOGLE_API_URL",
       ExchangetokenConst.US_GOOGLE_BASE_URL);
@@ -232,6 +236,13 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetokenUs(key, uniChatRequest);
+      
+    } else if (ModelPlatformName.AIAPI.equals(platform)) {
+      if (key == null) {
+        key = AIAPI_API_KEY;
+      }
+      return useAiApi(key, uniChatRequest);
+      
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -624,6 +635,12 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetoken(key, uniChatRequest, listener);
+      
+    } else if (ModelPlatformName.AIAPI.equals(platform)) {
+      if (key == null) {
+        key = AIAPI_API_KEY;
+      }
+      return useAiApi(key, uniChatRequest, listener);
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -867,6 +884,14 @@ public class UniChatClient {
   }
 
   public static EventSource useExchangetoken(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
+  }
+  
+  public static UniChatResponse useAiApi(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(EXCHANGE_TOKEN_US_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useAiApi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
   }
 }
