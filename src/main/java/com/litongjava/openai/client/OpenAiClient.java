@@ -664,6 +664,10 @@ public class OpenAiClient {
     return chatWithImage(apiKey, OpenAiModels.GPT_4O_MINI, prompt, bytes, suffix);
   }
 
+  public static ChatModelResponse getModels(String apiKey) {
+    return getModels(null, apiKey);
+  }
+
   public static ChatModelResponse getModels(String api_perfix_url, String apiKey) {
     if (api_perfix_url == null) {
       api_perfix_url = OpenAiConst.API_PREFIX_URL;
