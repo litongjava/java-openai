@@ -233,7 +233,7 @@ public class WhisperClient {
     Request request = requestBuilder.build();
 
     // Obtain an HTTP client from the pool
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     try (Response response = httpClient.newCall(request).execute()) {
       String responseBody = response.body().string();

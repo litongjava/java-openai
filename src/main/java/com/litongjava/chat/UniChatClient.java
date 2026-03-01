@@ -888,11 +888,11 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useAiApi(String key, UniChatRequest uniChatRequest) {
-    return useOpenAi(EXCHANGE_TOKEN_US_API_URL, key, uniChatRequest);
+    return useOpenAi(AIAPI_API_URL, key, uniChatRequest);
   }
 
   public static EventSource useAiApi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
-    return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
+    return useOpenAi(AIAPI_API_URL, key, uniChatRequest, listener);
   }
 
   public static ChatModelResponse models(String platform) {

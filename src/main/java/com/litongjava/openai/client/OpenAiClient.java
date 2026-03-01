@@ -340,7 +340,7 @@ public class OpenAiClient {
    */
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
 
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
@@ -386,14 +386,12 @@ public class OpenAiClient {
 
   public static Response generate(String uri, String bodyString) {
 
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     String url = uri + "/chat/completions";
-    Request request = new Request.Builder() //
-        .url(url) //
-        .method("POST", body).build();
+    Request request = new Request.Builder().url(url).method("POST", body).build();
     try {
       return httpClient.newCall(request).execute();
     } catch (IOException e) {
@@ -429,7 +427,7 @@ public class OpenAiClient {
    */
   public static Call chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString,
       Callback callback) {
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     if (debug) {
       log.info(bodyString);
@@ -450,7 +448,7 @@ public class OpenAiClient {
 
   public static EventSource chatCompletions(String apiPrefixUrl, Map<String, String> requestHeaders, String bodyString,
       EventSourceListener listener) {
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     if (debug) {
       log.info(bodyString);
@@ -541,7 +539,7 @@ public class OpenAiClient {
       api_perfix_url = OpenAiConst.API_PREFIX_URL;
     }
 
-    OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
+    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
 
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
