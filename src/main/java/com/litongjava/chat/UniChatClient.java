@@ -400,7 +400,8 @@ public class UniChatClient {
 
     OpenAiChatRequest openAiChatRequest = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
-      if (ModelPlatformName.ANTHROPIC.equals(uniChatRequest.getPlatform())) {
+      String platform = uniChatRequest.getPlatform();
+      if (isAnthropic(platform)) {
         String systemPrompt = uniChatRequest.getSystemPrompt();
         if (systemPrompt != null) {
           ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
@@ -568,7 +569,7 @@ public class UniChatClient {
       }
       return useExchangeTokenUsGoogle(key, uniChatRequest, listener);
 
-    } else if (isAnthropic(platform)) {
+    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
       }
