@@ -142,7 +142,7 @@ public class UniChatClient {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
       }
-      return useClaude(key, uniChatRequest);
+      return useExchangeTokenClaude(key, uniChatRequest);
     } else if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
       if (key == null) {
         key = VOLCENGINE_API_KEY;
@@ -367,6 +367,10 @@ public class UniChatClient {
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    return useClaude(apiPrefixUrl,key, uniChatRequest);
+  }
+
+  public static UniChatResponse useClaude(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     if (messages != null) {
       Iterator<UniChatMessage> iterator = messages.iterator();
@@ -424,10 +428,6 @@ public class UniChatClient {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
 
     return useGoogle(apiPrefixUrl, key, uniChatRequest);
-  }
-
-  public static UniChatResponse useExchangeTokenGoogle(String key, UniChatRequest uniChatRequest) {
-    return useGoogle(EXCHANGE_TOKEN_GOOGLE_API_URL, key, uniChatRequest);
   }
 
   public static UniChatResponse useGoogle(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
@@ -558,7 +558,7 @@ public class UniChatClient {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
       }
-      return useClaude(key, uniChatRequest, listener);
+      return useExchangeTokenClaude(key, uniChatRequest, listener);
 
     } else if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
       if (key == null) {
@@ -701,6 +701,14 @@ public class UniChatClient {
   }
 
   public static EventSource useClaude(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    
+    return useClaude(apiPrefixUrl, key, uniChatRequest, listener);
+
+  }
+
+  public static EventSource useClaude(String apiPrefixUrl, String key, UniChatRequest uniChatRequest,
+      EventSourceListener listener) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     Iterator<UniChatMessage> iterator = messages.iterator();
     while (iterator.hasNext()) {
@@ -730,7 +738,6 @@ public class UniChatClient {
     openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
     openaiChatRequest.setStream(uniChatRequest.getStream());
 
-    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     EventSource eventSource = null;
     if (apiPrefixUrl != null) {
       eventSource = ClaudeClient.chatCompletions(apiPrefixUrl, key, openaiChatRequest, listener);
@@ -739,7 +746,6 @@ public class UniChatClient {
     }
 
     return eventSource;
-
   }
 
   public static EventSource useGoogle(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
@@ -1050,5 +1056,18 @@ public class UniChatClient {
 
   public static ChatModelResponse getModels(String url, String key) {
     return OpenAiClient.getModels(url, key);
+  }
+
+  public static UniChatResponse useExchangeTokenGoogle(String key, UniChatRequest uniChatRequest) {
+    return useGoogle(EXCHANGE_TOKEN_GOOGLE_API_URL, key, uniChatRequest);
+  }
+
+  private static UniChatResponse useExchangeTokenClaude(String key, UniChatRequest uniChatRequest) {
+    return useClaude(EXCHANGE_TOKEN_API_URL, key, uniChatRequest);
+  }
+
+  private static EventSource useExchangeTokenClaude(String key, UniChatRequest uniChatRequest,
+      EventSourceListener listener) {
+    return useClaude(EXCHANGE_TOKEN_API_URL, key, uniChatRequest, listener);
   }
 }
