@@ -142,7 +142,7 @@ public class UniChatClient {
       }
       return useExchangeTokenUsGoogle(key, uniChatRequest);
 
-    } else if (isAnthropic(platform)) {
+    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
       }
