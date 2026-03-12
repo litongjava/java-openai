@@ -7,6 +7,7 @@ public interface OpenAiModels {
   // =========================
   // GPT-5 SERIES
   // =========================
+  
   String GPT_5 = "gpt-5";
   String GPT_5_2025_08_07 = "gpt-5-2025-08-07";
   String GPT_5_CHAT_LATEST = "gpt-5-chat-latest";

@@ -16,6 +16,9 @@ public interface ExchangetokenModels {
   String GPT_4O_MINI = "gpt-4o-mini";
 
   // Claude
+  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
+  String CLAUDE_SONNET_4_6 = "claude-sonnet-4-6";
+  String CLAUDE_HAIKU_4_6 = "claude-haiku-4-6";
   String CLAUDE_HAIKU_4_5 = "claude-haiku-4-5";
   String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
   String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
