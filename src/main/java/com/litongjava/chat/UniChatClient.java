@@ -117,6 +117,27 @@ public class UniChatClient {
   public static final String AIAPI_API_KEY = EnvUtils.get("AIAPI_API_KEY");
   public static final String AIAPI_API_URL = EnvUtils.get("AIAPI_API_URL", AiApiConst.V1_BASE_URL);
 
+  public static boolean isAnthropic(String platform) {
+    return ModelPlatformName.ANTHROPIC.equals(platform) ||
+    //
+        ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform) ||
+        //
+        ModelPlatformName.EXCHANGE_TOKEN_US_ANTHROPIC.equals(platform);
+  }
+  
+  public static boolean isGoogle(String platform) {
+    return ModelPlatformName.GOOGLE.equals(platform) ||
+    //
+        ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform) ||
+        //
+        ModelPlatformName.EXCHANGE_TOKEN_US_GOOGLE.equals(platform);
+  }
+  
+  
+  public static ChatModelResponse getModels(String url, String key) {
+    return OpenAiClient.getModels(url, key);
+  }
+  
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
@@ -780,13 +801,7 @@ public class UniChatClient {
     return eventSource;
   }
 
-  private static boolean isAnthropic(String platform) {
-    return ModelPlatformName.ANTHROPIC.equals(platform) ||
-    //
-        ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform) ||
-        //
-        ModelPlatformName.EXCHANGE_TOKEN_US_ANTHROPIC.equals(platform);
-  }
+
 
   public static EventSource useGoogle(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
@@ -1086,9 +1101,6 @@ public class UniChatClient {
     }
   }
 
-  public static ChatModelResponse getModels(String url, String key) {
-    return OpenAiClient.getModels(url, key);
-  }
 
   // useExchangetoken
   public static UniChatResponse useExchangetoken(String key, UniChatRequest uniChatRequest) {

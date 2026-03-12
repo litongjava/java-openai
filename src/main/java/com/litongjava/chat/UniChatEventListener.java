@@ -43,10 +43,10 @@ public abstract class UniChatEventListener extends EventSourceListener {
     }
     try {
       UniChatResponse chatResposne = null;
-      if (ModelPlatformName.GOOGLE.equals(platform)) {
+      if (UniChatClient.isGoogle(platform)) {
         chatResposne = google(data);
 
-      } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+      } else if (UniChatClient.isAnthropic(platform)) {
         chatResposne = anthropic(data);
 
       } else {
