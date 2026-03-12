@@ -26,6 +26,10 @@ public interface ExchangetokenModels {
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
 
   // Gemini 3
+  String GEMINI_3_1_FLASH_IMAGE_PREVIEW="gemini-3.1-flash-image-preview";
+  String GEMINI_3_1_PRO_PREVIEW = "gemini-3.1-pro-preview";
+  String GEMINI_3_1_FLASH_PREVIEW = "gemini-3.1-flash-lite-preview";
+
   String GEMINI_3_FLASH_PREVIEW = "gemini-3-flash-preview";
   String GEMINI_3_PRO_PREVIEW = "gemini-3-pro-preview";
   String GEMINI_3_PRO_IMAGE_PREVIEW = "gemini-3-pro-image-preview";

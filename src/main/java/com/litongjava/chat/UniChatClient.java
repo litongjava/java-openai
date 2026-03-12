@@ -138,6 +138,11 @@ public class UniChatClient {
       }
       return useClaude(key, uniChatRequest);
 
+    } else if (ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useClaude(key, uniChatRequest);
     } else if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
       if (key == null) {
         key = VOLCENGINE_API_KEY;
@@ -536,9 +541,22 @@ public class UniChatClient {
       }
       return useGoogle(key, uniChatRequest, listener);
 
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
+      }
+      return useGoogle(key, uniChatRequest, listener);
+
     } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
+      }
+      return useClaude(key, uniChatRequest, listener);
+
+    } else if (ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform)) {
+      if (key == null) {
+        key = EXCHANGE_TOKEN_API_KEY;
       }
       return useClaude(key, uniChatRequest, listener);
 
@@ -1031,6 +1049,6 @@ public class UniChatClient {
   }
 
   public static ChatModelResponse getModels(String url, String key) {
-    return OpenAiClient.getModels(url,key);
+    return OpenAiClient.getModels(url, key);
   }
 }

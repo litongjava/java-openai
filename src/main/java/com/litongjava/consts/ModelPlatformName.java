@@ -31,5 +31,7 @@ public interface ModelPlatformName {
   String EXCHANGE_TOKEN = "exchange_token";
   String EXCHANGE_TOKEN_US = "exchange_token_us";
   String EXCHANGE_TOKEN_GOOGLE = "exchange_token_google";
+  String EXCHANGE_TOKEN_ANTHROPIC = "exchange_token_anthropic";
+  
   String AIAPI = "aiapi";
 }
