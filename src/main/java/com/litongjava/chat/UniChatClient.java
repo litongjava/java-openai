@@ -142,7 +142,7 @@ public class UniChatClient {
       }
       return useExchangeTokenUsGoogle(key, uniChatRequest);
 
-    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+    } else if (isAnthropic(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
       }
@@ -568,7 +568,7 @@ public class UniChatClient {
       }
       return useExchangeTokenUsGoogle(key, uniChatRequest, listener);
 
-    } else if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+    } else if (isAnthropic(platform)) {
       if (key == null) {
         key = CLAUDE_API_KEY;
       }
@@ -678,13 +678,13 @@ public class UniChatClient {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetoken(key, uniChatRequest, listener);
-      
+
     } else if (ModelPlatformName.EXCHANGE_TOKEN_US.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
       }
       return useExchangetokenUs(key, uniChatRequest, listener);
-      
+
     } else if (ModelPlatformName.AIAPI.equals(platform)) {
       if (key == null) {
         key = AIAPI_API_KEY;
@@ -754,7 +754,7 @@ public class UniChatClient {
     String platform = uniChatRequest.getPlatform();
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (ModelPlatformName.ANTHROPIC.equals(platform) && systemPrompt != null) {
+      if (isAnthropic(platform) && systemPrompt != null) {
         ClaudeMessageContent claudeChatMessage = new ClaudeMessageContent("text", systemPrompt);
         if (uniChatRequest.isCacheSystemPrompt()) {
           claudeChatMessage.setCache_control(new ClaudeCacheControl());
@@ -777,6 +777,14 @@ public class UniChatClient {
     }
 
     return eventSource;
+  }
+
+  private static boolean isAnthropic(String platform) {
+    return ModelPlatformName.ANTHROPIC.equals(platform) ||
+    //
+        ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform) ||
+        //
+        ModelPlatformName.EXCHANGE_TOKEN_US_ANTHROPIC.equals(platform);
   }
 
   public static EventSource useGoogle(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
