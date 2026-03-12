@@ -17,6 +17,9 @@ public class ApiCooldownManager {
    * @throws InterruptedException if the thread is interrupted while sleeping.
    */
   public void enforceCooldown(String serviceKey) throws InterruptedException {
+    if(serviceKey==null) {
+      return;
+    }
     Long cooldownUntil = cooldownUntilTimestamps.get(serviceKey);
     if (cooldownUntil != null) {
       long now = System.currentTimeMillis();
