@@ -1,3 +1,6 @@
+[win.env]
+set JAVA_HOME=D:\java\jdk-1.8_411
+
 [win.build]
 mvn clean install -DskipTests -Dgpg.skip
 
