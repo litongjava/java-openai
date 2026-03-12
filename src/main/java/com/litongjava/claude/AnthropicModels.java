@@ -7,6 +7,11 @@ package com.litongjava.claude;
  *
  */
 public interface AnthropicModels {
+  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
+  String CLAUDE_SONNET_4_6 = "claude-sonnet-4-6";
+  String CLAUDE_HAIKU_4_6 = "claude-haiku-4-6";
+  
+  String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
   String CLAUDE_HAIKU_4_5 = "claude-haiku-4-5";
   String CLAUDE_SONNET_4_5_20250929 = "claude-sonnet-4-5-20250929";
