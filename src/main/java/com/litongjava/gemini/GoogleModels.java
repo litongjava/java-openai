@@ -26,9 +26,6 @@ public interface GoogleModels {
   String GEMINI_1_5_PRO_EXP_0801 = "gemini-1.5-pro-exp-0801";
   String GEMINI_1_5_PRO_EXP_0827 = "gemini-1.5-pro-exp-0827";
 
-  String GEMINI_3_FLASH_PREVIEW = "models/gemini-3-flash-preview";
-  String GEMINI_3_PRO_PREVIEW = "models/gemini-3-pro-preview";
-
   // Gemini 1.5 Flash
   String GEMINI_1_5_FLASH_LATEST = "gemini-1.5-flash-latest";
   String GEMINI_1_5_FLASH_001 = "gemini-1.5-flash-001";
@@ -57,6 +54,15 @@ public interface GoogleModels {
   String GEMINI_2_5_FLASH_LITE_PREVIEW_06_17 = "gemini-2.5-flash-lite-preview-06-17";
   String GEMINI_2_5_FLASH_IMAGE_PREVIEW = "gemini-2.5-flash-image-preview";
 
+  //
+  String GEMINI_3_FLASH_PREVIEW = "models/gemini-3-flash-preview";
+  String GEMINI_3_PRO_PREVIEW = "models/gemini-3-pro-preview";
+  String GEMINI_3_PRO_IMAGE_PREVIEW = "gemini-3-pro-image-preview";
+  
+  String GEMINI_3_1_FLASH_IMAGE_PREVIEW="gemini-3.1-flash-image-preview";
+  String GEMINI_3_1_PRO_PREVIEW = "gemini-3.1-pro-preview";
+  String GEMINI_3_1_FLASH_PREVIEW = "gemini-3.1-flash-lite-preview";
+  
   // Gemini Experimental
   String GEMINI_EXP_1206 = "gemini-exp-1206";
   String GEMINI_EXP_1121 = "gemini-exp-1121";

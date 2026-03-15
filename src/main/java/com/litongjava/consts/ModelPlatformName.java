@@ -2,7 +2,7 @@ package com.litongjava.consts;
 
 public interface ModelPlatformName {
   String OPENAI = "openai";
-  String VERTEX = "vertexai";
+  String VERTEX_AI = "vertex_ai";
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
 

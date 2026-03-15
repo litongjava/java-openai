@@ -44,6 +44,7 @@ import com.litongjava.openrouter.OpenRouterConst;
 import com.litongjava.tencent.TencentConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
+import com.litongjava.vertexai.VertexAiConsts;
 import com.litongjava.volcengine.VolcEngineConst;
 import com.litongjava.zenmux.ZenmuxConst;
 
@@ -54,6 +55,9 @@ public class UniChatClient {
   private static final Logger log = LoggerFactory.getLogger(UniChatClient.class);
 
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
+  public static final String VERTEX_AI_API_KEY = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_KEY_NAME);
+  public static final String VERTEX_AI_API_URL = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_URL_NAME,
+      VertexAiConsts.API_MODEL_BASE);
   public static final String CLAUDE_API_KEY = ClaudeClient.CLAUDE_API_KEY;
 
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
@@ -124,7 +128,7 @@ public class UniChatClient {
         //
         ModelPlatformName.EXCHANGE_TOKEN_US_ANTHROPIC.equals(platform);
   }
-  
+
   public static boolean isGoogle(String platform) {
     return ModelPlatformName.GOOGLE.equals(platform) ||
     //
@@ -132,12 +136,11 @@ public class UniChatClient {
         //
         ModelPlatformName.EXCHANGE_TOKEN_US_GOOGLE.equals(platform);
   }
-  
-  
+
   public static ChatModelResponse getModels(String url, String key) {
     return OpenAiClient.getModels(url, key);
   }
-  
+
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
@@ -151,6 +154,11 @@ public class UniChatClient {
         key = GEMINI_API_KEY;
       }
       return useGoogle(key, uniChatRequest);
+    } else if (ModelPlatformName.VERTEX_AI.equals(platform)) {
+      if (key == null) {
+        key = VERTEX_AI_API_KEY;
+      }
+      return useVertexAi(key, uniChatRequest);
     } else if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
@@ -578,6 +586,12 @@ public class UniChatClient {
       }
       return useGoogle(key, uniChatRequest, listener);
 
+    } else if (ModelPlatformName.VERTEX_AI.equals(platform)) {
+      if (key == null) {
+        key = VERTEX_AI_API_KEY;
+      }
+      return useVertexAi(key, uniChatRequest, listener);
+
     } else if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
@@ -800,8 +814,6 @@ public class UniChatClient {
 
     return eventSource;
   }
-
-
 
   public static EventSource useGoogle(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
@@ -1101,7 +1113,6 @@ public class UniChatClient {
     }
   }
 
-
   // useExchangetoken
   public static UniChatResponse useExchangetoken(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(EXCHANGE_TOKEN_API_URL, key, uniChatRequest);
@@ -1157,4 +1168,14 @@ public class UniChatClient {
       EventSourceListener listener) {
     return useClaude(EXCHANGE_TOKEN_US_API_URL, key, uniChatRequest, listener);
   }
+
+  // VERTEX_AI
+  private static UniChatResponse useVertexAi(String key, UniChatRequest uniChatRequest) {
+    return useGoogle(VERTEX_AI_API_URL, key, uniChatRequest);
+  }
+
+  private static EventSource useVertexAi(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useGoogle(VERTEX_AI_API_URL, key, uniChatRequest, listener);
+  }
+
 }
