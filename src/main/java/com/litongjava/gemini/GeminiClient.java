@@ -219,7 +219,7 @@ public class GeminiClient {
 
   public static Call stream(String googleApiKey, String modelName, String bodyString, Callback callback) {
     // 拼接 URL
-    String url = GEMINI_API_URL + modelName + ":streamGenerateContent?alt=sse";
+    String url = GEMINI_API_URL + "/" + modelName + ":streamGenerateContent?alt=sse";
     if (debug) {
       log.info("{} {}", url, bodyString);
     }
@@ -329,7 +329,7 @@ public class GeminiClient {
    * @return GeminiCacheVo - The created cache metadata
    */
   public static GeminiCacheVo createCache(String googleApiKey, GeminiCreateCacheRequest requestVo) {
-    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents";
+    String url = GeminiConsts.GEMINI_API_BASE + "/cachedContents";
     String requestJson = Json.getSkipNullJson().toJson(requestVo);
 
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
@@ -373,7 +373,7 @@ public class GeminiClient {
    * @return GeminiCacheVo - The cache metadata
    */
   public static GeminiCacheVo getCache(String googleApiKey, String cacheName) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
+    String url = GeminiConsts.GEMINI_API_BASE + "/" + cacheName;
 
     Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).get().build(); // Use GET
                                                                                                               // method
@@ -413,7 +413,7 @@ public class GeminiClient {
    * @return GeminiListCachesResponseVo - A list of cache metadata
    */
   public static GeminiListCachesResponse listCaches(String googleApiKey) {
-    String url = GeminiConsts.GEMINI_API_BASE + "cachedContents";
+    String url = GeminiConsts.GEMINI_API_BASE + "/cachedContents";
 
     Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).get().build();
 
@@ -455,7 +455,7 @@ public class GeminiClient {
    */
   public static GeminiCacheVo updateCache(String googleApiKey, String cacheName,
       GeminiUpdateCacheRequest updateRequestVo) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
+    String url = GeminiConsts.GEMINI_API_BASE + "/" + cacheName;
     String requestJson = Json.getSkipNullJson().toJson(updateRequestVo);
 
     RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
@@ -503,7 +503,7 @@ public class GeminiClient {
    *                     "cachedContents/12345")
    */
   public static void deleteCache(String googleApiKey, String cacheName) {
-    String url = GeminiConsts.GEMINI_API_BASE + cacheName;
+    String url = GeminiConsts.GEMINI_API_BASE + "/" + cacheName;
 
     Request request = new Request.Builder().url(url).addHeader("x-goog-api-key", googleApiKey).delete().build(); // Use
                                                                                                                  // DELETE

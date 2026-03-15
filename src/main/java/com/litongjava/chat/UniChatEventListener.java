@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.litongjava.claude.ClaudeChatResponse;
 import com.litongjava.claude.ClaudeChatUsage;
-import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.gemini.GeminiCandidate;
 import com.litongjava.gemini.GeminiChatResponse;
 import com.litongjava.gemini.GeminiContentResponse;
@@ -35,6 +34,8 @@ public abstract class UniChatEventListener extends EventSourceListener {
     return this.platform;
   }
 
+  public abstract void onData(UniChatResponse chatResposne);
+  
   @Override
   public void onEvent(EventSource eventSource, String id, String type, String data) {
     // OpenAI 最后会推送一个 [DONE] 事件
@@ -58,8 +59,6 @@ public abstract class UniChatEventListener extends EventSourceListener {
     }
 
   }
-
-  public abstract void onData(UniChatResponse chatResposne);
 
   private UniChatResponse anthropic(String data) {
     ClaudeChatResponse chatResponse = FastJson2Utils.parse(data, ClaudeChatResponse.class);
