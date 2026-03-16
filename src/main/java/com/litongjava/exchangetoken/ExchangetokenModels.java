@@ -2,6 +2,8 @@ package com.litongjava.exchangetoken;
 
 public interface ExchangetokenModels {
   // GPT
+  String GPT_5_4 = "gpt-5.4";
+  String GPT_5_3 = "gpt-5.3";
   String GPT_5_2 = "gpt-5.2";
   String GPT_5_1 = "gpt-5.1";
   String GPT_5 = "gpt-5";
