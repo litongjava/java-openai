@@ -1,6 +1,8 @@
 package com.litongjava.exchangetoken;
 
 public interface ExchangetokenModels {
+  String GPT_5_3_CODEX = "gpt-5.3-codex";
+  String GPT_5_2_CODEX = "gpt-5.2-codex";
   // GPT
   String GPT_5_4 = "gpt-5.4";
   String GPT_5_3 = "gpt-5.3";
@@ -28,7 +30,7 @@ public interface ExchangetokenModels {
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
 
   // Gemini 3
-  String GEMINI_3_1_FLASH_IMAGE_PREVIEW="gemini-3.1-flash-image-preview";
+  String GEMINI_3_1_FLASH_IMAGE_PREVIEW = "gemini-3.1-flash-image-preview";
   String GEMINI_3_1_PRO_PREVIEW = "gemini-3.1-pro-preview";
   String GEMINI_3_1_FLASH_PREVIEW = "gemini-3.1-flash-lite-preview";
 

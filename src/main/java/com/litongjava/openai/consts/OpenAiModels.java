@@ -7,7 +7,7 @@ public interface OpenAiModels {
   // =========================
   // GPT-5 SERIES
   // =========================
-  
+
   String GPT_5 = "gpt-5";
   String GPT_5_2025_08_07 = "gpt-5-2025-08-07";
   String GPT_5_CHAT_LATEST = "gpt-5-chat-latest";
@@ -40,9 +40,12 @@ public interface OpenAiModels {
   String GPT_5_2_PRO_2025_12_11 = "gpt-5.2-pro-2025-12-11";
 
   String GPT_5_2_CODEX = "gpt-5.2-codex";
-  
+
   String GPT_5_3 = "gpt-5.3";
   String GPT_5_4 = "gpt-5.4";
+
+  String GPT_5_3_CHAT = "gpt-5.3-chat";
+  String GPT_5_3_CODEX = "gpt-5.3-codex";
 
   // =========================
   // GPT-4.1 SERIES
