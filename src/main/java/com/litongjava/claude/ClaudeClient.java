@@ -14,8 +14,8 @@ import com.litongjava.exception.GenerateException;
 import com.litongjava.openai.chat.ChatMessageContent;
 import com.litongjava.openai.chat.OpenAiChatMessage;
 import com.litongjava.openai.chat.OpenAiChatRequest;
-import com.litongjava.openai.embedding.EmbeddingRequestVo;
-import com.litongjava.openai.embedding.EmbeddingResponseVo;
+import com.litongjava.openai.embedding.EmbeddingRequest;
+import com.litongjava.openai.embedding.EmbeddingResponse;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.Json;
@@ -448,29 +448,29 @@ public class ClaudeClient {
   }
 
   public static float[] embeddingArray(String input, String model) {
-    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(model, input);
+    EmbeddingRequest embeddingRequestVo = new EmbeddingRequest(model, input);
     String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
   public static float[] embeddingArray(String serverUrl, String input, String model) {
-    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
+    EmbeddingRequest embeddingRequestVo = new EmbeddingRequest(input, model);
     return embeddings(serverUrl, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
-  public static EmbeddingResponseVo embeddings(EmbeddingRequestVo embeddingRequestVo) {
+  public static EmbeddingResponse embeddings(EmbeddingRequest embeddingRequestVo) {
     String apiKey = EnvUtils.get("CLAUDE_API_KEY");
     return embeddings(apiKey, embeddingRequestVo);
   }
 
-  public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
-    EmbeddingResponseVo respVo = null;
+  public static EmbeddingResponse embeddings(String serverUrl, String apiKey, EmbeddingRequest reoVo) {
+    EmbeddingResponse respVo = null;
     String json = Json.getSkipNullJson().toJson(reoVo);
     try (Response response = embeddings(serverUrl, apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, EmbeddingResponse.class);
       } else {
         throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", serverUrl, json, code, bodyString);
       }
@@ -480,14 +480,14 @@ public class ClaudeClient {
     return respVo;
   }
 
-  public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
-    EmbeddingResponseVo respVo = null;
+  public static EmbeddingResponse embeddings(String apiKey, EmbeddingRequest reoVo) {
+    EmbeddingResponse respVo = null;
     String json = Json.getSkipNullJson().toJson(reoVo);
     try (Response response = embeddings(apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, EmbeddingResponse.class);
       } else {
         throw new GenerateException(ModelPlatformName.ANTHROPIC, "Claude generateContent failed", ClaudeConsts.API_PREFIX_URL, json, code,
             bodyString);
@@ -499,12 +499,12 @@ public class ClaudeClient {
   }
 
   public static float[] embeddingArray(String serverUrl, String apiKey, String input, String model) {
-    EmbeddingRequestVo reqVo = new EmbeddingRequestVo(input, model);
+    EmbeddingRequest reqVo = new EmbeddingRequest(input, model);
     return embeddingArray(serverUrl, apiKey, reqVo);
   }
 
-  public static float[] embeddingArray(String serverUrl, String apiKey, EmbeddingRequestVo reqVo) {
-    EmbeddingResponseVo embeddings = embeddings(serverUrl, apiKey, reqVo);
+  public static float[] embeddingArray(String serverUrl, String apiKey, EmbeddingRequest reqVo) {
+    EmbeddingResponse embeddings = embeddings(serverUrl, apiKey, reqVo);
     return embeddings.getData().get(0).getEmbedding();
   }
 

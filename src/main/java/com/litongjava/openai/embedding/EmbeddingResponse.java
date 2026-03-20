@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmbeddingResponseVo {
+public class EmbeddingResponse {
   private String object;
   private String model;
   private List<EmbeddingData> data;

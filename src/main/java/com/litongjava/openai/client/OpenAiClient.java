@@ -16,8 +16,8 @@ import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.openai.consts.OpenAiModels;
-import com.litongjava.openai.embedding.EmbeddingRequestVo;
-import com.litongjava.openai.embedding.EmbeddingResponseVo;
+import com.litongjava.openai.embedding.EmbeddingRequest;
+import com.litongjava.openai.embedding.EmbeddingResponse;
 import com.litongjava.tio.utils.SystemTimer;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
@@ -551,9 +551,7 @@ public class OpenAiClient {
 
     Headers headers = Headers.of(requestHeaders);
 
-    Request request = new Request.Builder() //
-        .url(api_perfix_url + "/embeddings") //
-        .method("POST", body).headers(headers) //
+    Request request = new Request.Builder().url(api_perfix_url + "/embeddings").method("POST", body).headers(headers)
         .build();
     try {
       return httpClient.newCall(request).execute();
@@ -563,13 +561,13 @@ public class OpenAiClient {
   }
 
   public static float[] embeddingArray(String input, String model) {
-    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(model, input);
+    EmbeddingRequest embeddingRequestVo = new EmbeddingRequest(model, input);
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
   public static float[] embeddingArray(String apiKey, String input, String model) {
-    EmbeddingRequestVo embeddingRequestVo = new EmbeddingRequestVo(input, model);
+    EmbeddingRequest embeddingRequestVo = new EmbeddingRequest(input, model);
     return embeddings(apiKey, embeddingRequestVo).getData().get(0).getEmbedding();
   }
 
@@ -581,17 +579,22 @@ public class OpenAiClient {
     return embeddingArray(input, OpenAiModels.TEXT_EMBEDDING_3_LARGE);
   }
 
-  public static EmbeddingResponseVo embeddings(EmbeddingRequestVo embeddingRequestVo) {
+  public static EmbeddingResponse embeddings(EmbeddingRequest embeddingRequestVo) {
     String apiKey = EnvUtils.get("OPENAI_API_KEY");
     return embeddings(apiKey, embeddingRequestVo);
   }
 
-  public static EmbeddingResponseVo embeddings(String serverUrl, String apiKey, EmbeddingRequestVo reoVo) {
-    EmbeddingResponseVo respVo = null;
-    try (Response response = embeddings(serverUrl, apiKey, Json.getSkipNullJson().toJson(reoVo))) {
+  public static EmbeddingResponse embeddings(String openaiApiUrl, String apiKey, String model, String text) {
+    EmbeddingRequest reoVo = new EmbeddingRequest(model, text);
+    return embeddings(openaiApiUrl, apiKey, reoVo);
+  }
+
+  public static EmbeddingResponse embeddings(String api_perfix_url, String apiKey, EmbeddingRequest reoVo) {
+    EmbeddingResponse respVo = null;
+    try (Response response = embeddings(api_perfix_url, apiKey, Json.getSkipNullJson().toJson(reoVo))) {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, EmbeddingResponse.class);
       } else {
         throw new RuntimeException("status:" + response.code() + ",sbody:" + bodyString);
       }
@@ -601,14 +604,14 @@ public class OpenAiClient {
     return respVo;
   }
 
-  public static EmbeddingResponseVo embeddings(String apiKey, EmbeddingRequestVo reoVo) {
-    EmbeddingResponseVo respVo = null;
+  public static EmbeddingResponse embeddings(String apiKey, EmbeddingRequest reoVo) {
+    EmbeddingResponse respVo = null;
     String json = Json.getSkipNullJson().toJson(reoVo);
     try (Response response = embeddings(apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
-        respVo = JsonUtils.parse(bodyString, EmbeddingResponseVo.class);
+        respVo = JsonUtils.parse(bodyString, EmbeddingResponse.class);
       } else {
         String serverUrl = EnvUtils.get("OPENAI_API_URL");
         log.error("AI generate failed status code:{},response body:{}", code, bodyString);
@@ -622,12 +625,12 @@ public class OpenAiClient {
   }
 
   public static float[] embeddingArray(String serverUrl, String apiKey, String input, String model) {
-    EmbeddingRequestVo reqVo = new EmbeddingRequestVo(input, model);
+    EmbeddingRequest reqVo = new EmbeddingRequest(input, model);
     return embeddingArray(serverUrl, apiKey, reqVo);
   }
 
-  public static float[] embeddingArray(String serverUrl, String apiKey, EmbeddingRequestVo reqVo) {
-    EmbeddingResponseVo embeddings = embeddings(serverUrl, apiKey, reqVo);
+  public static float[] embeddingArray(String serverUrl, String apiKey, EmbeddingRequest reqVo) {
+    EmbeddingResponse embeddings = embeddings(serverUrl, apiKey, reqVo);
     return embeddings.getData().get(0).getEmbedding();
   }
 
@@ -696,5 +699,4 @@ public class OpenAiClient {
     }
     return null;
   }
-
 }

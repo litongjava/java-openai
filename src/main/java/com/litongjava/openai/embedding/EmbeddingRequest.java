@@ -9,25 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class EmbeddingRequestVo {
+public class EmbeddingRequest {
   private String model;
   private Object input;
 
-  public EmbeddingRequestVo input(String input) {
+  public EmbeddingRequest input(String input) {
     this.input = input;
     return this;
   }
 
-  public EmbeddingRequestVo model(String model) {
+  public EmbeddingRequest model(String model) {
     this.model = model;
     return this;
   }
 
-  public EmbeddingRequestVo(String input) {
+  public EmbeddingRequest(String input) {
     this.input = input;
   }
 
-  public EmbeddingRequestVo(List<String> input) {
+  public EmbeddingRequest(List<String> input) {
     this.input = input;
   }
 
