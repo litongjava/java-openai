@@ -78,40 +78,45 @@ public class UniChatMessage {
     return role;
   }
 
-  public void setRole(String role) {
+  public UniChatMessage setRole(String role) {
     this.role = role;
+    return this;
   }
 
   public String getContent() {
     return content;
   }
 
-  public void setContent(String content) {
+  public UniChatMessage setContent(String content) {
     this.content = content;
+    return this;
   }
 
   public List<ChatImageFile> getFiles() {
     return files;
   }
 
-  public void setFiles(List<ChatImageFile> files) {
+  public UniChatMessage setFiles(List<ChatImageFile> files) {
     this.files = files;
+    return this;
   }
 
   public ChatMessageArgs getArgs() {
     return args;
   }
 
-  public void setArgs(ChatMessageArgs args) {
+  public UniChatMessage setArgs(ChatMessageArgs args) {
     this.args = args;
+    return this;
   }
 
   public List<String> getAttachments() {
     return attachments;
   }
 
-  public void setAttachments(List<String> attachments) {
+  public UniChatMessage setAttachments(List<String> attachments) {
     this.attachments = attachments;
+    return this;
   }
 
 }

@@ -17,7 +17,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <langchain4j.version>0.34.0</langchain4j.version>
     <fastjson2.version>2.0.60</fastjson2.version>
-    <tio.version>2.0.8</tio.version>
+    <tio.version>2.0.9</tio.version>
     <lombok-version>1.18.44</lombok-version>
   </properties>
   <dependencies>
