@@ -37,4 +37,5 @@ public interface ModelPlatformName {
   String EXCHANGE_TOKEN_US_ANTHROPIC = "exchange_token_us_anthropic";
 
   String AIAPI = "aiapi";
+  String ELEVEN_LABS = "eleven_labs";
 }
