@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.litongjava.openai.ChatProvider;
+import com.litongjava.openai.chat.ChatRequestTool;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 public class UniChatRequest {
@@ -33,6 +34,7 @@ public class UniChatRequest {
   private ChatProvider provider;
   private List<String> responseModalities;
   private Boolean enable_search;
+  private List<ChatRequestTool> tools;
 
   public UniChatRequest(String platform, String model) {
     this.platform = platform;
@@ -104,7 +106,7 @@ public class UniChatRequest {
     List<UniChatMessage> messages = new ArrayList<>(prompts.length);
     for (String prompt : prompts) {
       if (StrUtil.isNotBlank(prompt)) {
-        UniChatMessage part = new UniChatMessage(prompt);
+        UniChatMessage part = UniChatMessage.buildUser(prompt);
         messages.add(part);
       }
     }
@@ -379,5 +381,13 @@ public class UniChatRequest {
   public UniChatRequest setEnable_search(Boolean enable_search) {
     this.enable_search = enable_search;
     return this;
+  }
+
+  public List<ChatRequestTool> getTools() {
+    return tools;
+  }
+
+  public void setTools(List<ChatRequestTool> tools) {
+    this.tools = tools;
   }
 }

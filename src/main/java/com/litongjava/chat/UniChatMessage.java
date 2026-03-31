@@ -3,29 +3,38 @@ package com.litongjava.chat;
 import java.util.List;
 
 import com.litongjava.openai.chat.MessageRole;
+import com.litongjava.openai.chat.ToolCall;
 
 public class UniChatMessage {
-  private String role = "user";
+
+  private String role;
   private String content;
-  // data:image base64 code, url:image http url
+
+  // 图片等
   private List<ChatImageFile> files;
+
   private ChatMessageArgs args;
   private List<String> attachments;
+
+  // ====== 新增（关键）======
+
+  // assistant -> tool_calls
+  private List<ToolCall> toolCalls;
+
+  // tool -> tool_call_id
+  private String toolCallId;
+
+  // tool -> name（可选）
+  private String name;
+
+  // =======================
+
+  public UniChatMessage() {
+  }
 
   public UniChatMessage(String role, String content) {
     this.role = role;
     this.content = content;
-  }
-
-  public UniChatMessage(String role, List<ChatImageFile> files) {
-    this.role = role;
-    this.files = files;
-  }
-
-  public UniChatMessage(String role, String content, ChatMessageArgs args) {
-    this.role = role;
-    this.content = content;
-    this.args = args;
   }
 
   public static UniChatMessage buildSystem(String content) {
@@ -36,43 +45,29 @@ public class UniChatMessage {
     return new UniChatMessage(MessageRole.user, content);
   }
 
-  public static UniChatMessage buildUser(List<ChatImageFile> files) {
-    return new UniChatMessage(MessageRole.user, files);
-  }
-
   public static UniChatMessage buildAssistant(String content) {
     return new UniChatMessage(MessageRole.assistant, content);
   }
 
-  public UniChatMessage role(String role) {
-    this.role = role;
-    return this;
+  // assistant 带 tool_calls
+  public static UniChatMessage buildAssistantWithToolCalls(List<ToolCall> toolCalls) {
+    UniChatMessage msg = new UniChatMessage();
+    msg.setRole(MessageRole.assistant);
+    msg.setToolCalls(toolCalls);
+    return msg;
   }
 
-  public UniChatMessage content(String content) {
-    this.content = content;
-    return this;
+  // tool 返回结果
+  public static UniChatMessage buildTool(String toolCallId, String name, String content) {
+    UniChatMessage msg = new UniChatMessage();
+    msg.setRole("tool");
+    msg.setToolCallId(toolCallId);
+    msg.setName(name);
+    msg.setContent(content);
+    return msg;
   }
 
-  public UniChatMessage(String content) {
-    this.role = "user";
-    this.content = content;
-  }
-
-  public UniChatMessage() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
-  public UniChatMessage(String role, String content, List<ChatImageFile> files, ChatMessageArgs args,
-      List<String> attachments) {
-    super();
-    this.role = role;
-    this.content = content;
-    this.files = files;
-    this.args = args;
-    this.attachments = attachments;
-  }
+  // ===== getter / setter =====
 
   public String getRole() {
     return role;
@@ -119,4 +114,30 @@ public class UniChatMessage {
     return this;
   }
 
+  public List<ToolCall> getToolCalls() {
+    return toolCalls;
+  }
+
+  public UniChatMessage setToolCalls(List<ToolCall> toolCalls) {
+    this.toolCalls = toolCalls;
+    return this;
+  }
+
+  public String getToolCallId() {
+    return toolCallId;
+  }
+
+  public UniChatMessage setToolCallId(String toolCallId) {
+    this.toolCallId = toolCallId;
+    return this;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public UniChatMessage setName(String name) {
+    this.name = name;
+    return this;
+  }
 }

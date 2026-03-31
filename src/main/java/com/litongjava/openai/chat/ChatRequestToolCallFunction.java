@@ -11,5 +11,4 @@ public class ChatRequestToolCallFunction {
   private String name;
   private String description;
   private ChatRequestFunctionParameter parameters;
-  
 }

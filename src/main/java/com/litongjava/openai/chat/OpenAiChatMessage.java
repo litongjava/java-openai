@@ -24,6 +24,10 @@ public class OpenAiChatMessage {
   private Object content;
   private Boolean prefix;
 
+  private List<ToolCall> tool_calls;
+  private String tool_call_id;
+  private String name;
+
   public static OpenAiChatMessage buildSystem(String content) {
     return new OpenAiChatMessage(MessageRole.system, content);
   }
@@ -57,6 +61,18 @@ public class OpenAiChatMessage {
     this.role = chatMessage.getRole();
 
     String chatContent = chatMessage.getContent();
+    if (chatMessage.getToolCalls() != null) {
+      this.tool_calls = chatMessage.getToolCalls();
+    }
+
+    if (chatMessage.getToolCallId() != null) {
+      this.tool_call_id = chatMessage.getToolCallId();
+    }
+
+    if (chatMessage.getName() != null) {
+      this.name = chatMessage.getName();
+    }
+
     List<ChatImageFile> files = chatMessage.getFiles();
     if (chatContent != null && files != null) {
       List<ChatMessageContent> contents = new ArrayList<>();
@@ -153,5 +169,37 @@ public class OpenAiChatMessage {
       this.role = message.getRole();
       this.content = content;
     }
+  }
+
+  public List<ToolCall> getTool_calls() {
+    return tool_calls;
+  }
+
+  public void setTool_calls(List<ToolCall> tool_calls) {
+    this.tool_calls = tool_calls;
+  }
+
+  public String getTool_call_id() {
+    return tool_call_id;
+  }
+
+  public void setTool_call_id(String tool_call_id) {
+    this.tool_call_id = tool_call_id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public void setContent(Object content) {
+    this.content = content;
   }
 }

@@ -311,10 +311,10 @@ public class UniChatClient {
         if (next.getRole().equals("model")) {
           role = "assistant";
         }
-        String content = next.getContent();
-        if (content != null) {
-          openAiChatMesages.add(new OpenAiChatMessage(role, content));
-        }
+
+        OpenAiChatMessage openAiMsg = new OpenAiChatMessage(next);
+        openAiChatMesages.add(openAiMsg);
+
         List<ChatImageFile> files = next.getFiles();
         // files
         if (files != null && files.size() > 0) {
@@ -370,12 +370,9 @@ public class UniChatClient {
 
     ChatProvider provider = uniChatRequest.getProvider();
     openAiChatRequestVo.setProvider(provider);
+    openAiChatRequestVo.setTools(uniChatRequest.getTools());
 
-    if (prefixUrl == null) {
-
-    }
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
-
     OpenAiChatResponse chatResponse = null;
     if (apiPrefixUrl != null) {
       chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
@@ -388,7 +385,6 @@ public class UniChatClient {
     }
     ChatResponseUsage usage = chatResponse.getUsage();
     String model = chatResponse.getModel();
-
     List<Choice> choices = chatResponse.getChoices();
     String rawResponse = chatResponse.getRawResponse();
     if (choices == null) {

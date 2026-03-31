@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class ChatRequestTool {
   private String type;
   private ChatRequestToolCallFunction function;
-
 }
