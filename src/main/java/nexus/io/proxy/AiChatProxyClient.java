@@ -3,8 +3,7 @@ package nexus.io.proxy;
 import java.io.IOException;
 import java.util.Map;
 
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-
+import nexus.io.tio.utils.http.OkHttpClientPool;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

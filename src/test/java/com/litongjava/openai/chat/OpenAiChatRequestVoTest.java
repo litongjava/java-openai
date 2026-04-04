@@ -5,12 +5,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.json.Json;
-
 import nexus.io.openai.chat.ChatMessageContent;
 import nexus.io.openai.chat.ChatRequestImage;
 import nexus.io.openai.chat.OpenAiChatMessage;
 import nexus.io.openai.chat.OpenAiChatRequest;
+import nexus.io.tio.utils.json.Json;
 
 public class OpenAiChatRequestVoTest {
 

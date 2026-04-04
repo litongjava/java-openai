@@ -4,13 +4,12 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.hex.HexUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
-
 import nexus.io.minimax.MiniMaxHttpClient;
 import nexus.io.minimax.MiniMaxTTSResponse;
 import nexus.io.minimax.MiniMaxVoice;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.hex.HexUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
 
 public class MiniMaxHttpClientTest {
 

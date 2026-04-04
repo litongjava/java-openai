@@ -1,6 +1,6 @@
 package nexus.io.byteplus;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class BytePlusConfig {
   private String base_url = "https://voice.ap-southeast-1.bytepluses.com";

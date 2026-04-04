@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.tio.utils.hutool.StrUtil;
-
 import nexus.io.chat.ChatImageFile;
 import nexus.io.chat.UniChatMessage;
+import nexus.io.tio.utils.hutool.StrUtil;
 
 /**
  * 表示请求中的单条对话

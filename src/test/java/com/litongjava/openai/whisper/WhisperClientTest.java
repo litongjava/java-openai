@@ -5,13 +5,12 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.model.http.response.ResponseVo;
 import nexus.io.openai.whisper.WhisperClient;
 import nexus.io.openai.whisper.WhisperResponseFormat;
 import nexus.io.openai.whisper.WhisperTranscriptionResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class WhisperClientTest {
   @Test

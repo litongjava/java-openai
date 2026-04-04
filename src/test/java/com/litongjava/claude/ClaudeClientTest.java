@@ -2,11 +2,10 @@ package com.litongjava.claude;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.claude.ClaudeChatResponse;
 import nexus.io.claude.ClaudeClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class ClaudeClientTest {
 

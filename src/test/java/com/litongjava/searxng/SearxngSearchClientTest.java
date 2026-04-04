@@ -2,10 +2,9 @@ package com.litongjava.searxng;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.searxng.SearxngSearchClient;
 import nexus.io.searxng.SearxngSearchResponse;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class SearxngSearchClientTest {
 

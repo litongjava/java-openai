@@ -7,10 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-
 import nexus.io.model.http.response.ResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.OkHttpClientPool;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

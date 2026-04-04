@@ -1,10 +1,9 @@
 package nexus.io.searchapi;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.HttpUtils;
-import com.litongjava.tio.utils.url.UrlUtils;
-
 import nexus.io.model.http.response.ResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.HttpUtils;
+import nexus.io.tio.utils.url.UrlUtils;
 
 public class SearchapiClient {
 

@@ -5,13 +5,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.jian.rerank.JinaModel;
 import nexus.io.jian.rerank.JinaRerankClient;
 import nexus.io.jian.rerank.RerankReqVo;
 import nexus.io.jian.rerank.RerankRespVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class JinaRerankClientTest {
 

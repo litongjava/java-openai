@@ -9,11 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-import com.litongjava.tio.utils.json.Json;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.exception.GenerateException;
 import nexus.io.openai.chat.ChatMessageContent;
@@ -21,6 +16,10 @@ import nexus.io.openai.chat.OpenAiChatMessage;
 import nexus.io.openai.chat.OpenAiChatRequest;
 import nexus.io.openai.embedding.EmbeddingRequest;
 import nexus.io.openai.embedding.EmbeddingResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.OkHttpClientPool;
+import nexus.io.tio.utils.json.Json;
+import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;

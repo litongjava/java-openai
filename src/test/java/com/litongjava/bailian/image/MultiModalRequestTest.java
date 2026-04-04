@@ -2,9 +2,8 @@ package com.litongjava.bailian.image;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.bailian.image.MultiModalRequest;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class MultiModalRequestTest {
 

@@ -5,8 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.litongjava.tio.utils.json.FastJson2Utils;
-
 import nexus.io.claude.ClaudeChatResponse;
 import nexus.io.claude.ClaudeChatUsage;
 import nexus.io.gemini.GeminiCandidate;
@@ -18,6 +16,7 @@ import nexus.io.openai.chat.ChatResponseDelta;
 import nexus.io.openai.chat.ChatResponseUsage;
 import nexus.io.openai.chat.Choice;
 import nexus.io.openai.chat.OpenAiChatResponse;
+import nexus.io.tio.utils.json.FastJson2Utils;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 

@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-
 import nexus.io.chat.PlatformInput;
 import nexus.io.chat.UniChatClient;
 import nexus.io.chat.UniChatMessage;
@@ -14,6 +12,7 @@ import nexus.io.chat.UniChatRequest;
 import nexus.io.chat.UniChatResponse;
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.exchangetoken.ExchangetokenModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class ExchangetokenClientTest {
 

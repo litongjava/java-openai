@@ -2,8 +2,8 @@ package nexus.io.prompt;
 
 import java.net.URL;
 
-import com.litongjava.tio.utils.hutool.FileUtil;
-import com.litongjava.tio.utils.hutool.ResourceUtil;
+import nexus.io.tio.utils.hutool.FileUtil;
+import nexus.io.tio.utils.hutool.ResourceUtil;
 
 public class PromptResource {
 

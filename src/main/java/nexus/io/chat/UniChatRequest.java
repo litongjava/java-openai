@@ -3,10 +3,9 @@ package nexus.io.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.tio.utils.hutool.StrUtil;
-
 import nexus.io.openai.ChatProvider;
 import nexus.io.openai.chat.ChatRequestTool;
+import nexus.io.tio.utils.hutool.StrUtil;
 
 public class UniChatRequest {
   private String domain;

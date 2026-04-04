@@ -1,12 +1,11 @@
 package nexus.io.openai.chat;
 
-import com.litongjava.tio.utils.base64.Base64Utils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nexus.io.chat.ChatImageFile;
+import nexus.io.tio.utils.base64.Base64Utils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
 
 @Data
 @NoArgsConstructor

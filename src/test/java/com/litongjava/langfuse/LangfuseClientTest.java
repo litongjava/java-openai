@@ -2,11 +2,10 @@ package com.litongjava.langfuse;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.langfuse.LangfuseClient;
 import nexus.io.langfuse.PromptPayload;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class LangfuseClientTest {
 

@@ -3,7 +3,7 @@ package nexus.io.linux;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-import com.litongjava.tio.utils.commandline.ProcessResult;
+import nexus.io.tio.utils.commandline.ProcessResult;
 
 public class MultipartProcessResultParser {
 

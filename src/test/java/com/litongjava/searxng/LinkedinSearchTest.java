@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.searxng.LinkedinSearch;
 import nexus.io.searxng.SearxngResult;
 import nexus.io.searxng.SearxngSearchResponse;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class LinkedinSearchTest {
 

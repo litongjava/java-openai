@@ -2,12 +2,11 @@ package com.litongjava.gitee;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-
 import nexus.io.gitee.GiteeClient;
 import nexus.io.gitee.GiteeDocumentOutput;
 import nexus.io.gitee.GiteeSimpleMarkdownUtils;
 import nexus.io.gitee.GiteeTaskResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class GiteeClientTest {
 

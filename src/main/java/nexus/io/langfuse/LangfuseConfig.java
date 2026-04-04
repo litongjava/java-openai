@@ -1,6 +1,6 @@
 package nexus.io.langfuse;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class LangfuseConfig {
 

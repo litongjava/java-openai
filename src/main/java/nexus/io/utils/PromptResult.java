@@ -1,6 +1,6 @@
 package nexus.io.utils;
 
-import com.litongjava.tio.utils.hutool.StrUtil;
+import nexus.io.tio.utils.hutool.StrUtil;
 
 public class PromptResult {
   public static final String YES = "yes";

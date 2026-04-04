@@ -2,10 +2,9 @@ package com.litongjava.gemini;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-
 import nexus.io.gemini.GeminiClient;
 import nexus.io.gemini.GoogleModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class GeminiClientTest {
 

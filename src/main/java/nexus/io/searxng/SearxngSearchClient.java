@@ -3,10 +3,9 @@ package nexus.io.searxng;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.HttpUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.HttpUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Response;
 
 public class SearxngSearchClient {

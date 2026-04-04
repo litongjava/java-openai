@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.litongjava.tio.utils.hutool.StrUtil;
+import nexus.io.tio.utils.hutool.StrUtil;
 
 /**
  * 工具：将 Gitee 文档解析结果转换为可阅读的 Markdown（包含图片引用 + 页码）

@@ -6,12 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.http.OkHttpClientPool;
+import nexus.io.tio.utils.hutool.FilenameUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

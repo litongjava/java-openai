@@ -6,13 +6,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.openai.chat.OpenAiChatMessage;
 import nexus.io.openai.chat.OpenAiChatRequest;
 import nexus.io.openai.chat.OpenAiChatResponse;
 import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Response;
 
 public class ChatExample {

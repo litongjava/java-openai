@@ -3,10 +3,9 @@ package nexus.io.sd;
 import java.io.IOException;
 import java.util.Map;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.HttpUtils;
-
 import nexus.io.model.upload.UploadFile;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.HttpUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;

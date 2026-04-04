@@ -3,11 +3,10 @@ package nexus.io.supadata;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.HttpUtils;
-import com.litongjava.tio.utils.json.FastJson2Utils;
-
 import nexus.io.model.http.response.ResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.HttpUtils;
+import nexus.io.tio.utils.json.FastJson2Utils;
 import okhttp3.Response;
 
 public class SupadataClient {

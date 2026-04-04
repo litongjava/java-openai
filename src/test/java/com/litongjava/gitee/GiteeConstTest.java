@@ -2,13 +2,12 @@ package com.litongjava.gitee;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.gitee.GiteeConst;
 import nexus.io.gitee.GiteeModels;
 import nexus.io.openai.chat.OpenAiChatResponse;
 import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class GiteeConstTest {
 

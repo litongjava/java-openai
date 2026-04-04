@@ -6,14 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.tio.utils.SystemTimer;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.HttpUtils;
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-import com.litongjava.tio.utils.hutool.StrUtil;
-import com.litongjava.tio.utils.json.Json;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import lombok.extern.slf4j.Slf4j;
 import nexus.io.chat.ChatModelResponse;
 import nexus.io.cloudflare.CloudflareModelInfo;
@@ -27,6 +19,13 @@ import nexus.io.openai.consts.OpenAiConst;
 import nexus.io.openai.consts.OpenAiModels;
 import nexus.io.openai.embedding.EmbeddingRequest;
 import nexus.io.openai.embedding.EmbeddingResponse;
+import nexus.io.tio.utils.SystemTimer;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.HttpUtils;
+import nexus.io.tio.utils.http.OkHttpClientPool;
+import nexus.io.tio.utils.hutool.StrUtil;
+import nexus.io.tio.utils.json.Json;
+import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;

@@ -4,11 +4,10 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-
 import nexus.io.deepseek.RustDeepseekOcrClient;
 import nexus.io.openai.chat.OpenAiChatResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class RustDeepseekOcrClientTest {
 

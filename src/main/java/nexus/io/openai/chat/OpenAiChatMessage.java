@@ -3,8 +3,6 @@ package nexus.io.openai.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.tio.utils.hutool.StrUtil;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,7 @@ import nexus.io.chat.ChatImageFile;
 import nexus.io.chat.UniChatMessage;
 import nexus.io.claude.ClaudeMessageContent;
 import nexus.io.consts.ModelPlatformName;
+import nexus.io.tio.utils.hutool.StrUtil;
 
 /**
  * the chat request message of openai

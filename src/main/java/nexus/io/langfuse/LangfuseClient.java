@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.litongjava.tio.utils.http.OkHttpClientPool;
-import com.litongjava.tio.utils.json.FastJson2Utils;
-
 import lombok.extern.slf4j.Slf4j;
+import nexus.io.tio.utils.http.OkHttpClientPool;
+import nexus.io.tio.utils.json.FastJson2Utils;
 import okhttp3.Credentials;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
