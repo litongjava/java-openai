@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import nexus.io.openrouter.OpenrouterClient;
+import nexus.io.openrouter.OpenrouterModelResponse;
+import nexus.io.openrouter.OpenrouterPalmyraX5;
+
 public class OpenrouterClientTest {
 
   @Test

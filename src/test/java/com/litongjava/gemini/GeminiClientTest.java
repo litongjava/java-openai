@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 
+import nexus.io.gemini.GeminiClient;
+import nexus.io.gemini.GoogleModels;
+
 public class GeminiClientTest {
 
   @Test

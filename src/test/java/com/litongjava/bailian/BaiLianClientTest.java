@@ -2,9 +2,11 @@ package com.litongjava.bailian;
 
 import org.junit.Test;
 
-import com.litongjava.bailian.image.MultiModalRequest;
-import com.litongjava.bailian.image.MultiModalResponse;
 import com.litongjava.tio.utils.environment.EnvUtils;
+
+import nexus.io.bailian.BaiLianClient;
+import nexus.io.bailian.image.MultiModalRequest;
+import nexus.io.bailian.image.MultiModalResponse;
 
 public class BaiLianClientTest {
 

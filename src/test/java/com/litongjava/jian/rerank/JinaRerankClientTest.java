@@ -8,6 +8,11 @@ import org.junit.Test;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.jian.rerank.JinaModel;
+import nexus.io.jian.rerank.JinaRerankClient;
+import nexus.io.jian.rerank.RerankReqVo;
+import nexus.io.jian.rerank.RerankRespVo;
+
 public class JinaRerankClientTest {
 
   @Test

@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.searxng.LinkedinSearch;
+import nexus.io.searxng.SearxngResult;
+import nexus.io.searxng.SearxngSearchResponse;
+
 public class LinkedinSearchTest {
 
   @Test

@@ -5,13 +5,15 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.chat.PlatformInput;
-import com.litongjava.chat.UniChatClient;
-import com.litongjava.chat.UniChatMessage;
-import com.litongjava.chat.UniChatRequest;
-import com.litongjava.chat.UniChatResponse;
-import com.litongjava.consts.ModelPlatformName;
 import com.litongjava.tio.utils.environment.EnvUtils;
+
+import nexus.io.chat.PlatformInput;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatMessage;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.ModelPlatformName;
+import nexus.io.exchangetoken.ExchangetokenModels;
 
 public class ExchangetokenClientTest {
 

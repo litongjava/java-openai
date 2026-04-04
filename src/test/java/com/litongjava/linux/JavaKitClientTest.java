@@ -9,6 +9,10 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hutool.FileUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.linux.ExecuteCodeRequest;
+import nexus.io.linux.JavaKitClient;
+import nexus.io.linux.SessionFinishRequest;
+
 public class JavaKitClientTest {
 
   @Test

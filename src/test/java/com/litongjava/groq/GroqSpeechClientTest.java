@@ -6,6 +6,8 @@ import java.nio.file.Files;
 
 import org.junit.Test;
 
+import nexus.io.groq.GroqSpeechClient;
+
 public class GroqSpeechClientTest {
 
   @Test

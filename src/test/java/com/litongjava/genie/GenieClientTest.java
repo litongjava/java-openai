@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 
+import nexus.io.genie.GenieClient;
+import nexus.io.genie.GenieTTSRequest;
 import nexus.io.model.http.response.ResponseVo;
 
 public class GenieClientTest {

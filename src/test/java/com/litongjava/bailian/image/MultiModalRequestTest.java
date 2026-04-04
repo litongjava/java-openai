@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.bailian.image.MultiModalRequest;
+
 public class MultiModalRequestTest {
 
   @Test

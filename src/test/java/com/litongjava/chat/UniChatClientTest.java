@@ -4,13 +4,20 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.claude.AnthropicModels;
-import com.litongjava.consts.ModelPlatformName;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.exchangetoken.ExchangetokenModels;
-import com.litongjava.gemini.GoogleModels;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.monitor.SystemMonitorUtils;
+
+import nexus.io.chat.ChatModelEntity;
+import nexus.io.chat.ChatModelResponse;
+import nexus.io.chat.PlatformInput;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.claude.AnthropicModels;
+import nexus.io.consts.ModelPlatformName;
+import nexus.io.exception.GenerateException;
+import nexus.io.exchangetoken.ExchangetokenModels;
+import nexus.io.gemini.GoogleModels;
 
 public class UniChatClientTest {
 

@@ -2,10 +2,15 @@ package com.litongjava.chat;
 
 import org.junit.Test;
 
-import com.litongjava.consts.ModelPlatformName;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.gemini.GoogleModels;
 import com.litongjava.tio.utils.environment.EnvUtils;
+
+import nexus.io.chat.PlatformInput;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.ModelPlatformName;
+import nexus.io.exception.GenerateException;
+import nexus.io.gemini.GoogleModels;
 
 public class VertexAiTest {
 

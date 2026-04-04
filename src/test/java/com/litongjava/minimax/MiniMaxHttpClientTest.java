@@ -8,6 +8,10 @@ import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.hex.HexUtils;
 import com.litongjava.tio.utils.hutool.FileUtil;
 
+import nexus.io.minimax.MiniMaxHttpClient;
+import nexus.io.minimax.MiniMaxTTSResponse;
+import nexus.io.minimax.MiniMaxVoice;
+
 public class MiniMaxHttpClientTest {
 
   @Test

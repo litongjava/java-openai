@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.cloudflare.CloudflareModelEntity;
-import com.litongjava.cloudflare.CloudflareModelInfo;
 import com.litongjava.tio.utils.environment.EnvUtils;
+
+import nexus.io.cloudflare.CloudflareModelEntity;
+import nexus.io.cloudflare.CloudflareModelInfo;
+import nexus.io.openai.client.OpenAiClient;
 
 public class OpenAiClientTest {
 

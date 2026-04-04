@@ -2,8 +2,9 @@ package com.litongjava.open.chat;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.OpenAiChatResponse;
 import com.litongjava.tio.utils.json.JsonUtils;
+
+import nexus.io.openai.chat.OpenAiChatResponse;
 
 public class ChatResponseVoTest {
 

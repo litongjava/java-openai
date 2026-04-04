@@ -5,6 +5,9 @@ import org.junit.Test;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.langfuse.LangfuseClient;
+import nexus.io.langfuse.PromptPayload;
+
 public class LangfuseClientTest {
 
   @Test

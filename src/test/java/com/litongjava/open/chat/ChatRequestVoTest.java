@@ -7,13 +7,14 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.ChatRequestFunctionParameter;
-import com.litongjava.openai.chat.ChatRequestFunctionProperty;
-import com.litongjava.openai.chat.ChatRequestTool;
-import com.litongjava.openai.chat.ChatRequestToolCallFunction;
-import com.litongjava.openai.chat.OpenAiChatRequest;
 import com.litongjava.tio.utils.json.JsonUtils;
+
+import nexus.io.openai.chat.ChatRequestFunctionParameter;
+import nexus.io.openai.chat.ChatRequestFunctionProperty;
+import nexus.io.openai.chat.ChatRequestTool;
+import nexus.io.openai.chat.ChatRequestToolCallFunction;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequest;
 
 public class ChatRequestVoTest {
 

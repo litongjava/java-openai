@@ -4,6 +4,11 @@ import org.junit.Test;
 
 import com.litongjava.tio.utils.environment.EnvUtils;
 
+import nexus.io.gitee.GiteeClient;
+import nexus.io.gitee.GiteeDocumentOutput;
+import nexus.io.gitee.GiteeSimpleMarkdownUtils;
+import nexus.io.gitee.GiteeTaskResponse;
+
 public class GiteeClientTest {
 
   @Test
