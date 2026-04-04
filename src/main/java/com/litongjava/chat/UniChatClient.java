@@ -366,7 +366,8 @@ public class UniChatClient {
       openAiChatRequestVo.setResponse_format(responseFormat);
     }
 
-    openAiChatRequestVo.setModalities(uniChatRequest.getResponseModalities());
+    List<String> responseModalities = uniChatRequest.getResponseModalities();
+    openAiChatRequestVo.setModalities(responseModalities);
 
     ChatProvider provider = uniChatRequest.getProvider();
     openAiChatRequestVo.setProvider(provider);

@@ -3,10 +3,10 @@ package com.litongjava.sd;
 import java.io.IOException;
 import java.util.Map;
 
-import com.litongjava.model.upload.UploadFile;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 
+import nexus.io.model.upload.UploadFile;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;

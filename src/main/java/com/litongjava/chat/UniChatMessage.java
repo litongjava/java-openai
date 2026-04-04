@@ -37,6 +37,11 @@ public class UniChatMessage {
     this.content = content;
   }
 
+  public UniChatMessage(String content) {
+    this.role = "user";
+    this.content = content;
+  }
+
   public static UniChatMessage buildSystem(String content) {
     return new UniChatMessage(MessageRole.system, content);
   }
@@ -138,6 +143,16 @@ public class UniChatMessage {
 
   public UniChatMessage setName(String name) {
     this.name = name;
+    return this;
+  }
+
+  public UniChatMessage role(String role) {
+    this.role=role;
+    return this;
+  }
+
+  public UniChatMessage content(String content) {
+    this.content=content;
     return this;
   }
 }

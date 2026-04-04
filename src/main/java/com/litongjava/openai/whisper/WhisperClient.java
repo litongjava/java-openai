@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.litongjava.aiapi.AiApiConst;
 import com.litongjava.consts.ModelPlatformName;
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.openai.consts.OpenAiConst;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.ContentTypeUtils;
@@ -16,6 +15,7 @@ import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.hutool.FilenameUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.model.http.response.ResponseVo;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;

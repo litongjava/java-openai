@@ -2,10 +2,10 @@ package com.litongjava.libreoffice;
 
 import java.io.IOException;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 
+import nexus.io.model.http.response.ResponseVo;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.MultipartBody;

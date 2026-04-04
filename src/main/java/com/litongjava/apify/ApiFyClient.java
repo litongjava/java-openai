@@ -1,10 +1,11 @@
 package com.litongjava.apify;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
+
+import nexus.io.model.http.response.ResponseVo;
 
 public class ApiFyClient {
   public static String LINKEDIN_PROFILE_SCRAPER_URL = "https://api.apify.com/v2/acts/dev_fusion~linkedin-profile-scraper/run-sync-get-dataset-items";

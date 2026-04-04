@@ -2,11 +2,11 @@ package com.litongjava.genie;
 
 import java.io.IOException;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.OkHttpClientPool;
 import com.litongjava.tio.utils.json.JsonUtils;
 
+import nexus.io.model.http.response.ResponseVo;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

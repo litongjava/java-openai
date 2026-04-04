@@ -1,9 +1,10 @@
 package com.litongjava.searchapi;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.url.UrlUtils;
+
+import nexus.io.model.http.response.ResponseVo;
 
 public class SearchapiClient {
 

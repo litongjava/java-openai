@@ -1,10 +1,11 @@
 package com.litongjava.google.search;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.Http;
 import com.litongjava.tio.utils.json.JsonUtils;
 import com.litongjava.tio.utils.url.UrlUtils;
+
+import nexus.io.model.http.response.ResponseVo;
 
 public class GoogleCustomSearchClient {
 

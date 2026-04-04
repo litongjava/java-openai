@@ -1,10 +1,11 @@
 package com.litongjava.tavily;
 
-import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.json.JsonUtils;
+
+import nexus.io.model.http.response.ResponseVo;
 
 public class TavilyClient {
 

@@ -255,7 +255,7 @@ public class OpenAiClient {
    */
   public static OpenAiChatResponse chatCompletions(String apiPerfixUrl, String apiKey,
       OpenAiChatRequest chatRequestVo) {
-    String json = JsonUtils.toJson(chatRequestVo);
+    String json = JsonUtils.toSkipNullJson(chatRequestVo);
     if (debug) {
       log.info("request json:{}", json);
     }

@@ -2,12 +2,12 @@ package com.litongjava.search;
 
 import java.util.List;
 
-import com.litongjava.model.web.WebPageContent;
 import com.litongjava.openai.chat.SearchReturnImage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nexus.io.model.web.WebPageContent;
 
 @Data
 @NoArgsConstructor

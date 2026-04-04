@@ -6,7 +6,8 @@ import java.util.List;
 import com.litongjava.gemini.GroundingChunk;
 import com.litongjava.gemini.GroundingChunkWeb;
 import com.litongjava.gemini.GroundingMetadata;
-import com.litongjava.model.web.WebPageContent;
+
+import nexus.io.model.web.WebPageContent;
 
 public class UniSources {
 
