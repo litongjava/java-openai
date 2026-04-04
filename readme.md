@@ -77,7 +77,7 @@ Add the following dependencies to your `pom.xml`:
 ```xml
 <dependencies>
   <dependency>
-    <groupId>com.litongjava</groupId>
+    <groupId>nexus.io</groupId>
     <artifactId>java-openai</artifactId>
     <version>1.1.4</version>
   </dependency>
@@ -102,20 +102,20 @@ Other service keys (if applicable) should be added similarly (e.g., `GEMINI_API_
 ### 3. Run With PromptEngine
 
 ```java
-package com.litongjava.prompt;
+package nexus.io.prompt;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.ChatResponseFormatType;
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.OpenAiModels;
-import com.litongjava.template.PromptEngine;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatResponseFormatType;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.OpenAiModels;
+import nexus.io.template.PromptEngine;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class ProfessorEmojisTest {
   public static void main(String[] args) {
@@ -266,13 +266,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.OpenAiModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.OpenAiModels;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 import okhttp3.Response;
 
@@ -313,12 +313,12 @@ public class SimpleAskExample {
 ### 5. Another Simplified Example Using Roles
 
 ```java
-package com.litongjava.openai.example;
+package nexus.io.openai.example;
 
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class ChatCompletionsWithRoleExample {
   public static void main(String[] args) {
@@ -341,19 +341,19 @@ public class ChatCompletionsWithRoleExample {
 #### Chat Example
 
 ```java
-package com.litongjava.openai.example;
+package nexus.io.openai.example;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.OpenAiModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatMessage;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.OpenAiModels;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 import okhttp3.Response;
 
@@ -395,7 +395,7 @@ public class SimpleAskExample {
 #### Ask with Image
 
 ```java
-package com.litongjava.perplexica.services;
+package nexus.io.perplexica.services;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -403,21 +403,21 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMesageContent;
-import com.litongjava.openai.chat.ChatRequestImage;
-import com.litongjava.openai.chat.ChatResponseMessage;
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.OpenAiModels;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
-import com.litongjava.tio.utils.hutool.ResourceUtil;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatMesageContent;
+import nexus.io.openai.chat.ChatRequestImage;
+import nexus.io.openai.chat.ChatResponseMessage;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.OpenAiModels;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
+import nexus.io.tio.utils.hutool.FilenameUtils;
+import nexus.io.tio.utils.hutool.ResourceUtil;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class AskWithImageOpenai {
 
@@ -467,17 +467,17 @@ public class AskWithImageOpenai {
 #### Chat with Image
 
 ```java
-package com.litongjava.maxkb.service;
+package nexus.io.maxkb.service;
 
 import java.net.URL;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.hutool.FileUtil;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
-import com.litongjava.tio.utils.hutool.ResourceUtil;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.hutool.FileUtil;
+import nexus.io.tio.utils.hutool.FilenameUtils;
+import nexus.io.tio.utils.hutool.ResourceUtil;
 
 public class DatasetDocumentSplitServiceTest {
 
@@ -507,16 +507,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatRequestFunctionParameter;
-import com.litongjava.openai.chat.ChatRequestFunctionProperty;
-import com.litongjava.openai.chat.ChatRequestTool;
-import com.litongjava.openai.chat.ChatRequestToolCallFunction;
-import com.litongjava.openai.chat.ChatRequestVo;
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatMessage;
+import nexus.io.openai.chat.ChatRequestFunctionParameter;
+import nexus.io.openai.chat.ChatRequestFunctionProperty;
+import nexus.io.openai.chat.ChatRequestTool;
+import nexus.io.openai.chat.ChatRequestToolCallFunction;
+import nexus.io.openai.chat.ChatRequestVo;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 import okhttp3.Response;
 
@@ -588,16 +588,16 @@ public class AskWithTools {
 ### Whisper Transcription
 #### srt
 ```java
-package com.litongjava.client;
+package nexus.io.client;
 
 import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.openai.whisper.WhisperClient;
-import com.litongjava.openai.whisper.WhisperResponseFormat;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.model.http.response.ResponseVo;
+import nexus.io.openai.whisper.WhisperClient;
+import nexus.io.openai.whisper.WhisperResponseFormat;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class WhisperClientTest {
   @Test
@@ -616,15 +616,15 @@ public class WhisperClientTest {
 #### Example 1: Generate Embedding
 
 ```java
-package com.litongjava.openai.example;
+package nexus.io.openai.example;
 
 import java.io.IOException;
 
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.embedding.EmbeddingRequestVo;
-import com.litongjava.openai.embedding.EmbeddingResponseVo;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.embedding.EmbeddingRequestVo;
+import nexus.io.openai.embedding.EmbeddingResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 import okhttp3.Response;
 
@@ -664,13 +664,13 @@ public class EmbeddingExample {
 #### Example 2: Simple Embedding
 
 ```java
-package com.litongjava.example;
+package nexus.io.example;
 
 import org.junit.Test;
 
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.OpenAiModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.OpenAiModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class SimpleEmbeddingExample {
 
@@ -696,13 +696,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.LlamaConstants;
-import com.litongjava.openai.constants.LlamaModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.openai.chat.ChatMessage;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.LlamaConstants;
+import nexus.io.openai.constants.LlamaModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class Llama3_1_Test {
 
@@ -739,13 +739,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.openai.chat.ChatResponseVo;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.openai.constants.PerplexityConstants;
-import com.litongjava.openai.constants.PerplexityModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.openai.chat.ChatMessage;
+import nexus.io.openai.chat.ChatResponseVo;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.openai.constants.PerplexityConstants;
+import nexus.io.openai.constants.PerplexityModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class PerplexityTest {
 
@@ -777,19 +777,19 @@ public class PerplexityTest {
 ### Jina Rerank
 
 ```java
-package com.litongjava.open.chat.client;
+package nexus.io.open.chat.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.jian.rerank.JinaModel;
-import com.litongjava.jian.rerank.JinaRerankClient;
-import com.litongjava.jian.rerank.RerankReqVo;
-import com.litongjava.jian.rerank.RerankRespVo;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.jian.rerank.JinaModel;
+import nexus.io.jian.rerank.JinaRerankClient;
+import nexus.io.jian.rerank.RerankReqVo;
+import nexus.io.jian.rerank.RerankRespVo;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class JinaRerankClientTest {
 
@@ -828,8 +828,8 @@ public class JinaRerankClientTest {
 ```java
 import org.junit.Test;
 
-import com.litongjava.jian.search.JinaSearchClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.jian.search.JinaSearchClient;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class JinaSearchServiceTest {
 
@@ -847,7 +847,7 @@ public class JinaSearchServiceTest {
 A simple data class example:
 
 ```java
-package com.litongjava.searxng;
+package nexus.io.searxng;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -881,12 +881,12 @@ public static List<WebPageContent> parse(String markdown) {
 ### GOOGLE GEMINI Text
 
 ```java
-package com.litongjava.gemini;
+package nexus.io.gemini;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 /**
  * Demo for Gemini
@@ -921,24 +921,24 @@ public class GeminiDemo {
 ### Google GEMINI Images
 
 ```java
-package com.litongjava.llm.service;
+package nexus.io.llm.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.gemini.GeminiCandidateVo;
-import com.litongjava.gemini.GeminiChatRequestVo;
-import com.litongjava.gemini.GeminiChatResponseVo;
-import com.litongjava.gemini.GeminiClient;
-import com.litongjava.gemini.GeminiContentVo;
-import com.litongjava.gemini.GeminiInlineDataVo;
-import com.litongjava.gemini.GeminiPartVo;
-import com.litongjava.gemini.GoogleGeminiModels;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
+import nexus.io.gemini.GeminiCandidateVo;
+import nexus.io.gemini.GeminiChatRequestVo;
+import nexus.io.gemini.GeminiChatResponseVo;
+import nexus.io.gemini.GeminiClient;
+import nexus.io.gemini.GeminiContentVo;
+import nexus.io.gemini.GeminiInlineDataVo;
+import nexus.io.gemini.GeminiPartVo;
+import nexus.io.gemini.GoogleGeminiModels;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.hutool.FilenameUtils;
 
 public class LlmOcrService {
 
@@ -973,15 +973,15 @@ public class LlmOcrService {
 ```
 
 ```java
-package com.litongjava.llm.service;
+package nexus.io.llm.service;
 
 import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
 
 public class LlmOcrServiceTest {
 
@@ -1118,14 +1118,14 @@ public class LlmOcrServiceTest {
 **Java Code:**
 
 ```java
-package com.litongjava.gemini;
+package nexus.io.gemini;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class GeminiFunctionCallExample {
 
@@ -1234,15 +1234,15 @@ public class GeminiFunctionCallExample {
 ### Gemini Upload File
 
 ```java
-package com.litongjava.gemini;
+package nexus.io.gemini;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class GeminiClientUploadFileTest {
   public static void main(String[] args) throws IOException {
@@ -1277,13 +1277,13 @@ public class GeminiClientUploadFileTest {
 ### Gemini Ask with PDF
 
 ```java
-package com.litongjava.gemini;
+package nexus.io.gemini;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class GeminiClientAskWithPdfTest {
 
@@ -1320,27 +1320,27 @@ public class GeminiClientAskWithPdfTest {
 ```
 ### Generate Image
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.jfinal.kit.Kv;
-import com.litongjava.gemini.GeminiChatRequestVo;
-import com.litongjava.gemini.GeminiChatResponseVo;
-import com.litongjava.gemini.GeminiClient;
-import com.litongjava.gemini.GeminiGenerationConfigVo;
-import com.litongjava.gemini.GeminiPartVo;
-import com.litongjava.gemini.GoogleGeminiModels;
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.openai.chat.ChatMessage;
-import com.litongjava.template.PromptEngine;
-import com.litongjava.tio.boot.admin.services.AwsS3StorageService;
-import com.litongjava.tio.boot.admin.utils.AwsS3Utils;
-import com.litongjava.tio.boot.admin.vo.UploadResultVo;
-import com.litongjava.tio.http.common.UploadFile;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.snowflake.SnowflakeIdUtils;
+import nexus.io.gemini.GeminiChatRequestVo;
+import nexus.io.gemini.GeminiChatResponseVo;
+import nexus.io.gemini.GeminiClient;
+import nexus.io.gemini.GeminiGenerationConfigVo;
+import nexus.io.gemini.GeminiPartVo;
+import nexus.io.gemini.GoogleGeminiModels;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.openai.chat.ChatMessage;
+import nexus.io.template.PromptEngine;
+import nexus.io.tio.boot.admin.services.AwsS3StorageService;
+import nexus.io.tio.boot.admin.utils.AwsS3Utils;
+import nexus.io.tio.boot.admin.vo.UploadResultVo;
+import nexus.io.tio.http.common.UploadFile;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.snowflake.SnowflakeIdUtils;
 
 public class ImageGenerateService {
 
@@ -1376,14 +1376,14 @@ public class ImageGenerateService {
 
 ```
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import org.junit.Test;
 
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.manim.config.AdminAppConfig;
-import com.litongjava.tio.boot.testing.TioBootTest;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.manim.config.AdminAppConfig;
+import nexus.io.tio.boot.testing.TioBootTest;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class ImageGenerateServiceTest {
 
@@ -1409,13 +1409,13 @@ OPENAI_API_URL=https://generativelanguage.googleapis.com/v1beta/openai
 Then in code:
 
 ```java
-package com.litongjava.perplexica.services;
+package nexus.io.perplexica.services;
 
-import com.litongjava.gemini.GoogleGeminiModels;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.gemini.GoogleGeminiModels;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class GeminiClientTest {
   public static void main(String[] args) {
@@ -1432,7 +1432,7 @@ public class GeminiClientTest {
 ## Claude
 ### Image
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -1440,20 +1440,20 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.chat.ChatFile;
-import com.litongjava.chat.ChatMessage;
-import com.litongjava.claude.ClaudeClient;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.gemini.GeminiClient;
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.manim.config.AdminAppConfig;
-import com.litongjava.tio.boot.admin.services.AwsS3StorageService;
-import com.litongjava.tio.boot.admin.vo.UploadResultVo;
-import com.litongjava.tio.boot.testing.TioBootTest;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.http.HttpDownloadUtils;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
+import nexus.io.chat.ChatFile;
+import nexus.io.chat.ChatMessage;
+import nexus.io.claude.ClaudeClient;
+import nexus.io.exception.GenerateException;
+import nexus.io.gemini.GeminiClient;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.manim.config.AdminAppConfig;
+import nexus.io.tio.boot.admin.services.AwsS3StorageService;
+import nexus.io.tio.boot.admin.vo.UploadResultVo;
+import nexus.io.tio.boot.testing.TioBootTest;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.http.HttpDownloadUtils;
+import nexus.io.tio.utils.hutool.FilenameUtils;
 
 public class AnswerServiceTest {
 
@@ -1496,20 +1496,20 @@ public class AnswerServiceTest {
 }
 ```
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.jfinal.kit.Kv;
-import com.litongjava.chat.ChatMessage;
-import com.litongjava.chat.UniChatClient;
-import com.litongjava.chat.UniChatRequest;
-import com.litongjava.chat.UniChatResponse;
-import com.litongjava.claude.ClaudeModels;
-import com.litongjava.consts.AiProviderName;
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.template.PromptEngine;
+import nexus.io.chat.ChatMessage;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.claude.ClaudeModels;
+import nexus.io.consts.AiProviderName;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.template.PromptEngine;
 
 public class AnswerService {
 
@@ -1588,14 +1588,14 @@ chatFile.setCached(true);
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.deepseek.DeepSeekConst;
-import com.litongjava.deepseek.DeepSeekModels;
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.deepseek.DeepSeekConst;
+import nexus.io.deepseek.DeepSeekModels;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class DeepSeekClientTest {
 
@@ -1620,20 +1620,20 @@ public class DeepSeekClientTest {
 ### SiliconFlow DeepSeek
 
 ```java
-package com.litongjava.perplexica.services;
+package nexus.io.perplexica.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.siliconflow.SiliconFlowConsts;
-import com.litongjava.siliconflow.SiliconFlowModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.siliconflow.SiliconFlowConsts;
+import nexus.io.siliconflow.SiliconFlowModels;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 import okhttp3.Response;
 
@@ -1675,7 +1675,7 @@ public class SiliconFlowDeepSeekTest {
 ### SiliconFlow DeepSeek Image
 
 ```java
-package com.litongjava.perplexica.services;
+package nexus.io.perplexica.services;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -1683,22 +1683,22 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.openai.chat.ChatMesageContent;
-import com.litongjava.openai.chat.ChatRequestImage;
-import com.litongjava.openai.chat.ChatResponseMessage;
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.siliconflow.SiliconFlowConsts;
-import com.litongjava.siliconflow.SiliconFlowModels;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
-import com.litongjava.tio.utils.hutool.ResourceUtil;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.openai.chat.ChatMesageContent;
+import nexus.io.openai.chat.ChatRequestImage;
+import nexus.io.openai.chat.ChatResponseMessage;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.siliconflow.SiliconFlowConsts;
+import nexus.io.siliconflow.SiliconFlowModels;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
+import nexus.io.tio.utils.hutool.FilenameUtils;
+import nexus.io.tio.utils.hutool.ResourceUtil;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class AskWithImageDeepSeek {
 
@@ -1756,14 +1756,14 @@ package llm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.openai.chat.OpenAiChatMessage;
-import com.litongjava.openai.chat.OpenAiChatRequestVo;
-import com.litongjava.openai.chat.OpenAiChatResponseVo;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
-import com.litongjava.volcengine.VolcEngineConst;
-import com.litongjava.volcengine.VolcEngineModels;
+import nexus.io.openai.chat.OpenAiChatMessage;
+import nexus.io.openai.chat.OpenAiChatRequestVo;
+import nexus.io.openai.chat.OpenAiChatResponseVo;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
+import nexus.io.volcengine.VolcEngineConst;
+import nexus.io.volcengine.VolcEngineModels;
 
 public class VolcEngineDeepSeekClient {
   public static void main(String[] args) {
@@ -1785,21 +1785,21 @@ public class VolcEngineDeepSeekClient {
 ```
 ## OpenRouter
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.chat.ChatMessage;
-import com.litongjava.chat.UniChatClient;
-import com.litongjava.chat.UniChatRequest;
-import com.litongjava.chat.UniChatResponse;
-import com.litongjava.consts.AiProviderName;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.openrouter.OpenRouterModels;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.chat.ChatMessage;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.AiProviderName;
+import nexus.io.exception.GenerateException;
+import nexus.io.openrouter.OpenRouterModels;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class OpenRouterTest {
 
@@ -1834,21 +1834,21 @@ public class OpenRouterTest {
 
 ### Text
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.bailian.BaiLianAiModels;
-import com.litongjava.chat.ChatMessage;
-import com.litongjava.chat.UniChatClient;
-import com.litongjava.chat.UniChatRequest;
-import com.litongjava.chat.UniChatResponse;
-import com.litongjava.consts.AiProviderName;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.bailian.BaiLianAiModels;
+import nexus.io.chat.ChatMessage;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.AiProviderName;
+import nexus.io.exception.GenerateException;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class AliyunBailianTest {
 
@@ -1881,16 +1881,16 @@ public class AliyunBailianTest {
 ```
 ### Image
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.io.File;
 
 import org.junit.Test;
 
-import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.openai.client.OpenAiClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
+import nexus.io.jfinal.aop.Aop;
+import nexus.io.openai.client.OpenAiClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
 
 public class LlmQwenOcrServiceTest {
 
@@ -1907,25 +1907,25 @@ public class LlmQwenOcrServiceTest {
 ```
 
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litongjava.bailian.BaiLianAiModels;
-import com.litongjava.chat.ChatFile;
-import com.litongjava.chat.ChatMessage;
-import com.litongjava.chat.UniChatClient;
-import com.litongjava.chat.UniChatRequest;
-import com.litongjava.chat.UniChatResponse;
-import com.litongjava.consts.AiProviderName;
-import com.litongjava.exception.GenerateException;
-import com.litongjava.manim.utils.AlarmUtils;
-import com.litongjava.template.PromptEngine;
-import com.litongjava.tio.utils.encoder.Base64Utils;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.http.ContentTypeUtils;
-import com.litongjava.tio.utils.hutool.FilenameUtils;
+import nexus.io.bailian.BaiLianAiModels;
+import nexus.io.chat.ChatFile;
+import nexus.io.chat.ChatMessage;
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatRequest;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.AiProviderName;
+import nexus.io.exception.GenerateException;
+import nexus.io.manim.utils.AlarmUtils;
+import nexus.io.template.PromptEngine;
+import nexus.io.tio.utils.encoder.Base64Utils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.ContentTypeUtils;
+import nexus.io.tio.utils.hutool.FilenameUtils;
 
 public class LlmQwenOcrService {
 
@@ -1975,9 +1975,9 @@ public class LlmQwenOcrService {
 ```java
 import org.junit.Test;
 
-import com.litongjava.bailian.image.MultiModalRequest;
-import com.litongjava.bailian.image.MultiModalResponse;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.bailian.image.MultiModalRequest;
+import nexus.io.bailian.image.MultiModalResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class BaiLianClientTest {
 
@@ -2002,7 +2002,7 @@ https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/7d/31
 #### GroqSpeechClientTest
 
 ```java
-package com.litongjava.groq;
+package nexus.io.groq;
 
 import java.io.File;
 import java.io.IOException;
@@ -2010,8 +2010,8 @@ import java.nio.file.Files;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class GroqSpeechClientTest {
 
@@ -2041,14 +2041,14 @@ public class GroqSpeechClientTest {
 ### LinkedIn Profile Scraper
 
 ```java
-package com.litongjava.client;
+package nexus.io.client;
 
 import org.junit.Test;
 
-import com.litongjava.apify.ApiFyClient;
-import com.litongjava.apify.ApiFyLinkedProfileReqVo;
-import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.apify.ApiFyClient;
+import nexus.io.apify.ApiFyLinkedProfileReqVo;
+import nexus.io.model.http.response.ResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class ApiFyClientTest {
 
@@ -2072,11 +2072,11 @@ Below is the translated version of the provided content:
 ### Example Code
 
 ```java
-package com.litongjava.perplexica.services;
+package nexus.io.perplexica.services;
 
-import com.litongjava.google.search.GoogleCustomSearchClient;
-import com.litongjava.google.search.GoogleCustomSearchResponse;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.google.search.GoogleCustomSearchClient;
+import nexus.io.google.search.GoogleCustomSearchResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class GoogleCustomSearchService {
 
@@ -2112,15 +2112,15 @@ Inside the method, it first retrieves the API Key stored in the environment vari
 ### Google Search
 
 ```java
-package com.litongjava.client;
+package nexus.io.client;
 
 import org.junit.Test;
 
-import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.searchapi.SearchapiClient;
-import com.litongjava.searchapi.SearchapiResult;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.FastJson2Utils;
+import nexus.io.model.http.response.ResponseVo;
+import nexus.io.searchapi.SearchapiClient;
+import nexus.io.searchapi.SearchapiResult;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.FastJson2Utils;
 
 public class SearchapiClientTest {
   @Test
@@ -2144,17 +2144,17 @@ public class SearchapiClientTest {
 ### YouTube Subtitle
 
 ```java
-package com.litongjava.client;
+package nexus.io.client;
 
 import java.util.List;
 
 import org.junit.Test;
 
-import com.litongjava.supadata.SubTitleContent;
-import com.litongjava.supadata.SubTitleResponse;
-import com.litongjava.supadata.SupadataClient;
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.video.VideoTimeUtils;
+import nexus.io.supadata.SubTitleContent;
+import nexus.io.supadata.SubTitleResponse;
+import nexus.io.supadata.SupadataClient;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.video.VideoTimeUtils;
 
 public class SupadataClientTest {
 
@@ -2193,17 +2193,17 @@ FISHAUDIO_API_KEY
 ```
 
 ```java
-package com.litongjava.manim.services;
+package nexus.io.manim.services;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import com.litongjava.fishaudio.tts.FishAudioClient;
-import com.litongjava.fishaudio.tts.FishAudioTTSRequestVo;
-import com.litongjava.model.http.response.ResponseVo;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.fishaudio.tts.FishAudioClient;
+import nexus.io.fishaudio.tts.FishAudioTTSRequestVo;
+import nexus.io.model.http.response.ResponseVo;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class FishAudioClientTest {
 
@@ -2259,7 +2259,7 @@ public class FishAudioClientTest {
 ## MiniMax
 ### TTS 
 ```java
-package com.litongjava.minimax;
+package nexus.io.minimax;
 
 import java.io.File;
 
@@ -2267,8 +2267,8 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.hutool.FileUtil;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.hutool.FileUtil;
 
 public class MiniMaxHttpClientTest {
 
@@ -2304,12 +2304,12 @@ LANGFUSE_SECRET_KEY = sk-lf-c
 示例代码
 
 ```
-package com.litongjava.langfuse;
+package nexus.io.langfuse;
 
 import org.junit.Test;
 
-import com.litongjava.tio.utils.environment.EnvUtils;
-import com.litongjava.tio.utils.json.JsonUtils;
+import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.json.JsonUtils;
 
 public class LangfuseClientTest {
 
@@ -2332,11 +2332,11 @@ BYTE_PLUS_ACCESS_KEY=
 ```
 
 ```java
-package com.litongjava.kit.service;
+package nexus.io.kit.service;
 
-import com.litongjava.byteplus.BytePlusTTSHttpStreamClient;
-import com.litongjava.byteplus.BytePlusVoice;
-import com.litongjava.tio.utils.environment.EnvUtils;
+import nexus.io.byteplus.BytePlusTTSHttpStreamClient;
+import nexus.io.byteplus.BytePlusVoice;
+import nexus.io.tio.utils.environment.EnvUtils;
 
 public class BytePlusTTSHttpStreamClientTest {
   public static void main(String[] args) {
