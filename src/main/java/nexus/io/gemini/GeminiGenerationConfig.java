@@ -19,6 +19,7 @@ public class GeminiGenerationConfig {
   private String responseMimeType;
   private UniResponseSchema responseSchema;
   private UniThinkingConfig thinkingConfig;
+  private GeminiSpeechConfig speechConfig;
 
   public GeminiGenerationConfig buildJsonValue() {
     this.responseMimeType = "application/json";
@@ -114,6 +115,14 @@ public class GeminiGenerationConfig {
 
   public void setThinkingConfig(UniThinkingConfig thinkingConfig) {
     this.thinkingConfig = thinkingConfig;
+  }
+
+  public GeminiSpeechConfig getSpeechConfig() {
+    return speechConfig;
+  }
+
+  public void setSpeechConfig(GeminiSpeechConfig speechConfig) {
+    this.speechConfig = speechConfig;
   }
 
 }
