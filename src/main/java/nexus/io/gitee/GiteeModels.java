@@ -85,6 +85,8 @@ public interface GiteeModels {
   String DEEPSEEK_PROVER_V2_7B = "DeepSeek-Prover-V2-7B";
   String DEEPSEEK_OCR = "DeepSeek-OCR";
   String DEEPSEEK_V3_2 = "DeepSeek-V3.2";
+  String DeepSeek_V4_Pro = "DeepSeek-V4-Pro";
+  String DeepSeek_V4_Flash = "DeepSeek-V4-Flash";
 
   // ===== DianJin =====
   String DIANJIN_R1_32B = "DianJin-R1-32B";
