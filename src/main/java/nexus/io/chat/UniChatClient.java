@@ -40,6 +40,12 @@ import nexus.io.openai.chat.OpenAiChatRequest;
 import nexus.io.openai.chat.OpenAiChatResponse;
 import nexus.io.openai.client.OpenAiClient;
 import nexus.io.openai.consts.OpenAiConst;
+import nexus.io.openai.responses.OpenAiResponsesClient;
+import nexus.io.openai.responses.OpenAiResponsesInput;
+import nexus.io.openai.responses.OpenAiResponsesInputContent;
+import nexus.io.openai.responses.OpenAiResponsesRequest;
+import nexus.io.openai.responses.OpenAiResponsesResponse;
+import nexus.io.openai.responses.OpenAiResponsesUsage;
 import nexus.io.openrouter.OpenRouterConst;
 import nexus.io.tencent.TencentConst;
 import nexus.io.tio.utils.environment.EnvUtils;
@@ -64,6 +70,15 @@ public class UniChatClient {
 
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PREFIX_URL);
   public static final String VOLCENGINE_API_KEY = EnvUtils.get("VOLCENGINE_API_KEY");
+
+  public static final String OPENAI_RESPONSES_API_URL = EnvUtils.get("OPENAI_RESPONSES_API_URL",
+      OpenAiConst.API_PREFIX_URL);
+  public static final String OPENAI_RESPONSES_API_KEY = EnvUtils.get("OPENAI_RESPONSES_API_KEY", OPENAI_API_KEY);
+
+  public static final String VOLCENGINE_RESPONSES_API_URL = EnvUtils.get("VOLCENGINE_RESPONSES_API_URL",
+      VolcEngineConst.API_RESPONSES_PREFIX_URL);
+  public static final String VOLCENGINE_RESPONSES_API_KEY = EnvUtils.get("VOLCENGINE_RESPONSES_API_KEY",
+      VOLCENGINE_API_KEY);
 
   public static final String OPENROUTER_API_URL = EnvUtils.get("OPENROUTER_API_URL", OpenRouterConst.API_PREFIX_URL);
   public static final String OPENROUTER_API_KEY = EnvUtils.get("OPENROUTER_API_KEY");
@@ -175,6 +190,18 @@ public class UniChatClient {
         key = CLAUDE_API_KEY;
       }
       return useClaude(key, uniChatRequest);
+
+    } else if (ModelPlatformName.OPENAI_RESPONSES.equals(platform)) {
+      if (key == null) {
+        key = OPENAI_RESPONSES_API_KEY;
+      }
+      return useOpenAiResponses(key, uniChatRequest);
+
+    } else if (ModelPlatformName.VOLC_ENGINE_RESPONSES.equals(platform)) {
+      if (key == null) {
+        key = VOLCENGINE_RESPONSES_API_KEY;
+      }
+      return useVolcEngineResponses(key, uniChatRequest);
 
     } else if (ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform)) {
       if (key == null) {
@@ -606,6 +633,12 @@ public class UniChatClient {
       }
       return useClaude(key, uniChatRequest, listener);
 
+    } else if (ModelPlatformName.OPENAI_RESPONSES.equals(platform)) {
+      throw new UnsupportedOperationException("OpenAI Responses streaming is not supported by UniChatClient yet");
+
+    } else if (ModelPlatformName.VOLC_ENGINE_RESPONSES.equals(platform)) {
+      throw new UnsupportedOperationException("VolcEngine Responses streaming is not supported by UniChatClient yet");
+
     } else if (ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
@@ -854,6 +887,123 @@ public class UniChatClient {
 
   public static UniChatResponse useOpenAi(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(OPENAI_API_URL, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useOpenAiResponses(String key, UniChatRequest uniChatRequest) {
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    if (apiPrefixUrl == null) {
+      apiPrefixUrl = OPENAI_RESPONSES_API_URL;
+    }
+    return useOpenAiResponses(apiPrefixUrl, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useVolcEngineResponses(String key, UniChatRequest uniChatRequest) {
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    if (apiPrefixUrl == null) {
+      apiPrefixUrl = VOLCENGINE_RESPONSES_API_URL;
+    }
+    return useOpenAiResponses(apiPrefixUrl, key, uniChatRequest);
+  }
+
+  public static UniChatResponse useOpenAiResponses(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
+    OpenAiResponsesRequest request = toOpenAiResponsesRequest(uniChatRequest);
+    OpenAiResponsesResponse response = OpenAiResponsesClient.responses(apiPrefixUrl, key, request);
+    if (response == null) {
+      return null;
+    }
+
+    String content = response.getOutputText();
+    ChatResponseMessage message = new ChatResponseMessage("assistant", content);
+    ChatResponseUsage usage = toChatResponseUsage(response.getUsage());
+    return new UniChatResponse(response.getModel(), message, usage, response.getRawResponse());
+  }
+
+  public static OpenAiResponsesRequest toOpenAiResponsesRequest(UniChatRequest uniChatRequest) {
+    List<OpenAiResponsesInput> inputs = new ArrayList<>();
+    if (uniChatRequest.isUseSystemPrompt() && StrUtil.isNotBlank(uniChatRequest.getSystemPrompt())) {
+      inputs.add(new OpenAiResponsesInput("system",
+          singleResponsesTextContent(uniChatRequest.getSystemPrompt())));
+    }
+
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
+    if (messages != null && messages.size() > 0) {
+      for (UniChatMessage message : messages) {
+        if (message == null) {
+          continue;
+        }
+        String role = message.getRole();
+        if ("model".equals(role)) {
+          role = "assistant";
+        }
+        if (StrUtil.isBlank(role)) {
+          role = "user";
+        }
+
+        List<OpenAiResponsesInputContent> contents = new ArrayList<>();
+        if (StrUtil.isNotBlank(message.getContent())) {
+          contents.add(OpenAiResponsesInputContent.text(message.getContent()));
+        }
+
+        List<ChatImageFile> files = message.getFiles();
+        if (files != null && files.size() > 0) {
+          for (ChatImageFile file : files) {
+            String imageUrl = toResponsesImageUrl(file);
+            if (StrUtil.isNotBlank(imageUrl)) {
+              contents.add(OpenAiResponsesInputContent.imageUrl(imageUrl));
+            }
+          }
+        }
+
+        if (!contents.isEmpty()) {
+          inputs.add(new OpenAiResponsesInput(role, contents));
+        }
+      }
+    }
+
+    OpenAiResponsesRequest request = new OpenAiResponsesRequest();
+    request.setModel(uniChatRequest.getModel());
+    request.setInput(inputs);
+    request.setTemperature(uniChatRequest.getTemperature());
+    request.setMax_output_tokens(uniChatRequest.getMax_tokens());
+    return request;
+  }
+
+  private static List<OpenAiResponsesInputContent> singleResponsesTextContent(String text) {
+    List<OpenAiResponsesInputContent> contents = new ArrayList<>(1);
+    contents.add(OpenAiResponsesInputContent.text(text));
+    return contents;
+  }
+
+  private static String toResponsesImageUrl(ChatImageFile file) {
+    if (file == null) {
+      return null;
+    }
+    if (StrUtil.isNotBlank(file.getUrl())) {
+      return file.getUrl();
+    }
+    String data = file.getData();
+    if (StrUtil.isBlank(data)) {
+      return null;
+    }
+    if (data.startsWith("data:")) {
+      return data;
+    }
+    String mimeType = file.getMimeType();
+    if (StrUtil.isBlank(mimeType)) {
+      mimeType = "image/png";
+    }
+    return "data:" + mimeType + ";base64," + data;
+  }
+
+  private static ChatResponseUsage toChatResponseUsage(OpenAiResponsesUsage usage) {
+    if (usage == null) {
+      return null;
+    }
+    ChatResponseUsage chatUsage = new ChatResponseUsage();
+    chatUsage.setPrompt_tokens(usage.getInput_tokens());
+    chatUsage.setCompletion_tokens(usage.getOutput_tokens());
+    chatUsage.setTotal_tokens(usage.getTotal_tokens());
+    return chatUsage;
   }
 
   public static UniChatResponse useVolcEngine(String key, UniChatRequest uniChatRequest) {

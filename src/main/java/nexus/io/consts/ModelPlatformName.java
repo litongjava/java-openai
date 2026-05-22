@@ -2,6 +2,7 @@ package nexus.io.consts;
 
 public interface ModelPlatformName {
   String OPENAI = "openai";
+  String OPENAI_RESPONSES = "openai_responses";
   String VERTEX_AI = "vertex_ai";
   String ANTHROPIC = "anthropic";
   String GOOGLE = "google";
@@ -9,6 +10,7 @@ public interface ModelPlatformName {
   String OPENROUTER = "openrouter";
 
   String VOLC_ENGINE = "volcengine";
+  String VOLC_ENGINE_RESPONSES = "volcengine_responses";
   String BAILIAN = "bailian";
   String CHAT_GLM = "chat_glm";
 

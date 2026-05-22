@@ -8,7 +8,11 @@ import lombok.Data;
 public class VolcRequest {
   private String reqid;
   private String text;
+  private String model;
   private String text_type;
   private String operation;
-  private Integer silence_duration;
+  private Number silence_duration;
+  private Boolean enable_trailing_silence_audio;
+  private Integer with_timestamp;
+  private String extra_param;
 }
