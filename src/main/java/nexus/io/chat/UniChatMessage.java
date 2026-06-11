@@ -16,8 +16,6 @@ public class UniChatMessage {
   private ChatMessageArgs args;
   private List<String> attachments;
 
-  // ====== 新增（关键）======
-
   // assistant -> tool_calls
   private List<ToolCall> toolCalls;
 
@@ -26,8 +24,6 @@ public class UniChatMessage {
 
   // tool -> name（可选）
   private String name;
-
-  // =======================
 
   public UniChatMessage() {
   }

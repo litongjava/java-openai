@@ -334,8 +334,12 @@ public class UniChatClient {
       while (iterator.hasNext()) {
         UniChatMessage next = iterator.next();
         String role = next.getRole();
-        if (next.getRole().equals("model")) {
-          role = "assistant";
+        if (role != null) {
+          if (role.equals("model")) {
+            role = "assistant";
+          }
+        } else {
+          role = "user";
         }
 
         OpenAiChatMessage openAiMsg = new OpenAiChatMessage(next);
@@ -921,8 +925,7 @@ public class UniChatClient {
   public static OpenAiResponsesRequest toOpenAiResponsesRequest(UniChatRequest uniChatRequest) {
     List<OpenAiResponsesInput> inputs = new ArrayList<>();
     if (uniChatRequest.isUseSystemPrompt() && StrUtil.isNotBlank(uniChatRequest.getSystemPrompt())) {
-      inputs.add(new OpenAiResponsesInput("system",
-          singleResponsesTextContent(uniChatRequest.getSystemPrompt())));
+      inputs.add(new OpenAiResponsesInput("system", singleResponsesTextContent(uniChatRequest.getSystemPrompt())));
     }
 
     List<UniChatMessage> messages = uniChatRequest.getMessages();
