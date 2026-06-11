@@ -30,8 +30,6 @@ import nexus.io.gitee.GiteeConst;
 import nexus.io.minimax.MiniMaxConst;
 import nexus.io.moonshot.MoonshotConst;
 import nexus.io.openai.ChatProvider;
-import nexus.io.openai.chat.ChatMessageContent;
-import nexus.io.openai.chat.ChatRequestImage;
 import nexus.io.openai.chat.ChatResponseMessage;
 import nexus.io.openai.chat.ChatResponseUsage;
 import nexus.io.openai.chat.Choice;
@@ -329,6 +327,14 @@ public class UniChatClient {
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
+    
+    if (uniChatRequest.isUseSystemPrompt()) {
+      String systemPrompt = uniChatRequest.getSystemPrompt();
+      if (StrUtil.isNotBlank(systemPrompt)) {
+        openAiChatMesages.add(new OpenAiChatMessage("system", systemPrompt));
+      }
+    }
+    
     if (messages != null && messages.size() > 0) {
       Iterator<UniChatMessage> iterator = messages.iterator();
       while (iterator.hasNext()) {
@@ -344,34 +350,10 @@ public class UniChatClient {
 
         OpenAiChatMessage openAiMsg = new OpenAiChatMessage(next);
         openAiChatMesages.add(openAiMsg);
-
-        List<ChatImageFile> files = next.getFiles();
-        // files
-        if (files != null && files.size() > 0) {
-          List<ChatMessageContent> multiContents = new ArrayList<>();
-          for (ChatImageFile file : files) {
-            String data = file.getData();
-            ChatRequestImage chatRequestImage = new ChatRequestImage();
-            chatRequestImage.setDetail("auto");
-            chatRequestImage.setUrl(data);
-            ChatMessageContent image = new ChatMessageContent(chatRequestImage);
-            multiContents.add(image);
-
-          }
-          OpenAiChatMessage openAiFileMesage = new OpenAiChatMessage();
-          openAiFileMesage.role(role);
-          openAiFileMesage.multiContents(multiContents);
-          openAiChatMesages.add(openAiFileMesage);
-        }
       }
     }
 
-    if (uniChatRequest.isUseSystemPrompt()) {
-      String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (StrUtil.isNotBlank(systemPrompt)) {
-        openAiChatMesages.add(0, new OpenAiChatMessage("system", systemPrompt));
-      }
-    }
+
     OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setMessages(openAiChatMesages);
 

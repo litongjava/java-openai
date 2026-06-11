@@ -75,12 +75,15 @@ public class OpenAiChatMessage {
     List<ChatImageFile> files = chatMessage.getFiles();
     if (chatContent != null && files != null) {
       List<ChatMessageContent> contents = new ArrayList<>();
-
       contents.add(new ChatMessageContent(chatContent));
 
       for (ChatImageFile chatImageFile : files) {
-        ChatMessageContent chatMessageContent = new ChatMessageContent(chatImageFile);
-        contents.add(chatMessageContent);
+        String data = chatImageFile.getData();
+        ChatRequestImage chatRequestImage = new ChatRequestImage();
+        chatRequestImage.setDetail("auto");
+        chatRequestImage.setUrl(data);
+        ChatMessageContent image = new ChatMessageContent(chatRequestImage);
+        contents.add(image);
       }
 
       this.content = contents;
@@ -88,12 +91,17 @@ public class OpenAiChatMessage {
     } else if (chatContent != null) {
       this.content = chatContent;
 
-    } else if (files != null) {
-      List<ChatMessageContent> contents = new ArrayList<>();
+    } else if (files != null && files.size() > 0) {
+      List<ChatMessageContent> multiContents = new ArrayList<>();
       for (ChatImageFile chatImageFile : files) {
-        ChatMessageContent chatMessageContent = new ChatMessageContent(chatImageFile);
-        contents.add(chatMessageContent);
+        String data = chatImageFile.getData();
+        ChatRequestImage chatRequestImage = new ChatRequestImage();
+        chatRequestImage.setDetail("auto");
+        chatRequestImage.setUrl(data);
+        ChatMessageContent image = new ChatMessageContent(chatRequestImage);
+        multiContents.add(image);
       }
+      this.content = multiContents;
     }
   }
 
