@@ -1,6 +1,7 @@
 package nexus.io.claude;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -339,7 +340,12 @@ public class ClaudeClient {
     if (debug) {
       log.info(bodyString);
     }
-    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    
+    MediaType jsonMediaType = MediaType.parse("application/json");
+    byte[] bodyBytes = bodyString.getBytes(StandardCharsets.UTF_8);
+    RequestBody body = RequestBody.create(bodyBytes, jsonMediaType);
+    
+    //RequestBody body = RequestBody.create(bodyString, jsonMediaType);
 
     Headers headers = Headers.of(requestHeaders);
 
