@@ -99,8 +99,8 @@ public class UniChatClient {
   public static final String CEREBRAS_API_URL = EnvUtils.get("CEREBRAS_API_URL", CerebrasConst.API_PREFIX_URL);
   public static final String CEREBRAS_API_KEY = EnvUtils.get("CEREBRAS_API_KEY");
 
-  public static final String GITEE_API_URL = EnvUtils.get("GITEE_API_URL", GiteeConst.API_PREFIX_URL);
-  public static final String GITEE_API_KEY = EnvUtils.get("GITEE_API_KEY");
+  public static final String GITEE_API_URL = EnvUtils.get(GiteeConst.GITEE_API_URL_KEY, GiteeConst.API_PREFIX_URL);
+  public static final String GITEE_API_KEY = EnvUtils.get(GiteeConst.GITEE_API_KEY);
 
   public static final String OLLAMA_API_URL = EnvUtils.get("OLLAMA_API_URL");
   public static final String OLLAMA_API_KEY = EnvUtils.get("OLLAMA_API_KEY");

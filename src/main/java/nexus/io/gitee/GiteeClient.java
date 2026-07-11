@@ -3,6 +3,8 @@ package nexus.io.gitee;
 import java.io.File;
 import java.io.IOException;
 
+import nexus.io.chat.ChatModelResponse;
+import nexus.io.openai.client.OpenAiClient;
 import nexus.io.tio.utils.environment.EnvUtils;
 import nexus.io.tio.utils.http.ContentTypeUtils;
 import nexus.io.tio.utils.http.OkHttpClientPool;
@@ -27,8 +29,7 @@ public class GiteeClient {
   private final String baseUrl;
 
   /**
-   * 从环境变量获取配置：
-   * GITEE_AI_API_KEY, GITEE_AI_BASE
+   * 从环境变量获取配置： GITEE_AI_API_KEY, GITEE_AI_BASE
    */
   public GiteeClient() {
     this(EnvUtils.getStr("GITEE_API_KEY"), EnvUtils.getStr("GITEE_BASE_URL", GiteeConst.BASE_URL));
@@ -113,6 +114,17 @@ public class GiteeClient {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static ChatModelResponse getModels() {
+    String url = EnvUtils.get(GiteeConst.GITEE_API_URL_KEY, GiteeConst.API_PREFIX_URL);
+    String key = EnvUtils.get(GiteeConst.GITEE_API_KEY);
+    return OpenAiClient.getModels(url, key);
+
+  }
+
+  public static ChatModelResponse getModels(String apiKey) {
+    return OpenAiClient.getModels(GiteeConst.API_PREFIX_URL, apiKey);
   }
 
 }
