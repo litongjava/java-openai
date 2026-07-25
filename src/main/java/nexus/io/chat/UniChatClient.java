@@ -27,6 +27,7 @@ import nexus.io.gemini.GeminiTool;
 import nexus.io.gemini.GeminiUsageMetadata;
 import nexus.io.gemini.GroundingMetadata;
 import nexus.io.gitee.GiteeConst;
+import nexus.io.llmproxy.LlmProxyConst;
 import nexus.io.minimax.MiniMaxConst;
 import nexus.io.moonshot.MoonshotConst;
 import nexus.io.openai.ChatProvider;
@@ -101,6 +102,9 @@ public class UniChatClient {
 
   public static final String GITEE_API_URL = EnvUtils.get(GiteeConst.GITEE_API_URL_KEY, GiteeConst.API_PREFIX_URL);
   public static final String GITEE_API_KEY = EnvUtils.get(GiteeConst.GITEE_API_KEY);
+  public static final String LLM_PROXY_API_URL = EnvUtils.get(LlmProxyConst.LLM_PROXY_API_URL_KEY,
+      LlmProxyConst.API_PREFIX_URL);
+  public static final String LLM_PROXY_API_KEY = EnvUtils.get(LlmProxyConst.LLM_PROXY_API_KEY);
 
   public static final String OLLAMA_API_URL = EnvUtils.get("OLLAMA_API_URL");
   public static final String OLLAMA_API_KEY = EnvUtils.get("OLLAMA_API_KEY");
@@ -298,6 +302,12 @@ public class UniChatClient {
         key = GITEE_API_KEY;
       }
       return useGitee(key, uniChatRequest);
+
+    } else if (ModelPlatformName.LLM_PROXY.equals(platform)) {
+      if (key == null) {
+        key = LLM_PROXY_API_KEY;
+      }
+      return useLlmProxy(key, uniChatRequest);
 
     } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
       if (key == null) {
@@ -724,6 +734,12 @@ public class UniChatClient {
       }
       return useGitee(key, uniChatRequest, listener);
 
+    } else if (ModelPlatformName.LLM_PROXY.equals(platform)) {
+      if (key == null) {
+        key = LLM_PROXY_API_KEY;
+      }
+      return useLlmProxy(key, uniChatRequest, listener);
+
     } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
       if (key == null) {
         key = EXCHANGE_TOKEN_API_KEY;
@@ -1093,6 +1109,14 @@ public class UniChatClient {
     return useOpenAi(GITEE_API_URL, key, uniChatRequest, listener);
   }
 
+  public static UniChatResponse useLlmProxy(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(LLM_PROXY_API_URL, key, uniChatRequest);
+  }
+
+  public static EventSource useLlmProxy(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(LLM_PROXY_API_URL, key, uniChatRequest, listener);
+  }
+
   public static UniChatResponse useTitanium(String key, UniChatRequest uniChatRequest) {
     return useOpenAi(TITANIUM_API_URL, key, uniChatRequest);
   }
@@ -1217,6 +1241,12 @@ public class UniChatClient {
         key = GITEE_API_KEY;
       }
       return getModels(GITEE_API_URL, key);
+
+    } else if (ModelPlatformName.LLM_PROXY.equals(platform)) {
+      if (key == null) {
+        key = LLM_PROXY_API_KEY;
+      }
+      return getModels(LLM_PROXY_API_URL, key);
 
     } else if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
       if (key == null) {

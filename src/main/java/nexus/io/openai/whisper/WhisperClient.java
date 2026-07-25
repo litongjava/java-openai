@@ -48,13 +48,14 @@ public class WhisperClient {
     }
   }
 
-  private static WhisperTranscriptionResponse transcriptToJson(String apiPrefixUrl, String apiKey, String filename, byte[] audioBytes) {
+  private static WhisperTranscriptionResponse transcriptToJson(String apiPrefixUrl, String apiKey, String filename,
+      byte[] audioBytes) {
     ResponseVo responseVo = transcriptions(apiPrefixUrl, apiKey, filename, audioBytes, WhisperResponseFormat.json);
     String bodyString = responseVo.getBodyString();
-    if(responseVo.isOk()) {
+    if (responseVo.isOk()) {
       return JsonUtils.parse(bodyString, WhisperTranscriptionResponse.class);
     }
-    
+
     WhisperTranscriptionResponse whisperTranscriptionResponse = new WhisperTranscriptionResponse();
     whisperTranscriptionResponse.setRasResponse(bodyString);
     return whisperTranscriptionResponse;
@@ -183,6 +184,15 @@ public class WhisperClient {
     return transcriptions(baseUrl, apiKey, filename, fileBody, new WhisperTranscriptionsRequest(responseFormat));
   }
 
+  public static ResponseVo transcriptions(String baseUrl, String apiKey, File file,
+      WhisperTranscriptionsRequest requestEntity) {
+
+    String filename = file.getName();
+    String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
+    RequestBody fileBody = RequestBody.create(file, MediaType.get(contentType));
+    return transcriptions(baseUrl, apiKey, filename, fileBody, requestEntity);
+  }
+
   public static ResponseVo transcriptions(String baseUrl, String apiKey, String filename, RequestBody fileBody,
       WhisperTranscriptionsRequest requestEntity) {
     Map<String, String> header = new HashMap<>();
@@ -195,6 +205,7 @@ public class WhisperClient {
     String model = requestEntity.getModel();
     String response_format = requestEntity.getResponse_format();
     String prompt = requestEntity.getPrompt();
+    String language = requestEntity.getLanguage();
     Float temperature = requestEntity.getTemperature();
     Boolean stream = requestEntity.getStream();
 
@@ -204,6 +215,9 @@ public class WhisperClient {
     bodyBuilder.addFormDataPart("model", model);
     if (prompt != null) {
       bodyBuilder.addFormDataPart("prompt", prompt);
+    }
+    if (language != null) {
+      bodyBuilder.addFormDataPart("language", language);
     }
 
     if (temperature != null) {
@@ -249,5 +263,4 @@ public class WhisperClient {
       throw new RuntimeException(e.getMessage(), e);
     }
   }
-
 }

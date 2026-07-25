@@ -130,6 +130,7 @@ public interface GiteeModels {
 
   // ===== FunASR =====
   String FunASR = "FunASR";
+  String FUN_ASR_NANO_2512 = "Fun-ASR-Nano-2512";
 
   // ===== GOT / OCR =====
   String GOT_OCR2_0 = "GOT-OCR2_0";

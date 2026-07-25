@@ -219,8 +219,9 @@ public class CodeBlockUtils {
   }
 
   /**
-   * Extracts TypeScript code from the generated text. Supports ```typescript and
-   * ```ts fences. If no fence is found, returns trimmed text when non-empty.
+   * Extracts TypeScript code from the generated text. Supports ```typescript,
+   * ```tsx and ```ts fences. If no fence is found, returns trimmed text when
+   * non-empty.
    *
    * @param generatedText the raw text containing TypeScript code
    * @return the extracted TypeScript code or null if none found
@@ -233,13 +234,17 @@ public class CodeBlockUtils {
 
     String code;
     int idxLong = generatedText.indexOf("```typescript");
+    int idxTsx = generatedText.indexOf("```tsx");
     int idxShort = generatedText.indexOf("```ts");
     int indexOf = -1;
     String fence = null;
 
-    if (idxLong >= 0 && (idxShort == -1 || idxLong <= idxShort)) {
+    if (idxLong >= 0 && (idxTsx == -1 || idxLong <= idxTsx) && (idxShort == -1 || idxLong <= idxShort)) {
       indexOf = idxLong;
       fence = "```typescript";
+    } else if (idxTsx >= 0 && (idxShort == -1 || idxTsx <= idxShort)) {
+      indexOf = idxTsx;
+      fence = "```tsx";
     } else if (idxShort >= 0) {
       indexOf = idxShort;
       fence = "```ts";

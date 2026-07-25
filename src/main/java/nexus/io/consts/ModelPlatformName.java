@@ -29,6 +29,7 @@ public interface ModelPlatformName {
   String ZENMUX = "zenmux";
 
   String GITEE = "gitee";
+  String LLM_PROXY = "llm-proxy";
   String AUTO = "auto";
 
   String EXCHANGE_TOKEN = "exchange_token";

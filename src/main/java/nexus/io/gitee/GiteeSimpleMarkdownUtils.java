@@ -39,7 +39,7 @@ public class GiteeSimpleMarkdownUtils {
     }
     List<GiteeDocumentPage> pages = output.getPages();
     if (pages == null || pages.isEmpty()) {
-      return "";
+      return segmentsToMarkdown(output.getSegments());
     }
 
     StringBuilder sb = new StringBuilder();
@@ -65,6 +65,23 @@ public class GiteeSimpleMarkdownUtils {
       fallbackIndex++;
     }
     return sb.toString().trim();
+  }
+
+  private static String segmentsToMarkdown(List<GiteeDocumentSegment> segments) {
+    if (segments == null || segments.isEmpty()) {
+      return "";
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (GiteeDocumentSegment segment : segments) {
+      if (segment != null && StrUtil.isNotBlank(segment.getContent())) {
+        if (sb.length() > 0) {
+          sb.append("\n\n");
+        }
+        sb.append(segment.getContent().trim());
+      }
+    }
+    return sb.toString();
   }
 
   /**
