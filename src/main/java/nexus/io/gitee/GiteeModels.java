@@ -81,15 +81,15 @@ public interface GiteeModels {
   String DEEPSEEK_V3 = "DeepSeek-V3";
   String DEEPSEEK_V3_1 = "DeepSeek-V3_1";
   String DEEPSEEK_V3_1_TERMINUS = "DeepSeek-V3_1-Terminus";
-  
+
   String DEEPSEEK_PROVER_V2_7B = "DeepSeek-Prover-V2-7B";
-  
+
   String DEEPSEEK_OCR = "DeepSeek-OCR";
   String DEEPSEEK_OCR_2 = "DeepSeek-OCR_2";
-  
+
   String DEEPSEEK_V3_2_EXP = "DeepSeek-V3.2-Exp";
   String DEEPSEEK_V3_2 = "DeepSeek-V3.2";
-  
+
   String DeepSeek_V4_Pro = "DeepSeek-V4-Pro";
   String DeepSeek_V4_Flash = "DeepSeek-V4-Flash";
 
@@ -322,6 +322,7 @@ public interface GiteeModels {
   String GLM_4_32B_ALIAS = GLM_4_32B;
 
   String KIMI_K2_INSTRUCT = "kimi-k2-instruct";
+  String KIMI_K3 = "kimi-k3";
 
   String PADDLEOCR_VL = "PaddleOCR-VL";
 }
