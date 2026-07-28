@@ -36,8 +36,5 @@ public class GiteeClientTest {
         System.out.println(json);
       }
     }
-      
-    
-    
   }
 }

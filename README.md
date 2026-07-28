@@ -25,6 +25,7 @@ The core idea: **business code should describe intent, not protocol details**. T
 - [Google Vertex AI](#google-vertex-ai)
 - [Anthropic Claude](#anthropic-claude)
 - [Bailian TTS](#bailian-tts)
+- [Gitee Client](#gitee-client)
 - [Error Handling](#error-handling)
 - [Project Layout](#project-layout)
 - [License](#license)
@@ -449,6 +450,10 @@ UniChatResponse response = UniChatClient.generate(request);
 ## Bailian TTS
 
 Use `BailianTTSClient` for Alibaba Cloud Bailian / DashScope text-to-speech. See [docs/bailian-tts.md](docs/bailian-tts.md) for configuration, request fields, response fields, and examples.
+
+## Gitee Client
+
+Use `GiteeClient` for Gitee AI document parsing, task polling, markdown conversion, model listing, and audio transcription helpers. See [docs/gitee-client.md](docs/gitee-client.md) for examples and field reference.
 
 ## Error Handling
 
