@@ -48,7 +48,7 @@ public class UniEmbeddingClient {
   public static final String ZENMUX_API_URL = EnvUtils.get("ZENMUX_API_URL", ZenmuxConst.API_PREFIX_URL);
   public static final String ZENMUX_API_KEY = EnvUtils.get("ZENMUX_API_KEY");
 
-  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.API_PERFIX_URL);
+  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL);
   public static final String BAILIAN_API_KEY = EnvUtils.get("BAILIAN_API_KEY");
 
   public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);

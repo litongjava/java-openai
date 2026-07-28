@@ -248,9 +248,10 @@ public class ClaudeClient {
       chatRequest.setMax_tokens(64000);
     }
     chatRequest.setStream(true);
-    String bodyString = JsonUtils.toSkipNullJson(chatRequest);
+    String bodyString = toSkipNullJson(chatRequest);
     return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
   }
+
 
   public static EventSource chatCompletions(String apiPerfixUrl, String apiKey, String bodyString, EventSourceListener listener) {
     Map<String, String> header = new HashMap<>(1);
@@ -270,8 +271,11 @@ public class ClaudeClient {
 
     OkHttpClient httpClient = OkHttpClientPool.get1000HttpClient();
 
-    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    byte[] bodyBytes = bodyString.getBytes(StandardCharsets.UTF_8);
+    MediaType mediaType = MediaType.parse("application/json");
+    RequestBody body = RequestBody.create(bodyBytes, mediaType);
 
+    
     Headers headers = Headers.of(requestHeaders);
 
     String url = uri + "/messages";
@@ -319,7 +323,8 @@ public class ClaudeClient {
     if (debug) {
       log.info(bodyString);
     }
-    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    byte[] bodyBytes = bodyString.getBytes(StandardCharsets.UTF_8);
+    RequestBody body = RequestBody.create(bodyBytes, MediaType.parse("application/json"));
 
     Headers headers = Headers.of(requestHeaders);
 
@@ -432,8 +437,8 @@ public class ClaudeClient {
     }
 
     OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
-
-    RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
+    byte[] bodyBytes = bodyString.getBytes(StandardCharsets.UTF_8);
+    RequestBody body = RequestBody.create(bodyBytes, MediaType.parse("application/json"));
 
     Map<String, String> requestHeaders = new HashMap<>(1);
     requestHeaders.put("x-api-key", apiKey);
@@ -541,6 +546,15 @@ public class ClaudeClient {
 
   public static ClaudeChatResponse chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
     return chatWithImage(apiKey, AnthropicModels.CLAUDE_3_7_SONNET_20250219, prompt, bytes, suffix);
+  }
+  
+
+  private static String toSkipNullJson(OpenAiChatRequest chatRequest) {
+    String model = chatRequest.getModel();
+    if(AnthropicModels.CLAUDE_SONNET_5.equals(model)) {
+      chatRequest.setTemperature(null);
+    }
+    return JsonUtils.toSkipNullJson(chatRequest);
   }
 
 }

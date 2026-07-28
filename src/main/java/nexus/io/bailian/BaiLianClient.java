@@ -26,20 +26,20 @@ import okhttp3.Response;
 public class BaiLianClient {
   private static final Logger log = LoggerFactory.getLogger(BaiLianClient.class);
   public static boolean debug = false;
-  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.BAILIAN_PERFIX_URL);
+  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.BAILIAN_API_PERFIX_URL);
 
   public static float[] embeddingArray(String text) {
     String apiKey = EnvUtils.get("BAILIAN_API_KEY");
-    return OpenAiClient.embeddingArray(BaiLianConst.API_PERFIX_URL, apiKey, BaiLianAiModels.TEXT_EMBEDDING_V4, text);
+    return OpenAiClient.embeddingArray(BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL, apiKey, BaiLianAiModels.TEXT_EMBEDDING_V4, text);
   }
 
   public static float[] embeddingArray(String model, String text) {
     String apiKey = EnvUtils.get("BAILIAN_API_KEY");
-    return OpenAiClient.embeddingArray(BaiLianConst.API_PERFIX_URL, apiKey, model, "hi");
+    return OpenAiClient.embeddingArray(BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL, apiKey, model, "hi");
   }
 
   public static float[] embeddingArray(String apiKey, String model, String text) {
-    return OpenAiClient.embeddingArray(BaiLianConst.API_PERFIX_URL, apiKey, model, "hi");
+    return OpenAiClient.embeddingArray(BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL, apiKey, model, "hi");
   }
 
   /**

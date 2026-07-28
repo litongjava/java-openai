@@ -33,8 +33,7 @@ public class VolcTtsHttpClient {
 
   public static boolean debug;
   public static final OkHttpClient httpClient = OkHttpClientPool.get300HttpClient();
-  public static final String API_URL = EnvUtils.get("VOLC_TTS_API_URL",
-      "https://openspeech.bytedance.com/api/v1/tts");
+  public static final String API_URL = EnvUtils.get("VOLC_TTS_API_URL", VolcConst.BYTE_DANCE_BASE_URL + "/api/v1/tts");
 
   public static final String DEFAULT_CLUSTER = "volcano_tts";
   public static final String DEFAULT_UID = "uid";
@@ -90,7 +89,7 @@ public class VolcTtsHttpClient {
       log.info("{} {}", apiUrl, requestJson);
     }
 
-    RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json; charset=utf-8"));
+    RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
     Request httpRequest = new Request.Builder().url(apiUrl).post(body)
         .addHeader("Authorization", "Bearer;" + accessToken).build();
 
@@ -134,7 +133,8 @@ public class VolcTtsHttpClient {
     VolcRequest request = VolcRequest.builder().reqid(UUID.randomUUID().toString()).operation("query").text(text)
         .build();
 
-    return VolcTtsRequest.builder().app(VolcApp.builder().appid(appid).token(accessToken).cluster(DEFAULT_CLUSTER).build())
+    return VolcTtsRequest.builder()
+        .app(VolcApp.builder().appid(appid).token(accessToken).cluster(DEFAULT_CLUSTER).build())
         .user(VolcUser.builder().uid(DEFAULT_UID).build()).audio(audio).request(request).build();
   }
 

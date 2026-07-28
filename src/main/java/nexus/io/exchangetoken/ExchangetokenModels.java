@@ -20,14 +20,22 @@ public interface ExchangetokenModels {
   String GPT_4O_MINI = "gpt-4o-mini";
 
   // Claude
-  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
-  String CLAUDE_SONNET_4_6 = "claude-sonnet-4-6";
-  String CLAUDE_HAIKU_4_6 = "claude-haiku-4-6";
+
   String CLAUDE_HAIKU_4_5 = "claude-haiku-4-5";
-  String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
-  String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
+  String CLAUDE_HAIKU_4_6 = "claude-haiku-4-6";
+
   String CLAUDE_SONNET_4 = "claude-sonnet-4";
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
+  String CLAUDE_SONNET_4_6 = "claude-sonnet-4-6";
+  String CLAUDE_SONNET_5 = "claude-sonnet-5";
+
+  String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
+  String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
+  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
+  String CLAUDE_OPUS_4_7 = "claude-opus-4-7";
+  String CLAUDE_OPUS_4_8 = "claude-opus-4-8";
+
+  String CLAUDE_FABLE_5 = "claude-fable-5";
 
   // Gemini 3
   String GEMINI_3_1_FLASH_IMAGE_PREVIEW = "gemini-3.1-flash-image-preview";
