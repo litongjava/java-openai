@@ -24,6 +24,7 @@ The core idea: **business code should describe intent, not protocol details**. T
 - [Google Gemini](#google-gemini)
 - [Google Vertex AI](#google-vertex-ai)
 - [Anthropic Claude](#anthropic-claude)
+- [Bailian TTS](#bailian-tts)
 - [Error Handling](#error-handling)
 - [Project Layout](#project-layout)
 - [License](#license)
@@ -444,6 +445,10 @@ UniChatResponse response = UniChatClient.generate(request);
 ```
 
 `cacheSystemPrompt = true` automatically attaches Anthropic's `cache_control` block to the system message. To send images, attach `ChatImageFile` files exactly as in the multimodal section — they are translated into Claude's `image` content blocks.
+
+## Bailian TTS
+
+Use `BailianTTSClient` for Alibaba Cloud Bailian / DashScope text-to-speech. See [docs/bailian-tts.md](docs/bailian-tts.md) for configuration, request fields, response fields, and examples.
 
 ## Error Handling
 
