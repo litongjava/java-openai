@@ -1,6 +1,5 @@
 package nexus.io.sd;
 
-import java.io.IOException;
 import java.util.Map;
 
 import nexus.io.model.upload.UploadFile;

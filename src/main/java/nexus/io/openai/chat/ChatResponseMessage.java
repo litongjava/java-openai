@@ -26,6 +26,10 @@ public class ChatResponseMessage {
   private List<UniChatFile> images;
   private UniSources uniSources;
 
+  public ChatResponseMessage(String role) {
+    this.role = role;
+  }
+  
   public ChatResponseMessage(String role, String content) {
     this.role = role;
     this.content = content;
@@ -60,5 +64,4 @@ public class ChatResponseMessage {
     }
 
   }
-
 }

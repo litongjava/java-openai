@@ -85,7 +85,8 @@ public class UniChatClient {
   public static final String ZENMUX_API_URL = EnvUtils.get("ZENMUX_API_URL", ZenmuxConst.API_PREFIX_URL);
   public static final String ZENMUX_API_KEY = EnvUtils.get("ZENMUX_API_KEY");
 
-  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL", BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL);
+  public static final String BAILIAN_API_URL = EnvUtils.get("BAILIAN_API_URL",
+      BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL);
   public static final String BAILIAN_API_KEY = EnvUtils.get("BAILIAN_API_KEY");
 
   public static final String TENCENT_API_URL = EnvUtils.get("TENCENT_API_URL", TencentConst.API_PERFIX_URL);
@@ -337,14 +338,14 @@ public class UniChatClient {
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
-    
+
     if (uniChatRequest.isUseSystemPrompt()) {
       String systemPrompt = uniChatRequest.getSystemPrompt();
       if (StrUtil.isNotBlank(systemPrompt)) {
         openAiChatMesages.add(new OpenAiChatMessage("system", systemPrompt));
       }
     }
-    
+
     if (messages != null && messages.size() > 0) {
       Iterator<UniChatMessage> iterator = messages.iterator();
       while (iterator.hasNext()) {
@@ -362,7 +363,6 @@ public class UniChatClient {
         openAiChatMesages.add(openAiMsg);
       }
     }
-
 
     OpenAiChatRequest openAiChatRequestVo = new OpenAiChatRequest();
     openAiChatRequestVo.setMessages(openAiChatMesages);
@@ -482,8 +482,17 @@ public class UniChatClient {
     }
 
     String role = chatResponse.getRole();
-    ClaudeMessageContent claudeChatMessage = chatResponse.getContent().get(0);
-    ChatResponseMessage message = new ChatResponseMessage(role, claudeChatMessage.getText());
+    ChatResponseMessage message = new ChatResponseMessage(role);
+
+    List<ClaudeMessageContent> contentList = chatResponse.getContent();
+    for (ClaudeMessageContent claudeMessageContent : contentList) {
+      if ("text".equals(claudeMessageContent.getType())) {
+        message.setContent(claudeMessageContent.getText());
+      } 
+//      else {
+//        message.setReasoning(claudeMessageContent.getText());
+//      }
+    }
     ChatResponseUsage usage = new ChatResponseUsage(chatResponse.getUsage());
     return new UniChatResponse(model, message, usage, chatResponse.getRawResponse());
   }

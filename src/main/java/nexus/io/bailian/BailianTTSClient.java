@@ -43,7 +43,7 @@ public class BailianTTSClient {
 
   public static BailianTTSResponse generate(String apiUrl, String accessToken, BailianTTSRequest request) {
     if (StrUtil.isBlank(accessToken)) {
-      throw new RuntimeException("BAILIEN_API_KEY is empty");
+      throw new RuntimeException("BAILIAN_API_KEY is empty");
     }
     if (request == null) {
       throw new RuntimeException("request can not be null");
