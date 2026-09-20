@@ -41,4 +41,5 @@ public interface ModelPlatformName {
 
   String AIAPI = "aiapi";
   String ELEVEN_LABS = "eleven_labs";
+  String DEEPSEEK = "deepseek";
 }
