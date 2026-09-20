@@ -15,6 +15,7 @@ import nexus.io.claude.ClaudeChatResponse;
 import nexus.io.claude.ClaudeClient;
 import nexus.io.claude.ClaudeMessageContent;
 import nexus.io.consts.ModelPlatformName;
+import nexus.io.deepseek.DeepSeekConst;
 import nexus.io.exchangetoken.ExchangetokenConst;
 import nexus.io.gemini.GeminiCandidate;
 import nexus.io.gemini.GeminiChatRequest;
@@ -66,6 +67,9 @@ public class UniChatClient {
 
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get("OPENAI_API_KEY");
+
+  public static final String DEEPSEEK_API_URL = EnvUtils.get("DEEPSEEK_API_URL", DeepSeekConst.API_PREFIX_URL);
+  public static final String DEEPSEEK_API_KEY = EnvUtils.get("DEEPSEEK_API_KEY");
 
   public static final String VOLCENGINE_API_URL = EnvUtils.get("VOLCENGINE_API_URL", VolcEngineConst.API_PREFIX_URL);
   public static final String VOLCENGINE_API_KEY = EnvUtils.get("VOLCENGINE_API_KEY");
@@ -327,6 +331,12 @@ public class UniChatClient {
       }
       return useAiApi(key, uniChatRequest);
 
+    } else if (ModelPlatformName.DEEPSEEK.equals(platform)) {
+      if (key == null) {
+        key = DEEPSEEK_API_KEY;
+      }
+      return useDeepseek(key, uniChatRequest);
+
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -488,7 +498,7 @@ public class UniChatClient {
     for (ClaudeMessageContent claudeMessageContent : contentList) {
       if ("text".equals(claudeMessageContent.getType())) {
         message.setContent(claudeMessageContent.getText());
-      } 
+      }
 //      else {
 //        message.setReasoning(claudeMessageContent.getText());
 //      }
@@ -766,6 +776,11 @@ public class UniChatClient {
         key = AIAPI_API_KEY;
       }
       return useAiApi(key, uniChatRequest, listener);
+    } else if (ModelPlatformName.DEEPSEEK.equals(platform)) {
+      if (key == null) {
+        key = DEEPSEEK_API_KEY;
+      }
+      return useDeepseek(key, uniChatRequest, listener);
     } else {
       if (key == null) {
         key = OPENAI_API_KEY;
@@ -1142,6 +1157,14 @@ public class UniChatClient {
     return useOpenAi(AIAPI_API_URL, key, uniChatRequest, listener);
   }
 
+  public static UniChatResponse useDeepseek(String key, UniChatRequest uniChatRequest) {
+    return useOpenAi(DEEPSEEK_API_URL, key, uniChatRequest);
+  }
+
+  private static EventSource useDeepseek(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
+    return useOpenAi(DEEPSEEK_API_URL, key, uniChatRequest, listener);
+  }
+
   public static ChatModelResponse models(String platform) {
     return models(platform, null);
 
@@ -1274,6 +1297,12 @@ public class UniChatClient {
         key = AIAPI_API_KEY;
       }
       return getModels(AIAPI_API_URL, key);
+
+    } else if (ModelPlatformName.DEEPSEEK.equals(platform)) {
+      if (key == null) {
+        key = DEEPSEEK_API_KEY;
+      }
+      return getModels(DEEPSEEK_API_URL, key);
 
     } else {
       if (key == null) {
