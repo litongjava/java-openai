@@ -1,5 +1,8 @@
 # Gitee Client
 
+[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/18.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/18.html)
+
+
 `GiteeClient` wraps Gitee AI document parsing, task polling, model listing, and audio
 transcription helpers.
 
@@ -12,6 +15,9 @@ GITEE_API_KEY=your-gitee-api-key
 
 # Optional. Used by OpenAI-compatible endpoints such as /v1/models.
 GITEE_API_URL=https://ai.gitee.com/v1
+
+# Optional. Used by new GiteeClient() for document parsing and task polling.
+GITEE_BASE_URL=https://ai.gitee.com
 ```
 
 `new GiteeClient()` reads `GITEE_API_KEY` and defaults the base URL to
@@ -91,6 +97,29 @@ GiteeTaskResponse task = new GiteeClient().parseDocument(data, "sample.pdf");
 
 ## Custom Document Parse Request
 
+### Document Parsing Models
+
+Use these `GiteeModels` constants as the request model:
+
+| Model ID | Constant |
+| --- | --- |
+| `MinerU2.5-Pro` | `GiteeModels.MINERU2_5_PRO` |
+| `Unlimited-OCR` | `GiteeModels.UNLIMITED_OCR` |
+| `PaddleOCR-VL-1.5` | `GiteeModels.PADDLEOCR_VL_1_5` |
+| `DeepSeek-OCR` | `GiteeModels.DEEPSEEK_OCR` |
+| `MinerU2.5` | `GiteeModels.MINERU2_5` |
+| `PDF-Extract-Kit-1.0` | `GiteeModels.PDF_EXTRACT_KIT_1_0` |
+
+`GiteeModels.PADDLEOCR_VL` remains available for the distinct `PaddleOCR-VL`
+model. `parseDocument(...)` forwards the model ID to the provider without a local
+allowlist. Available options and output fields depend on the selected model.
+
+`HunyuanOCR` uses the synchronous image OCR endpoint, not the asynchronous PDF
+parsing endpoint. To process a PDF with this model, render its pages to PNG/JPEG
+and call `ocr(...)` for each page.
+
+### Optional Parameters
+
 Use `GiteeDocumentParseRequest` for optional parsing parameters:
 
 ```java
@@ -118,6 +147,41 @@ GiteeTaskResponse task = new GiteeClient().parseDocument(file, request);
 | `include_image_base64` | Whether to include image data as base64. |
 | `end_pages` | Last page to parse. |
 | `output_format` | Provider output format, for example `markdown`. |
+
+## Synchronous Image OCR
+
+```java
+EnvUtils.load();
+GiteeOcrResponse result = new GiteeClient().ocr(
+    new File("data/page.png"), GiteeModels.HUNYUAN_OCR);
+System.out.println(result.getText());
+```
+
+Import `nexus.io.gitee.GiteeOcrResponse` along with the client and model constants.
+This sends multipart fields `model` and `image` to `/v1/images/ocr`.
+`getText()` accepts both the documented `text` field and the observed
+`text_result` field. `getText_result()` and `getPrompt()` expose the latter
+response format directly. A byte-array overload accepts image bytes, filename,
+and model ID.
+
+See the [official Gitee API reference](https://ai.gitee.com/docs/openapi/v1).
+
+## Model Comparison and Custom HTTP Clients
+
+The constructor `GiteeClient(apiKey, baseUrl, httpClient)` accepts a custom
+`okhttp3.OkHttpClient` for timeouts and response capture. Document parsing normally
+sends `X-Failover-Enabled: true`. For model comparisons, an interceptor can replace
+it with `false` to prevent a fallback model from affecting the result.
+
+Keep raw responses when benchmarking. Some models return page content through
+`segments`; segment indices may restart when the provider processes batches and
+must not be sorted globally. Some models omit footer-only pages. Unlimited-OCR
+may include layout labels and coordinates in its content; the Markdown helper
+currently joins segment content without removing those labels.
+
+Task submission can return `status: failure` even with HTTP 200, for example when
+the account has too many running tasks. Inspect the raw `output.error` before
+deciding whether to retry. Do not treat a transport success as successful OCR.
 
 ## Task Response
 

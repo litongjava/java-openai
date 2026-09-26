@@ -144,6 +144,7 @@ public interface GiteeModels {
   String HIDREAM_I1_FULL = "HiDream-I1-Full";
 
   // ===== Hunyuan =====
+  String HUNYUAN_OCR = "HunyuanOCR";
   String HUNYUAN3D_2 = "Hunyuan3D-2";
   String HUNYUAN_DiT_V1_2_DIFFUSERS_DISTILLED = "HunyuanDiT-v1.2-Diffusers-Distilled";
   String HUNYUAN_MT_CHIMERA_7B = "Hunyuan-MT-Chimera-7B";
@@ -182,6 +183,7 @@ public interface GiteeModels {
 
   // ===== MinerU =====
   String MINERU2_5 = "MinerU2.5";
+  String MINERU2_5_PRO = "MinerU2.5-Pro";
 
   // ===== Moark =====
   String MOARK_M1 = "moark-m1";
@@ -284,6 +286,9 @@ public interface GiteeModels {
   // ===== UVDoc =====
   String UVDOC = "UVDoc";
 
+  // ===== Unlimited / OCR =====
+  String UNLIMITED_OCR = "Unlimited-OCR";
+
   // ===== Vision / YOLO =====
   String YOLOV8 = "YOLOv8";
 
@@ -325,4 +330,5 @@ public interface GiteeModels {
   String KIMI_K3 = "kimi-k3";
 
   String PADDLEOCR_VL = "PaddleOCR-VL";
+  String PADDLEOCR_VL_1_5 = "PaddleOCR-VL-1.5";
 }

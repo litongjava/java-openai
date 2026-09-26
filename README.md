@@ -10,8 +10,22 @@ The core idea: **business code should describe intent, not protocol details**. T
 - Unified message: `UniChatMessage`
 - Built on top of [OkHttp](https://square.github.io/okhttp/) and [FastJSON2](https://github.com/alibaba/fastjson)
 
+## Documentation
+
+[java-openai documentation (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/) · [java-openai documentation (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/)
+
+| Guide | Chinese site | Alternate site |
+| --- | --- | --- |
+| Quick start | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/01.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/01.html) |
+| Streaming | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/02.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/02.html) |
+| Multimodal images | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/03.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/03.html) |
+| Gitee PDF parsing and OCR | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/18.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/18.html) |
+| DeepSeek model discovery | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/19.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/19.html) |
+| Bailian TTS | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/20.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/20.html) |
+
 ## Table of Contents
 
+- [Documentation](#documentation)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Quick Start](#quick-start)
@@ -26,6 +40,7 @@ The core idea: **business code should describe intent, not protocol details**. T
 - [Anthropic Claude](#anthropic-claude)
 - [Bailian TTS](#bailian-tts)
 - [Gitee Client](#gitee-client)
+- [DeepSeek Client](#deepseek-client)
 - [Error Handling](#error-handling)
 - [Project Layout](#project-layout)
 - [License](#license)
@@ -36,9 +51,11 @@ The core idea: **business code should describe intent, not protocol details**. T
 <dependency>
   <groupId>nexus.io</groupId>
   <artifactId>java-openai</artifactId>
-  <version>1.3.1</version>
+  <version>${java-openai.version}</version>
 </dependency>
 ```
+
+Define `java-openai.version` in your project dependency management to match the library you install.
 
 ## Configuration
 
@@ -454,6 +471,10 @@ Use `BailianTTSClient` for Alibaba Cloud Bailian / DashScope text-to-speech. See
 ## Gitee Client
 
 Use `GiteeClient` for Gitee AI document parsing, task polling, markdown conversion, model listing, and audio transcription helpers. See [docs/gitee-client.md](docs/gitee-client.md) for examples and field reference.
+
+## DeepSeek Client
+
+Use `DeepSeekClient.getModels()` to discover the models available to your official API account. See [the client guide](docs/deepseek-client.md) and [online guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/19.html) · [online guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/19.html).
 
 ## Error Handling
 

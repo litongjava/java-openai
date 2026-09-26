@@ -30,12 +30,13 @@ public class GiteeClient {
 
   private final String apiKey;
   private final String baseUrl;
+  private final OkHttpClient httpClient;
 
   /**
-   * 从环境变量获取配置： GITEE_AI_API_KEY, GITEE_AI_BASE
+   * 从环境配置获取：GITEE_API_KEY、GITEE_BASE_URL。
    */
   public GiteeClient() {
-    this(EnvUtils.getStr("GITEE_API_KEY"), EnvUtils.getStr("GITEE_BASE_URL", GiteeConst.BASE_URL));
+    this(EnvUtils.get("GITEE_API_KEY"), EnvUtils.get("GITEE_BASE_URL", GiteeConst.BASE_URL));
   }
 
   public GiteeClient(String apiKey) {
@@ -43,8 +44,14 @@ public class GiteeClient {
   }
 
   public GiteeClient(String apiKey, String baseUrl) {
+    this(apiKey, baseUrl, client);
+  }
+
+  /** Allows callers to configure timeouts and request/response interceptors. */
+  public GiteeClient(String apiKey, String baseUrl, OkHttpClient httpClient) {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl != null ? baseUrl : GiteeConst.BASE_URL;
+    this.httpClient = java.util.Objects.requireNonNull(httpClient, "httpClient");
   }
 
   /**
@@ -97,6 +104,25 @@ public class GiteeClient {
     Request request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + apiKey).get().build();
 
     return execute(request);
+  }
+
+  /** Synchronous image OCR: POST /v1/images/ocr (for example HunyuanOCR). */
+  public GiteeOcrResponse ocr(File image, String model) {
+    String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(image.getName()));
+    return ocr(RequestBody.create(image, MediaType.get(contentType)), image.getName(), model);
+  }
+
+  public GiteeOcrResponse ocr(byte[] image, String filename, String model) {
+    String contentType = ContentTypeUtils.getContentType(FilenameUtils.getSuffix(filename));
+    return ocr(RequestBody.create(image, MediaType.get(contentType)), filename, model);
+  }
+
+  private GiteeOcrResponse ocr(RequestBody image, String filename, String model) {
+    MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+        .addFormDataPart("model", model).addFormDataPart("image", filename, image).build();
+    Request request = new Request.Builder().url(baseUrl + "/v1/images/ocr")
+        .addHeader("Authorization", "Bearer " + apiKey).post(body).build();
+    return execute(request, GiteeOcrResponse.class);
   }
 
   /**
@@ -198,11 +224,15 @@ public class GiteeClient {
    * 统一执行 HTTP 请求并解析为 GiteeTaskResponse
    */
   private GiteeTaskResponse execute(Request request) {
-    Call call = client.newCall(request);
+    return execute(request, GiteeTaskResponse.class);
+  }
+
+  private <T> T execute(Request request, Class<T> responseType) {
+    Call call = httpClient.newCall(request);
     try (Response response = call.execute()) {
       if (response.isSuccessful()) {
         String json = response.body().string();
-        return JsonUtils.parse(json, GiteeTaskResponse.class);
+        return JsonUtils.parse(json, responseType);
       } else {
         String msg = "code:" + response.code() + ",body:" + response.body().string();
         throw new RuntimeException(msg);

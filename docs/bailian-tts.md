@@ -1,5 +1,8 @@
 # Bailian TTS
 
+[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/20.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/20.html)
+
+
 `BailianTTSClient` wraps Alibaba Cloud Bailian / DashScope text-to-speech through the
 `/api/v1/services/audio/tts/SpeechSynthesizer` endpoint.
 
