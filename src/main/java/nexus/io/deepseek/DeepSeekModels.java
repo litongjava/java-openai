@@ -6,7 +6,8 @@ public interface DeepSeekModels {
   String DEEPSEEK_CHAT = "deepseek-chat";
   // DeepSeek-R1。
   String DEEPSEEK_REASONER = "deepseek-reasoner";
-
+  
+  String deepseek_flash = "deepseek-flash";
   String deepseek_v4_flash = "deepseek-v4-flash";
   String deepseek_v4_flash_vision_exp = "deepseek-v4-flash-vision-exp";
   String deepseek_v4_pro = "deepseek-v4-pro";
