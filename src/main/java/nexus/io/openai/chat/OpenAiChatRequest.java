@@ -33,6 +33,7 @@ public class OpenAiChatRequest {
   private Boolean stream;
   private ChatStreamOptions stream_options;
   private Boolean enable_thinking;
+  private java.util.Map<String, String> thinking;
 
   // https://inference-docs.cerebras.ai/resources/openrouter-cerebras
   private ChatProvider provider;

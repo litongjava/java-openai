@@ -27,6 +27,16 @@ public class UniChatRequest {
   private String cachedId;
   private Integer max_tokens;
   private Boolean enable_thinking;
+  private java.util.Map<String, String> thinking;
+
+  public java.util.Map<String, String> getThinking() {
+    return thinking;
+  }
+
+  public UniChatRequest setThinking(java.util.Map<String, String> thinking) {
+    this.thinking = thinking;
+    return this;
+  }
   private UniThinkingConfig thinkingConfig;
   // ChatResponseFormatType
   private String responseFormat;

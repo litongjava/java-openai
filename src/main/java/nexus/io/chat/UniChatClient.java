@@ -346,6 +346,18 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
+    OpenAiChatRequest openAiChatRequestVo = toOpenAiRequest(uniChatRequest);
+    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
+    OpenAiChatResponse chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl != null ? apiPrefixUrl : prefixUrl, apiKey, openAiChatRequestVo);
+    if (chatResponse == null || chatResponse.getChoices() == null || chatResponse.getChoices().isEmpty()
+        || chatResponse.getChoices().get(0) == null || chatResponse.getChoices().get(0).getMessage() == null) {
+      return null;
+    }
+    return new UniChatResponse(chatResponse.getModel(), chatResponse.getChoices().get(0).getMessage(), chatResponse.getUsage(), chatResponse.getRawResponse());
+  }
+
+  /** Convert without modifying the caller's messages; shared by generation and streaming. */
+  public static OpenAiChatRequest toOpenAiRequest(UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
 
@@ -370,6 +382,7 @@ public class UniChatClient {
         }
 
         OpenAiChatMessage openAiMsg = new OpenAiChatMessage(next);
+        openAiMsg.setRole(role);
         openAiChatMesages.add(openAiMsg);
       }
     }
@@ -378,6 +391,8 @@ public class UniChatClient {
     openAiChatRequestVo.setMessages(openAiChatMesages);
 
     openAiChatRequestVo.setModel(uniChatRequest.getModel());
+    openAiChatRequestVo.setThinking(uniChatRequest.getThinking());
+    openAiChatRequestVo.setStream(uniChatRequest.getStream());
     Float temperature = uniChatRequest.getTemperature();
     if (temperature != null) {
       openAiChatRequestVo.setTemperature(temperature);
@@ -405,37 +420,17 @@ public class UniChatClient {
     openAiChatRequestVo.setProvider(provider);
     openAiChatRequestVo.setTools(uniChatRequest.getTools());
 
-    String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
-    OpenAiChatResponse chatResponse = null;
-    if (apiPrefixUrl != null) {
-      chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl, apiKey, openAiChatRequestVo);
-    } else {
-      chatResponse = OpenAiClient.chatCompletions(prefixUrl, apiKey, openAiChatRequestVo);
-    }
+    return openAiChatRequestVo;
+  }
 
-    if (chatResponse == null) {
-      return null;
+  /** Raw HTTP callback for OpenAI-compatible endpoints, retaining cancellation through Call. */
+  public static okhttp3.Call streamOpenAi(UniChatRequest request, okhttp3.Callback callback) {
+    if (request.getApiPrefixUrl() == null || request.getApiKey() == null) {
+      throw new IllegalArgumentException("Explicit API URL and key are required");
     }
-    ChatResponseUsage usage = chatResponse.getUsage();
-    String model = chatResponse.getModel();
-    List<Choice> choices = chatResponse.getChoices();
-    String rawResponse = chatResponse.getRawResponse();
-    if (choices == null) {
-      log.error("raw response:{}", rawResponse);
-      return null;
-    }
-    Choice choice = choices.get(0);
-    if (choice == null) {
-      log.error("raw response:{}", rawResponse);
-      return null;
-    }
-    ChatResponseMessage message = choice.getMessage();
-    if (message == null) {
-      log.error("raw response:{}", rawResponse);
-      return null;
-    }
-
-    return new UniChatResponse(model, message, usage, rawResponse);
+    OpenAiChatRequest body = toOpenAiRequest(request);
+    body.setStream(true);
+    return OpenAiClient.chatCompletions(request.getApiPrefixUrl(), request.getApiKey(), body, callback);
   }
 
   public static UniChatResponse useClaude(String key, UniChatRequest uniChatRequest) {
@@ -791,27 +786,7 @@ public class UniChatClient {
 
   public static EventSource useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest,
       EventSourceListener listener) {
-    List<UniChatMessage> messages = uniChatRequest.getMessages();
-    Iterator<UniChatMessage> iterator = messages.iterator();
-    while (iterator.hasNext()) {
-      UniChatMessage next = iterator.next();
-      if (next.getRole().equals("model")) {
-        next.setRole("assistant");
-      }
-    }
-    if (uniChatRequest.isUseSystemPrompt()) {
-      String systemPrompt = uniChatRequest.getSystemPrompt();
-      if (systemPrompt != null) {
-        messages.add(0, new UniChatMessage("system", systemPrompt));
-      }
-    }
-    OpenAiChatRequest openaiChatRequest = new OpenAiChatRequest();
-    openaiChatRequest.setModel(uniChatRequest.getModel());
-    openaiChatRequest.setTemperature(uniChatRequest.getTemperature());
-    openaiChatRequest.setChatMessages(messages);
-    openaiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
-    openaiChatRequest.setStream(uniChatRequest.getStream());
-
+    OpenAiChatRequest openaiChatRequest = toOpenAiRequest(uniChatRequest);
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
     EventSource eventSource = null;
     if (apiPrefixUrl != null) {
