@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import nexus.io.aiapi.AiApiConst;
 import nexus.io.bailian.BaiLianConst;
 import nexus.io.cerebras.CerebrasConst;
 import nexus.io.claude.ClaudeCacheControl;
 import nexus.io.claude.ClaudeChatResponse;
 import nexus.io.claude.ClaudeClient;
+import nexus.io.claude.ClaudeConsts;
 import nexus.io.claude.ClaudeMessageContent;
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.deepseek.DeepSeekConst;
@@ -21,6 +19,7 @@ import nexus.io.gemini.GeminiCandidate;
 import nexus.io.gemini.GeminiChatRequest;
 import nexus.io.gemini.GeminiChatResponse;
 import nexus.io.gemini.GeminiClient;
+import nexus.io.gemini.GeminiConsts;
 import nexus.io.gemini.GeminiContentResponse;
 import nexus.io.gemini.GeminiGenerationConfig;
 import nexus.io.gemini.GeminiPart;
@@ -34,7 +33,6 @@ import nexus.io.moonshot.MoonshotConst;
 import nexus.io.openai.ChatProvider;
 import nexus.io.openai.chat.ChatResponseMessage;
 import nexus.io.openai.chat.ChatResponseUsage;
-import nexus.io.openai.chat.Choice;
 import nexus.io.openai.chat.OpenAiChatMessage;
 import nexus.io.openai.chat.OpenAiChatRequest;
 import nexus.io.openai.chat.OpenAiChatResponse;
@@ -50,15 +48,15 @@ import nexus.io.openrouter.OpenRouterConst;
 import nexus.io.tencent.TencentConst;
 import nexus.io.tio.utils.environment.EnvUtils;
 import nexus.io.tio.utils.hutool.StrUtil;
+import nexus.io.tio.utils.json.JsonUtils;
 import nexus.io.vertexai.VertexAiConsts;
 import nexus.io.volcengine.VolcEngineConst;
 import nexus.io.zenmux.ZenmuxConst;
+import okhttp3.OkHttpClient;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 
 public class UniChatClient {
-  private static final Logger log = LoggerFactory.getLogger(UniChatClient.class);
-
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String VERTEX_AI_API_KEY = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_KEY_NAME);
   public static final String VERTEX_AI_API_URL = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_URL_NAME,
@@ -164,6 +162,274 @@ public class UniChatClient {
 
   public static UniChatResponse generate(UniChatRequest uniChatRequest) {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
+  }
+
+  /**
+   * Synchronous generation using the caller's transport for every supported
+   * platform. Platform routing selects the wire protocol, credentials, request
+   * and response conversion. No shared client mutation, body logging or
+   * application-level retry.
+   */
+  public static UniChatResponse generate(OkHttpClient client, String key, UniChatRequest request)
+      throws java.io.IOException {
+    if (client == null || request == null) {
+      throw new IllegalArgumentException("Client and request are required");
+    }
+    if (Boolean.TRUE.equals(request.getStream())) {
+      throw new IllegalArgumentException("This transport requires synchronous generation");
+    }
+    String platform = request.getPlatform();
+    PlatformConfig config = platformConfig(platform);
+    String prefix = request.getApiPrefixUrl();
+    if (StrUtil.isBlank(prefix)) {
+      prefix = EnvUtils.get(config.urlName, config.defaultUrl);
+    }
+    if (StrUtil.isBlank(prefix)) {
+      throw new IllegalArgumentException("A configured or explicit API prefix is required");
+    }
+    if (StrUtil.isBlank(key)) {
+      key = request.getApiKey();
+    }
+    if (StrUtil.isBlank(key)) {
+      key = EnvUtils.get(config.keyName);
+      if (StrUtil.isBlank(key) && ModelPlatformName.OPENAI_RESPONSES.equals(platform)) {
+        key = EnvUtils.get("OPENAI_API_KEY");
+      } else if (StrUtil.isBlank(key) && ModelPlatformName.VOLC_ENGINE_RESPONSES.equals(platform)) {
+        key = EnvUtils.get("VOLCENGINE_API_KEY");
+      }
+    }
+
+    if (isGoogle(platform) || ModelPlatformName.VERTEX_AI.equals(platform)) {
+      return useGoogle(client, prefix, key, request);
+    } else if (isAnthropic(platform)) {
+      return useClaude(client, prefix, key, request);
+    } else if (ModelPlatformName.OPENAI_RESPONSES.equals(platform)
+        || ModelPlatformName.VOLC_ENGINE_RESPONSES.equals(platform)) {
+      return useOpenAiResponses(client, prefix, key, request);
+    } else {
+      return useOpenAi(client, prefix, key, request);
+    }
+  }
+
+  private static UniChatResponse useOpenAi(OkHttpClient client, String prefix, String key, UniChatRequest request)
+      throws java.io.IOException {
+    OpenAiChatRequest payload = toOpenAiRequest(request);
+    if (ModelPlatformName.VOLC_ENGINE.equals(request.getPlatform()) && request.getMax_tokens() == null) {
+      payload.setMax_tokens(16384);
+    } else if (ModelPlatformName.BAILIAN.equals(request.getPlatform())) {
+      payload.setEnable_thinking(false);
+    }
+    String raw = post(client, prefix + "/chat/completions", authHeaders("Authorization", bearer(key)), payload);
+    OpenAiChatResponse parsed = parseResponse(raw, OpenAiChatResponse.class);
+    if (parsed == null || parsed.getChoices() == null || parsed.getChoices().isEmpty()
+        || parsed.getChoices().get(0) == null || parsed.getChoices().get(0).getMessage() == null) {
+      throw new java.io.IOException("Chat provider response has no assistant message");
+    }
+    return new UniChatResponse(parsed.getModel(), parsed.getChoices().get(0).getMessage(), parsed.getUsage(), raw);
+  }
+
+  private static UniChatResponse useGoogle(OkHttpClient client, String prefix, String key, UniChatRequest request)
+      throws java.io.IOException {
+    GeminiChatRequest payload = toGoogleRequest(request);
+    String raw = post(client, prefix + "/" + request.getModel() + ":generateContent",
+        authHeaders("x-goog-api-key", key), payload);
+    GeminiChatResponse parsed = parseResponse(raw, GeminiChatResponse.class);
+    if (parsed == null || parsed.getCandidates() == null || parsed.getCandidates().isEmpty()
+        || parsed.getCandidates().get(0) == null || parsed.getCandidates().get(0).getContent() == null
+        || parsed.getCandidates().get(0).getContent().getParts() == null
+        || parsed.getCandidates().get(0).getContent().getParts().isEmpty()) {
+      throw new java.io.IOException("Chat provider response has no candidate content");
+    }
+    parsed.setRawData(raw);
+    return fromGoogleResponse(parsed);
+  }
+
+  private static UniChatResponse useClaude(OkHttpClient client, String prefix, String key, UniChatRequest request)
+      throws java.io.IOException {
+    OpenAiChatRequest payload = toClaudeRequest(request);
+    if (payload.getMax_tokens() == null) {
+      payload.setMax_tokens(64000);
+    }
+    java.util.Map<String, String> headers = authHeaders("x-api-key", key);
+    headers.put("anthropic-version", "2023-06-01");
+    String raw = post(client, prefix + "/messages", headers, payload);
+    ClaudeChatResponse parsed = parseResponse(raw, ClaudeChatResponse.class);
+    if (parsed == null || parsed.getContent() == null || parsed.getContent().isEmpty()) {
+      throw new java.io.IOException("Chat provider response has no message content");
+    }
+    parsed.setRawResponse(raw);
+    return fromClaudeResponse(request.getModel(), parsed);
+  }
+
+  private static UniChatResponse useOpenAiResponses(OkHttpClient client, String prefix, String key,
+      UniChatRequest request) throws java.io.IOException {
+    String raw = post(client, prefix + "/responses", authHeaders("Authorization", bearer(key)),
+        toOpenAiResponsesRequest(request));
+    OpenAiResponsesResponse parsed = parseResponse(raw, OpenAiResponsesResponse.class);
+    if (parsed == null || parsed.getOutputText() == null) {
+      throw new java.io.IOException("Chat provider response has no output text");
+    }
+    parsed.setRawResponse(raw);
+    return fromOpenAiResponsesResponse(parsed);
+  }
+
+  private static String bearer(String key) {
+    return StrUtil.isBlank(key) ? null : "Bearer " + key;
+  }
+
+  private static java.util.Map<String, String> authHeaders(String name, String key) {
+    java.util.Map<String, String> headers = new java.util.HashMap<>();
+    if (StrUtil.isNotBlank(key)) {
+      headers.put(name, key);
+    }
+    return headers;
+  }
+
+  /**
+   * All protocols execute on this exact client and share non-logging
+   * response handling.
+   */
+  private static String post(OkHttpClient client, String url, java.util.Map<String, String> headers, Object payload)
+      throws java.io.IOException {
+    okhttp3.Request httpRequest = new okhttp3.Request.Builder().url(url).headers(okhttp3.Headers.of(headers))
+        .post(
+            okhttp3.RequestBody.create(JsonUtils.toSkipNullJson(payload), okhttp3.MediaType.parse("application/json")))
+        .build();
+    try (okhttp3.Response response = client.newCall(httpRequest).execute()) {
+      if (!response.isSuccessful() || response.body() == null) {
+        throw new java.io.IOException("Chat provider HTTP status " + response.code());
+      }
+      java.io.ByteArrayOutputStream output = new java.io.ByteArrayOutputStream();
+      java.io.InputStream input = response.body().byteStream();
+      byte[] chunk = new byte[4096];
+      int count;
+      while ((count = input.read(chunk)) != -1) {
+        output.write(chunk, 0, count);
+      }
+      return new String(output.toByteArray(), java.nio.charset.StandardCharsets.UTF_8);
+    }
+  }
+
+  private static <T> T parseResponse(String raw, Class<T> type) throws java.io.IOException {
+    try {
+      return JsonUtils.parse(raw, type);
+    } catch (RuntimeException invalid) {
+      throw new java.io.IOException("Chat provider response is not valid JSON");
+    }
+  }
+
+  /**
+   * Uses the request key when supplied, otherwise reads the platform's key from
+   * EnvUtils.
+   */
+  public static UniChatResponse generate(OkHttpClient client, UniChatRequest request) throws java.io.IOException {
+    return generate(client, null, request);
+  }
+
+  private static final class PlatformConfig {
+    final String urlName;
+    final String keyName;
+    final String defaultUrl;
+
+    PlatformConfig(String urlName, String keyName, String defaultUrl) {
+      this.urlName = urlName;
+      this.keyName = keyName;
+      this.defaultUrl = defaultUrl;
+    }
+  }
+
+  /** Mirrors all platform branches in generate(String, UniChatRequest). */
+  private static PlatformConfig platformConfig(String platform) {
+    if (ModelPlatformName.GOOGLE.equals(platform)) {
+      return new PlatformConfig("GEMINI_API_URL", "GEMINI_API_KEY", GeminiConsts.GEMINI_API_MODEL_BASE);
+    }
+    if (ModelPlatformName.VERTEX_AI.equals(platform)) {
+      return new PlatformConfig("VERTEX_AI_API_URL", "VERTEX_AI_API_KEY", VertexAiConsts.API_MODEL_BASE);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_GOOGLE.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_GOOGLE_API_URL", "EXCHANGE_TOKEN_API_KEY",
+          ExchangetokenConst.GOOGLE_BASE_URL);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_US_GOOGLE.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_US_GOOGLE_API_URL", "EXCHANGE_TOKEN_API_KEY",
+          ExchangetokenConst.US_GOOGLE_BASE_URL);
+    }
+    if (ModelPlatformName.ANTHROPIC.equals(platform)) {
+      return new PlatformConfig("CLAUDE_API_URL", "CLAUDE_API_KEY", ClaudeConsts.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_ANTHROPIC.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_API_URL", "EXCHANGE_TOKEN_API_KEY", ExchangetokenConst.BASE_URL);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_US_ANTHROPIC.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_US_API_URL", "EXCHANGE_TOKEN_API_KEY", ExchangetokenConst.US_BASE_URL);
+    }
+    if (ModelPlatformName.OPENAI_RESPONSES.equals(platform)) {
+      return new PlatformConfig("OPENAI_RESPONSES_API_URL", "OPENAI_RESPONSES_API_KEY", OpenAiConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.VOLC_ENGINE_RESPONSES.equals(platform)) {
+      return new PlatformConfig("VOLCENGINE_RESPONSES_API_URL", "VOLCENGINE_RESPONSES_API_KEY",
+          VolcEngineConst.API_RESPONSES_PREFIX_URL);
+    }
+    if (ModelPlatformName.VOLC_ENGINE.equals(platform)) {
+      return new PlatformConfig("VOLCENGINE_API_URL", "VOLCENGINE_API_KEY", VolcEngineConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.OPENROUTER.equals(platform)) {
+      return new PlatformConfig("OPENROUTER_API_URL", "OPENROUTER_API_KEY", OpenRouterConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.ZENMUX.equals(platform)) {
+      return new PlatformConfig("ZENMUX_API_URL", "ZENMUX_API_KEY", ZenmuxConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.BAILIAN.equals(platform)) {
+      return new PlatformConfig("BAILIAN_API_URL", "BAILIAN_API_KEY", BaiLianConst.BAILIEN_API_OPENAI_PERFIX_URL);
+    }
+    if (ModelPlatformName.TENCENT.equals(platform)) {
+      return new PlatformConfig("TENCENT_API_URL", "TENCENT_API_KEY", TencentConst.API_PERFIX_URL);
+    }
+    if (ModelPlatformName.MINIMAX.equals(platform)) {
+      return new PlatformConfig("MINIMAX_API_URL", "MINIMAX_API_KEY", MiniMaxConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.MOONSHOT.equals(platform)) {
+      return new PlatformConfig("MOONSHOT_API_URL", "MOONSHOT_API_KEY", MoonshotConst.API_PERFIX_URL);
+    }
+    if (ModelPlatformName.CEREBRAS.equals(platform)) {
+      return new PlatformConfig("CEREBRAS_API_URL", "CEREBRAS_API_KEY", CerebrasConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.OLLAMA.equals(platform)) {
+      return new PlatformConfig("OLLAMA_API_URL", "OLLAMA_API_KEY", null);
+    }
+    if (ModelPlatformName.LLAMACPP.equals(platform)) {
+      return new PlatformConfig("LLAMACPP_API_URL", "LLAMACPP_API_KEY", null);
+    }
+    if (ModelPlatformName.VLLM.equals(platform)) {
+      return new PlatformConfig("VLLM_API_URL", "VLLM_API_KEY", null);
+    }
+    if (ModelPlatformName.SWIFT.equals(platform)) {
+      return new PlatformConfig("SWIFT_API_URL", "SWIFT_API_KEY", null);
+    }
+    if (ModelPlatformName.TITANIUM.equals(platform)) {
+      return new PlatformConfig("TITANIUM_API_URL", "TITANIUM_API_KEY", null);
+    }
+    if (ModelPlatformName.GITEE.equals(platform)) {
+      return new PlatformConfig("GITEE_API_URL", "GITEE_API_KEY", GiteeConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.LLM_PROXY.equals(platform)) {
+      return new PlatformConfig("LLM_PROXY_API_URL", "LLM_PROXY_API_KEY", LlmProxyConst.API_PREFIX_URL);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_API_URL", "EXCHANGE_TOKEN_API_KEY", ExchangetokenConst.BASE_URL);
+    }
+    if (ModelPlatformName.EXCHANGE_TOKEN_US.equals(platform)) {
+      return new PlatformConfig("EXCHANGE_TOKEN_US_API_URL", "EXCHANGE_TOKEN_API_KEY", ExchangetokenConst.US_BASE_URL);
+    }
+    if (ModelPlatformName.AIAPI.equals(platform)) {
+      return new PlatformConfig("AIAPI_API_URL", "AIAPI_API_KEY", AiApiConst.V1_BASE_URL);
+    }
+    if (ModelPlatformName.DEEPSEEK.equals(platform)) {
+      return new PlatformConfig("DEEPSEEK_API_URL", "DEEPSEEK_API_KEY", DeepSeekConst.API_PREFIX_URL);
+    }
+    // Keep the existing default branch: unspecified/custom platforms use OpenAI
+    // configuration.
+    return new PlatformConfig("OPENAI_API_URL", "OPENAI_API_KEY", OpenAiConst.API_PREFIX_URL);
   }
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
@@ -348,15 +614,20 @@ public class UniChatClient {
   public static UniChatResponse useOpenAi(String prefixUrl, String apiKey, UniChatRequest uniChatRequest) {
     OpenAiChatRequest openAiChatRequestVo = toOpenAiRequest(uniChatRequest);
     String apiPrefixUrl = uniChatRequest.getApiPrefixUrl();
-    OpenAiChatResponse chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl != null ? apiPrefixUrl : prefixUrl, apiKey, openAiChatRequestVo);
+    OpenAiChatResponse chatResponse = OpenAiClient.chatCompletions(apiPrefixUrl != null ? apiPrefixUrl : prefixUrl,
+        apiKey, openAiChatRequestVo);
     if (chatResponse == null || chatResponse.getChoices() == null || chatResponse.getChoices().isEmpty()
         || chatResponse.getChoices().get(0) == null || chatResponse.getChoices().get(0).getMessage() == null) {
       return null;
     }
-    return new UniChatResponse(chatResponse.getModel(), chatResponse.getChoices().get(0).getMessage(), chatResponse.getUsage(), chatResponse.getRawResponse());
+    return new UniChatResponse(chatResponse.getModel(), chatResponse.getChoices().get(0).getMessage(),
+        chatResponse.getUsage(), chatResponse.getRawResponse());
   }
 
-  /** Convert without modifying the caller's messages; shared by generation and streaming. */
+  /**
+   * Convert without modifying the caller's messages; shared by generation and
+   * streaming.
+   */
   public static OpenAiChatRequest toOpenAiRequest(UniChatRequest uniChatRequest) {
     List<UniChatMessage> messages = uniChatRequest.getMessages();
     List<OpenAiChatMessage> openAiChatMesages = new ArrayList<>();
@@ -423,7 +694,10 @@ public class UniChatClient {
     return openAiChatRequestVo;
   }
 
-  /** Raw HTTP callback for OpenAI-compatible endpoints, retaining cancellation through Call. */
+  /**
+   * Raw HTTP callback for OpenAI-compatible endpoints, retaining cancellation
+   * through Call.
+   */
   public static okhttp3.Call streamOpenAi(UniChatRequest request, okhttp3.Callback callback) {
     if (request.getApiPrefixUrl() == null || request.getApiKey() == null) {
       throw new IllegalArgumentException("Explicit API URL and key are required");
@@ -439,18 +713,23 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useClaude(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
-    List<UniChatMessage> messages = uniChatRequest.getMessages();
-    if (messages != null) {
-      Iterator<UniChatMessage> iterator = messages.iterator();
-      while (iterator.hasNext()) {
-        UniChatMessage next = iterator.next();
-        if (next.getRole().equals("model")) {
-          // 'system', 'assistant', 'user', 'function', 'tool', and 'developer'.",
-          next.setRole("assistant");
-        }
-      }
+    OpenAiChatRequest openAiChatRequest = toClaudeRequest(uniChatRequest);
+    ClaudeChatResponse chatResponse = null;
+    if (apiPrefixUrl != null) {
+      chatResponse = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequest);
+    } else {
+      chatResponse = ClaudeClient.chatCompletions(key, openAiChatRequest);
     }
 
+    if (chatResponse == null) {
+      return null;
+    }
+
+    return fromClaudeResponse(uniChatRequest.getModel(), chatResponse);
+  }
+
+  private static OpenAiChatRequest toClaudeRequest(UniChatRequest uniChatRequest) {
+    List<UniChatMessage> messages = uniChatRequest.getMessages();
     OpenAiChatRequest openAiChatRequest = new OpenAiChatRequest();
     if (uniChatRequest.isUseSystemPrompt()) {
       String platform = uniChatRequest.getPlatform();
@@ -472,20 +751,23 @@ public class UniChatClient {
     }
 
     openAiChatRequest.setTemperature(uniChatRequest.getTemperature());
-    openAiChatRequest.setChatMessages(messages, uniChatRequest.getPlatform());
+    List<OpenAiChatMessage> converted = new ArrayList<>();
+    if (messages != null) {
+      for (UniChatMessage message : messages) {
+        OpenAiChatMessage copy = new OpenAiChatMessage(message, ModelPlatformName.ANTHROPIC);
+        if ("model".equals(copy.getRole())) {
+          copy.setRole("assistant");
+        }
+        converted.add(copy);
+      }
+    }
+    openAiChatRequest.setMessages(converted);
     openAiChatRequest.setMax_tokens(uniChatRequest.getMax_tokens());
 
-    ClaudeChatResponse chatResponse = null;
-    if (apiPrefixUrl != null) {
-      chatResponse = ClaudeClient.chatCompletions(apiPrefixUrl, key, openAiChatRequest);
-    } else {
-      chatResponse = ClaudeClient.chatCompletions(key, openAiChatRequest);
-    }
+    return openAiChatRequest;
+  }
 
-    if (chatResponse == null) {
-      return null;
-    }
-
+  private static UniChatResponse fromClaudeResponse(String model, ClaudeChatResponse chatResponse) {
     String role = chatResponse.getRole();
     ChatResponseMessage message = new ChatResponseMessage(role);
 
@@ -498,7 +780,7 @@ public class UniChatClient {
 //        message.setReasoning(claudeMessageContent.getText());
 //      }
     }
-    ChatResponseUsage usage = new ChatResponseUsage(chatResponse.getUsage());
+    ChatResponseUsage usage = chatResponse.getUsage() == null ? null : new ChatResponseUsage(chatResponse.getUsage());
     return new UniChatResponse(model, message, usage, chatResponse.getRawResponse());
   }
 
@@ -509,19 +791,37 @@ public class UniChatClient {
   }
 
   public static UniChatResponse useGoogle(String apiPrefixUrl, String key, UniChatRequest uniChatRequest) {
+    GeminiChatRequest geminiChatRequestVo = toGoogleRequest(uniChatRequest);
+    GeminiChatResponse chatResponse = null;
+    if (apiPrefixUrl != null) {
+      chatResponse = GeminiClient.generate(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo);
+    } else {
+      chatResponse = GeminiClient.generate(key, uniChatRequest.getModel(), geminiChatRequestVo);
+    }
+
+    if (chatResponse == null) {
+      return null;
+    }
+    return fromGoogleResponse(chatResponse);
+  }
+
+  private static GeminiChatRequest toGoogleRequest(UniChatRequest uniChatRequest) {
     GeminiChatRequest geminiChatRequestVo = new GeminiChatRequest();
-    geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
+    if (uniChatRequest.getMessages() != null) {
+      geminiChatRequestVo.setChatMessages(uniChatRequest.getMessages());
+    }
     String cachedId = uniChatRequest.getCachedId();
     // CachedContent can not be used with GenerateContent request setting
     // system_instruction, tools or tool_config.
     // Proposed fix: move those values to CachedContent from GenerateContent request
     if (cachedId != null) {
       geminiChatRequestVo.setCachedContent(cachedId);
-    } else {
+    } else if (uniChatRequest.isUseSystemPrompt()) {
       geminiChatRequestVo.setSystemPrompt(uniChatRequest.getSystemPrompt());
     }
 
     GeminiGenerationConfig config = new GeminiGenerationConfig();
+    config.setMaxOutputTokens(uniChatRequest.getMax_tokens());
 
     Float temperature = uniChatRequest.getTemperature();
     if (temperature != null) {
@@ -536,7 +836,8 @@ public class UniChatClient {
 
     String responseMimeType = uniChatRequest.getResponseFormat();
     if (responseMimeType != null) {
-      config.setResponseMimeType(responseMimeType);
+      config.setResponseMimeType(
+          "json_object".equals(responseMimeType) ? ResponseMimeType.APPLICATION_JSON : responseMimeType);
     }
     List<String> responseModalities = uniChatRequest.getResponseModalities();
     config.setResponseModalities(responseModalities);
@@ -561,18 +862,12 @@ public class UniChatClient {
       geminiChatRequestVo.setTools(tools);
     }
 
-    GeminiChatResponse chatResponse = null;
-    if (apiPrefixUrl != null) {
-      chatResponse = GeminiClient.generate(apiPrefixUrl, key, uniChatRequest.getModel(), geminiChatRequestVo);
-    } else {
-      chatResponse = GeminiClient.generate(key, uniChatRequest.getModel(), geminiChatRequestVo);
-    }
+    return geminiChatRequestVo;
+  }
 
-    if (chatResponse == null) {
-      return null;
-    }
+  private static UniChatResponse fromGoogleResponse(GeminiChatResponse chatResponse) {
     GeminiUsageMetadata usageMetadata = chatResponse.getUsageMetadata();
-    ChatResponseUsage usage = new ChatResponseUsage(usageMetadata);
+    ChatResponseUsage usage = usageMetadata == null ? null : new ChatResponseUsage(usageMetadata);
     String modelVersion = chatResponse.getModelVersion();
 
     UniChatResponse uniChatResponse = new UniChatResponse();
@@ -913,6 +1208,10 @@ public class UniChatClient {
       return null;
     }
 
+    return fromOpenAiResponsesResponse(response);
+  }
+
+  private static UniChatResponse fromOpenAiResponsesResponse(OpenAiResponsesResponse response) {
     String content = response.getOutputText();
     ChatResponseMessage message = new ChatResponseMessage("assistant", content);
     ChatResponseUsage usage = toChatResponseUsage(response.getUsage());

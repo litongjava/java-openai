@@ -338,9 +338,19 @@ public class OpenAiClient {
    * @return
    */
   public static Response chatCompletions(String uri, Map<String, String> requestHeaders, String bodyString) {
+    return chatCompletions(OkHttpClientPool.get600HttpClient(), uri, requestHeaders, bodyString);
+  }
 
-    OkHttpClient httpClient = OkHttpClientPool.get600HttpClient();
-
+  /**
+   * Raw, caller-owned transport for business operations with explicit timeout/retry policy.
+   * This overload does not log request/response bodies or mutate the shared client pool.
+   * The caller must close the returned response and decide how unknown outcomes are reconciled.
+   */
+  public static Response chatCompletions(OkHttpClient httpClient, String uri,
+      Map<String, String> requestHeaders, String bodyString) {
+    if (httpClient == null) {
+      throw new IllegalArgumentException("httpClient is required");
+    }
     RequestBody body = RequestBody.create(bodyString, MediaType.parse("application/json"));
 
     Headers headers = Headers.of(requestHeaders);
