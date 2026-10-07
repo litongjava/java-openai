@@ -28,14 +28,18 @@ public interface ExchangetokenModels {
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";
   String CLAUDE_SONNET_4_6 = "claude-sonnet-4-6";
   String CLAUDE_SONNET_5 = "claude-sonnet-5";
+  String CLAUDE_SONNET_5_5 = "claude-sonnet-5_5";
 
   String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
   String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
   String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
   String CLAUDE_OPUS_4_7 = "claude-opus-4-7";
   String CLAUDE_OPUS_4_8 = "claude-opus-4-8";
+  String CLAUDE_OPUS_5 = "claude-opus-5";
+  String CLAUDE_OPUS_5_5 = "claude-opus-5-5";
 
   String CLAUDE_FABLE_5 = "claude-fable-5";
+  String CLAUDE_FABLE_5_1 = "claude-fable-5_1";
 
   // Gemini 3
   String GEMINI_3_1_FLASH_IMAGE_PREVIEW = "gemini-3.1-flash-image-preview";
