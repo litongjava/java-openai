@@ -29,6 +29,11 @@ public interface AnthropicModels {
   String CLAUDE_OPUS_4_20250514 = "claude-opus-4-20250514";
   String CLAUDE_OPUS_4_1 = "claude-opus-4-1";
   String CLAUDE_OPUS_4_1_20250805 = "claude-opus-4-1-20250805";
-  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
   String CLAUDE_OPUS_4_5 = "claude-opus-4-5";
+  String CLAUDE_OPUS_4_6 = "claude-opus-4-6";
+  
+  String CLAUDE_OPUS_5_5 = "claude-opus-5-5";
+
+  String CLAUDE_FABLE_5 = "claude-fable-5";
+  String CLAUDE_FABLE_5_1 = "claude-fable-5_1";
 }

@@ -195,6 +195,13 @@ public class ClaudeClient {
     if (max_tokens == null) {
       chatRequestVo.setMax_tokens(64000);
     }
+    Float temperature = chatRequestVo.getTemperature();
+    String model = chatRequestVo.getModel();
+    if (temperature != null) {
+      if (AnthropicModels.CLAUDE_OPUS_5_5.equals(model)) {
+        chatRequestVo.setTemperature(null);
+      }
+    }
     String json = toSkipNullJson(chatRequestVo);
     if (debug) {
       log.info(json);
