@@ -18,6 +18,7 @@ public class ExecuteCodeRequest {
   private String figure;
   // l low,m medium,h high
   private String quality;
+  private String size;
   private String storage_platform;
 
   public ExecuteCodeRequest(String code) {

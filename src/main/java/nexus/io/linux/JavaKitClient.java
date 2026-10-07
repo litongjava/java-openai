@@ -2,6 +2,8 @@ package nexus.io.linux;
 
 import java.io.IOException;
 
+import nexus.io.linux.model.ProcessResultResponse;
+
 import nexus.io.model.http.response.ResponseVo;
 import nexus.io.tio.utils.commandline.ProcessResult;
 import nexus.io.tio.utils.environment.EnvUtils;
@@ -107,6 +109,10 @@ public class JavaKitClient {
       sb.append("code_timeout=").append(code_timeout).append("&");
     }
 
+    if (codeRequest.getSize() != null) {
+      sb.append("size=").append(UrlUtils.encode(codeRequest.getSize())).append("&");
+    }
+
     if (quality != null) {
       sb.append("quality=").append(quality).append("&");
     }
@@ -200,7 +206,7 @@ public class JavaKitClient {
       int resposneCode = response.code();
       if (response.isSuccessful()) {
         long end = System.currentTimeMillis();
-        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
+        ProcessResult result = parseProcessResult(string);
         if (result != null) {
           result.setElapsed(end - start);
         }
@@ -211,6 +217,17 @@ public class JavaKitClient {
     } catch (IOException e) {
       throw new RuntimeException("Failed to request:" + targetUrl, e);
     }
+  }
+
+  static ProcessResult parseProcessResult(String json) {
+    ProcessResultResponse response = JsonUtils.parse(json, ProcessResultResponse.class);
+    if (response != null && response.getCode() != null) {
+      if (!Integer.valueOf(1).equals(response.getCode())) {
+        throw new IllegalStateException(response.getMsg());
+      }
+      return JsonUtils.parse(JsonUtils.toJson(response.getData()), ProcessResult.class);
+    }
+    return JsonUtils.parse(json, ProcessResult.class);
   }
 
   private static ProcessResult post(String targetUrl, String key, ExecuteCodeRequest codeRequest) {
@@ -250,7 +267,7 @@ public class JavaKitClient {
       int resposneCode = response.code();
       if (response.isSuccessful()) {
         long end = System.currentTimeMillis();
-        ProcessResult result = JsonUtils.parse(string, ProcessResult.class);
+        ProcessResult result = parseProcessResult(string);
         if (result != null) {
           result.setElapsed(end - start);
         }
