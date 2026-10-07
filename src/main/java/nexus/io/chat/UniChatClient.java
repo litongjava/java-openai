@@ -293,7 +293,7 @@ public class UniChatClient {
       throws java.io.IOException {
     okhttp3.Request httpRequest = new okhttp3.Request.Builder().url(url).headers(okhttp3.Headers.of(headers))
         .post(
-            okhttp3.RequestBody.create(JsonUtils.toSkipNullJson(payload), okhttp3.MediaType.parse("application/json")))
+            okhttp3.RequestBody.create(ChatRequestUtils.toSkipNullJson(payload), okhttp3.MediaType.parse("application/json")))
         .build();
     try (okhttp3.Response response = client.newCall(httpRequest).execute()) {
       if (!response.isSuccessful() || response.body() == null) {

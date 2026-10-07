@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nexus.io.chat.ChatRequestUtils;
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.exception.GenerateException;
 import nexus.io.openai.chat.ChatMessageContent;
@@ -139,7 +140,7 @@ public class ClaudeClient {
     if (chatRequestVo.getMax_tokens() == null) {
       chatRequestVo.setMax_tokens(64000);
     }
-    String json = toSkipNullJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     if (debug) {
       System.out.println(json);
     }
@@ -178,7 +179,7 @@ public class ClaudeClient {
    * @return
    */
   public static Call chatCompletions(OpenAiChatRequest chatRequestVo, Callback callback) {
-    String json = toSkipNullJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
 
@@ -195,14 +196,7 @@ public class ClaudeClient {
     if (max_tokens == null) {
       chatRequestVo.setMax_tokens(64000);
     }
-    Float temperature = chatRequestVo.getTemperature();
-    String model = chatRequestVo.getModel();
-    if (temperature != null) {
-      if (AnthropicModels.CLAUDE_OPUS_5_5.equals(model)) {
-        chatRequestVo.setTemperature(null);
-      }
-    }
-    String json = toSkipNullJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     if (debug) {
       log.info(json);
     }
@@ -258,7 +252,7 @@ public class ClaudeClient {
       chatRequest.setMax_tokens(64000);
     }
     chatRequest.setStream(true);
-    String bodyString = toSkipNullJson(chatRequest);
+    String bodyString = ChatRequestUtils.toSkipNullJson(chatRequest);
     return chatCompletions(apiPerfixUrl, apiKey, bodyString, listener);
   }
 
@@ -298,7 +292,7 @@ public class ClaudeClient {
 
   public static Call chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo, Callback callback) {
     String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
-    return chatCompletions(apiPerfixUrl, apiKey, toSkipNullJson(chatRequestVo), callback);
+    return chatCompletions(apiPerfixUrl, apiKey, ChatRequestUtils.toSkipNullJson(chatRequestVo), callback);
   }
 
   public static EventSource chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo,
@@ -317,7 +311,7 @@ public class ClaudeClient {
    */
   public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
       Callback callback) {
-    return chatCompletions(serverUrl, apiKey, toSkipNullJson(chatRequestVo), callback);
+    return chatCompletions(serverUrl, apiKey, ChatRequestUtils.toSkipNullJson(chatRequestVo), callback);
   }
 
   /**
@@ -563,13 +557,4 @@ public class ClaudeClient {
   public static ClaudeChatResponse chatWithImage(String apiKey, String prompt, byte[] bytes, String suffix) {
     return chatWithImage(apiKey, AnthropicModels.CLAUDE_3_7_SONNET_20250219, prompt, bytes, suffix);
   }
-
-  private static String toSkipNullJson(OpenAiChatRequest chatRequest) {
-    String model = chatRequest.getModel();
-    if (AnthropicModels.CLAUDE_SONNET_5.equals(model)) {
-      chatRequest.setTemperature(null);
-    }
-    return JsonUtils.toSkipNullJson(chatRequest);
-  }
-
 }

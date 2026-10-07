@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import nexus.io.chat.ChatModelResponse;
 import nexus.io.cloudflare.CloudflareModelInfo;
+import nexus.io.chat.ChatRequestUtils;
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.exception.GenerateException;
 import nexus.io.openai.chat.ChatMessageContent;
@@ -192,7 +193,7 @@ public class OpenAiClient {
    * @return
    */
   public static OpenAiChatResponse chatCompletions(String apiKey, OpenAiChatRequest chatRequestVo) {
-    String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     OpenAiChatResponse respVo = null;
     try (Response response = chatCompletions(apiKey, json)) {
       String bodyString = response.body().string();
@@ -236,12 +237,12 @@ public class OpenAiClient {
    * @return
    */
   public static Call chatCompletions(OpenAiChatRequest chatRequestVo, Callback callback) {
-    String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     return chatCompletions(json, callback);
   }
 
   public static EventSource chatCompletions(OpenAiChatRequest chatRequestVo, EventSourceListener listener) {
-    String json = Json.getSkipNullJson().toJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     return chatCompletions(json, listener);
   }
 
@@ -254,7 +255,7 @@ public class OpenAiClient {
    */
   public static OpenAiChatResponse chatCompletions(String apiPerfixUrl, String apiKey,
       OpenAiChatRequest chatRequestVo) {
-    String json = JsonUtils.toSkipNullJson(chatRequestVo);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequestVo);
     if (debug) {
       log.info("request json:{}", json);
     }
@@ -368,7 +369,7 @@ public class OpenAiClient {
   }
 
   public static OpenAiChatResponse generate(String uri, OpenAiChatRequest chatRequest) {
-    String json = Json.getSkipNullJson().toJson(chatRequest);
+    String json = ChatRequestUtils.toSkipNullJson(chatRequest);
     OpenAiChatResponse respVo = null;
     try (Response response = generate(uri, json)) {
       String bodyString = response.body().string();
@@ -418,12 +419,12 @@ public class OpenAiClient {
    */
   public static Call chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
       Callback callback) {
-    return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), callback);
+    return chatCompletions(serverUrl, apiKey, ChatRequestUtils.toSkipNullJson(chatRequestVo), callback);
   }
 
   public static EventSource chatCompletions(String serverUrl, String apiKey, OpenAiChatRequest chatRequestVo,
       EventSourceListener listener) {
-    return chatCompletions(serverUrl, apiKey, Json.getSkipNullJson().toJson(chatRequestVo), listener);
+    return chatCompletions(serverUrl, apiKey, ChatRequestUtils.toSkipNullJson(chatRequestVo), listener);
   }
 
   /**

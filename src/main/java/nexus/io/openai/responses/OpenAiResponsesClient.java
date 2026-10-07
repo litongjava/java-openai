@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import nexus.io.chat.ChatRequestUtils;
 import nexus.io.consts.ModelPlatformName;
 import nexus.io.exception.GenerateException;
 import nexus.io.openai.consts.OpenAiConst;
 import nexus.io.tio.utils.environment.EnvUtils;
 import nexus.io.tio.utils.http.OkHttpClientPool;
 import nexus.io.tio.utils.hutool.StrUtil;
-import nexus.io.tio.utils.json.Json;
 import nexus.io.tio.utils.json.JsonUtils;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -52,7 +52,7 @@ public class OpenAiResponsesClient {
   }
 
   public static OpenAiResponsesResponse responses(String apiPrefixUrl, String apiKey, OpenAiResponsesRequest request) {
-    String json = Json.getSkipNullJson().toJson(request);
+    String json = ChatRequestUtils.toSkipNullJson(request);
     try (Response response = responses(apiPrefixUrl, apiKey, json)) {
       int code = response.code();
       String bodyString = response.body().string();
