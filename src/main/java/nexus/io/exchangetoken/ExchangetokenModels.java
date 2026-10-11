@@ -23,6 +23,7 @@ public interface ExchangetokenModels {
 
   String CLAUDE_HAIKU_4_5 = "claude-haiku-4-5";
   String CLAUDE_HAIKU_4_6 = "claude-haiku-4-6";
+  String CLAUDE_HAIKU_5_5 = "claude-haiku-5-5";
 
   String CLAUDE_SONNET_4 = "claude-sonnet-4";
   String CLAUDE_SONNET_4_5 = "claude-sonnet-4-5";

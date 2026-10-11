@@ -23,7 +23,8 @@ public class ChatRequestUtilsTest {
 
   @Test
   public void incompatibleModelsOmitTemperatureFromBothRequestFormats() {
-    String[] models = {"claude-opus-5-5", "claude-sonnet-5", "claude-opus-4-7", "claude-opus-4-8",
+    String[] models = {"claude-haiku-5-5", "anthropic/claude-haiku-5.5", "claude-haiku-5-5:thinking",
+        "claude-opus-5-5", "claude-sonnet-5", "claude-opus-4-7", "claude-opus-4-8",
         "claude-fable-5", "claude-fable-5-1", "claude-fable-5_1", "claude-mythos-preview",
         "anthropic/claude-opus-5.5", "anthropic/claude-sonnet-5:thinking",
         "o1-preview", "o3-mini-2025-01-31", "openai/o4-mini", "gpt-5", "gpt-5-2025-08-07",
@@ -59,7 +60,8 @@ public class ChatRequestUtilsTest {
 
   @Test
   public void ownedTransportAppliesRulesForNativeClaudeOpenAiAndResponses() throws Exception {
-    String[][] routes = {{"anthropic", "claude-opus-5-5"}, {"openai", "o3"},
+    String[][] routes = {{"exchange_token_anthropic", "claude-haiku-5-5"},
+        {"anthropic", "claude-haiku-5-5"}, {"anthropic", "claude-opus-5-5"}, {"openai", "o3"},
         {"openrouter", "anthropic/claude-sonnet-5"}, {"openai_responses", "gpt-5-mini"}};
     AtomicInteger calls = new AtomicInteger();
     OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {

@@ -59,7 +59,7 @@ public final class ChatRequestUtils {
     if (model.startsWith("claude-")) {
       model = model.replace('.', '-');
       return !matches(model, "claude-opus-4-7", "claude-opus-4-8", "claude-opus-5", "claude-sonnet-5", "claude-fable-5",
-          "claude-mythos-5", "claude-mythos-preview") && !"claude-fable-5_1".equals(model);
+          "claude-mythos-5", "claude-mythos-preview", "claude-haiku-5-5") && !"claude-fable-5_1".equals(model);
     }
     return !matches(model, "o1", "o3", "o4-mini", "gpt-5-mini", "gpt-5-nano", "gpt-5-pro", "gpt-5-codex",
         "gpt-5.1-codex", "gpt-5.2-codex", "gpt-5.3-codex", "gpt-5.2-pro", "codex-mini-latest", "gpt-6-astra",
