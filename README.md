@@ -22,6 +22,7 @@ The core idea: **business code should describe intent, not protocol details**. T
 | Gitee PDF parsing and OCR | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/18.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/18.html) |
 | DeepSeek model discovery | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/19.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/19.html) |
 | Bailian TTS | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/20.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/20.html) |
+| OpenAI, Claude and DeepSeek web search | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/23.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/23.html) |
 
 ## Table of Contents
 
@@ -41,6 +42,7 @@ The core idea: **business code should describe intent, not protocol details**. T
 - [Bailian TTS](#bailian-tts)
 - [Gitee Client](#gitee-client)
 - [DeepSeek Client](#deepseek-client)
+- [Web Search](#web-search)
 - [Error Handling](#error-handling)
 - [Project Layout](#project-layout)
 - [License](#license)
@@ -476,9 +478,63 @@ Use `GiteeClient` for Gitee AI document parsing, task polling, markdown conversi
 
 Use `DeepSeekClient.getModels()` to discover the models available to your official API account. See [the client guide](docs/deepseek-client.md) and [online guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/19.html) · [online guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/19.html).
 
+## Web Search
+
+`UniChatClient.webSearch` adapts the endpoint, credentials, tools, and output parameters to the selected platform. The example below explicitly selects DeepSeek. The two-argument overload infers the platform from the model name; it does not default to DeepSeek. Explicit platforms take precedence; omitted models use platform defaults.
+
+```java
+import nexus.io.chat.UniChatClient;
+import nexus.io.chat.UniChatResponse;
+import nexus.io.consts.ModelPlatformName;
+import nexus.io.deepseek.DeepSeekModels;
+import nexus.io.tio.utils.environment.EnvUtils;
+
+EnvUtils.load();
+UniChatResponse result = UniChatClient.webSearch(
+    ModelPlatformName.DEEPSEEK, DeepSeekModels.deepseek_v4_flash,
+    "Find the latest Java release and cite the official source.");
+System.out.println(result.getMessage().getContent());
+System.out.println(result.getCitations());
+System.out.println(result.getSearchSources());
+System.out.println(result.getSearchErrors());
+```
+
+Use `webSearch(UniChatRequest)` with `UniWebSearchOptions` for domain filters, location, and tool-call limits. `generate(request)` also uses this route when `enable_search` is true for a supported platform. The `(OkHttpClient, request)` and `(OkHttpClient, apiKey, request)` overloads preserve the caller's transport and throw `IOException`; default-client calls wrap I/O failures in `RuntimeException`. Original requests are not mutated. Unified search is synchronous; for SSE use the native clients below.
+
+Use the native clients for hosted web search and source citations:
+
+```java
+import nexus.io.claude.AnthropicModels;
+import nexus.io.claude.ClaudeChatResponse;
+import nexus.io.claude.ClaudeClient;
+import nexus.io.deepseek.DeepSeekClient;
+import nexus.io.deepseek.DeepSeekModels;
+import nexus.io.openai.consts.OpenAiModels;
+import nexus.io.openai.responses.OpenAiResponsesClient;
+import nexus.io.openai.responses.OpenAiResponsesResponse;
+import nexus.io.tio.utils.environment.EnvUtils;
+
+EnvUtils.load();
+String query = "Find the latest Java release and cite the official source.";
+OpenAiResponsesResponse openai = OpenAiResponsesClient.webSearch(OpenAiModels.GPT_5_4, query);
+ClaudeChatResponse claude = ClaudeClient.webSearch(AnthropicModels.CLAUDE_SONNET_4_6, query);
+ClaudeChatResponse deepseek = DeepSeekClient.webSearch(DeepSeekModels.deepseek_v4_flash, query);
+System.out.println(openai.getOutputText());
+System.out.println(claude.getOutputText());
+System.out.println(deepseek.getOutputText());
+```
+
+Configure `OPENAI_API_KEY`, `CLAUDE_API_KEY`, and/or `DEEPSEEK_API_KEY`. Each native `webSearch` entry also accepts an explicit API key or `(apiPrefixUrl, apiKey, model, query)`. OpenAI uses `/v1/responses`; Claude uses `/v1/messages`; DeepSeek uses `/anthropic/v1/messages`, with an independent `DEEPSEEK_SEARCH_BASE_URL` override. Unified search selects the same protocols automatically.
+
+For options, edit `OpenAiResponsesClient.webSearchRequest(...)` with `OpenAiWebSearchTool`, or `ClaudeClient.webSearchRequest(...)` with `ClaudeWebSearchTool`. Send the latter through `ClaudeClient.chatCompletions(...)` or `DeepSeekClient.messages(...)`. All three routes support native SSE events through `EventSourceListener` overloads.
+
+OpenAI returns source URLs in search actions and citations in output-text annotations. Claude/DeepSeek return search results, citations, and embedded search errors in content blocks (`webSearchResults()` / `webSearchError()`). HTTP 200 can contain a search error or `pause_turn`; preserve the original assistant content from `rawResponse` when continuing. The convenience methods do not retry paused turns automatically.
+
+See the [web search guide](https://tio-boot.cn/zh/59_java-openai/23.html) for filters, location, citations, continuation, and streaming examples.
+
 ## Error Handling
 
-When a provider rejects the request, `UniChatClient` throws `GenerateException`. The exception preserves the **already-translated** request body and the raw response — invaluable for diagnosing provider-side failures.
+The original default-client generation paths throw `GenerateException` when a provider rejects the request. The exception preserves the **already-translated** request body and the raw response. Caller-owned transports and the unified web-search route use the sanitized I/O error behavior described above.
 
 ```java
 import nexus.io.chat.UniChatClient;

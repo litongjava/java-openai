@@ -2,6 +2,7 @@ package nexus.io.claude;
 
 import java.util.List;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import nexus.io.openai.chat.ChatResponseDelta;
 
 public class ClaudeChatResponse {
@@ -15,6 +16,20 @@ public class ClaudeChatResponse {
   private List<ClaudeMessageContent> content;
   private ChatResponseDelta delta;
   private String rawResponse;
+
+  /** Joins text blocks while skipping server tool calls and search results. */
+  @JSONField(serialize = false)
+  public String getOutputText() {
+    StringBuilder text = new StringBuilder();
+    if (content != null) {
+      for (ClaudeMessageContent block : content) {
+        if (block != null && "text".equals(block.getType()) && block.getText() != null) {
+          text.append(block.getText());
+        }
+      }
+    }
+    return text.length() == 0 ? null : text.toString();
+  }
 
   public ClaudeChatResponse() {
     super();

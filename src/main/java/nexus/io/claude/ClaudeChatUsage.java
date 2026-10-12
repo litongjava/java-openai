@@ -1,10 +1,17 @@
 package nexus.io.claude;
 
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
 public class ClaudeChatUsage {
   private Integer input_tokens;
   private Integer output_tokens;
   private Integer cache_creation_input_tokens;
   private Integer cache_read_input_tokens;
+  @Getter @Setter
+  private Map<String, Integer> server_tool_use;
 
   public ClaudeChatUsage() {
     super();

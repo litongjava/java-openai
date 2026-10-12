@@ -44,6 +44,7 @@ public class UniChatRequest {
   private ChatProvider provider;
   private List<String> responseModalities;
   private Boolean enable_search;
+  private UniWebSearchOptions webSearchOptions;
   private List<ChatRequestTool> tools;
 
   public UniChatRequest(String platform, String model) {
@@ -386,6 +387,15 @@ public class UniChatRequest {
 
   public Boolean getEnable_search() {
     return enable_search;
+  }
+
+  public UniWebSearchOptions getWebSearchOptions() {
+    return webSearchOptions;
+  }
+
+  public UniChatRequest setWebSearchOptions(UniWebSearchOptions webSearchOptions) {
+    this.webSearchOptions = webSearchOptions;
+    return this;
   }
 
   public UniChatRequest setEnable_search(Boolean enable_search) {

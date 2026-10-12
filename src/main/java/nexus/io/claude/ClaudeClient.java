@@ -3,6 +3,7 @@ package nexus.io.claude;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,26 @@ public class ClaudeClient {
   public static boolean debug = false;
   public static final String CLAUDE_API_URL = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
   public static final String CLAUDE_API_KEY = EnvUtils.get("CLAUDE_API_KEY");
+
+  /** Creates an editable Messages request using the basic server-side search tool. */
+  public static OpenAiChatRequest webSearchRequest(String model, String query) {
+    return new OpenAiChatRequest().setModel(model).setMax_tokens(4096).setStream(false)
+        .setMessages(Collections.singletonList(OpenAiChatMessage.buildUser("Perform a web search for: " + query)))
+        .setTools(Collections.singletonList(new ClaudeWebSearchTool().setMax_uses(5)));
+  }
+
+  public static ClaudeChatResponse webSearch(String model, String query) {
+    return webSearch(EnvUtils.get("CLAUDE_API_KEY"), model, query);
+  }
+
+  public static ClaudeChatResponse webSearch(String apiKey, String model, String query) {
+    return webSearch(CLAUDE_API_URL, apiKey, model, query);
+  }
+
+  /** apiPrefixUrl includes /v1, but not /messages. */
+  public static ClaudeChatResponse webSearch(String apiPrefixUrl, String apiKey, String model, String query) {
+    return chatCompletions(apiPrefixUrl, apiKey, webSearchRequest(model, query));
+  }
 
   /**
    * 
@@ -150,6 +171,7 @@ public class ClaudeClient {
       String bodyString = response.body().string();
       if (response.isSuccessful()) {
         respVo = JsonUtils.parse(bodyString, ClaudeChatResponse.class);
+        respVo.setRawResponse(bodyString);
       } else {
         String apiPerfixUrl = EnvUtils.get("CLAUDE_API_URL", ClaudeConsts.API_PREFIX_URL);
         log.error("Claude generate failed {}", bodyString);

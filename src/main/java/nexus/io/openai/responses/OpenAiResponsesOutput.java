@@ -16,4 +16,15 @@ public class OpenAiResponsesOutput {
   private String status;
   private List<OpenAiResponsesOutputContent> content;
   private List<OpenAiResponsesSummary> summary;
+  private OpenAiWebSearchAction action;
+
+  public OpenAiResponsesOutput(String id, String type, String role, String status,
+      List<OpenAiResponsesOutputContent> content, List<OpenAiResponsesSummary> summary) {
+    this.id = id;
+    this.type = type;
+    this.role = role;
+    this.status = status;
+    this.content = content;
+    this.summary = summary;
+  }
 }

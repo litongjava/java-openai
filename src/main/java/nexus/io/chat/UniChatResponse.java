@@ -14,6 +14,42 @@ public class UniChatResponse {
   private ChatResponseDelta delta;
   private ChatResponseUsage usage;
   private List<String> citations;
+  private List<UniWebSearchSource> searchSources;
+  private List<String> searchErrors;
+  private String finishReason;
+  private Integer webSearchRequests;
+
+  public List<UniWebSearchSource> getSearchSources() {
+    return searchSources;
+  }
+
+  public void setSearchSources(List<UniWebSearchSource> searchSources) {
+    this.searchSources = searchSources;
+  }
+
+  public List<String> getSearchErrors() {
+    return searchErrors;
+  }
+
+  public void setSearchErrors(List<String> searchErrors) {
+    this.searchErrors = searchErrors;
+  }
+
+  public String getFinishReason() {
+    return finishReason;
+  }
+
+  public void setFinishReason(String finishReason) {
+    this.finishReason = finishReason;
+  }
+
+  public Integer getWebSearchRequests() {
+    return webSearchRequests;
+  }
+
+  public void setWebSearchRequests(Integer webSearchRequests) {
+    this.webSearchRequests = webSearchRequests;
+  }
 
   public UniChatResponse(String model, ChatResponseMessage message, ChatResponseUsage usage, String rawData) {
     this.model = model;

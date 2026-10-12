@@ -47,6 +47,7 @@ import nexus.io.openai.responses.OpenAiResponsesUsage;
 import nexus.io.openrouter.OpenRouterConst;
 import nexus.io.tencent.TencentConst;
 import nexus.io.tio.utils.environment.EnvUtils;
+import nexus.io.tio.utils.http.OkHttpClientPool;
 import nexus.io.tio.utils.hutool.StrUtil;
 import nexus.io.tio.utils.json.JsonUtils;
 import nexus.io.vertexai.VertexAiConsts;
@@ -164,6 +165,42 @@ public class UniChatClient {
     return generate(uniChatRequest.getApiKey(), uniChatRequest);
   }
 
+  /** Searches with an inferred platform; the caller's explicit model is preserved. */
+  public static UniChatResponse webSearch(String model, String query) {
+    return webSearch(new UniChatRequest().setModel(model).setUserPrompts(query));
+  }
+
+  public static UniChatResponse webSearch(String platform, String model, String query) {
+    return webSearch(new UniChatRequest(platform, model).setUserPrompts(query));
+  }
+
+  public static UniChatResponse webSearch(UniChatRequest request) {
+    return webSearch((String) null, request);
+  }
+
+  public static UniChatResponse webSearch(String key, UniChatRequest request) {
+    try {
+      return webSearch(OkHttpClientPool.get600HttpClient(), key, request);
+    } catch (java.io.IOException e) {
+      throw new RuntimeException("Web search request failed", e);
+    }
+  }
+
+  public static UniChatResponse webSearch(OkHttpClient client, UniChatRequest request) throws java.io.IOException {
+    return webSearch(client, null, request);
+  }
+
+  /** Uses the caller's exact transport without changing the request or adding retries. */
+  public static UniChatResponse webSearch(OkHttpClient client, String key, UniChatRequest request)
+      throws java.io.IOException {
+    if (client == null) {
+      throw new IllegalArgumentException("Client is required");
+    }
+    UniWebSearchAdapter.Prepared prepared = UniWebSearchAdapter.prepare(key, request);
+    String raw = post(client, prepared.url, prepared.headers, prepared.payload);
+    return UniWebSearchAdapter.parse(prepared, raw);
+  }
+
   /**
    * Synchronous generation using the caller's transport for every supported
    * platform. Platform routing selects the wire protocol, credentials, request
@@ -177,6 +214,9 @@ public class UniChatClient {
     }
     if (Boolean.TRUE.equals(request.getStream())) {
       throw new IllegalArgumentException("This transport requires synchronous generation");
+    }
+    if (UniWebSearchAdapter.enabled(request)) {
+      return webSearch(client, key, request);
     }
     String platform = request.getPlatform();
     PlatformConfig config = platformConfig(platform);
@@ -433,6 +473,10 @@ public class UniChatClient {
   }
 
   public static UniChatResponse generate(String key, UniChatRequest uniChatRequest) {
+
+    if (UniWebSearchAdapter.enabled(uniChatRequest)) {
+      return webSearch(key, uniChatRequest);
+    }
 
     String platform = uniChatRequest.getPlatform();
 
@@ -905,6 +949,9 @@ public class UniChatClient {
 
   public static EventSource stream(String key, UniChatRequest uniChatRequest, EventSourceListener listener) {
 
+    if (UniWebSearchAdapter.enabled(uniChatRequest)) {
+      throw new IllegalArgumentException("Unified web search is synchronous; use a native EventSourceListener overload for streaming");
+    }
     String platform = uniChatRequest.getPlatform();
     uniChatRequest.setStream(true);
 

@@ -21,12 +21,37 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
+import okhttp3.sse.EventSources;
 
 @Slf4j
 public class OpenAiResponsesClient {
   public static boolean debug = false;
   public static final String OPENAI_API_URL = EnvUtils.get("OPENAI_API_URL", OpenAiConst.API_PREFIX_URL);
   public static final String OPENAI_API_KEY = EnvUtils.get(OpenAiConst.OPENAI_API_KEY);
+
+  /** Creates an editable request with hosted search required and source URLs included. */
+  public static OpenAiResponsesRequest webSearchRequest(String model, String query) {
+    return new OpenAiResponsesRequest().setModel(model)
+        .setInput(Collections.singletonList(OpenAiResponsesInput.userText(query)))
+        .setTools(Collections.singletonList(new OpenAiWebSearchTool()))
+        .setTool_choice("required")
+        .setInclude(Collections.singletonList("web_search_call.action.sources"));
+  }
+
+  public static OpenAiResponsesResponse webSearch(String model, String query) {
+    return responses(webSearchRequest(model, query));
+  }
+
+  public static OpenAiResponsesResponse webSearch(String apiKey, String model, String query) {
+    return responses(apiKey, webSearchRequest(model, query));
+  }
+
+  /** apiPrefixUrl includes /v1, but not /responses. */
+  public static OpenAiResponsesResponse webSearch(String apiPrefixUrl, String apiKey, String model, String query) {
+    return responses(apiPrefixUrl, apiKey, webSearchRequest(model, query));
+  }
 
   public static OpenAiResponsesResponse responses(String model, String text) {
     OpenAiResponsesRequest request = new OpenAiResponsesRequest().setModel(model)
@@ -52,6 +77,9 @@ public class OpenAiResponsesClient {
   }
 
   public static OpenAiResponsesResponse responses(String apiPrefixUrl, String apiKey, OpenAiResponsesRequest request) {
+    if (Boolean.TRUE.equals(request.getStream())) {
+      throw new IllegalArgumentException("Use the EventSourceListener overload for streaming Responses requests");
+    }
     String json = ChatRequestUtils.toSkipNullJson(request);
     try (Response response = responses(apiPrefixUrl, apiKey, json)) {
       int code = response.code();
@@ -98,5 +126,26 @@ public class OpenAiResponsesClient {
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage(), e);
     }
+  }
+
+  /** Delivers native Responses SSE events, including search progress and citations. */
+  public static EventSource responses(String apiPrefixUrl, String apiKey, OpenAiResponsesRequest request,
+      EventSourceListener listener) {
+    if (StrUtil.isBlank(apiKey)) {
+      throw new IllegalArgumentException("api key can not empty");
+    }
+    if (StrUtil.isBlank(apiPrefixUrl)) {
+      apiPrefixUrl = OpenAiConst.API_PREFIX_URL;
+    }
+    request.setStream(true);
+    RequestBody body = RequestBody.create(ChatRequestUtils.toSkipNullJson(request), MediaType.parse("application/json"));
+    Request httpRequest = new Request.Builder().url(apiPrefixUrl + "/responses")
+        .header("Authorization", "Bearer " + apiKey).header("Accept", "text/event-stream")
+        .post(body).build();
+    return EventSources.createFactory(OkHttpClientPool.get600HttpClient()).newEventSource(httpRequest, listener);
+  }
+
+  public static EventSource responses(OpenAiResponsesRequest request, EventSourceListener listener) {
+    return responses(OPENAI_API_URL, EnvUtils.get(OpenAiConst.OPENAI_API_KEY), request, listener);
   }
 }

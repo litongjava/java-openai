@@ -11,6 +11,7 @@ import nexus.io.chat.UniChatClient;
 import nexus.io.chat.UniChatRequest;
 import nexus.io.chat.UniChatResponse;
 import nexus.io.consts.ModelPlatformName;
+import nexus.io.deepseek.DeepSeekModels;
 import nexus.io.exception.GenerateException;
 import nexus.io.exchangetoken.ExchangetokenModels;
 import nexus.io.gemini.GoogleModels;
@@ -31,7 +32,8 @@ public class UniChatClientTest {
   @Test
   public void useExchangeToken() {
     EnvUtils.load();
-    PlatformInput platformInput = new PlatformInput(ModelPlatformName.EXCHANGE_TOKEN, ExchangetokenModels.GPT_5_3_CODEX);
+    PlatformInput platformInput = new PlatformInput(ModelPlatformName.EXCHANGE_TOKEN,
+        ExchangetokenModels.GPT_5_3_CODEX);
     UniChatRequest request = new UniChatRequest(platformInput);
     request.setUserPrompts("how are you?");
 
@@ -39,10 +41,10 @@ public class UniChatClientTest {
       UniChatResponse response = UniChatClient.generate(request);
       String content = response.getMessage().getContent();
       System.out.println(content);
-    }catch (GenerateException e) {
+    } catch (GenerateException e) {
       System.out.println(e.getResponseBody());
     }
-    
+
   }
 
   @Test
@@ -74,5 +76,17 @@ public class UniChatClientTest {
       String responseBody = e.getResponseBody();
       System.out.println(responseBody);
     }
+  }
+
+  @Test
+  public void deepseekSearch() {
+    EnvUtils.load();
+    UniChatResponse response = UniChatClient.webSearch(ModelPlatformName.DEEPSEEK, DeepSeekModels.deepseek_v4_flash,
+        "查询 Java 最新正式版本，提供官方来源");
+    System.out.println(response.getMessage().getContent());
+    System.out.println(response.getCitations());
+    response.getSearchSources().forEach(source -> System.out.println(source.getTitle() + " " + source.getUrl()));
+    System.out.println("停止原因：" + response.getFinishReason());
+    System.out.println("搜索错误：" + response.getSearchErrors());
   }
 }
