@@ -1,6 +1,6 @@
 # Gitee Client
 
-[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/18.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/18.html)
+[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/59_java-openai/10.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/59_java-openai/10.html)
 
 
 `GiteeClient` wraps Gitee AI document parsing, task polling, model listing, and audio

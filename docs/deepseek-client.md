@@ -1,6 +1,6 @@
 # DeepSeek Official API and OCR
 
-[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/19.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/19.html)
+[Online java-openai guide (tio-boot.cn)](https://tio-boot.cn/zh/59_java-openai/06.html) · [Online java-openai guide (tio-boot.com)](https://tio-boot.com/zh/59_java-openai/06.html)
 
 
 Load configuration before discovering the models available to an API account:

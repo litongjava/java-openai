@@ -12,17 +12,17 @@ The core idea: **business code should describe intent, not protocol details**. T
 
 ## Documentation
 
-[java-openai documentation (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/) · [java-openai documentation (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/)
+[java-openai documentation (tio-boot.cn)](https://tio-boot.cn/zh/59_java-openai/) · [java-openai documentation (tio-boot.com)](https://tio-boot.com/zh/59_java-openai/)
 
 | Guide | Chinese site | Alternate site |
 | --- | --- | --- |
-| Quick start | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/01.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/01.html) |
-| Streaming | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/02.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/02.html) |
-| Multimodal images | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/03.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/03.html) |
-| Gitee PDF parsing and OCR | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/18.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/18.html) |
-| DeepSeek model discovery | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/19.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/19.html) |
-| Bailian TTS | [tio-boot.cn](https://tio-boot.cn/zh/54_java-openai/20.html) | [tio-boot.com](https://tio-boot.com/zh/54_java-openai/20.html) |
-| OpenAI, Claude and DeepSeek web search | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/23.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/23.html) |
+| Quick start | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/01.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/01.html) |
+| Streaming | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/02.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/02.html) |
+| Multimodal images | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/03.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/03.html) |
+| Gitee PDF parsing and OCR | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/10.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/10.html) |
+| DeepSeek model discovery | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/06.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/06.html) |
+| Bailian TTS | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/14.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/14.html) |
+| OpenAI, Claude and DeepSeek web search | [tio-boot.cn](https://tio-boot.cn/zh/59_java-openai/08.html) | [tio-boot.com](https://tio-boot.com/zh/59_java-openai/08.html) |
 
 ## Table of Contents
 
@@ -476,7 +476,7 @@ Use `GiteeClient` for Gitee AI document parsing, task polling, markdown conversi
 
 ## DeepSeek Client
 
-Use `DeepSeekClient.getModels()` to discover the models available to your official API account. See [the client guide](docs/deepseek-client.md) and [online guide (tio-boot.cn)](https://tio-boot.cn/zh/54_java-openai/19.html) · [online guide (tio-boot.com)](https://tio-boot.com/zh/54_java-openai/19.html).
+Use `DeepSeekClient.getModels()` to discover the models available to your official API account. See [the client guide](docs/deepseek-client.md) and [online guide (tio-boot.cn)](https://tio-boot.cn/zh/59_java-openai/06.html) · [online guide (tio-boot.com)](https://tio-boot.com/zh/59_java-openai/06.html).
 
 ## Web Search
 
@@ -530,7 +530,7 @@ For options, edit `OpenAiResponsesClient.webSearchRequest(...)` with `OpenAiWebS
 
 OpenAI returns source URLs in search actions and citations in output-text annotations. Claude/DeepSeek return search results, citations, and embedded search errors in content blocks (`webSearchResults()` / `webSearchError()`). HTTP 200 can contain a search error or `pause_turn`; preserve the original assistant content from `rawResponse` when continuing. The convenience methods do not retry paused turns automatically.
 
-See the [web search guide](https://tio-boot.cn/zh/59_java-openai/23.html) for filters, location, citations, continuation, and streaming examples.
+See the [web search guide](https://tio-boot.cn/zh/59_java-openai/08.html) for filters, location, citations, continuation, and streaming examples.
 
 ## Error Handling
 

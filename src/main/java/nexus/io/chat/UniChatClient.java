@@ -1,5 +1,6 @@
 package nexus.io.chat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,10 +55,40 @@ import nexus.io.vertexai.VertexAiConsts;
 import nexus.io.volcengine.VolcEngineConst;
 import nexus.io.zenmux.ZenmuxConst;
 import okhttp3.OkHttpClient;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 
 public class UniChatClient {
+  /**
+   * Executes a caller-built request without altering protocol-specific fields.
+   * The caller owns the response and must close it, including streaming bodies.
+   * Cancellation is available through the call returned by newCall.
+   */
+  public static Response execute(OkHttpClient client, Request request) throws IOException {
+    return newCall(client, request).execute();
+  }
+
+  /** Creates a cancellable raw call using the caller's transport policy. */
+  public static Call newCall(OkHttpClient client, Request request) {
+    if (client == null || request == null) {
+      throw new IllegalArgumentException("client and request are required");
+    }
+    return client.newCall(request);
+  }
+
+  /** Opens a raw WebSocket using the caller's headers, proxy and connection policy. */
+  public static WebSocket newWebSocket(OkHttpClient client, Request request, WebSocketListener listener) {
+    if (client == null || request == null || listener == null) {
+      throw new IllegalArgumentException("client, request and listener are required");
+    }
+    return client.newWebSocket(request, listener);
+  }
+
   public static final String GEMINI_API_KEY = GeminiClient.GEMINI_API_KEY;
   public static final String VERTEX_AI_API_KEY = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_KEY_NAME);
   public static final String VERTEX_AI_API_URL = EnvUtils.get(VertexAiConsts.VERTEX_AI_API_URL_NAME,
