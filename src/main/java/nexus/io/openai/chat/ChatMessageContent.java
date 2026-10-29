@@ -14,10 +14,16 @@ public class ChatMessageContent {
   private String type = "text";
   private String text;
   private ChatRequestImage image_url;
+  private ChatRequestVideo video_url;
 
   public ChatMessageContent(ChatRequestImage chatRequestImage) {
     this.type = "image_url";
     this.image_url = chatRequestImage;
+  }
+
+  public ChatMessageContent(ChatRequestVideo chatRequestVideo) {
+    this.type = "video_url";
+    this.video_url = chatRequestVideo;
   }
 
   public ChatMessageContent(String text) {
@@ -37,12 +43,17 @@ public class ChatMessageContent {
   }
 
   public ChatMessageContent(ChatImageFile chatImageFile) {
+    String url = chatImageFile.getData() != null ? chatImageFile.getData() : chatImageFile.getUrl();
+    String mimeType = chatImageFile.getMimeType();
+    if (mimeType != null && mimeType.startsWith("video/")) {
+      this.type = "video_url";
+      this.video_url = new ChatRequestVideo(url);
+      return;
+    }
     this.type = "image_url";
     ChatRequestImage chatRequestImage = new ChatRequestImage();
     chatRequestImage.setDetail("auto");
-    chatRequestImage.setUrl(chatImageFile.getUrl());
-    
+    chatRequestImage.setUrl(url);
     this.image_url = chatRequestImage;
   }
-
 }
